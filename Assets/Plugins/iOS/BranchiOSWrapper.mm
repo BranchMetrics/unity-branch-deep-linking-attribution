@@ -1,5 +1,14 @@
 #include "BranchiOSWrapper.h"
 #include "Branch.h"
+#import "AppDelegateListener.h"
+
+#pragma mark - Private notification class interface
+
+@interface BranchUnityWrapper : NSObject
+
+@property (strong, nonatomic) NSDictionary *launchOptions;
+
+@end
 
 #pragma mark - Converter methods
 
@@ -91,26 +100,29 @@ static callbackWithUrl callbackWithUrlForCallbackId(char *callbackId) {
 #pragma mark - Key methods
 
 static NSString *_branchKey;
+static BranchUnityWrapper *_wrapper;
 void _setBranchKey(char *branchKey) {
     _branchKey = CreateNSString(branchKey);
+    
+    _wrapper = [[BranchUnityWrapper alloc] init];
 }
 
 #pragma mark - InitSession methods
 
 void _initSession() {
-    [[Branch getInstance:_branchKey] initSession];
+    [[Branch getInstance:_branchKey] initSessionWithLaunchOptions:_wrapper.launchOptions];
 }
 
 void _initSessionWithCallback(char *callbackId) {
-    [[Branch getInstance:_branchKey] initSessionAndRegisterDeepLinkHandler:callbackWithParamsForCallbackId(callbackId)];
+    [[Branch getInstance:_branchKey] initSessionWithLaunchOptions:_wrapper.launchOptions andRegisterDeepLinkHandler:callbackWithParamsForCallbackId(callbackId)];
 }
 
 void _initSessionAsReferrable(BOOL isReferrable) {
-    [[Branch getInstance:_branchKey] initSession:isReferrable];
+    [[Branch getInstance:_branchKey] initSessionWithLaunchOptions:_wrapper.launchOptions isReferrable:isReferrable];
 }
 
 void _initSessionAsReferrableWithCallback(BOOL isReferrable, char *callbackId) {
-    [[Branch getInstance:_branchKey] initSession:isReferrable andRegisterDeepLinkHandler:callbackWithParamsForCallbackId(callbackId)];
+    [[Branch getInstance:_branchKey] initSessionWithLaunchOptions:_wrapper.launchOptions isReferrable:isReferrable andRegisterDeepLinkHandler:callbackWithParamsForCallbackId(callbackId)];
 }
 
 #pragma mark - Session Item methods
@@ -310,3 +322,31 @@ void _validateReferralCodeWithCallback(char *code, char *callbackId) {
 void _applyReferralCodeWithCallback(char *code, char *callbackId) {
     [[Branch getInstance:_branchKey] applyReferralCode:CreateNSString(code) andCallback:callbackWithParamsForCallbackId(callbackId)];
 }
+
+#pragma mark - Private notification class implementation
+
+@implementation BranchUnityWrapper
+
+- (id)init {
+    if (self = [super init]) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidFinishLaunching:) name:UIApplicationDidFinishLaunchingNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onAppOpenURL:) name:kUnityOnOpenURL object:nil];
+    }
+    
+    return self;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)applicationDidFinishLaunching:(NSNotification *)notification {
+    self.launchOptions = notification.userInfo;
+}
+
+- (void)onAppOpenURL:(NSNotification *)notification {
+    NSURL *openURL = notification.userInfo[@"url"];
+    [[Branch getInstance:_branchKey] handleDeepLink:openURL];
+}
+
+@end
