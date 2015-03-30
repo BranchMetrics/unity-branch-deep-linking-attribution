@@ -17,14 +17,23 @@ public class Branch : MonoBehaviour {
 
     #region InitSession methods
 
+    /**
+     * Just initialize session.
+     */
     public static void initSession() {
         _initSession();
     }
 
+    /**
+     * Just initialize session, specifying whether is should be referrable.
+     */
     public static void  initSession(bool isReferrable) {
         _initSessionAsReferrable(isReferrable);
     }
 
+    /**
+     * Initialize session and receive information about how it opened.
+     */
     public static void initSession(BranchCallbackWithParams callback) {
         var callbackId = _getNextCallbackId();
 
@@ -33,6 +42,9 @@ public class Branch : MonoBehaviour {
         _initSessionWithCallback(callbackId);
     }
 
+    /**
+     * Initialize session and receive information about how it opened, specifying whether is should be referrable.
+     */
     public static void initSession(bool isReferrable, BranchCallbackWithParams callback) {
         var callbackId = _getNextCallbackId();
 
@@ -45,26 +57,41 @@ public class Branch : MonoBehaviour {
 
     #region Session Item methods
 
+    /**
+     * Get the referring parameters from the initial install.
+     */
     public static Dictionary<string, object> getFirstReferringParams() {
         string firstReferringParamsString = _getFirstReferringParams();
 
         return MiniJSON.Json.Deserialize(firstReferringParamsString) as Dictionary<string, object>;
     }
 
+    /**
+     * Get the referring parameters from the last open.
+     */
     public static Dictionary<string, object> getLatestReferringParams() {
         string latestReferringParamsString = _getLatestReferringParams();
 
         return MiniJSON.Json.Deserialize(latestReferringParamsString) as Dictionary<string, object>;
     }
 
+    /**
+     * Reset the current session
+     */
     public static void resetUserSession() {
         _resetUserSession();
     }
 
+    /**
+     * Specifiy an identity for the current session
+     */
     public static void setIdentity(string userId) {
         _setIdentity(userId);
     }
 
+    /**
+     * Specifiy an identity for the current session and receive information about the set.
+     */
     public static void setIdentity(string userId, BranchCallbackWithParams callback) {
         var callbackId = _getNextCallbackId();
 
@@ -73,6 +100,9 @@ public class Branch : MonoBehaviour {
         _setIdentityWithCallback(userId, callbackId);
     }
 
+    /**
+     * Clear current session
+     */
     public static void logout() {
         _logout();
     }
@@ -81,14 +111,23 @@ public class Branch : MonoBehaviour {
 
     #region Configuration methods
 
+    /**
+     * How many seconds between retries
+     */
     public static void setRetryInterval(int retryInterval) {
         _setRetryInterval(retryInterval);
     }
 
+    /**
+     * How many retries before giving up
+     */
     public static void setMaxRetries(int maxRetries) {
         _setMaxRetries(maxRetries);
     }
 
+    /**
+     * How long before deeming a request as timed out
+     */
     public static void setNetworkTimeout(int timeout) {
         _setNetworkTimeout(timeout);
     }
@@ -97,6 +136,9 @@ public class Branch : MonoBehaviour {
 
     #region User Action methods
 
+    /**
+     * Load counts for all actions. Callback indicates whether a change has occured in these numbers since you last called this method.
+     */
     public static void loadActionCounts(BranchCallbackWithStatus callback) {
         var callbackId = _getNextCallbackId();
 
@@ -105,18 +147,30 @@ public class Branch : MonoBehaviour {
         _loadActionCountsWithCallback(callbackId);
     }
 
+    /**
+     * Mark a custom action completed
+     */
     public static void userCompletedAction(string action) {
         _userCompletedAction(action);
     }
 
+    /**
+     * Mark a custom action completed with additional custom fields
+     */
     public static void userCompletedAction(string action, Dictionary<string, object> state) {
         _userCompletedActionWithState(action, MiniJSON.Json.Serialize(state));
     }
 
+    /**
+     * Get the number of counts for an action
+     */
     public static int getTotalCountsForAction(string action) {
         return _getTotalCountsForAction(action);
     }
 
+    /**
+     * Get the number of "unique" counts for an action
+     */
     public static int getUniqueCountsForAction(string action) {
        return _getUniqueCountsForAction(action);
     }
@@ -125,6 +179,9 @@ public class Branch : MonoBehaviour {
 
     #region Credit methods
 
+    /**
+     * Load reward information. Callback indicates whether these values have changed.
+     */
     public static void loadRewards(BranchCallbackWithStatus callback) {
         var callbackId = _getNextCallbackId();
 
@@ -133,22 +190,37 @@ public class Branch : MonoBehaviour {
         _loadRewardsWithCallback(callbackId);
     }
 
+    /**
+     * Get total credit count
+     */
     public static int getCredits() {
         return _getCredits();
     }
 
+    /**
+     * Get credit count for a specified bucket
+     */
     public static int getCredits(string bucket) {
         return _getCreditsForBucket(bucket);
     }
 
+    /**
+     * Redeem reward for a specified amount of credits
+     */
     public static void redeemRewards(int count) {
         _redeemRewards(count);
     }
 
+    /**
+     * Redeem reward for a specified amount of credits and a certain bucket
+     */
     public static void redeemRewards(int count, string bucket) {
         _redeemRewardsForBucket(count, bucket);
     }
 
+    /**
+     * Get Credit Transaction History items in a list
+     */
     public static void getCreditHistory(BranchCallbackWithList callback) {
         var callbackId = _getNextCallbackId();
 
@@ -157,6 +229,9 @@ public class Branch : MonoBehaviour {
         _getCreditHistoryWithCallback(callbackId);
     }
 
+    /**
+     * Get Credit Transaction History items in a list for a specified bucket
+     */
     public static void getCreditHistory(string bucket, BranchCallbackWithList callback) {
         var callbackId = _getNextCallbackId();
 
@@ -165,6 +240,9 @@ public class Branch : MonoBehaviour {
         _getCreditHistoryForBucketWithCallback(bucket, callbackId);
     }
 
+    /**
+     * Get Credit Transaction History items in a list starting at a specified transaction id, and continuing for a specified number of items, either descending or ascending (0, 1)
+     */
     public static void getCreditHistory(string creditTransactionId, int length, int order, BranchCallbackWithList callback) {
         var callbackId = _getNextCallbackId();
 
@@ -173,6 +251,10 @@ public class Branch : MonoBehaviour {
         _getCreditHistoryForTransactionWithLengthOrderAndCallback(creditTransactionId, length, order, callbackId);
     }
 
+
+    /**
+     * Get Credit Transaction History items in a list for a specified bucket starting at a specified transaction id, and continuing for a specified number of items, either descending or ascending (0, 1)
+     */
     public static void getCreditHistory(string bucket, string creditTransactionId, int length, int order, BranchCallbackWithList callback) {
         var callbackId = _getNextCallbackId();
         
@@ -185,6 +267,9 @@ public class Branch : MonoBehaviour {
 
     #region Content URL Methods
 
+    /**
+     * Get a content url given a set of params and a channel
+     */
     public static void getContentURL(Dictionary<string, object> parameters, string channel, BranchCallbackWithUrl callback) {
         var callbackId = _getNextCallbackId();
         
@@ -193,6 +278,9 @@ public class Branch : MonoBehaviour {
         _getContentUrlWithParamsChannelAndCallback(MiniJSON.Json.Serialize(parameters), channel, callbackId);
     }
 
+    /**
+     * Get a content url given a set of params, tags, and a channel
+     */
     public static void getContentURL(Dictionary<string, object> parameters, List<string> tags, string channel, BranchCallbackWithUrl callback) {
         var callbackId = _getNextCallbackId();
         
@@ -205,6 +293,9 @@ public class Branch : MonoBehaviour {
 
     #region Short URL Generation methods
 
+    /**
+     * Get an arbitrary short url
+     */
     public static void getShortURL(BranchCallbackWithUrl callback) {
         var callbackId = _getNextCallbackId();
         
@@ -213,6 +304,9 @@ public class Branch : MonoBehaviour {
         _getShortURLWithCallback(callbackId);
     }
 
+    /**
+     * Get a short url given a set of params
+     */
     public static void getShortURL(Dictionary<string, object> parameters, BranchCallbackWithUrl callback) {
         var callbackId = _getNextCallbackId();
         
@@ -221,6 +315,9 @@ public class Branch : MonoBehaviour {
         _getShortURLWithParamsAndCallback(MiniJSON.Json.Serialize(parameters), callbackId);
     }
 
+    /**
+     * Get a short url given a set of params, tags, channel, feature, and stage
+     */
     public static void getShortURLWithTags(Dictionary<string, object> parameters, List<string> tags, string channel, string feature, string stage, BranchCallbackWithUrl callback) {
         var callbackId = _getNextCallbackId();
         
@@ -229,6 +326,9 @@ public class Branch : MonoBehaviour {
         _getShortURLWithParamsTagsChannelFeatureStageAndCallback(MiniJSON.Json.Serialize(parameters), MiniJSON.Json.Serialize(tags), channel, feature, stage, callbackId);
     }
 
+    /**
+     * Get a short url given a set of params, tags, channel, feature, stage, and alias
+     */
     public static void getShortURLWithTags(Dictionary<string, object> parameters, List<string> tags, string channel, string feature, string stage, string alias, BranchCallbackWithUrl callback) {
         var callbackId = _getNextCallbackId();
         
@@ -237,6 +337,9 @@ public class Branch : MonoBehaviour {
         _getShortURLWithParamsTagsChannelFeatureStageAliasAndCallback(MiniJSON.Json.Serialize(parameters), MiniJSON.Json.Serialize(tags), channel, feature, stage, alias, callbackId);
     }
 
+    /**
+     * Get a short url given a set of params, tags, channel, feature, stage, and type
+     */
     public static void getShortURLWithTags(int type, Dictionary<string, object> parameters, List<string> tags, string channel, string feature, string stage, BranchCallbackWithUrl callback) {
         var callbackId = _getNextCallbackId();
         
@@ -245,6 +348,9 @@ public class Branch : MonoBehaviour {
         _getShortURLWithParamsTagsChannelFeatureStageTypeAndCallback(MiniJSON.Json.Serialize(parameters), MiniJSON.Json.Serialize(tags), channel, feature, stage, type, callbackId);
     }
 
+    /**
+     * Get a short url given a set of params, tags, channel, feature, stage, and matchDuration
+     */
     public static void getShortURLWithTags(Dictionary<string, object> parameters, List<string>tags, string channel, string feature, string stage, int matchDuration, BranchCallbackWithUrl callback) {
         var callbackId = _getNextCallbackId();
         
@@ -253,6 +359,9 @@ public class Branch : MonoBehaviour {
         _getShortURLWithParamsTagsChannelFeatureStageMatchDurationAndCallback(MiniJSON.Json.Serialize(parameters), MiniJSON.Json.Serialize(tags), channel, feature, stage, matchDuration, callbackId);
     }
 
+    /**
+     * Get a short url given a set of params, channel, and feature
+     */
     public static void getShortURL(Dictionary<string, object> parameters, string channel, string feature, BranchCallbackWithUrl callback) {
         var callbackId = _getNextCallbackId();
         
@@ -261,6 +370,9 @@ public class Branch : MonoBehaviour {
         _getShortURLWithParamsChannelFeatureAndCallback(MiniJSON.Json.Serialize(parameters), channel, feature, callbackId);
     }
 
+    /**
+     * Get a short url given a set of params, channel, feature, and stage
+     */
     public static void getShortURL(Dictionary<string, object> parameters, string channel, string feature, string stage, BranchCallbackWithUrl callback) {
         var callbackId = _getNextCallbackId();
         
@@ -269,6 +381,9 @@ public class Branch : MonoBehaviour {
         _getShortURLWithParamsChannelFeatureStageAndCallback(MiniJSON.Json.Serialize(parameters), channel, feature, stage, callbackId);
     }
 
+    /**
+     * Get a short url given a set of params, channel, feature, stage, and alias
+     */
     public static void getShortURL(Dictionary<string, object> parameters, string channel, string feature, string stage, string alias, BranchCallbackWithUrl callback) {
         var callbackId = _getNextCallbackId();
         
@@ -277,6 +392,9 @@ public class Branch : MonoBehaviour {
         _getShortURLWithParamsChannelFeatureStageAliasAndCallback(MiniJSON.Json.Serialize(parameters), channel, feature, stage, alias, callbackId);
     }
 
+    /**
+     * Get a short url given a set of params, channel, feature, stage, and type
+     */
     public static void getShortURL(int type, Dictionary<string, object> parameters, string channel, string feature, string stage, BranchCallbackWithUrl callback) {
         var callbackId = _getNextCallbackId();
         
@@ -285,6 +403,9 @@ public class Branch : MonoBehaviour {
         _getShortURLWithParamsChannelFeatureStageTypeAndCallback(MiniJSON.Json.Serialize(parameters), channel, feature, stage, type, callbackId);
     }
 
+    /**
+     * Get a short url given a set of params, channel, feature, stage, and match duration
+     */
     public static void getShortURL(Dictionary<string, object> parameters, string channel, string feature, string stage, int matchDuration, BranchCallbackWithUrl callback) {
         var callbackId = _getNextCallbackId();
         
@@ -297,6 +418,9 @@ public class Branch : MonoBehaviour {
 
     #region Referral Methods
 
+    /**
+     * Get a referral url given a set of params, tags, and channel
+     */
     public static void getReferralURL(Dictionary<string, object> parameters, List<string> tags, string channel, BranchCallbackWithUrl callback) {
         var callbackId = _getNextCallbackId();
         
@@ -305,6 +429,9 @@ public class Branch : MonoBehaviour {
         _getReferralUrlWithParamsTagsChannelAndCallback(MiniJSON.Json.Serialize(parameters), MiniJSON.Json.Serialize(tags), channel, callbackId);
     }
 
+    /**
+     * Get a referral url given a set of params and channel
+     */
     public static void getReferralURL(Dictionary<string, object> parameters, string channel, BranchCallbackWithUrl callback) {
         var callbackId = _getNextCallbackId();
         
@@ -313,6 +440,9 @@ public class Branch : MonoBehaviour {
         _getReferralUrlWithParamsChannelAndCallback(MiniJSON.Json.Serialize(parameters), channel, callbackId);
     }
 
+    /**
+     * Get an arbitrary referral code for this session
+     */
     public static void getReferralCode(BranchCallbackWithParams callback) {
         var callbackId = _getNextCallbackId();
         
@@ -321,6 +451,9 @@ public class Branch : MonoBehaviour {
         _getReferralCodeWithCallback(callbackId);
     }
 
+    /**
+     * Get a referral code for this session for a specified amount
+     */
     public static void getReferralCode(int amount, BranchCallbackWithParams callback) {
         var callbackId = _getNextCallbackId();
         
@@ -329,6 +462,9 @@ public class Branch : MonoBehaviour {
         _getReferralCodeWithAmountAndCallback(amount, callbackId);
     }
 
+    /**
+     * Get a referral code for this session with a prefix identifier for a specified amount
+     */
     public static void getReferralCode(string prefix, int amount, BranchCallbackWithParams callback) {
         var callbackId = _getNextCallbackId();
         
@@ -337,6 +473,9 @@ public class Branch : MonoBehaviour {
         _getReferralCodeWithPrefixAmountAndCallback(prefix, amount, callbackId);
     }
 
+    /**
+     * Get a referral code for this session for a specified amount set to expire at the specified time
+     */
     public static void getReferralCode(int amount, DateTime expiration, BranchCallbackWithParams callback) {
         var callbackId = _getNextCallbackId();
         
@@ -345,6 +484,9 @@ public class Branch : MonoBehaviour {
         _getReferralCodeWithAmountExpirationAndCallback(amount, expiration.ToString("yyyy-MM-ddTHH:mm:ssZ"), callbackId);
     }
 
+    /**
+     * Get a referral code for this session with a prefix identifier for a specified amount set to expire at the specified time
+     */
     public static void getReferralCode(string prefix, int amount, DateTime expiration, BranchCallbackWithParams callback) {
         var callbackId = _getNextCallbackId();
         
@@ -353,6 +495,11 @@ public class Branch : MonoBehaviour {
         _getReferralCodeWithPrefixAmountExpirationAndCallback(prefix, amount, expiration.ToString("yyyy-MM-ddTHH:mm:ssZ"), callbackId);
     }
 
+    /**
+     * Get a referral code for this session with a prefix identifier for a specified amount set to expire at the specified time in a specified bucket with a specified calculation type and location
+     * Calc Type can be one of 0 (unlimited, reward can be applied continually) or 1 (unique, user can only apply a specific code once)
+     * Location can be one of 0 (referree, user applying referral code receives credit), 1 (referrer, user who created code receives credit), or 2 (both, both the sender and receiver receive credit)
+     */
     public static void getReferralCode(string prefix, int amount, DateTime expiration, string bucket, int calcType, int location, BranchCallbackWithParams callback) {
         var callbackId = _getNextCallbackId();
         
@@ -361,6 +508,11 @@ public class Branch : MonoBehaviour {
         _getReferralCodeWithPrefixAmountExpirationBucketTypeLocationAndCallback(prefix, amount, expiration.ToString("yyyy-MM-ddTHH:mm:ssZ"), bucket, calcType, location, callbackId);
     }
 
+    /**
+     * Validate if a referral code exists in Branch system and is still valid. A code is vaild if:
+     * 1. It hasn't expired.
+     * 2. If its calculation type is uniqe, it hasn't been applied by current user.
+     */
     public static void validateReferralCode(string code, BranchCallbackWithParams callback) {
         var callbackId = _getNextCallbackId();
         
@@ -369,6 +521,9 @@ public class Branch : MonoBehaviour {
         _validateReferralCodeWithCallback(code, callbackId);
     }
 
+    /**
+     * Apply a referral code if it exists in Branch system and is still valid (see above). If the code is valid, returns the referral code object in the callback.
+     */
     public static void applyReferralCode(string code, BranchCallbackWithParams callback) {
         var callbackId = _getNextCallbackId();
         
