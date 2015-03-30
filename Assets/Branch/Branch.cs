@@ -45,16 +45,16 @@ public class Branch : MonoBehaviour {
 
     #region Session Item methods
 
-    public static Dictionary<string, string> getFirstReferringParams() {
+    public static Dictionary<string, object> getFirstReferringParams() {
         string firstReferringParamsString = _getFirstReferringParams();
 
-        return MiniJSON.Json.Deserialize(firstReferringParamsString) as Dictionary<string, string>;
+        return MiniJSON.Json.Deserialize(firstReferringParamsString) as Dictionary<string, object>;
     }
 
-    public static Dictionary<string, string> getLatestReferringParams() {
+    public static Dictionary<string, object> getLatestReferringParams() {
         string latestReferringParamsString = _getLatestReferringParams();
 
-        return MiniJSON.Json.Deserialize(latestReferringParamsString) as Dictionary<string, string>;
+        return MiniJSON.Json.Deserialize(latestReferringParamsString) as Dictionary<string, object>;
     }
 
     public static void resetUserSession() {
@@ -109,7 +109,7 @@ public class Branch : MonoBehaviour {
         _userCompletedAction(action);
     }
 
-    public static void userCompletedAction(string action, Dictionary<string, string> state) {
+    public static void userCompletedAction(string action, Dictionary<string, object> state) {
         _userCompletedActionWithState(action, MiniJSON.Json.Serialize(state));
     }
 
@@ -185,7 +185,7 @@ public class Branch : MonoBehaviour {
 
     #region Content URL Methods
 
-    public static void getContentURL(Dictionary<string, string> parameters, string channel, BranchCallbackWithUrl callback) {
+    public static void getContentURL(Dictionary<string, object> parameters, string channel, BranchCallbackWithUrl callback) {
         var callbackId = _getNextCallbackId();
         
         _branchCallbacks[callbackId] = callback;
@@ -193,7 +193,7 @@ public class Branch : MonoBehaviour {
         _getContentUrlWithParamsChannelAndCallback(MiniJSON.Json.Serialize(parameters), channel, callbackId);
     }
 
-    public static void getContentURL(Dictionary<string, string> parameters, List<string> tags, string channel, BranchCallbackWithUrl callback) {
+    public static void getContentURL(Dictionary<string, object> parameters, List<string> tags, string channel, BranchCallbackWithUrl callback) {
         var callbackId = _getNextCallbackId();
         
         _branchCallbacks[callbackId] = callback;
@@ -213,7 +213,7 @@ public class Branch : MonoBehaviour {
         _getShortURLWithCallback(callbackId);
     }
 
-    public static void getShortURL(Dictionary<string, string> parameters, BranchCallbackWithUrl callback) {
+    public static void getShortURL(Dictionary<string, object> parameters, BranchCallbackWithUrl callback) {
         var callbackId = _getNextCallbackId();
         
         _branchCallbacks[callbackId] = callback;
@@ -221,7 +221,7 @@ public class Branch : MonoBehaviour {
         _getShortURLWithParamsAndCallback(MiniJSON.Json.Serialize(parameters), callbackId);
     }
 
-    public static void getShortURLWithTags(Dictionary<string, string> parameters, List<string> tags, string channel, string feature, string stage, BranchCallbackWithUrl callback) {
+    public static void getShortURLWithTags(Dictionary<string, object> parameters, List<string> tags, string channel, string feature, string stage, BranchCallbackWithUrl callback) {
         var callbackId = _getNextCallbackId();
         
         _branchCallbacks[callbackId] = callback;
@@ -229,7 +229,7 @@ public class Branch : MonoBehaviour {
         _getShortURLWithParamsTagsChannelFeatureStageAndCallback(MiniJSON.Json.Serialize(parameters), MiniJSON.Json.Serialize(tags), channel, feature, stage, callbackId);
     }
 
-    public static void getShortURLWithTags(Dictionary<string, string> parameters, List<string> tags, string channel, string feature, string stage, string alias, BranchCallbackWithUrl callback) {
+    public static void getShortURLWithTags(Dictionary<string, object> parameters, List<string> tags, string channel, string feature, string stage, string alias, BranchCallbackWithUrl callback) {
         var callbackId = _getNextCallbackId();
         
         _branchCallbacks[callbackId] = callback;
@@ -237,7 +237,7 @@ public class Branch : MonoBehaviour {
         _getShortURLWithParamsTagsChannelFeatureStageAliasAndCallback(MiniJSON.Json.Serialize(parameters), MiniJSON.Json.Serialize(tags), channel, feature, stage, alias, callbackId);
     }
 
-    public static void getShortURLWithTags(int type, Dictionary<string, string> parameters, List<string> tags, string channel, string feature, string stage, BranchCallbackWithUrl callback) {
+    public static void getShortURLWithTags(int type, Dictionary<string, object> parameters, List<string> tags, string channel, string feature, string stage, BranchCallbackWithUrl callback) {
         var callbackId = _getNextCallbackId();
         
         _branchCallbacks[callbackId] = callback;
@@ -245,7 +245,7 @@ public class Branch : MonoBehaviour {
         _getShortURLWithParamsTagsChannelFeatureStageTypeAndCallback(MiniJSON.Json.Serialize(parameters), MiniJSON.Json.Serialize(tags), channel, feature, stage, type, callbackId);
     }
 
-    public static void getShortURLWithTags(Dictionary<string, string> parameters, List<string>tags, string channel, string feature, string stage, int matchDuration, BranchCallbackWithUrl callback) {
+    public static void getShortURLWithTags(Dictionary<string, object> parameters, List<string>tags, string channel, string feature, string stage, int matchDuration, BranchCallbackWithUrl callback) {
         var callbackId = _getNextCallbackId();
         
         _branchCallbacks[callbackId] = callback;
@@ -253,7 +253,7 @@ public class Branch : MonoBehaviour {
         _getShortURLWithParamsTagsChannelFeatureStageMatchDurationAndCallback(MiniJSON.Json.Serialize(parameters), MiniJSON.Json.Serialize(tags), channel, feature, stage, matchDuration, callbackId);
     }
 
-    public static void getShortURL(Dictionary<string, string> parameters, string channel, string feature, BranchCallbackWithUrl callback) {
+    public static void getShortURL(Dictionary<string, object> parameters, string channel, string feature, BranchCallbackWithUrl callback) {
         var callbackId = _getNextCallbackId();
         
         _branchCallbacks[callbackId] = callback;
@@ -261,7 +261,7 @@ public class Branch : MonoBehaviour {
         _getShortURLWithParamsChannelFeatureAndCallback(MiniJSON.Json.Serialize(parameters), channel, feature, callbackId);
     }
 
-    public static void getShortURL(Dictionary<string, string> parameters, string channel, string feature, string stage, BranchCallbackWithUrl callback) {
+    public static void getShortURL(Dictionary<string, object> parameters, string channel, string feature, string stage, BranchCallbackWithUrl callback) {
         var callbackId = _getNextCallbackId();
         
         _branchCallbacks[callbackId] = callback;
@@ -269,7 +269,7 @@ public class Branch : MonoBehaviour {
         _getShortURLWithParamsChannelFeatureStageAndCallback(MiniJSON.Json.Serialize(parameters), channel, feature, stage, callbackId);
     }
 
-    public static void getShortURL(Dictionary<string, string> parameters, string channel, string feature, string stage, string alias, BranchCallbackWithUrl callback) {
+    public static void getShortURL(Dictionary<string, object> parameters, string channel, string feature, string stage, string alias, BranchCallbackWithUrl callback) {
         var callbackId = _getNextCallbackId();
         
         _branchCallbacks[callbackId] = callback;
@@ -277,7 +277,7 @@ public class Branch : MonoBehaviour {
         _getShortURLWithParamsChannelFeatureStageAliasAndCallback(MiniJSON.Json.Serialize(parameters), channel, feature, stage, alias, callbackId);
     }
 
-    public static void getShortURL(int type, Dictionary<string, string> parameters, string channel, string feature, string stage, BranchCallbackWithUrl callback) {
+    public static void getShortURL(int type, Dictionary<string, object> parameters, string channel, string feature, string stage, BranchCallbackWithUrl callback) {
         var callbackId = _getNextCallbackId();
         
         _branchCallbacks[callbackId] = callback;
@@ -285,7 +285,7 @@ public class Branch : MonoBehaviour {
         _getShortURLWithParamsChannelFeatureStageTypeAndCallback(MiniJSON.Json.Serialize(parameters), channel, feature, stage, type, callbackId);
     }
 
-    public static void getShortURL(Dictionary<string, string> parameters, string channel, string feature, string stage, int matchDuration, BranchCallbackWithUrl callback) {
+    public static void getShortURL(Dictionary<string, object> parameters, string channel, string feature, string stage, int matchDuration, BranchCallbackWithUrl callback) {
         var callbackId = _getNextCallbackId();
         
         _branchCallbacks[callbackId] = callback;
@@ -297,7 +297,7 @@ public class Branch : MonoBehaviour {
 
     #region Referral Methods
 
-    public static void getReferralURL(Dictionary<string, string> parameters, List<string> tags, string channel, BranchCallbackWithUrl callback) {
+    public static void getReferralURL(Dictionary<string, object> parameters, List<string> tags, string channel, BranchCallbackWithUrl callback) {
         var callbackId = _getNextCallbackId();
         
         _branchCallbacks[callbackId] = callback;
@@ -305,7 +305,7 @@ public class Branch : MonoBehaviour {
         _getReferralUrlWithParamsTagsChannelAndCallback(MiniJSON.Json.Serialize(parameters), MiniJSON.Json.Serialize(tags), channel, callbackId);
     }
 
-    public static void getReferralURL(Dictionary<string, string> parameters, string channel, BranchCallbackWithUrl callback) {
+    public static void getReferralURL(Dictionary<string, object> parameters, string channel, BranchCallbackWithUrl callback) {
         var callbackId = _getNextCallbackId();
         
         _branchCallbacks[callbackId] = callback;
