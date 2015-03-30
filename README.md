@@ -35,9 +35,13 @@ Our linking infrastructure will support anything you want to build. If it doesn'
 
 To allow Branch to configure itself, you must add a BranchPrefab asset to your scene. Simply drag into your scene, and then specify your APP_KEY in the properties.
 
+![Branch Unity Config](https://s3-us-west-1.amazonaws.com/branch-guides/unity1.png)
+
 #### iOS Note
 
 If you're creating an iOS app for your Unity project, you must enable Objective C exceptions in the Build Settings in order for Branch to compile.
+
+![iOS Project Settings](https://s3-us-west-1.amazonaws.com/branch-guides/unity2.png)
 
 ### Register custom URIs for direct deep linking (optional but recommended)
 
