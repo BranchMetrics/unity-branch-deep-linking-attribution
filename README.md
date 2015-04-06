@@ -6,10 +6,7 @@ At Branch, we live, breath uptime and performance. Just in case, we've got mecha
 
 ## Installation
 
-### Available on Unity
-Get the asset from the asset store: https://www.assetstore.unity3d.com/#!/content/33627
-
-#### Or download the raw files
+#### Download the raw files
 
 Download code from here: https://s3-us-west-1.amazonaws.com/branchhost/BranchUnityWrapper.unitypackage
 
