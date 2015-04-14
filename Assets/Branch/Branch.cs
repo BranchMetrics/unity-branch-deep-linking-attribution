@@ -918,8 +918,8 @@ public class Branch : MonoBehaviour {
     public void _asyncCallbackWithParams(string callbackDictString) {
         var callbackDict = MiniJSON.Json.Deserialize(callbackDictString) as Dictionary<string, object>;
         var callbackId = callbackDict["callbackId"] as string;
-        var parameters = callbackDict["params"] as Dictionary<string, object>;
-        var error = callbackDict["error"] as string;
+        Dictionary<string, object> parameters = callbackDict.ContainsKey("params") ? callbackDict["params"] as Dictionary<string, object> : null;
+        string error = callbackDict.ContainsKey("error") ? callbackDict["error"] as string : null;
 
         var callback = _branchCallbacks[callbackId] as BranchCallbackWithParams;
         callback(parameters, error);
@@ -928,8 +928,8 @@ public class Branch : MonoBehaviour {
     public void _asyncCallbackWithStatus(string callbackDictString) {
         var callbackDict = MiniJSON.Json.Deserialize(callbackDictString) as Dictionary<string, object>;
         var callbackId = callbackDict["callbackId"] as string;
-        var status = (callbackDict["status"] as bool?).Value || false;
-        var error = callbackDict["error"] as string;
+        bool status = callbackDict.ContainsKey("status") ? (callbackDict["status"] as bool?).Value : false;
+        string error = callbackDict.ContainsKey("error") ? callbackDict["error"] as string : null;
 
         var callback = _branchCallbacks[callbackId] as BranchCallbackWithStatus;
         callback(status, error);
@@ -938,8 +938,8 @@ public class Branch : MonoBehaviour {
     public void _asyncCallbackWithList(string callbackDictString) {
         var callbackDict = MiniJSON.Json.Deserialize(callbackDictString) as Dictionary<string, object>;
         var callbackId = callbackDict["callbackId"] as string;
-        var list = callbackDict["list"] as List<string>;
-        var error = callbackDict["error"] as string;
+        List<string> list = callbackDict.ContainsKey("list") ? callbackDict["list"] as List<string> : null;
+        string error = callbackDict.ContainsKey("error") ? callbackDict["error"] as string : null;
 
         var callback = _branchCallbacks[callbackId] as BranchCallbackWithList;
         callback(list, error);
@@ -948,8 +948,8 @@ public class Branch : MonoBehaviour {
     public void _asyncCallbackWithUrl(string callbackDictString) {
         var callbackDict = MiniJSON.Json.Deserialize(callbackDictString) as Dictionary<string, object>;
         var callbackId = callbackDict["callbackId"] as string;
-        var url = callbackDict["url"] as string;
-        var error = callbackDict["error"] as string;
+        string url = callbackDict.ContainsKey("url") ? callbackDict["url"] as string : null;
+        string error = callbackDict.ContainsKey("error") ? callbackDict["error"] as string : null;
 
         var callback = _branchCallbacks[callbackId] as BranchCallbackWithUrl;
         callback(url, error);

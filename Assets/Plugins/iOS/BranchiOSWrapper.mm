@@ -93,7 +93,7 @@ static callbackWithUrl callbackWithUrlForCallbackId(char *callbackId) {
         id errorDictItem = error ? [error description] : [NSNull null];
         NSDictionary *callbackDict = @{ @"callbackId": callbackString, @"url": url, @"error": errorDictItem };
         
-        UnitySendMessage("Branch", "_asyncCallbackUrl", jsonCStringFromDictionary(callbackDict));
+        UnitySendMessage("Branch", "_asyncCallbackWithUrl", jsonCStringFromDictionary(callbackDict));
     };
 }
 

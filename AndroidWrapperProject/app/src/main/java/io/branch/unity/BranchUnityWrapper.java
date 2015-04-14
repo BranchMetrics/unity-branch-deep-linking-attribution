@@ -435,25 +435,25 @@ public class BranchUnityWrapper {
 
         @Override
         public void onInitFinished(JSONObject params, BranchError branchError) {
-            _sendMessageWithWithBranchError(branchError, "params", params);
+            _sendMessageWithWithBranchError("_asyncCallbackWithParams", branchError, "params", params);
         }
 
         @Override
         public void onStateChanged(boolean changed, BranchError branchError) {
-            _sendMessageWithWithBranchError(branchError, "status", changed);
+            _sendMessageWithWithBranchError("_asyncCallbackWithStatus", branchError, "status", changed);
         }
 
         @Override
         public void onReceivingResponse(JSONArray list, BranchError branchError) {
-            _sendMessageWithWithBranchError(branchError, "list", list);
+            _sendMessageWithWithBranchError("_asyncCallbackWithList", branchError, "list", list);
         }
 
         @Override
         public void onLinkCreate(String url, BranchError branchError) {
-            _sendMessageWithWithBranchError(branchError, "url", url);
+            _sendMessageWithWithBranchError("_asyncCallbackWithUrl", branchError, "url", url);
         }
 
-        private void _sendMessageWithWithBranchError(BranchError branchError, String extraKey, Object extraValue) {
+        private void _sendMessageWithWithBranchError(String asyncCallbackMethod, BranchError branchError, String extraKey, Object extraValue) {
             try {
                 JSONObject responseObject = new JSONObject();
                 responseObject.put("callbackId", _callbackId);
@@ -461,7 +461,7 @@ public class BranchUnityWrapper {
                 responseObject.put("error", branchError == null ? null : branchError.getMessage());
 
                 String respString = responseObject.toString();
-                UnityPlayer.UnitySendMessage("Branch", "_asyncCallbackWithParams", respString);
+                UnityPlayer.UnitySendMessage("Branch", asyncCallbackMethod, respString);
             }
             catch (JSONException jsone) {
                 // nothing to do here
