@@ -13,10 +13,10 @@
 @implementation BranchActivityItemProvider
 
 - (id)initWithParams:(NSDictionary *)params
-                 andTags:(NSArray *)tags
-              andFeature:(NSString *)feature
-                andStage:(NSString *)stage
-                andAlias:(NSString *)alias {
+             andTags:(NSArray *)tags
+          andFeature:(NSString *)feature
+            andStage:(NSString *)stage
+            andAlias:(NSString *)alias {
     
     NSString *url = [[Branch getInstance] getLongURLWithParams:params andChannel:nil andTags:tags andFeature:feature andStage:stage andAlias:alias];
     
@@ -29,26 +29,27 @@
         self.stage = stage;
         self.alias = alias;
         self.branchURL = url;
-        self.semaphore = dispatch_semaphore_create(0);
     }
+    
+    self.userAgentString = [[[UIWebView alloc] init] stringByEvaluatingJavaScriptFromString:@"navigator.userAgent"];
     
     return self;
 }
 
-- (id) item {
+- (id)item {
     if ([self.placeholderItem isKindOfClass:[NSString class]]) {
-        
         NSString *channel = [BranchActivityItemProvider humanReadableChannelWithActivityType:self.activityType];
         
-        __weak BranchActivityItemProvider *weakSelf = self;
-        [[Branch getInstance] getShortURLWithParams:self.params andTags:self.tags andChannel:channel andFeature:self.feature andStage:self.stage andAlias:self.alias andCallback:^(NSString *url, NSError *err) {
-            if (!err) {
-                self.branchURL = url;
-            }
-            dispatch_semaphore_signal(weakSelf.semaphore);
-        }];
-        dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);
-        return self.branchURL;
+        // Because Facebook immediately scrapes URLs, we add an additional parameter to the existing list, telling the backend to ignore the first click
+        BOOL ignoreFirstClick = [channel isEqualToString:@"facebook"];
+        if (ignoreFirstClick) {
+            self.branchURL = [[Branch getInstance] getShortURLWithParams:self.params andTags:self.tags andChannel:channel andFeature:self.feature andStage:self.stage andAlias:self.alias ignoreUAString:self.userAgentString];
+        }
+        else {
+            self.branchURL = [[Branch getInstance] getShortURLWithParams:self.params andTags:self.tags andChannel:channel andFeature:self.feature andStage:self.stage andAlias:self.alias];
+        }
+
+        return [NSURL URLWithString:self.branchURL];
     }
     return self.placeholderItem;
 }

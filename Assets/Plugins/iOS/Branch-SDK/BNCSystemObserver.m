@@ -14,6 +14,8 @@
 #import <UIKit/UIScreen.h>
 #import <SystemConfiguration/SystemConfiguration.h>
 
+NSString * const BRANCH_URI_SCHEME_NAME = @"io.branch.sdk";
+
 @implementation BNCSystemObserver
 
 + (NSString *)getUniqueHardwareId:(BOOL *)isReal andIsDebug:(BOOL)debug {
@@ -53,27 +55,30 @@
     return YES;
 }
 
-+ (NSString *)getURIScheme {
++ (NSString *)getDefaultUriScheme {
     NSArray *urlTypes = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleURLTypes"];
-    if (urlTypes) {
-        for (NSDictionary *urlType in urlTypes) {
-            NSArray *urlSchemes = [urlType objectForKey:@"CFBundleURLSchemes"];
-            if (urlSchemes) {
-                for (NSString *urlScheme in urlSchemes) {
-                    if (![[urlScheme substringWithRange:NSMakeRange(0, 2)] isEqualToString:@"fb"] &&
-                        ![[urlScheme substringWithRange:NSMakeRange(0, 2)] isEqualToString:@"db"] &&
-                        ![[urlScheme substringWithRange:NSMakeRange(0, 3)] isEqualToString:@"pin"]) {
-                        return urlScheme;
-                    }
-                }
+
+    for (NSDictionary *urlType in urlTypes) {
+        NSArray *urlSchemes = [urlType objectForKey:@"CFBundleURLSchemes"];
+        for (NSString *urlScheme in urlSchemes) {
+            NSString *firstTwoCharacters = [urlScheme substringWithRange:NSMakeRange(0, 2)];
+            NSString *firstThreeCharacters = [urlScheme substringWithRange:NSMakeRange(0, 3)];
+            BOOL isFBScheme = [firstTwoCharacters isEqualToString:@"fb"];
+            BOOL isDBScheme = [firstTwoCharacters isEqualToString:@"db"];
+            BOOL isPinScheme = [firstThreeCharacters isEqualToString:@"pin"];
+            
+            // Don't use the schemes set aside for other integrations.
+            if (!isFBScheme && !isDBScheme && !isPinScheme) {
+                return urlScheme;
             }
         }
     }
+
     return nil;
 }
 
 + (NSString *)getAppVersion {
-    return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+    return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
 }
 
 + (NSString *)getCarrier {
@@ -120,11 +125,34 @@
     }
 }
 
-+ (NSNumber *)getUpdateState {
-    NSString *bundleRoot = [[NSBundle mainBundle] bundlePath];    NSFileManager *manager = [NSFileManager defaultManager];
-    NSDictionary* attrs = [manager attributesOfItemAtPath:bundleRoot error:nil];
-    if ((int)([[attrs fileCreationDate] timeIntervalSince1970]/(60*60*24)) == (int)([[attrs fileModificationDate] timeIntervalSince1970]/(60*60*24))) {
++ (NSNumber *)getUpdateState:(BOOL)updatePrefs {
+    NSString *storedAppVersion = [BNCPreferenceHelper getAppVersion];
+    NSString *currentAppVersion = [BNCSystemObserver getAppVersion];
+    NSFileManager *manager = [NSFileManager defaultManager];
+    
+    // for creation date
+    NSURL *documentsDirRoot = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+    NSDictionary *documentsDirAttributes = [manager attributesOfItemAtPath:documentsDirRoot.path error:nil];
+    int appCreationDay = (int)([[documentsDirAttributes fileCreationDate] timeIntervalSince1970]/(60*60*24));
+
+    // for modification date
+    NSString *bundleRoot = [[NSBundle mainBundle] bundlePath];
+    NSDictionary *bundleAttributes = [manager attributesOfItemAtPath:bundleRoot error:nil];
+    int appModificationDay = (int)([[bundleAttributes fileModificationDate] timeIntervalSince1970]/(60*60*24));
+
+    if (!storedAppVersion) {
+        if (updatePrefs) {
+            [BNCPreferenceHelper setAppVersion:currentAppVersion];
+        }
+        if ([documentsDirAttributes fileCreationDate] && [bundleAttributes fileModificationDate] && (appCreationDay != appModificationDay)) {
+            return [NSNumber numberWithInt:2];
+        }
         return nil;
+    } else if (![storedAppVersion isEqualToString:currentAppVersion]) {
+        if (updatePrefs) {
+            [BNCPreferenceHelper setAppVersion:currentAppVersion];
+        }
+        return [NSNumber numberWithInt:2];
     } else {
         return [NSNumber numberWithInt:1];
     }
