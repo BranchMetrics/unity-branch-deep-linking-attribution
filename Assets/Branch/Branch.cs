@@ -909,6 +909,210 @@ public class Branch : MonoBehaviour {
         BranchAndroidWrapper.applyReferralCodeWithCallback(code, callbackId);
     }
 
+    #else
+
+    private static void _setBranchKey(string branchKey) { }
+    
+    private static void _initSession() {
+        Debug.Log("Branch is not implemented on this platform");
+    }
+    
+    private static void _initSessionAsReferrable(bool isReferrable) {
+        Debug.Log("Branch is not implemented on this platform");
+    }
+    
+    private static void _initSessionWithCallback(string callbackId) {
+        callNotImplementedCallbackForParamCallback(callbackId);
+    }
+    
+    private static void _initSessionAsReferrableWithCallback(bool isReferrable, string callbackId) {
+        callNotImplementedCallbackForParamCallback(callbackId);
+    }
+    
+    private static string _getFirstReferringParams() {
+        return "{}";
+    }
+    
+    private static string _getLatestReferringParams() {
+        return "{}";
+    }
+    
+    private static void _resetUserSession() { }
+    
+    private static void _setIdentity(string userId) { }
+    
+    private static void _setIdentityWithCallback(string userId, string callbackId) {
+        callNotImplementedCallbackForParamCallback(callbackId);
+    }
+    
+    private static void _logout() { }
+    
+    private static void _setRetryInterval(int retryInterval) { }
+    
+    private static void _setMaxRetries(int maxRetries) { }
+    
+    private static void _setNetworkTimeout(int timeout) { }
+    
+    private static void _loadActionCountsWithCallback(string callbackId) {
+        callNotImplementedCallbackForStatusCallback(callbackId);
+    }
+    
+    private static void _userCompletedAction(string action) { }
+    
+    private static void _userCompletedActionWithState(string action, string stateDict) { }
+    
+    private static int _getTotalCountsForAction(string action) {
+        return 0;
+    }
+    
+    private static int _getUniqueCountsForAction(string action) {
+        return 0;
+    }
+    
+    private static void _loadRewardsWithCallback(string callbackId) {
+        callNotImplementedCallbackForStatusCallback(callbackId);
+    }
+    
+    private static int _getCredits() {
+        return 0;
+    }
+    
+    private static void _redeemRewards(int count) { }
+    
+    private static int _getCreditsForBucket(string bucket) {
+        return 0;
+    }
+    
+    private static void _redeemRewardsForBucket(int count, string bucket) { }
+    
+    private static void _getCreditHistoryWithCallback(string callbackId) {
+        callNotImplementedCallbackForListCallback(callbackId);
+    }
+    
+    private static void _getCreditHistoryForBucketWithCallback(string bucket, string callbackId) {
+        callNotImplementedCallbackForListCallback(callbackId);
+    }
+    
+    private static void _getCreditHistoryForTransactionWithLengthOrderAndCallback(string creditTransactionId, int length, int order, string callbackId) {
+        callNotImplementedCallbackForListCallback(callbackId);
+    }
+    
+    private static void _getCreditHistoryForBucketWithTransactionLengthOrderAndCallback(string bucket, string creditTransactionId, int length, int order, string callbackId) {
+        callNotImplementedCallbackForListCallback(callbackId);
+    }
+    
+    private static void _getContentUrlWithParamsChannelAndCallback(string parametersDict, string channel, string callbackId) {
+        callNotImplementedCallbackForUrlCallback(callbackId);
+    }
+    
+    private static void _getContentUrlWithParamsTagsChannelAndCallback(string parametersDict, string tags, string channel, string callbackId) {
+        callNotImplementedCallbackForUrlCallback(callbackId);
+    }
+    
+    private static void _getShortURLWithCallback(string callbackId) {
+        callNotImplementedCallbackForUrlCallback(callbackId);
+    }
+    
+    private static void _getShortURLWithParamsAndCallback(string parametersDict, string callbackId) {
+        callNotImplementedCallbackForUrlCallback(callbackId);
+    }
+    
+    private static void _getShortURLWithParamsTagsChannelFeatureStageAndCallback(string parametersDict, string tags, string channel, string feature, string stage, string callbackId) {
+        callNotImplementedCallbackForUrlCallback(callbackId);
+    }
+    
+    private static void _getShortURLWithParamsTagsChannelFeatureStageAliasAndCallback(string parametersDict, string tags, string channel, string feature, string stage, string alias, string callbackId) {
+        callNotImplementedCallbackForUrlCallback(callbackId);
+    }
+    
+    private static void _getShortURLWithParamsTagsChannelFeatureStageTypeAndCallback(string parametersDict, string tags, string channel, string feature, string stage, int type, string callbackId) {
+        callNotImplementedCallbackForUrlCallback(callbackId);
+    }
+    
+    private static void _getShortURLWithParamsTagsChannelFeatureStageMatchDurationAndCallback(string parametersDict, string tags, string channel, string feature, string stage, int matchDuration, string callbackId) {
+        callNotImplementedCallbackForUrlCallback(callbackId);
+    }
+    
+    private static void _getShortURLWithParamsChannelFeatureAndCallback(string parametersDict, string channel, string feature, string callbackId) {
+        callNotImplementedCallbackForUrlCallback(callbackId);
+    }
+    
+    private static void _getShortURLWithParamsChannelFeatureStageAndCallback(string parametersDict, string channel, string feature, string stage, string callbackId) {
+        callNotImplementedCallbackForUrlCallback(callbackId);
+    }
+    
+    private static void _getShortURLWithParamsChannelFeatureStageAliasAndCallback(string parametersDict, string channel, string feature, string stage, string alias, string callbackId) {
+        callNotImplementedCallbackForUrlCallback(callbackId);
+    }
+    
+    private static void _getShortURLWithParamsChannelFeatureStageTypeAndCallback(string parametersDict, string channel, string feature, string stage, int type, string callbackId) {
+        callNotImplementedCallbackForUrlCallback(callbackId);
+    }
+    
+    private static void _getShortURLWithParamsChannelFeatureStageMatchDurationAndCallback(string parametersDict, string channel, string feature, string stage, int matchDuration, string callbackId) {
+        callNotImplementedCallbackForUrlCallback(callbackId);
+    }
+    
+    private static void _getReferralUrlWithParamsTagsChannelAndCallback(string parametersDict, string tags, string channel, string callbackId) {
+        callNotImplementedCallbackForUrlCallback(callbackId);
+    }
+    
+    private static void _getReferralUrlWithParamsChannelAndCallback(string parametersDict, string channel, string callbackId) {
+        callNotImplementedCallbackForUrlCallback(callbackId);
+    }
+    
+    private static void _getReferralCodeWithCallback(string callbackId) {
+        callNotImplementedCallbackForParamCallback(callbackId);
+    }
+    
+    private static void _getReferralCodeWithAmountAndCallback(int amount, string callbackId) {
+        callNotImplementedCallbackForParamCallback(callbackId);
+    }
+    
+    private static void _getReferralCodeWithPrefixAmountAndCallback(string prefix, int amount, string callbackId) {
+        callNotImplementedCallbackForParamCallback(callbackId);
+    }
+    
+    private static void _getReferralCodeWithAmountExpirationAndCallback(int amount, string expiration, string callbackId) {
+        callNotImplementedCallbackForParamCallback(callbackId);
+    }
+    
+    private static void _getReferralCodeWithPrefixAmountExpirationAndCallback(string prefix, int amount, string expiration, string callbackId) {
+        callNotImplementedCallbackForParamCallback(callbackId);
+    }
+    
+    private static void _getReferralCodeWithPrefixAmountExpirationBucketTypeLocationAndCallback(string prefix, int amount, string expiration, string bucket, int calcType, int location, string callbackId) {
+        callNotImplementedCallbackForParamCallback(callbackId);
+    }
+    
+    private static void _validateReferralCodeWithCallback(string code, string callbackId) {
+        callNotImplementedCallbackForParamCallback(callbackId);
+    }
+    
+    private static void _applyReferralCodeWithCallback(string code, string callbackId) {
+        callNotImplementedCallbackForParamCallback(callbackId);
+    }
+    
+    private static void callNotImplementedCallbackForParamCallback(string callbackId) {
+        var callback = _branchCallbacks[callbackId] as BranchCallbackWithParams;
+        callback(null, "Not implemented on this platform");
+    }
+    
+    private static void callNotImplementedCallbackForUrlCallback(string callbackId) {
+        var callback = _branchCallbacks[callbackId] as BranchCallbackWithUrl;
+        callback(null, "Not implemented on this platform");
+    }
+    
+    private static void callNotImplementedCallbackForListCallback(string callbackId) {
+        var callback = _branchCallbacks[callbackId] as BranchCallbackWithList;
+        callback(null, "Not implemented on this platform");
+    }
+    
+    private static void callNotImplementedCallbackForStatusCallback(string callbackId) {
+        var callback = _branchCallbacks[callbackId] as BranchCallbackWithStatus;
+        callback(false, "Not implemented on this platform");
+    }
+
     #endif
     
     #endregion
