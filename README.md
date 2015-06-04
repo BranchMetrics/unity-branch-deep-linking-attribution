@@ -6,10 +6,6 @@ At Branch, we live, breath uptime and performance. Just in case, we've got mecha
 
 ## Installation
 
-#### Get it on the Unity Store
-
-Install the package from Unity here: [http://u3d.as/eX3](http://u3d.as/eX3)
-
 #### Download the raw files
 
 Download code from here: [S3 Package](https://s3-us-west-1.amazonaws.com/branchhost/BranchUnityWrapper.unitypackage)
