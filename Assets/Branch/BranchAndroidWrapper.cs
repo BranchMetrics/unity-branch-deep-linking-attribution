@@ -27,6 +27,10 @@ public class BranchAndroidWrapper {
     public static void initSessionAsReferrableWithCallback(bool isReferrable, string callbackId) {
         _getBranchClass().CallStatic("initSession", callbackId, isReferrable);
     }
+
+    public static void closeSession() {
+        _getBranchClass ().CallStatic ("closeSession");
+    }
     
     #endregion
     

@@ -53,6 +53,13 @@ public class Branch : MonoBehaviour {
         _initSessionAsReferrableWithCallback(isReferrable, callbackId);
     }
 
+    /**
+     * Close session, necessary for some platforms to track when to cut off a Branch session.
+     */
+    public static void closeSession() {
+        _closeSession();
+    }
+
     #endregion
 
     #region Session Item methods
@@ -564,6 +571,8 @@ public class Branch : MonoBehaviour {
     
     [DllImport ("__Internal")]
     private static extern void _initSessionAsReferrableWithCallback(bool isReferrable, string callbackId);
+
+    private static void _closeSession() { };
     
     [DllImport ("__Internal")]
     private static extern string _getFirstReferringParams();
@@ -720,6 +729,10 @@ public class Branch : MonoBehaviour {
     private static void _initSessionWithCallback(string callbackId) {
         BranchAndroidWrapper.initSessionWithCallback(callbackId);
     }
+
+    private static void _closeSession() {
+        BranchAndroidWrapper.closeSession();
+    };
 
     private static void _initSessionAsReferrableWithCallback(bool isReferrable, string callbackId) {
         BranchAndroidWrapper.initSessionAsReferrableWithCallback(isReferrable, callbackId);
@@ -928,6 +941,8 @@ public class Branch : MonoBehaviour {
     private static void _initSessionAsReferrableWithCallback(bool isReferrable, string callbackId) {
         callNotImplementedCallbackForParamCallback(callbackId);
     }
+
+    private static void _closeSession() { };
     
     private static string _getFirstReferringParams() {
         return "{}";

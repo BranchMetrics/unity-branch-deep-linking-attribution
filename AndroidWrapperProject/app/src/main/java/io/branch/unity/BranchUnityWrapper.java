@@ -53,6 +53,10 @@ public class BranchUnityWrapper {
         Branch.getInstance(unityActivity.getApplicationContext(), _branchKey).initSession(new BranchReferralInitListenerUnityCallback(callbackId), isReferrable, unityActivity.getIntent().getData());
     }
 
+    public static void closeSession() {
+        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).closeSession();
+    }
+
     /**
      * Session Item methods
      */
