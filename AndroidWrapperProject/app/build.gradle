@@ -2,7 +2,10 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 22
-    buildToolsVersion "21.1.2"
+    buildToolsVersion "22.0.1"
+
+    sourceCompatibility = "1.6"
+    targetCompatibility = "1.6"
 
     defaultConfig {
         minSdkVersion 7
