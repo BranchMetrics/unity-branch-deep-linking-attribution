@@ -51,7 +51,7 @@ There seem to be some issues with 4.6 pulling all of the Branch-SDK files into t
 
 Additionally, the Xcode project template for Unity 4.6.x (tested with 4.6.1, but may be all the way up through 4.6.6) *does not* use ARC. Branch requires ARC, and we don't intend to add if checks thoughout the SDK to try to support pre-ARC. However, you can add flags to the project to compile the Branch files with ARC, which should work fine for you. Simple add `-fobjc-arc` to all Branch files in the Compile Sources region under Build Phases within your target.
 
-![iOS ARC Flags](Docs/Screenshots/ios-compile-source-flags.png)
+![iOS ARC Flags](https://github.com/BranchMetrics/Branch-Unity-SDK/blob/9a43bf3bfed07428f136f06e66c36c79d9683f72/Docs/Screenshots/ios-compile-source-flags.png)
 
 ### Register a URI scheme direct deep linking (optional but recommended)
 
