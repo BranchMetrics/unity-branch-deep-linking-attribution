@@ -45,6 +45,14 @@ If you're creating an iOS app for your Unity project, you must enable Objective 
 
 ![iOS Project Settings](https://raw.githubusercontent.com/BranchMetrics/Branch-Unity-SDK/8670cf9347e4d7c9a88e7c9c4263aa2eed3f2a27/Docs/Screenshots/enable-exceptions.png)
 
+#### iOS + Unity 4.6
+
+There seem to be some issues with 4.6 pulling all of the Branch-SDK files into the Xcode project. A simple solution is to pull all of the files from the `Branch-SDK` folder directly into the `Assets/Plugins/iOS` folder as siblings to the `BranchiOSWrapper.mm` file.
+
+Additionally, the Xcode project template for Unity 4.6.x (tested with 4.6.1, but may be all the way up through 4.6.6) *does not* use ARC. Branch requires ARC, and we don't intend to add if checks thoughout the SDK to try to support pre-ARC. However, you can add flags to the project to compile the Branch files with ARC, which should work fine for you. Simple add `-fobjc-arc` to all Branch files in the Compile Sources region under Build Phases within your target.
+
+![iOS ARC Flags](Docs/Screenshots/ios-compile-source-flags.png)
+
 ### Register a URI scheme direct deep linking (optional but recommended)
 
 You can register your app to respond to direct deep links (yourapp:// in a mobile browser) by adding a URI scheme in the YourProject-Info.plist file. Make sure to change **yourapp** to a unique string that represents your app name.
