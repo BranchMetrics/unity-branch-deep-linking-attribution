@@ -104,7 +104,7 @@ This deep link routing callback is called 100% of the time on init, with your li
 
 ###### C Sharp
 
-```c#
+```
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -128,7 +128,7 @@ These session parameters will be available at any point later on with this comma
 
 ###### C Sharp
 
-```c#
+```
 Dictionary<string, object> sessionParams = Branch.getLatestReferringParams();
 ```
 
@@ -139,7 +139,7 @@ If you ever want to access the original session params (the parameters passed in
 
 ###### C Sharp
 
-```c#
+```
 Dictionary<string, object> installParams = Branch.getFirstReferringParams();
 ```
 
@@ -153,7 +153,7 @@ To identify a user, just call:
 
 ###### C Sharp
 
-```c#
+```
 Branch.setIdentity("your user id");
 ```
 
@@ -165,7 +165,7 @@ If you provide a logout function in your app, be sure to clear the user when the
 
 ###### C Sharp
 
-```c#
+```
 Branch.logout();
 ```
 
@@ -173,7 +173,7 @@ Branch.logout();
 
 ###### C Sharp
 
-```c#
+```
 Branch.userCompletedAction("your_custom_event"); // your custom event name should not exceed 63 characters
 ```
 
@@ -181,7 +181,7 @@ OR if you want to store some state with the event
 
 ###### C Sharp
 
-```c#
+```
 Dictionary<string, object> stateItems = new Dictionary<string, object>
 {
 	{ "username", "Joe" },
@@ -194,7 +194,7 @@ Some example events you might want to track:
 
 ###### C Sharp
 
-```c#
+```
 "complete_purchase"  
 "wrote_message"  
 "finished_level_ten"
@@ -210,7 +210,7 @@ For more details on how to create links, see the [Branch link creation guide](ht
 
 ###### C Sharp
 
-```c#
+```
 // associate data with a link
 // you can access this data from any instance that installs or opens the app from this link (amazing...)
 
@@ -307,7 +307,7 @@ Reward balances change randomly on the backend when certain actions are taken (d
 
 ###### C Sharp
 
-```c#
+```
 Branch.loadRewards(delegate(bool changed, string error) {
     // changed boolean will indicate if the balance changed from what is currently in memory
 
@@ -323,7 +323,7 @@ We will store how many of the rewards have been deployed so that you don't have 
 
 ###### C Sharp
 
-```c#
+```
 // Save that the user has redeemed 5 credits
 Branch.redeemRewards(5);
 ```
@@ -334,7 +334,7 @@ This call will retrieve the entire history of credits and redemptions from the i
 
 ###### C Sharp
 
-```c#
+```
 Branch.getCreditHistory(delegate(List<string> historyItems, string error) {
     if (error == null) {
         // process history
@@ -391,7 +391,7 @@ Retrieve the referral code created by current user
 
 ###### C Sharp
 
-```c#
+```
 Branch.getReferralCode(delegate(Dictionary<string, object> referralObject, string error) {
     if (error == null) {
 		string referralCode = referralObject["referral_code"];
@@ -411,7 +411,7 @@ The returned referral code is a 6 character long unique alpha-numeric string wra
 
 ###### C Sharp
 
-```c#
+```
 int amount = 5;
 Branch.getCreditHistory(amount, delegate(Dictionary<string, object> referralObject, string error) {
     if (error == null) {
@@ -429,7 +429,7 @@ The resulting code will have your prefix, concatenated with a 4 character long u
 
 ###### C Sharp
 
-```c#
+```
 int amount = 5;
 string prefix = "BRANCH";
 Branch.getCreditHistory(prefix, amount, delegate(Dictionary<string, object> referralObject, string error) {
@@ -447,7 +447,7 @@ The prefix parameter is optional here, i.e. it could be getReferralCodeWithAmoun
 
 ###### C Sharp
 
-```c#
+```
 int amount = 5;
 string prefix = "BRANCH";
 DateTime expiration = DateTime.Now.AddDays(1);
@@ -478,7 +478,7 @@ You can also tune the referral code to the finest granularity, with the followin
 
 ###### C Sharp
 
-```c#
+```
 int amount = 5;
 string prefix = "BRANCH";
 DateTime expiration = DateTime.Now.AddDays(1);
@@ -508,7 +508,7 @@ If valid, returns the referral code JSONObject in the call back.
 
 ###### C Sharp
 
-```c#
+```
 Branch.validateReferralCode(code, delegate(Dictionary<string, object> referralObject, string error) {
     if (error != null) {
     	System.Console.WriteLine("Error in validating referral code: " + error);
@@ -534,7 +534,7 @@ Apply a referral code if it exists in Branch system and is still valid (see abov
 
 ###### C Sharp
 
-```c#
+```
 Branch.applyReferralCode(code, delegate(Dictionary<string, object> referralObject, string error) {
     if (error == null) {
         // applied. you can get the referral code amount from the params and deduct it in your UI.
