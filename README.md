@@ -103,6 +103,7 @@ Called when app first initializes a session, ideally in a class that is initiate
 This deep link routing callback is called 100% of the time on init, with your link params or an empty dictionary if none present.
 
 ###### C Sharp
+
 ```
 using UnityEngine;
 using System.Collections.Generic;
@@ -160,18 +161,22 @@ If you provide a logout function in your app, be sure to clear the user when the
 **Warning** this call will clear the referral credits and attribution on the device.
 
 ###### C Sharp
+
 ```
 Branch.logout();
 ```
 
 ### Register custom events
+
 ###### C Sharp
 ```
 Branch.userCompletedAction("your_custom_event"); // your custom event name should not exceed 63 characters
 ```
 
 OR if you want to store some state with the event
+
 ###### C Sharp
+
 ```
 Dictionary<string, object> stateItems = new Dictionary<string, object>
 {
@@ -182,7 +187,9 @@ Branch.userCompletedAction("your_custom_event", stateItems); // same 63 characte
 ```
 
 Some example events you might want to track:
+
 ###### C Sharp
+
 ```
 "complete_purchase"  
 "wrote_message"  
@@ -198,6 +205,7 @@ There are a bunch of options for creating these links. You can tag them for anal
 For more details on how to create links, see the [Branch link creation guide](https://github.com/BranchMetrics/Branch-Integration-Guides/blob/master/url-creation-guide.md)
 
 ###### C Sharp
+
 ```
 // associate data with a link
 // you can access this data from any instance that installs or opens the app from this link (amazing...)
@@ -294,6 +302,7 @@ Warning: For a referral program, you should not use unique awards for custom eve
 Reward balances change randomly on the backend when certain actions are taken (defined by your rules), so you'll need to make an asynchronous call to retrieve the balance. Here is the syntax:
 
 ###### C Sharp
+
 ```
 Branch.loadRewards(delegate(bool changed, string error) {
     // changed boolean will indicate if the balance changed from what is currently in memory
@@ -309,6 +318,7 @@ Branch.loadRewards(delegate(bool changed, string error) {
 We will store how many of the rewards have been deployed so that you don't have to track it on your end. In order to save that you gave the credits to the user, you can call redeem. Redemptions will reduce the balance of outstanding credits permanently.
 
 ###### C Sharp
+
 ```
 // Save that the user has redeemed 5 credits
 Branch.redeemRewards(5);
@@ -319,6 +329,7 @@ Branch.redeemRewards(5);
 This call will retrieve the entire history of credits and redemptions from the individual user. To use this call, implement like so:
 
 ###### C Sharp
+
 ```
 Branch.getCreditHistory(delegate(List<string> historyItems, string error) {
     if (error == null) {
@@ -328,6 +339,7 @@ Branch.getCreditHistory(delegate(List<string> historyItems, string error) {
 ```
 
 The response will return an array that has been parsed from the following JSON:
+
 ```json
 [
     {
@@ -354,6 +366,7 @@ The response will return an array that has been parsed from the following JSON:
     }
 ]
 ```
+
 **referrer**
 : The id of the referring user for this credit transaction. Returns null if no referrer is involved. Note this id is the user id in developer's own system that's previously passed to Branch's identify user API call.
 
@@ -373,6 +386,7 @@ The response will return an array that has been parsed from the following JSON:
 Retrieve the referral code created by current user
 
 ###### C Sharp
+
 ```
 Branch.getReferralCode(delegate(Dictionary<string, object> referralObject, string error) {
     if (error == null) {
@@ -392,6 +406,7 @@ The returned referral code is a 6 character long unique alpha-numeric string wra
 : The amount of credit to redeem when user applies the referral code
 
 ###### C Sharp
+
 ```
 int amount = 5;
 Branch.getCreditHistory(amount, delegate(Dictionary<string, object> referralObject, string error) {
@@ -409,6 +424,7 @@ The resulting code will have your prefix, concatenated with a 4 character long u
 
 
 ###### C Sharp
+
 ```
 int amount = 5;
 string prefix = "BRANCH";
@@ -426,6 +442,7 @@ The prefix parameter is optional here, i.e. it could be getReferralCodeWithAmoun
 : The expiration date of the referral code
 
 ###### C Sharp
+
 ```
 int amount = 5;
 string prefix = "BRANCH";
@@ -456,6 +473,7 @@ You can also tune the referral code to the finest granularity, with the followin
 2 (_BranchBothUsers_) - both the creator and applicant receive credit
 
 ###### C Sharp
+
 ```
 int amount = 5;
 string prefix = "BRANCH";
@@ -485,6 +503,7 @@ If valid, returns the referral code JSONObject in the call back.
 : The referral code to validate
 
 ###### C Sharp
+
 ```
 Branch.validateReferralCode(code, delegate(Dictionary<string, object> referralObject, string error) {
     if (error != null) {
@@ -510,6 +529,7 @@ Apply a referral code if it exists in Branch system and is still valid (see abov
 : The referral code to apply
 
 ###### C Sharp
+
 ```
 Branch.applyReferralCode(code, delegate(Dictionary<string, object> referralObject, string error) {
     if (error == null) {
