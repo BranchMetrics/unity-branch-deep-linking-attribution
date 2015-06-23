@@ -153,6 +153,10 @@ void _logout() {
 
 # pragma mark - Configuation methods
 
+void _setDebug() {
+    [Branch setDebug];
+}
+
 void _setRetryInterval(int retryInterval) {
     [[Branch getInstance:_branchKey] setRetryInterval:retryInterval];
 }

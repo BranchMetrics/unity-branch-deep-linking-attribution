@@ -89,6 +89,10 @@ public class BranchUnityWrapper {
      * Configuration methods
      */
 
+    public static void setDebug() {
+        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).setDebug();
+    }
+
     public static void setRetryInterval(int retryInterval) {
         Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).setRetryInterval(retryInterval);
     }

@@ -63,6 +63,10 @@ public class BranchAndroidWrapper {
     #endregion
     
     #region Configuration methods
+
+    public static void setDebug() {
+        _getBranchClass().CallStatic("setDebug");
+    }
     
     public static void setRetryInterval(int retryInterval) {
         _getBranchClass().CallStatic("setRetryInterval", retryInterval);

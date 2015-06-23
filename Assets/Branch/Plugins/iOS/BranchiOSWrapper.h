@@ -21,6 +21,7 @@ extern "C" {
 
     # pragma mark - Configuration methods
 
+    void _setDebug();
     void _setRetryInterval(int retryInterval);
     void _setMaxRetries(int maxRetries);
     void _setNetworkTimeout(int timeout);

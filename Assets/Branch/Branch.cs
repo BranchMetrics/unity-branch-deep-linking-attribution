@@ -119,6 +119,15 @@ public class Branch : MonoBehaviour {
     #region Configuration methods
 
     /**
+     * Puts Branch into debug mode, causing it to log all requests, and more importantly, not reference the hardware ID of the phone so you can register installs after just uninstalling/reinstalling the app.
+     *
+     * Make sure to remove setDebug before releasing.
+     */
+    public static void setDebug() {
+        _setDebug();
+    }
+
+    /**
      * How many seconds between retries
      */
     public static void setRetryInterval(int retryInterval) {
@@ -593,6 +602,9 @@ public class Branch : MonoBehaviour {
     private static extern void _logout();
     
     [DllImport ("__Internal")]
+    private static extern void _setDebug();
+
+    [DllImport ("__Internal")]
     private static extern void _setRetryInterval(int retryInterval);
     
     [DllImport ("__Internal")]
@@ -760,6 +772,10 @@ public class Branch : MonoBehaviour {
     
     private static void _logout() {
         BranchAndroidWrapper.logout();
+    }
+
+    private static void _setDebug() {
+        BranchAndroidWrapper.setDebug();
     }
     
     private static void _setRetryInterval(int retryInterval) {
