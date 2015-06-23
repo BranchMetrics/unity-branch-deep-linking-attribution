@@ -16,7 +16,7 @@ static NSString *CreateNSString(const char *string) {
     if (string == NULL) {
         return nil;
     }
-
+    
     return [NSString stringWithUTF8String:string];
 }
 
@@ -28,7 +28,7 @@ static NSDate *CreateNSDate(char *strDate) {
     NSString *str = CreateNSString(strDate);
     NSDateFormatter *formatter= [[NSDateFormatter alloc] init];
     formatter.dateFormat = @"yyyy-MM-ddTHH:mm:ssZ";
-
+    
     return [formatter dateFromString:str];
 }
 
@@ -48,53 +48,53 @@ static NSArray *arrayFromJsonString(char *jsonString) {
 static const char *jsonCStringFromDictionary(NSDictionary *dictionary) {
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionary options:kNilOptions error:nil];
     NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-
+    
     return [jsonString cStringUsingEncoding:NSUTF8StringEncoding];
 }
 
 static callbackWithParams callbackWithParamsForCallbackId(char *callbackId) {
     NSString *callbackString = CreateNSString(callbackId);
-
-    return ^(NSDictionary *params, NSError *error) {
+    
+    return Block_copy(^(NSDictionary *params, NSError *error) {
         id errorDictItem = error ? [error description] : [NSNull null];
         id paramsDictItem = params ?: [NSNull null];
         NSDictionary *callbackDict = @{ @"callbackId": callbackString, @"params": paramsDictItem, @"error": errorDictItem };
         
         UnitySendMessage("Branch", "_asyncCallbackWithParams", jsonCStringFromDictionary(callbackDict));
-    };
+    });
 }
 
 static callbackWithStatus callbackWithStatusForCallbackId(char *callbackId) {
     NSString *callbackString = CreateNSString(callbackId);
-
-    return ^(BOOL status, NSError *error) {
+    
+    return Block_copy(^(BOOL status, NSError *error) {
         id errorDictItem = error ? [error description] : [NSNull null];
         NSDictionary *callbackDict = @{ @"callbackId": callbackString, @"status": @(status), @"error": errorDictItem };
         
         UnitySendMessage("Branch", "_asyncCallbackWithStatus", jsonCStringFromDictionary(callbackDict));
-    };
+    });
 }
 
 static callbackWithList callbackWithListForCallbackId(char *callbackId) {
     NSString *callbackString = CreateNSString(callbackId);
-
-    return ^(NSArray *list, NSError *error) {
+    
+    return Block_copy(^(NSArray *list, NSError *error) {
         id errorDictItem = error ? [error description] : [NSNull null];
         NSDictionary *callbackDict = @{ @"callbackId": callbackString, @"list": list, @"error": errorDictItem };
         
         UnitySendMessage("Branch", "_asyncCallbackWithList", jsonCStringFromDictionary(callbackDict));
-    };
+    });
 }
 
 static callbackWithUrl callbackWithUrlForCallbackId(char *callbackId) {
     NSString *callbackString = CreateNSString(callbackId);
-
-    return ^(NSString *url, NSError *error) {
+    
+    return Block_copy(^(NSString *url, NSError *error) {
         id errorDictItem = error ? [error description] : [NSNull null];
         NSDictionary *callbackDict = @{ @"callbackId": callbackString, @"url": url, @"error": errorDictItem };
         
         UnitySendMessage("Branch", "_asyncCallbackWithUrl", jsonCStringFromDictionary(callbackDict));
-    };
+    });
 }
 
 #pragma mark - Key methods
