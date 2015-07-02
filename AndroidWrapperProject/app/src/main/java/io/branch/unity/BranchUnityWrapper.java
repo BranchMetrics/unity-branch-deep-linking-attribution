@@ -218,7 +218,7 @@ public class BranchUnityWrapper {
         Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getShortUrl(new BranchReferralInitListenerUnityCallback(callbackId));
     }
 
-    public static void getShortURL(String callbackId, String parameterDict) {
+    public static void getShortURL(String parameterDict, String callbackId) {
         try {
             JSONObject parameters = new JSONObject(parameterDict);
 
