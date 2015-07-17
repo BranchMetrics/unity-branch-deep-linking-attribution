@@ -34,23 +34,23 @@ public class BranchUnityWrapper {
 
     public static void initSession() {
         Activity unityActivity = UnityPlayer.currentActivity;
-        Branch.getInstance(unityActivity.getApplicationContext(), _branchKey).initSessionWithData(unityActivity.getIntent().getData());
+        Branch.getInstance(unityActivity.getApplicationContext(), _branchKey).initSessionWithData(unityActivity.getIntent().getData(), unityActivity);
     }
 
     public static void initSession(boolean isReferrable) {
         Activity unityActivity = UnityPlayer.currentActivity;
         // No congruent API here, so borrowing from initSession(callback, referrable, data) method
-        Branch.getInstance(unityActivity.getApplicationContext(), _branchKey).initSession(null, isReferrable, unityActivity.getIntent().getData());
+        Branch.getInstance(unityActivity.getApplicationContext(), _branchKey).initSession(null, isReferrable, unityActivity.getIntent().getData(), unityActivity);
     }
 
     public static void initSession(String callbackId) {
         Activity unityActivity = UnityPlayer.currentActivity;
-        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).initSession(new BranchReferralInitListenerUnityCallback(callbackId), unityActivity.getIntent().getData());
+        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).initSession(new BranchReferralInitListenerUnityCallback(callbackId), unityActivity.getIntent().getData(), unityActivity);
     }
 
     public static void initSession(String callbackId, boolean isReferrable) {
         Activity unityActivity = UnityPlayer.currentActivity;
-        Branch.getInstance(unityActivity.getApplicationContext(), _branchKey).initSession(new BranchReferralInitListenerUnityCallback(callbackId), isReferrable, unityActivity.getIntent().getData());
+        Branch.getInstance(unityActivity.getApplicationContext(), _branchKey).initSession(new BranchReferralInitListenerUnityCallback(callbackId), isReferrable, unityActivity.getIntent().getData(), unityActivity);
     }
 
     public static void closeSession() {
