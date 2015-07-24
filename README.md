@@ -104,7 +104,7 @@ This deep link routing callback is called 100% of the time on init, with your li
 
 ###### C Sharp
 
-```
+```csharp
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -128,7 +128,7 @@ These session parameters will be available at any point later on with this comma
 
 ###### C Sharp
 
-```
+```csharp
 Dictionary<string, object> sessionParams = Branch.getLatestReferringParams();
 ```
 
@@ -139,7 +139,7 @@ If you ever want to access the original session params (the parameters passed in
 
 ###### C Sharp
 
-```
+```csharp
 Dictionary<string, object> installParams = Branch.getFirstReferringParams();
 ```
 
@@ -153,7 +153,7 @@ To identify a user, just call:
 
 ###### C Sharp
 
-```
+```csharp
 Branch.setIdentity("your user id");
 ```
 
@@ -165,7 +165,7 @@ If you provide a logout function in your app, be sure to clear the user when the
 
 ###### C Sharp
 
-```
+```csharp
 Branch.logout();
 ```
 
@@ -173,7 +173,7 @@ Branch.logout();
 
 ###### C Sharp
 
-```
+```csharp
 Branch.userCompletedAction("your_custom_event"); // your custom event name should not exceed 63 characters
 ```
 
@@ -181,7 +181,7 @@ OR if you want to store some state with the event
 
 ###### C Sharp
 
-```
+```csharp
 Dictionary<string, object> stateItems = new Dictionary<string, object>
 {
 	{ "username", "Joe" },
@@ -194,9 +194,9 @@ Some example events you might want to track:
 
 ###### C Sharp
 
-```
-"complete_purchase"  
-"wrote_message"  
+```csharp
+"complete_purchase"
+"wrote_message"
 "finished_level_ten"
 ```
 
@@ -210,7 +210,7 @@ For more details on how to create links, see the [Branch link creation guide](ht
 
 ###### C Sharp
 
-```
+```csharp
 // associate data with a link
 // you can access this data from any instance that installs or opens the app from this link (amazing...)
 
@@ -264,7 +264,7 @@ You can customize the Facebook OG tags of each URL if you want to dynamically sh
 | "$og_title" | The title you'd like to appear for the link in social media
 | "$og_description" | The description you'd like to appear for the link in social media
 | "$og_image_url" | The URL for the image you'd like to appear for the link in social media
-| "$og_video" | The URL for the video 
+| "$og_video" | The URL for the video
 | "$og_url" | The URL you'd like to appear
 | "$og_app_id" | Your OG app ID. Optional and rarely used.
 
@@ -284,7 +284,7 @@ You have the ability to control the direct deep linking of each link by insertin
 
 | Key | Value
 | --- | ---
-| "$deeplink_path" | The value of the deep link path that you'd like us to append to your URI. For example, you could specify "$deeplink_path": "radio/station/456" and we'll open the app with the URI "yourapp://radio/station/456?link_click_id=branch-identifier". This is primarily for supporting legacy deep linking infrastructure. 
+| "$deeplink_path" | The value of the deep link path that you'd like us to append to your URI. For example, you could specify "$deeplink_path": "radio/station/456" and we'll open the app with the URI "yourapp://radio/station/456?link_click_id=branch-identifier". This is primarily for supporting legacy deep linking infrastructure.
 | "$always_deeplink" | true or false. (default is not to deep link first) This key can be specified to have our linking service force try to open the app, even if we're not sure the user has the app installed. If the app is not installed, we fall back to the respective app store or $platform_url key. By default, we only open the app if we've seen a user initiate a session in your app from a Branch link (has been cookied and deep linked by Branch)
 
 ## Referral system rewarding functionality
@@ -307,7 +307,7 @@ Reward balances change randomly on the backend when certain actions are taken (d
 
 ###### C Sharp
 
-```
+```csharp
 Branch.loadRewards(delegate(bool changed, string error) {
     // changed boolean will indicate if the balance changed from what is currently in memory
 
@@ -323,7 +323,7 @@ We will store how many of the rewards have been deployed so that you don't have 
 
 ###### C Sharp
 
-```
+```csharp
 // Save that the user has redeemed 5 credits
 Branch.redeemRewards(5);
 ```
@@ -334,7 +334,7 @@ This call will retrieve the entire history of credits and redemptions from the i
 
 ###### C Sharp
 
-```
+```csharp
 Branch.getCreditHistory(delegate(List<string> historyItems, string error) {
     if (error == null) {
         // process history
@@ -391,7 +391,7 @@ Retrieve the referral code created by current user
 
 ###### C Sharp
 
-```
+```csharp
 Branch.getReferralCode(delegate(Dictionary<string, object> referralObject, string error) {
     if (error == null) {
 		string referralCode = referralObject["referral_code"];
@@ -411,7 +411,7 @@ The returned referral code is a 6 character long unique alpha-numeric string wra
 
 ###### C Sharp
 
-```
+```csharp
 int amount = 5;
 Branch.getCreditHistory(amount, delegate(Dictionary<string, object> referralObject, string error) {
     if (error == null) {
@@ -429,7 +429,7 @@ The resulting code will have your prefix, concatenated with a 4 character long u
 
 ###### C Sharp
 
-```
+```csharp
 int amount = 5;
 string prefix = "BRANCH";
 Branch.getCreditHistory(prefix, amount, delegate(Dictionary<string, object> referralObject, string error) {
@@ -447,7 +447,7 @@ The prefix parameter is optional here, i.e. it could be getReferralCodeWithAmoun
 
 ###### C Sharp
 
-```
+```csharp
 int amount = 5;
 string prefix = "BRANCH";
 DateTime expiration = DateTime.Now.AddDays(1);
@@ -466,19 +466,19 @@ You can also tune the referral code to the finest granularity, with the followin
 **calculation_type**  _int_
 : This defines whether the referral code can be applied indefinitely, or only once per user
 
-0 (_BranchUnlimitedRewards_) - referral code can be applied continually  
+0 (_BranchUnlimitedRewards_) - referral code can be applied continually
 1 (_BranchUniqueRewards_) - a user can only apply a specific referral code once
 
 **location** _int_
 : The user to reward for applying the referral code
 
-0 (_BranchReferreeUser_) - the user applying the referral code receives credit  
-1 (_BranchReferringUser_) - the user who created the referral code receives credit  
+0 (_BranchReferreeUser_) - the user applying the referral code receives credit
+1 (_BranchReferringUser_) - the user who created the referral code receives credit
 2 (_BranchBothUsers_) - both the creator and applicant receive credit
 
 ###### C Sharp
 
-```
+```csharp
 int amount = 5;
 string prefix = "BRANCH";
 DateTime expiration = DateTime.Now.AddDays(1);
@@ -508,7 +508,7 @@ If valid, returns the referral code JSONObject in the call back.
 
 ###### C Sharp
 
-```
+```csharp
 Branch.validateReferralCode(code, delegate(Dictionary<string, object> referralObject, string error) {
     if (error != null) {
     	System.Console.WriteLine("Error in validating referral code: " + error);
@@ -534,7 +534,7 @@ Apply a referral code if it exists in Branch system and is still valid (see abov
 
 ###### C Sharp
 
-```
+```csharp
 Branch.applyReferralCode(code, delegate(Dictionary<string, object> referralObject, string error) {
     if (error == null) {
         // applied. you can get the referral code amount from the params and deduct it in your UI.
