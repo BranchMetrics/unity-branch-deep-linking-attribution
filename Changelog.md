@@ -1,6 +1,6 @@
 Branch Unity SDK change log
 
-- v0.1.3 Fixing Issue#2 "Crash on link click"
+- v0.1.3 Fixing a potential null pointer in the Android wrapper when no Activity was provided in the init.
 
 - v0.1.2 Fixing reverse param order on getShortUrl(params, callback) for Android.
 
