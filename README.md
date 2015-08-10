@@ -19,7 +19,7 @@ Due to Unity requirements, our UnityPackage file must have all of its contents i
 
 ![Move Plugins Folder](https://raw.githubusercontent.com/BranchMetrics/Branch-Unity-SDK/8670cf9347e4d7c9a88e7c9c4263aa2eed3f2a27/Docs/Screenshots/move-to-assets.gif)
 
-### Register you app
+### Register your app
 
 You can sign up for your own app id at [https://dashboard.branch.io](https://dashboard.branch.io)
 
