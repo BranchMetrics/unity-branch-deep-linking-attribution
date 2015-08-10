@@ -7,165 +7,155 @@
 //
 
 #import "BNCServerInterface.h"
-#import "BNCPreferenceHelper.h"
 #import "BNCConfig.h"
-#import "BNCLinkData.h"
 #import "BNCEncodingUtils.h"
+#import "BNCError.h"
 
 @implementation BNCServerInterface
 
-// make a generalized get request
-- (void)getRequestAsync:(NSDictionary *)params url:(NSString *)url andTag:(NSString *)requestTag {
-    [self getRequestAsync:params url:url andTag:requestTag retryNumber:0 log:YES];
+#pragma mark - GET methods
+
+- (void)getRequest:(NSDictionary *)params url:(NSString *)url key:(NSString *)key callback:(BNCServerCallback)callback {
+    [self getRequest:params url:url key:key retryNumber:0 log:YES callback:callback];
 }
 
-// this is actually a synchronous call; it should NOT be called from the main queue
-- (void)getRequestAsync:(NSDictionary *)params url:(NSString *)url andTag:(NSString *)requestTag log:(BOOL)log {
-    [self getRequestAsync:params url:url andTag:requestTag retryNumber:0 log:log];
+- (void)getRequest:(NSDictionary *)params url:(NSString *)url key:(NSString *)key log:(BOOL)log callback:(BNCServerCallback)callback {
+    [self getRequest:params url:url key:key retryNumber:0 log:log callback:callback];
 }
 
-- (void)getRequestAsync:(NSDictionary *)params url:(NSString *)url andTag:(NSString *)requestTag retryNumber:(NSInteger)retryNumber log:(BOOL)log {
-    BNCServerResponse *serverResponse = [self genericSyncHTTPRequest:[self prepareGetRequest:params url:url retryNumber:retryNumber log:log] withTag:requestTag andLinkData:nil];
+- (void)getRequest:(NSDictionary *)params url:(NSString *)url key:(NSString *)key retryNumber:(NSInteger)retryNumber log:(BOOL)log callback:(BNCServerCallback)callback {
+    NSURLRequest *request = [self prepareGetRequest:params url:url key:key retryNumber:retryNumber log:log];
 
-    NSInteger status = [serverResponse.statusCode integerValue];
-    BOOL isRetryableStatusCode = status >= 500;
-    
-    // Retry the request if appropriate
-    if (retryNumber < [BNCPreferenceHelper getRetryCount] && isRetryableStatusCode) {
-        [NSThread sleepForTimeInterval:[BNCPreferenceHelper getRetryInterval]];
-
-        if (log) {
-            [BNCPreferenceHelper log:FILE_NAME line:LINE_NUM message:@"Replaying request with tag %@", requestTag];
-        }
-
-        [self getRequestAsync:params url:url andTag:requestTag retryNumber:++retryNumber log:log];
-    }
-    // Otherwise, let the delegate handle it
-    else if (self.delegate) {
-        [self.delegate serverCallback:serverResponse];
-    }
-}
-
-- (BNCServerResponse *)getRequestSync:(NSDictionary *)params url:(NSString *)url andTag:(NSString *)requestTag {
-    return [self getRequestSync:params url:url andTag:requestTag log:YES];
-}
-
-- (BNCServerResponse *)getRequestSync:(NSDictionary *)params url:(NSString *)url andTag:(NSString *)requestTag log:(BOOL)log {
-    return [self genericSyncHTTPRequest:[self prepareGetRequest:params url:url retryNumber:0 log:log] withTag:requestTag andLinkData:nil];
-}
-
-// make a generalized post request
-- (void)postRequestAsync:(NSDictionary *)post url:(NSString *)url andTag:(NSString *)requestTag {
-    [self postRequestAsync:post url:url andTag:requestTag andLinkData:nil retryNumber:0 log:YES];
-}
-
-- (void)postRequestAsync:(NSDictionary *)post url:(NSString *)url andTag:(NSString *)requestTag log:(BOOL)log {
-    [self postRequestAsync:post url:url andTag:requestTag andLinkData:nil retryNumber:0 log:log];
-}
-
-- (void)postRequestAsync:(NSDictionary *)post url:(NSString *)url andTag:(NSString *)requestTag andLinkData:(BNCLinkData *)linkData {
-    [self postRequestAsync:post url:url andTag:requestTag andLinkData:linkData retryNumber:0 log:YES];
-}
-
-// this is actually a synchronous call; it should NOT be called from the main queue
-- (void)postRequestAsync:(NSDictionary *)post url:(NSString *)url andTag:(NSString *)requestTag andLinkData:(BNCLinkData *)linkData log:(BOOL)log {
-    [self postRequestAsync:post url:url andTag:requestTag andLinkData:linkData retryNumber:0 log:log];
-}
-
-- (void)postRequestAsync:(NSDictionary *)post url:(NSString *)url andTag:(NSString *)requestTag andLinkData:(BNCLinkData *)linkData retryNumber:(NSInteger)retryNumber log:(BOOL)log {
-    BNCServerResponse *serverResponse = [self genericSyncHTTPRequest:[self preparePostRequest:post url:url retryNumber:retryNumber log:log] withTag:requestTag andLinkData:linkData];
-    
-    NSInteger status = [serverResponse.statusCode integerValue];
-    BOOL isRetryableStatusCode = status >= 500;
-
-    // Retry the request if appropriate
-    if (retryNumber < [BNCPreferenceHelper getRetryCount] && isRetryableStatusCode) {
-        [NSThread sleepForTimeInterval:[BNCPreferenceHelper getRetryInterval]];
-
-        if (log) {
-            [BNCPreferenceHelper log:FILE_NAME line:LINE_NUM message:@"Replaying request with tag %@", requestTag];
-        }
-
-        [self postRequestAsync:post url:url andTag:requestTag andLinkData:linkData retryNumber:++retryNumber log:log];
-    }
-    // Otherwise, let the delegate handle it
-    else if (self.delegate) {
-        [self.delegate serverCallback:serverResponse];
-    }
-}
-
-- (BNCServerResponse *)postRequestSync:(NSDictionary *)post url:(NSString *)url andTag:(NSString *)requestTag andLinkData:(BNCLinkData *)linkData log:(BOOL)log {
-    NSURLRequest *request = [self preparePostRequest:post url:url retryNumber:0 log:log];
-    return [self genericSyncHTTPRequest:request withTag:requestTag andLinkData:linkData];
-}
-
-- (void)genericAsyncHTTPRequest:(NSMutableURLRequest *)request withTag:(NSString *)requestTag andLinkData:(BNCLinkData *)linkData {
-    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler: ^(NSURLResponse *response, NSData *POSTReply, NSError *error) {
-        BNCServerResponse *serverResponse = [self processServerResponse:response data:POSTReply error:error tag:requestTag andLinkData:linkData];
-        if (self.delegate) [self.delegate serverCallback:serverResponse];
+    [self genericHTTPRequest:request retryNumber:retryNumber log:log callback:callback retryHandler:^NSURLRequest *(NSInteger lastRetryNumber) {
+        return [self prepareGetRequest:params url:url key:key retryNumber:++lastRetryNumber log:log];
     }];
 }
 
-- (BNCServerResponse *)genericSyncHTTPRequest:(NSURLRequest *)request withTag:(NSString *)requestTag andLinkData:(BNCLinkData *)linkData {
-    NSURLResponse * response = nil;
-    NSError * error = nil;
-    NSData * POSTReply = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    
-    return [self processServerResponse:response data:POSTReply error:error tag:requestTag andLinkData:linkData];
+- (BNCServerResponse *)getRequest:(NSDictionary *)params url:(NSString *)url key:(NSString *)key {
+    return [self getRequest:params url:url key:key log:YES];
 }
 
-- (NSURLRequest *)prepareGetRequest:(NSDictionary *)params url:(NSString *)url retryNumber:(NSInteger)retryNumber log:(BOOL)log {
-    NSMutableDictionary *fullParamDict = [[NSMutableDictionary alloc] init];
-    [fullParamDict addEntriesFromDictionary:params];
-    fullParamDict[@"sdk"] = [NSString stringWithFormat:@"ios%@", SDK_VERSION];
-    fullParamDict[@"retryNumber"] = @(retryNumber);
+- (BNCServerResponse *)getRequest:(NSDictionary *)params url:(NSString *)url key:(NSString *)key log:(BOOL)log {
+    NSURLRequest *request = [self prepareGetRequest:params url:url key:key retryNumber:0 log:log];
+    return [self genericHTTPRequest:request log:log];
+}
+
+
+#pragma mark - POST methods
+
+- (void)postRequest:(NSDictionary *)post url:(NSString *)url key:(NSString *)key callback:(BNCServerCallback)callback {
+    [self postRequest:post url:url retryNumber:0 key:key log:YES callback:callback];
+}
+
+- (void)postRequest:(NSDictionary *)post url:(NSString *)url key:(NSString *)key log:(BOOL)log callback:(BNCServerCallback)callback {
+    [self postRequest:post url:url retryNumber:0 key: key log:log callback:callback];
+}
+
+- (void)postRequest:(NSDictionary *)post url:(NSString *)url retryNumber:(NSInteger)retryNumber key:(NSString *)key log:(BOOL)log callback:(BNCServerCallback)callback {
+    NSURLRequest *request = [self preparePostRequest:post url:url key:key retryNumber:retryNumber log:log];
+
+    [self genericHTTPRequest:request retryNumber:retryNumber log:log callback:callback retryHandler:^NSURLRequest *(NSInteger lastRetryNumber) {
+        return [self preparePostRequest:post url:url key:key retryNumber:++lastRetryNumber log:log];
+    }];
+}
+
+- (BNCServerResponse *)postRequest:(NSDictionary *)post url:(NSString *)url key:(NSString *)key log:(BOOL)log {
+    NSURLRequest *request = [self preparePostRequest:post url:url key:key retryNumber:0 log:log];
+    return [self genericHTTPRequest:request log:log];
+}
+
+
+#pragma mark - Generic requests
+
+- (void)genericHTTPRequest:(NSURLRequest *)request log:(BOOL)log callback:(BNCServerCallback)callback {
+    [self genericHTTPRequest:request retryNumber:0 log:log callback:callback retryHandler:^NSURLRequest *(NSInteger lastRetryNumber) {
+        return request;
+    }];
+}
+
+- (void)genericHTTPRequest:(NSURLRequest *)request retryNumber:(NSInteger)retryNumber log:(BOOL)log callback:(BNCServerCallback)callback retryHandler:(NSURLRequest *(^)(NSInteger))retryHandler {
+    [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *responseData, NSError *error) {
+        BNCServerResponse *serverResponse = [self processServerResponse:response data:responseData error:error log:log];
+        NSInteger status = [serverResponse.statusCode integerValue];
+        BOOL isRetryableStatusCode = status >= 500;
+        
+        // Retry the request if appropriate
+        if (retryNumber < self.preferenceHelper.retryCount && isRetryableStatusCode) {
+            dispatch_time_t dispatchTime = dispatch_time(DISPATCH_TIME_NOW, self.preferenceHelper.retryInterval * NSEC_PER_SEC);
+            dispatch_after(dispatchTime, dispatch_get_main_queue(), ^{
+                if (log) {
+                    [self.preferenceHelper log:FILE_NAME line:LINE_NUM message:@"Replaying request with url %@", request.URL.relativePath];
+                }
+                
+                // Create the next request
+                NSURLRequest *retryRequest = retryHandler(retryNumber);
+                [self genericHTTPRequest:retryRequest retryNumber:(retryNumber + 1) log:log callback:callback retryHandler:retryHandler];
+            });
+        }
+        else if (callback) {
+            // Wrap up bad statuses w/ specific error messages
+            if (status >= 500) {
+                error = [NSError errorWithDomain:BNCErrorDomain code:BNCServerProblemError userInfo:@{ NSLocalizedDescriptionKey: @"Trouble reaching the Branch servers, please try again shortly" }];
+            }
+            else if (status == 409) {
+                error = [NSError errorWithDomain:BNCErrorDomain code:BNCDuplicateResourceError userInfo:@{ NSLocalizedDescriptionKey: @"A resource with this identifier already exists" }];
+            }
+            else if (status > 400) {
+                NSString *errorString = [serverResponse.data objectForKey:@"error"] ?: @"The request was invalid.";
+
+                error = [NSError errorWithDomain:BNCErrorDomain code:BNCBadRequestError userInfo:@{ NSLocalizedDescriptionKey: errorString }];
+            }
+            
+            if (error && log) {
+                [self.preferenceHelper log:FILE_NAME line:LINE_NUM message:@"An error prevented request to %@ from completing: %@", request.URL.absoluteString, error.localizedDescription];
+            }
+
+            callback(serverResponse, error);
+        }
+    }];
+}
+
+- (BNCServerResponse *)genericHTTPRequest:(NSURLRequest *)request log:(BOOL)log {
+    NSURLResponse *response = nil;
+    NSError *error = nil;
+    NSData *respData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
     
-    NSString *appId = [BNCPreferenceHelper getAppKey];
-    NSString *branchKey = [BNCPreferenceHelper getBranchKey];
-    if (![branchKey isEqualToString:NO_STRING_VALUE]) {
-        fullParamDict[KEY_BRANCH_KEY] = branchKey;
-    } else if (![appId isEqualToString:NO_STRING_VALUE]) {
-        fullParamDict[@"app_id"] = appId;
-    }
+    return [self processServerResponse:response data:respData error:error log:log];
+}
+
+
+#pragma mark - Internals
+
+- (NSURLRequest *)prepareGetRequest:(NSDictionary *)params url:(NSString *)url key:(NSString *)key retryNumber:(NSInteger)retryNumber log:(BOOL)log {
+    NSDictionary *preparedParams = [self prepareParamDict:params key:key retryNumber:retryNumber];
     
-    NSString *requestUrlString = [NSString stringWithFormat:@"%@%@", url, [BNCEncodingUtils encodeDictionaryToQueryString:fullParamDict]];
+    NSString *requestUrlString = [NSString stringWithFormat:@"%@%@", url, [BNCEncodingUtils encodeDictionaryToQueryString:preparedParams]];
     
     if (log) {
-        [BNCPreferenceHelper log:FILE_NAME line:LINE_NUM message:@"using url = %@", url];
+        [self.preferenceHelper log:FILE_NAME line:LINE_NUM message:@"using url = %@", url];
     }
     
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     [request setURL:[NSURL URLWithString:requestUrlString]];
     [request setHTTPMethod:@"GET"];
-    [request setValue:@"applications/json" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     
     return request;
 }
 
-- (NSURLRequest *)preparePostRequest:(NSDictionary *)params url:(NSString *)url retryNumber:(NSInteger)retryNumber log:(BOOL)log {
-    NSMutableDictionary *fullParamDict = [[NSMutableDictionary alloc] init];
-    [fullParamDict addEntriesFromDictionary:params];
-    fullParamDict[@"sdk"] = [NSString stringWithFormat:@"ios%@", SDK_VERSION];
-    fullParamDict[@"retryNumber"] = @(retryNumber);
-    
-    NSString *appId = [BNCPreferenceHelper getAppKey];
-    NSString *branchKey = [BNCPreferenceHelper getBranchKey];
-    if (![branchKey isEqualToString:NO_STRING_VALUE]) {
-        fullParamDict[KEY_BRANCH_KEY] = branchKey;
-    } else if (![appId isEqualToString:NO_STRING_VALUE]) {
-        fullParamDict[@"app_id"] = appId;
-    }
+- (NSURLRequest *)preparePostRequest:(NSDictionary *)params url:(NSString *)url key:(NSString *)key retryNumber:(NSInteger)retryNumber log:(BOOL)log {
+    NSDictionary *preparedParams = [self prepareParamDict:params key:key retryNumber:retryNumber];
 
-    NSData *postData = [BNCEncodingUtils encodeDictionaryToJsonData:fullParamDict];
+    NSData *postData = [BNCEncodingUtils encodeDictionaryToJsonData:preparedParams];
     NSString *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
     
     if (log) {
-        [BNCPreferenceHelper log:FILE_NAME line:LINE_NUM message:@"using url = %@", url];
-        [BNCPreferenceHelper log:FILE_NAME line:LINE_NUM message:@"body = %@", [fullParamDict description]];
+        [self.preferenceHelper log:FILE_NAME line:LINE_NUM message:@"using url = %@", url];
+        [self.preferenceHelper log:FILE_NAME line:LINE_NUM message:@"body = %@", preparedParams];
     }
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
-    [request setTimeoutInterval:[BNCPreferenceHelper getTimeout]];
+    [request setTimeoutInterval:self.preferenceHelper.timeout];
     [request setHTTPMethod:@"POST"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
@@ -174,9 +164,24 @@
     return request;
 }
 
-- (BNCServerResponse *)processServerResponse:(NSURLResponse *)response data:(NSData *)data error:(NSError *)error tag:(NSString *)requestTag andLinkData:(BNCLinkData *)linkData {
-    BNCServerResponse *serverResponse = [[BNCServerResponse alloc] initWithTag:requestTag];
-    serverResponse.linkData = linkData;
+- (NSDictionary *)prepareParamDict:(NSDictionary *)params key:(NSString *)key retryNumber:(NSInteger)retryNumber {
+    NSMutableDictionary *fullParamDict = [[NSMutableDictionary alloc] init];
+    [fullParamDict addEntriesFromDictionary:params];
+    fullParamDict[@"sdk"] = [NSString stringWithFormat:@"ios%@", SDK_VERSION];
+    fullParamDict[@"retryNumber"] = @(retryNumber);
+    
+    if ([key hasPrefix:@"key_"]) {
+        fullParamDict[@"branch_key"] = key;
+    }
+    else {
+        fullParamDict[@"app_id"] = key;
+    }
+    
+    return fullParamDict;
+}
+
+- (BNCServerResponse *)processServerResponse:(NSURLResponse *)response data:(NSData *)data error:(NSError *)error log:(BOOL)log {
+    BNCServerResponse *serverResponse = [[BNCServerResponse alloc] init];
 
     if (!error) {
         serverResponse.statusCode = @([(NSHTTPURLResponse *)response statusCode]);
@@ -187,13 +192,8 @@
         serverResponse.data = error.userInfo;
     }
 
-    if ([BNCPreferenceHelper isDebug]  // for efficiency short-circuit purpose
-        && ![requestTag isEqualToString:REQ_TAG_DEBUG_LOG]
-        && ![requestTag isEqualToString:REQ_TAG_DEBUG_CONNECT]
-        && [requestTag isEqualToString:REQ_TAG_DEBUG_DISCONNECT]
-        && [requestTag isEqualToString:REQ_TAG_DEBUG_SCREEN])
-    {
-        [BNCPreferenceHelper log:FILE_NAME line:LINE_NUM message:@"returned = %@", [serverResponse description]];
+    if (log) {
+        [self.preferenceHelper log:FILE_NAME line:LINE_NUM message:@"returned = %@", serverResponse];
     }
     
     return serverResponse;

@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 
 import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
+import io.branch.referral.SharingHelper;
 
 /**
  * Created by grahammueller on 3/25/15.
@@ -28,6 +29,7 @@ public class BranchUnityWrapper {
         _branchKey = branchKey;
     }
 
+    private static Branch.ShareLinkBuilder linkBuilder = null;
     /**
      * InitSession methods
      */
@@ -127,12 +129,12 @@ public class BranchUnityWrapper {
         }
     }
 
-    public static void getTotalCountsForAction(String action) {
-        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getTotalCountsForAction(action);
+    public static int getTotalCountsForAction(String action) {
+        return Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getTotalCountsForAction(action);
     }
 
-    public static void getUniqueCountsForAction(String action) {
-        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getUniqueCountsForAction(action);
+    public static int getUniqueCountsForAction(String action) {
+        return Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getUniqueCountsForAction(action);
     }
 
     /**
@@ -350,6 +352,45 @@ public class BranchUnityWrapper {
     }
 
     /**
+     * Share methods
+     */
+
+    public static void shareLink(String parameterDict, String tagList, String message, String feature, String stage, String defaultUrl, String callbackId) {
+        try {
+            JSONObject parameters = new JSONObject(parameterDict);
+            JSONArray tagsJArray = new JSONArray(tagList);
+
+            linkBuilder = new Branch.ShareLinkBuilder(UnityPlayer.currentActivity, parameters);
+            linkBuilder.addPreferredSharingOption(SharingHelper.SHARE_WITH.FACEBOOK);
+            linkBuilder.addPreferredSharingOption(SharingHelper.SHARE_WITH.TWITTER);
+            linkBuilder.addPreferredSharingOption(SharingHelper.SHARE_WITH.MESSAGE);
+            linkBuilder.addPreferredSharingOption(SharingHelper.SHARE_WITH.EMAIL);
+            linkBuilder.addPreferredSharingOption(SharingHelper.SHARE_WITH.FLICKR);
+            linkBuilder.addPreferredSharingOption(SharingHelper.SHARE_WITH.GOOGLE_DOC);
+            linkBuilder.addPreferredSharingOption(SharingHelper.SHARE_WITH.WHATS_APP);
+            linkBuilder.setMessage(message);
+            linkBuilder.setStage(stage);
+            linkBuilder.setFeature(feature);
+            linkBuilder.setDefaultURL(defaultUrl);
+            linkBuilder.setCallback(new BranchReferralInitListenerUnityCallback(callbackId));
+
+            for (int i = 0; i < tagsJArray.length(); i++) {
+                linkBuilder.addTag(tagsJArray.getString(i));
+            }
+
+            UnityPlayer.currentActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    linkBuilder.shareLink();
+                }
+            });
+        }
+        catch (JSONException jsone) {
+            jsone.printStackTrace();
+        }
+    }
+
+    /**
      * Referral methods
      */
 
@@ -418,13 +459,15 @@ public class BranchUnityWrapper {
 
     private static Date _dateFromString(String dateString) {
         Date date = null;
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
-        try {
-            date = format.parse(dateString);
-        }
-        catch (ParseException pe) {
-           pe.printStackTrace();
+        if (dateString.length() > 0) {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+
+            try {
+                date = format.parse(dateString);
+            } catch (ParseException pe) {
+                pe.printStackTrace();
+            }
         }
 
         return date;
@@ -436,7 +479,7 @@ public class BranchUnityWrapper {
      * Callback for Unity
      */
 
-    private static class BranchReferralInitListenerUnityCallback implements Branch.BranchReferralInitListener, Branch.BranchReferralStateChangedListener, Branch.BranchListResponseListener, Branch.BranchLinkCreateListener {
+    private static class BranchReferralInitListenerUnityCallback implements Branch.BranchReferralInitListener, Branch.BranchReferralStateChangedListener, Branch.BranchListResponseListener, Branch.BranchLinkCreateListener, Branch.BranchLinkShareListener {
         public BranchReferralInitListenerUnityCallback(String callbackId) {
             _callbackId = callbackId;
         }
@@ -459,6 +502,25 @@ public class BranchUnityWrapper {
         @Override
         public void onLinkCreate(String url, BranchError branchError) {
             _sendMessageWithWithBranchError("_asyncCallbackWithUrl", branchError, "url", url);
+        }
+
+        @Override
+        public void onLinkShareResponse(String s, String s1, BranchError branchError) {
+            try {
+                JSONObject params = new JSONObject();
+                params.put("sharedLink", s);
+                params.put("sharedChannel", s1);
+
+                _sendMessageWithWithBranchError("_asyncCallbackWithParams", branchError, "params", params);
+            }
+            catch (JSONException jsone) {
+                jsone.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onChannelSelected(java.lang.String s) {
+            _sendMessageWithWithBranchError("_asyncCallbackWithParams", null, "selectedChannel", s);
         }
 
         private void _sendMessageWithWithBranchError(String asyncCallbackMethod, BranchError branchError, String extraKey, Object extraValue) {

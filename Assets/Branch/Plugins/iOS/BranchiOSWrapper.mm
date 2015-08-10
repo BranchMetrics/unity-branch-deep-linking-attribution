@@ -1,6 +1,8 @@
 #include "BranchiOSWrapper.h"
 #include "Branch.h"
 #import "AppDelegateListener.h"
+#import "UnityAppController.h"
+
 
 #pragma mark - Private notification class interface
 
@@ -154,7 +156,7 @@ void _logout() {
 # pragma mark - Configuation methods
 
 void _setDebug() {
-    [Branch setDebug];
+    [[Branch getInstance:_branchKey] setDebug];
 }
 
 void _setRetryInterval(int retryInterval) {
@@ -184,11 +186,11 @@ void _userCompletedActionWithState(char *action, char *stateDict) {
 }
 
 int _getTotalCountsForAction(char *action) {
-    return [[Branch getInstance:_branchKey] getTotalCountsForAction:CreateNSString(action)];
+    return (int)[[Branch getInstance:_branchKey] getTotalCountsForAction:CreateNSString(action)];
 }
 
 int _getUniqueCountsForAction(char *action) {
-    return [[Branch getInstance:_branchKey] getUniqueCountsForAction:CreateNSString(action)];
+    return (int)[[Branch getInstance:_branchKey] getUniqueCountsForAction:CreateNSString(action)];
 }
 
 #pragma mark - Credit methods
@@ -198,7 +200,7 @@ void _loadRewardsWithCallback(char *callbackId) {
 }
 
 int _getCredits() {
-    return [[Branch getInstance:_branchKey] getCredits];
+    return (int)[[Branch getInstance:_branchKey] getCredits];
 }
 
 void _redeemRewards(int count) {
@@ -206,7 +208,7 @@ void _redeemRewards(int count) {
 }
 
 int _getCreditsForBucket(char *bucket) {
-    return [[Branch getInstance:_branchKey] getCreditsForBucket:CreateNSString(bucket)];
+    return (int)[[Branch getInstance:_branchKey] getCreditsForBucket:CreateNSString(bucket)];
 }
 
 void _redeemRewardsForBucket(int count, char *bucket) {
@@ -222,11 +224,11 @@ void _getCreditHistoryForBucketWithCallback(char *bucket, char *callbackId) {
 }
 
 void _getCreditHistoryForTransactionWithLengthOrderAndCallback(char *creditTransactionId, int length, int order, char *callbackId) {
-    [[Branch getInstance:_branchKey] getCreditHistoryAfter:CreateNSString(creditTransactionId) number:length order:(CreditHistoryOrder)order andCallback:callbackWithListForCallbackId(callbackId)];
+    [[Branch getInstance:_branchKey] getCreditHistoryAfter:CreateNSString(creditTransactionId) number:length order:(BranchCreditHistoryOrder)order andCallback:callbackWithListForCallbackId(callbackId)];
 }
 
 void _getCreditHistoryForBucketWithTransactionLengthOrderAndCallback(char *bucket, char *creditTransactionId, int length, int order, char *callbackId) {
-    [[Branch getInstance:_branchKey] getCreditHistoryForBucket:CreateNSString(bucket) after:CreateNSString(creditTransactionId) number:length order:(CreditHistoryOrder)order andCallback:callbackWithListForCallbackId(callbackId)];
+    [[Branch getInstance:_branchKey] getCreditHistoryForBucket:CreateNSString(bucket) after:CreateNSString(creditTransactionId) number:length order:(BranchCreditHistoryOrder)order andCallback:callbackWithListForCallbackId(callbackId)];
 }
 
 #pragma mark - Content URL Methods
@@ -285,6 +287,19 @@ void _getShortURLWithParamsChannelFeatureStageMatchDurationAndCallback(char *par
     [[Branch getInstance:_branchKey] getShortURLWithParams:dictionaryFromJsonString(paramsDict) andChannel:CreateNSString(channel) andFeature:CreateNSString(feature) andStage:CreateNSString(stage) andMatchDuration:matchDuration andCallback:callbackWithUrlForCallbackId(callbackId)];
 }
 
+#pragma mark - Share Link methods
+
+void _shareLink(char *parameterDict, char *tagList, char *message, char *feature, char *stage, char *defaultUrl, char *callbackId) {
+    // Adding a link -- Branch UIActivityItemProvider
+    UIActivityItemProvider *itemProvider = [Branch getBranchActivityItemWithParams:dictionaryFromJsonString(parameterDict) feature:CreateNSString(feature) stage:CreateNSString(stage) tags:arrayFromJsonString(tagList)];
+    
+    // Pass this in the NSArray of ActivityItems when initializing a UIActivityViewController
+    UIActivityViewController *shareViewController = [[UIActivityViewController alloc] initWithActivityItems:@[CreateNSString(message), itemProvider] applicationActivities:nil];
+    
+    // Present the share sheet!
+    [GetAppController().rootViewController presentViewController:shareViewController animated:YES completion:nil];
+}
+
 #pragma mark - Referral methods
 
 void _getReferralUrlWithParamsTagsChannelAndCallback(char *paramsDict, char *tagList, char *channel, char *callbackId) {
@@ -296,35 +311,35 @@ void _getReferralUrlWithParamsChannelAndCallback(char *paramsDict, char *channel
 }
 
 void _getReferralCodeWithCallback(char *callbackId) {
-    [[Branch getInstance:_branchKey] getReferralCodeWithCallback:callbackWithParamsForCallbackId(callbackId)];
+    [[Branch getInstance:_branchKey] getPromoCodeWithCallback:callbackWithParamsForCallbackId(callbackId)];
 }
 
 void _getReferralCodeWithAmountAndCallback(int amount, char *callbackId) {
-    [[Branch getInstance:_branchKey] getReferralCodeWithAmount:amount andCallback:callbackWithParamsForCallbackId(callbackId)];
+    [[Branch getInstance:_branchKey] getPromoCodeWithAmount:amount callback:callbackWithParamsForCallbackId(callbackId)];
 }
 
 void _getReferralCodeWithPrefixAmountAndCallback(char *prefix, int amount, char *callbackId) {
-    [[Branch getInstance:_branchKey] getReferralCodeWithPrefix:CreateNSString(prefix) amount:amount andCallback:callbackWithParamsForCallbackId(callbackId)];
+    [[Branch getInstance:_branchKey] getPromoCodeWithPrefix:CreateNSString(prefix) amount:amount callback:callbackWithParamsForCallbackId(callbackId)];
 }
 
 void _getReferralCodeWithAmountExpirationAndCallback(int amount, char *expiration, char *callbackId) {
-    [[Branch getInstance:_branchKey] getReferralCodeWithAmount:amount expiration:CreateNSDate(expiration) andCallback:callbackWithParamsForCallbackId(callbackId)];
+    [[Branch getInstance:_branchKey] getPromoCodeWithAmount:amount expiration:CreateNSDate(expiration) callback:callbackWithParamsForCallbackId(callbackId)];
 }
 
 void _getReferralCodeWithPrefixAmountExpirationAndCallback(char *prefix, int amount, char *expiration, char *callbackId) {
-    [[Branch getInstance:_branchKey] getReferralCodeWithPrefix:CreateNSString(prefix) amount:amount expiration:CreateNSDate(expiration) andCallback:callbackWithParamsForCallbackId(callbackId)];
+    [[Branch getInstance:_branchKey] getPromoCodeWithPrefix:CreateNSString(prefix) amount:amount expiration:CreateNSDate(expiration) callback:callbackWithParamsForCallbackId(callbackId)];
 }
 
 void _getReferralCodeWithPrefixAmountExpirationBucketTypeLocationAndCallback(char *prefix, int amount, char *expiration, char *bucket, int calcType, int location, char *callbackId) {
-    [[Branch getInstance:_branchKey] getReferralCodeWithPrefix:CreateNSString(prefix) amount:amount expiration:CreateNSDate(expiration) bucket:CreateNSString(bucket) calculationType:(ReferralCodeCalculation)calcType location:(ReferralCodeLocation)location andCallback:callbackWithParamsForCallbackId(callbackId)];
+    [[Branch getInstance:_branchKey] getPromoCodeWithPrefix:CreateNSString(prefix) amount:amount expiration:CreateNSDate(expiration) bucket:CreateNSString(bucket) usageType:(BranchPromoCodeUsageType)calcType rewardLocation:(BranchPromoCodeRewardLocation)location callback:callbackWithParamsForCallbackId(callbackId)];
 }
 
 void _validateReferralCodeWithCallback(char *code, char *callbackId) {
-    [[Branch getInstance:_branchKey] validateReferralCode:CreateNSString(code) andCallback:callbackWithParamsForCallbackId(callbackId)];
+    [[Branch getInstance:_branchKey] validatePromoCode:CreateNSString(code) callback:callbackWithParamsForCallbackId(callbackId)];
 }
 
 void _applyReferralCodeWithCallback(char *code, char *callbackId) {
-    [[Branch getInstance:_branchKey] applyReferralCode:CreateNSString(code) andCallback:callbackWithParamsForCallbackId(callbackId)];
+    [[Branch getInstance:_branchKey] applyPromoCode:CreateNSString(code) callback:callbackWithParamsForCallbackId(callbackId)];
 }
 
 #pragma mark - Private notification class implementation

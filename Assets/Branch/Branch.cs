@@ -11,7 +11,7 @@ public class Branch : MonoBehaviour {
     public delegate void BranchCallbackWithParams(Dictionary<string, object> parameters, string error);
     public delegate void BranchCallbackWithUrl(string url, string error);
     public delegate void BranchCallbackWithStatus(bool changed, string error);
-    public delegate void BranchCallbackWithList(List<string> list, string error);
+    public delegate void BranchCallbackWithList(List<object> list, string error);
 
     #region Public methods
 
@@ -307,7 +307,19 @@ public class Branch : MonoBehaviour {
 
     #endregion
 
-    #region Short URL Generation methods
+	#region Share Link methods
+
+	public static void shareLink(Dictionary<string, object> parameters, List<string> tags, string message, string feature, string stage, string defaultUrl, BranchCallbackWithUrl callback) {
+		var callbackId = _getNextCallbackId();
+		
+		_branchCallbacks[callbackId] = callback;
+
+		_shareLink(MiniJSON.Json.Serialize(parameters), MiniJSON.Json.Serialize(tags), message, feature, stage, defaultUrl, callbackId);
+	}
+	
+	#endregion
+	
+	#region Short URL Generation methods
 
     /**
      * Get an arbitrary short url
@@ -492,23 +504,29 @@ public class Branch : MonoBehaviour {
     /**
      * Get a referral code for this session for a specified amount set to expire at the specified time
      */
-    public static void getReferralCode(int amount, DateTime expiration, BranchCallbackWithParams callback) {
+    public static void getReferralCode(int amount, DateTime? expiration, BranchCallbackWithParams callback) {
         var callbackId = _getNextCallbackId();
         
         _branchCallbacks[callbackId] = callback;
         
-        _getReferralCodeWithAmountExpirationAndCallback(amount, expiration.ToString("yyyy-MM-ddTHH:mm:ssZ"), callbackId);
+		if (expiration.HasValue)
+			_getReferralCodeWithAmountExpirationAndCallback(amount, expiration.Value.ToString("yyyy-MM-ddTHH:mm:ssZ"), callbackId);
+		else
+			_getReferralCodeWithAmountExpirationAndCallback(amount, "", callbackId);
     }
 
     /**
      * Get a referral code for this session with a prefix identifier for a specified amount set to expire at the specified time
      */
-    public static void getReferralCode(string prefix, int amount, DateTime expiration, BranchCallbackWithParams callback) {
+    public static void getReferralCode(string prefix, int amount, DateTime? expiration, BranchCallbackWithParams callback) {
         var callbackId = _getNextCallbackId();
         
         _branchCallbacks[callbackId] = callback;
         
-        _getReferralCodeWithPrefixAmountExpirationAndCallback(prefix, amount, expiration.ToString("yyyy-MM-ddTHH:mm:ssZ"), callbackId);
+		if (expiration.HasValue)
+        	_getReferralCodeWithPrefixAmountExpirationAndCallback(prefix, amount, expiration.Value.ToString("yyyy-MM-ddTHH:mm:ssZ"), callbackId);
+		else
+			_getReferralCodeWithPrefixAmountExpirationAndCallback(prefix, amount, "", callbackId);
     }
 
     /**
@@ -516,12 +534,16 @@ public class Branch : MonoBehaviour {
      * Calc Type can be one of 0 (unlimited, reward can be applied continually) or 1 (unique, user can only apply a specific code once)
      * Location can be one of 0 (referree, user applying referral code receives credit), 1 (referrer, user who created code receives credit), or 2 (both, both the sender and receiver receive credit)
      */
-    public static void getReferralCode(string prefix, int amount, DateTime expiration, string bucket, int calcType, int location, BranchCallbackWithParams callback) {
+    public static void getReferralCode(string prefix, int amount, DateTime? expiration, string bucket, int calcType, int location, BranchCallbackWithParams callback) {
         var callbackId = _getNextCallbackId();
         
         _branchCallbacks[callbackId] = callback;
         
-        _getReferralCodeWithPrefixAmountExpirationBucketTypeLocationAndCallback(prefix, amount, expiration.ToString("yyyy-MM-ddTHH:mm:ssZ"), bucket, calcType, location, callbackId);
+		if (expiration.HasValue)
+			_getReferralCodeWithPrefixAmountExpirationBucketTypeLocationAndCallback(prefix, amount, expiration.Value.ToString("yyyy-MM-ddTHH:mm:ssZ"), bucket, calcType, location, callbackId);
+		else
+			_getReferralCodeWithPrefixAmountExpirationBucketTypeLocationAndCallback(prefix, amount, "", bucket, calcType, location, callbackId);
+
     }
 
     /**
@@ -699,7 +721,10 @@ public class Branch : MonoBehaviour {
     
     [DllImport ("__Internal")]
     private static extern void _getReferralUrlWithParamsChannelAndCallback(string parametersDict, string channel, string callbackId);
-    
+
+	[DllImport ("__Internal")]
+	private static extern void _shareLink(string parameterDict, string tagList, string message, string feature, string stage, string defaultUrl, string callbackId);
+
     [DllImport ("__Internal")]
     private static extern void _getReferralCodeWithCallback(string callbackId);
     
@@ -854,6 +879,10 @@ public class Branch : MonoBehaviour {
         BranchAndroidWrapper.getContentUrlWithParamsTagsChannelAndCallback(parametersDict, tags, channel, callbackId);
     }
     
+	private static void _shareLink(string parameterDict, string tagList, string message, string feature, string stage, string defaultUrl, string callbackId) {
+		BranchAndroidWrapper.shareLink(parameterDict, tagList, message, feature, stage, defaultUrl, callbackId);
+	}
+
     private static void _getShortURLWithCallback(string callbackId) {
         BranchAndroidWrapper.getShortURLWithCallback(callbackId);
     }
@@ -1173,7 +1202,7 @@ public class Branch : MonoBehaviour {
     public void _asyncCallbackWithList(string callbackDictString) {
         var callbackDict = MiniJSON.Json.Deserialize(callbackDictString) as Dictionary<string, object>;
         var callbackId = callbackDict["callbackId"] as string;
-        List<string> list = callbackDict.ContainsKey("list") ? callbackDict["list"] as List<string> : null;
+		List<object> list = callbackDict.ContainsKey("list") ? callbackDict["list"] as List<object> : null;
         string error = callbackDict.ContainsKey("error") ? callbackDict["error"] as string : null;
 
         var callback = _branchCallbacks[callbackId] as BranchCallbackWithList;

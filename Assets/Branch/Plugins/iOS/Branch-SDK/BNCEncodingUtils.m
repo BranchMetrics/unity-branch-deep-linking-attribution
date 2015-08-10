@@ -44,53 +44,36 @@ static const short _base64DecodingTable[256] = {
     return [[NSString alloc] initWithData:[BNCEncodingUtils base64DecodeString:strData] encoding:NSUTF8StringEncoding];
 }
 
-+ (NSString *)base64EncodeData:(NSData *)objData {
-    const unsigned char * objRawData = [objData bytes];
-    char * objPointer;
-    char * strResult;
++ (NSString *)base64EncodeData:(NSData *)data {
+    const char * input = [data bytes];
+    unsigned long inputLength = [data length];
+    unsigned long modulo = inputLength % 3;
+    unsigned long outputLength = (inputLength / 3) * 4 + (modulo ? 4 : 0);
+    unsigned long j = 0;
     
-    // Get the Raw Data length and ensure we actually have data
-    long intLength = [objData length];
-    if (intLength == 0) return nil;
+    // Do not forget about trailing zero
+    unsigned char *output = malloc(outputLength + 1);
+    output[outputLength] = 0;
     
-    // Setup the String-based Result placeholder and pointer within that placeholder
-    strResult = (char *)calloc(((intLength + 2) / 3) * 4, sizeof(char));
-    objPointer = strResult;
-    
-    // Iterate through everything
-    while (intLength > 2) { // keep going until we have less than 24 bits
-        *objPointer++ = _base64EncodingTable[objRawData[0] >> 2];
-        *objPointer++ = _base64EncodingTable[((objRawData[0] & 0x03) << 4) + (objRawData[1] >> 4)];
-        *objPointer++ = _base64EncodingTable[((objRawData[1] & 0x0f) << 2) + (objRawData[2] >> 6)];
-        *objPointer++ = _base64EncodingTable[objRawData[2] & 0x3f];
-        
-        // we just handled 3 octets (24 bits) of data
-        objRawData += 3;
-        intLength -= 3;
+    // Here are no checks inside the loop, so it works much faster than other implementations
+    for (unsigned long i = 0; i < inputLength; i += 3) {
+        output[j++] = _base64EncodingTable[ (input[i] & 0xFC) >> 2 ];
+        output[j++] = _base64EncodingTable[ ((input[i] & 0x03) << 4) | ((input[i + 1] & 0xF0) >> 4) ];
+        output[j++] = _base64EncodingTable[ ((input[i + 1] & 0x0F)) << 2 | ((input[i + 2] & 0xC0) >> 6) ];
+        output[j++] = _base64EncodingTable[ (input[i + 2] & 0x3F) ];
     }
     
-    // now deal with the tail end of things
-    if (intLength != 0) {
-        *objPointer++ = _base64EncodingTable[objRawData[0] >> 2];
-        if (intLength > 1) {
-            *objPointer++ = _base64EncodingTable[((objRawData[0] & 0x03) << 4) + (objRawData[1] >> 4)];
-            *objPointer++ = _base64EncodingTable[(objRawData[1] & 0x0f) << 2];
-            *objPointer++ = '=';
-        } else {
-            *objPointer++ = _base64EncodingTable[(objRawData[0] & 0x03) << 4];
-            *objPointer++ = '=';
-            *objPointer++ = '=';
+    // Padding in the end of encoded string directly depends of modulo
+    if (modulo > 0) {
+        output[outputLength - 1] = '=';
+        if (modulo == 1) {
+            output[outputLength - 2] = '=';
         }
     }
     
-    // Terminate the string-based result
-    *objPointer = '\0';
-    
-    NSString *retString = [NSString stringWithCString:strResult encoding:NSASCIIStringEncoding];
-    free(strResult);
-    
-    // Return the results as an NSString object
-    return retString;
+    NSString *s = [NSString stringWithUTF8String:(const char *)output];
+    free(output);
+    return s;
 }
 
 + (NSData *)base64DecodeString:(NSString *)strBase64 {
@@ -215,14 +198,11 @@ static const short _base64DecodingTable[256] = {
 }
 
 + (NSData *)encodeDictionaryToJsonData:(NSDictionary *)dictionary {
-    return [[BNCEncodingUtils encodeDictionaryToJsonString:dictionary] dataUsingEncoding:NSUTF8StringEncoding];
+    NSString *jsonString = [BNCEncodingUtils encodeDictionaryToJsonString:dictionary];
+    return [NSData dataWithBytes:[jsonString UTF8String] length:jsonString.length];
 }
 
 + (NSString *)encodeDictionaryToJsonString:(NSDictionary *)dictionary {
-    return [BNCEncodingUtils encodeDictionaryToJsonString:dictionary needSource:YES];
-}
-
-+ (NSString *)encodeDictionaryToJsonString:(NSDictionary *)dictionary needSource:(BOOL)source {
     NSMutableString *encodedDictionary = [[NSMutableString alloc] initWithString:@"{"];
     for (NSString *key in dictionary) {
         NSString *value = nil;
@@ -243,7 +223,7 @@ static const short _base64DecodingTable[256] = {
             string = NO;
         }
         else if ([obj isKindOfClass:[NSDictionary class]]) {
-            value = [BNCEncodingUtils encodeDictionaryToJsonString:obj needSource:NO]; // Sub dictionaries have no need for source
+            value = [BNCEncodingUtils encodeDictionaryToJsonString:obj];
             string = NO;
         }
         else if ([obj isKindOfClass:[NSNumber class]]) {
@@ -272,19 +252,15 @@ static const short _base64DecodingTable[256] = {
         }
     }
     
-    if (source) {
-        [encodedDictionary appendString:@"\"source\":\"ios\"}"];
+    if (encodedDictionary.length > 1) {
+        [encodedDictionary deleteCharactersInRange:NSMakeRange([encodedDictionary length] - 1, 1)];
     }
-    else {
-        // Delete the trailing comma. Not necessary for an empty dictionary
-        if (encodedDictionary.length > 1) {
-            [encodedDictionary deleteCharactersInRange:NSMakeRange([encodedDictionary length] - 1, 1)];
-        }
 
-        [encodedDictionary appendString:@"}"];
-    }
+    [encodedDictionary appendString:@"}"];
     
-    [BNCPreferenceHelper log:FILE_NAME line:LINE_NUM message:@"encoded dictionary : %@", encodedDictionary];
+    if ([[BNCPreferenceHelper preferenceHelper] isDebug]) {
+        NSLog(@"encoded dictionary : %@", encodedDictionary);
+    }
     
     return encodedDictionary;
 }
@@ -314,7 +290,7 @@ static const short _base64DecodingTable[256] = {
             string = NO;
         }
         else if ([obj isKindOfClass:[NSDictionary class]]) {
-            value = [BNCEncodingUtils encodeDictionaryToJsonString:obj needSource:NO]; // Sub dictionaries have no need for source
+            value = [BNCEncodingUtils encodeDictionaryToJsonString:obj];
             string = NO;
         }
         else if ([obj isKindOfClass:[NSNumber class]]) {
@@ -327,7 +303,7 @@ static const short _base64DecodingTable[256] = {
         }
         else {
             // If this type is not a known type, don't attempt to encode it.
-            NSLog(@"Cannot encode value %@, type is in list of accepted types", obj);
+            NSLog(@"Cannot encode value %@, type is not in list of accepted types", obj);
             continue;
         }
         
@@ -345,8 +321,10 @@ static const short _base64DecodingTable[256] = {
     [encodedArray deleteCharactersInRange:NSMakeRange([encodedArray length] - 1, 1)];
     [encodedArray appendString:@"]"];
     
-    [BNCPreferenceHelper log:FILE_NAME line:LINE_NUM message:@"encoded array: %@", encodedArray];
-    
+    if ([[BNCPreferenceHelper preferenceHelper] isDebug]) {
+        NSLog(@"encoded array : %@", encodedArray);
+    }
+
     return encodedArray;
 }
 
@@ -377,7 +355,7 @@ static const short _base64DecodingTable[256] = {
             }
             else {
                 // If this type is not a known type, don't attempt to encode it.
-                NSLog(@"Cannot encode value %@, type is in list of accepted types", obj);
+                NSLog(@"Cannot encode value %@, type is in not list of accepted types", obj);
                 continue;
             }
             
@@ -399,13 +377,12 @@ static const short _base64DecodingTable[256] = {
 }
 
 + (NSDictionary *)decodeJsonStringToDictionary:(NSString *)jsonString {
-    // Nothing to do with this guy, just return an empty dictionary
-    if ([jsonString isEqualToString:NO_STRING_VALUE]) {
-        return @{};
-    }
-    
     // Just a basic decode, easy enough
     NSData *tempData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    if (!tempData) {
+        return @{};
+    }
+
     NSDictionary *plainDecodedDictionary = [NSJSONSerialization JSONObjectWithData:tempData options:NSJSONReadingMutableContainers error:nil];
     if (plainDecodedDictionary) {
         return plainDecodedDictionary;
@@ -414,6 +391,10 @@ static const short _base64DecodingTable[256] = {
     // If the first decode failed, it could be because the data was encoded. Try decoding first.
     NSString *decodedVersion = [BNCEncodingUtils base64DecodeStringToString:jsonString];
     tempData = [decodedVersion dataUsingEncoding:NSUTF8StringEncoding];
+    if (!tempData) {
+        return @{};
+    }
+
     NSDictionary *base64DecodedDictionary = [NSJSONSerialization JSONObjectWithData:tempData options:NSJSONReadingMutableContainers error:nil];
     if (base64DecodedDictionary) {
         return base64DecodedDictionary;
