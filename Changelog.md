@@ -9,6 +9,7 @@ Branch Unity SDK change log
          Fixing return value in method getTotalCountsForAction
          Fixing return value in method getUniqueCountsForAction
          Fixing methods for converting string to date in Android/iOS wrappers
+         Deleting method _runBlockOnThread because this method throws AndroidJavaException: java.lang.RuntimeException: Only one Looper may be created per thread
 
 - v0.1.3 Fixing a potential null pointer in the Android wrapper when no Activity was provided in the init.
 
