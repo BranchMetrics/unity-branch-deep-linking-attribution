@@ -505,11 +505,11 @@ public class BranchUnityWrapper {
         }
 
         @Override
-        public void onLinkShareResponse(String s, String s1, BranchError branchError) {
+        public void onLinkShareResponse(String sharedLink, String sharedChannel, BranchError branchError) {
             try {
                 JSONObject params = new JSONObject();
-                params.put("sharedLink", s);
-                params.put("sharedChannel", s1);
+                params.put("sharedLink", sharedLink);
+                params.put("sharedChannel", sharedChannel);
 
                 _sendMessageWithWithBranchError("_asyncCallbackWithParams", branchError, "params", params);
             }
@@ -519,8 +519,8 @@ public class BranchUnityWrapper {
         }
 
         @Override
-        public void onChannelSelected(java.lang.String s) {
-            _sendMessageWithWithBranchError("_asyncCallbackWithParams", null, "selectedChannel", s);
+        public void onChannelSelected(java.lang.String selectedChannel) {
+            _sendMessageWithWithBranchError("_asyncCallbackWithParams", null, "selectedChannel", selectedChannel);
         }
 
         private void _sendMessageWithWithBranchError(String asyncCallbackMethod, BranchError branchError, String extraKey, Object extraValue) {

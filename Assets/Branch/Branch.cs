@@ -509,10 +509,11 @@ public class Branch : MonoBehaviour {
         
         _branchCallbacks[callbackId] = callback;
         
-		if (expiration.HasValue)
+		if (expiration.HasValue) {
 			_getReferralCodeWithAmountExpirationAndCallback(amount, expiration.Value.ToString("yyyy-MM-ddTHH:mm:ssZ"), callbackId);
-		else
+		} else {
 			_getReferralCodeWithAmountExpirationAndCallback(amount, "", callbackId);
+		}
     }
 
     /**
@@ -523,10 +524,11 @@ public class Branch : MonoBehaviour {
         
         _branchCallbacks[callbackId] = callback;
         
-		if (expiration.HasValue)
+		if (expiration.HasValue) {
         	_getReferralCodeWithPrefixAmountExpirationAndCallback(prefix, amount, expiration.Value.ToString("yyyy-MM-ddTHH:mm:ssZ"), callbackId);
-		else
+		} else {
 			_getReferralCodeWithPrefixAmountExpirationAndCallback(prefix, amount, "", callbackId);
+		}
     }
 
     /**
@@ -539,11 +541,11 @@ public class Branch : MonoBehaviour {
         
         _branchCallbacks[callbackId] = callback;
         
-		if (expiration.HasValue)
+		if (expiration.HasValue) {
 			_getReferralCodeWithPrefixAmountExpirationBucketTypeLocationAndCallback(prefix, amount, expiration.Value.ToString("yyyy-MM-ddTHH:mm:ssZ"), bucket, calcType, location, callbackId);
-		else
+		} else {
 			_getReferralCodeWithPrefixAmountExpirationBucketTypeLocationAndCallback(prefix, amount, "", bucket, calcType, location, callbackId);
-
+		}
     }
 
     /**

@@ -15,32 +15,23 @@ public class BranchDemo : MonoBehaviour {
 	public GameObject creditsHistoryPanel;
 	public GameObject referralCodePanel;
 
-	void Start()
-	{
+	void Start() {
 		//init debug mode
 		Branch.setDebug();
 
 		//init Branch
 		Branch.initSession( (parameters, error) => {
-			if (error != null)
-			{
+			if (error != null) {
 				Debug.LogError("Branch Error: " + error);
-			}
-			else
-			{
-				Debug.Log("Branch initialization completed:");
-				foreach (var key in parameters.Keys)
-				{
-					Debug.Log("key: " + key.ToString() + " = " + parameters[key].ToString());
-				}
+			} else {
+				Debug.Log("Branch initialization completed: " + MiniJSON.Json.Serialize(parameters));
 			}
 		});
 	}
 
 	#region MainPanel
 
-	public void OnBtn_RefreshShortUrl()
-	{
+	public void OnBtn_RefreshShortUrl() {
 		Dictionary<string, object> parameters = new Dictionary<string, object>();
 		parameters.Add("name", "test name");
 		parameters.Add("message", "hello there with short url");
@@ -53,12 +44,9 @@ public class BranchDemo : MonoBehaviour {
 		tags.Add("tag2");
 
 		Branch.getShortURLWithTags(parameters, tags, "channel1", "feature1", "1", (url, error) => {
-			if (error != null)
-			{
+			if (error != null) {
 				Debug.LogError("Branch.getShortURL failed: " + error);
-			}
-			else
-			{
+			} else {
 				Debug.Log("Branch.getShortURL url: " + url);
 				inputShortLink.text = url;
 			}
@@ -66,20 +54,16 @@ public class BranchDemo : MonoBehaviour {
 	}
 
 
-	public void OnBtn_RefreshCounts()
-	{
+	public void OnBtn_RefreshCounts() {
 		lblInstallCountValue.text = "updating...";
 		lblBuyCountValue.text = "updating...";
 
 		Branch.loadActionCounts( (changed, error) => {
-			if (error != null)
-			{
+			if (error != null) {
 				Debug.LogError("Branch.loadActionCounts failed: " + error);
 				lblInstallCountValue.text = "error";
 				lblBuyCountValue.text = "error";
-			}
-			else
-			{
+			} else {
 				Debug.Log("Branch.loadActionCounts changed: " + changed);
 
 				lblInstallCountValue.text = "install total - " + Branch.getTotalCountsForAction("install").ToString() + ", unique - " + Branch.getUniqueCountsForAction("install").ToString();
@@ -89,52 +73,41 @@ public class BranchDemo : MonoBehaviour {
 	}
 
 
-	public void OnBtn_RefreshRewards()
-	{
+	public void OnBtn_RefreshRewards() {
 		lblCreditsValue.text = "updating...";
 
 		Branch.loadRewards( (changed, error) => {
-			if (error != null)
-			{
+			if (error != null) {
 				Debug.LogError("Branch.loadRewards failed: " + error);
 				lblCreditsValue.text = "error";
-			}
-			else
-			{
+			} else {
 				Debug.Log("Branch.loadRewards changed: " + changed);
-				
 				lblCreditsValue.text = Branch.getCredits().ToString();
 			}
 		});
 	}
 	
 	
-	public void OnBtn_Redeem5()
-	{
+	public void OnBtn_Redeem5() {
 		lblCreditsValue.text = "updating...";
 		Branch.redeemRewards(5);
 		OnBtn_RefreshRewards();
 	}
 	
 	
-	public void OnBtn_ExecuteBuy()
-	{
+	public void OnBtn_ExecuteBuy() {
 		Branch.userCompletedAction("buy");
 		OnBtn_RefreshCounts();
 	}
 
 
-	public void OnBtn_IdentifyUser()
-	{
+	public void OnBtn_IdentifyUser() {
 		lblIdentifyUser.text = "Identify User";
 
 		Branch.setIdentity("test_user_10", (parameters, error) => {
-			if (error != null)
-			{
+			if (error != null) {
 				Debug.LogError("Branch.setIdentity failed: " + error);
-			}
-			else
-			{
+			} else {
 				Debug.Log("Branch.setIdentity install params: " + parameters.ToString());
 				lblIdentifyUser.text = "test_user_10";
 			}
@@ -142,8 +115,7 @@ public class BranchDemo : MonoBehaviour {
 	}
 
 
-	public void OnBtn_ClearUser()
-	{
+	public void OnBtn_ClearUser() {
 		Branch.logout();
 
 		lblCreditsValue.text = "";
@@ -153,15 +125,13 @@ public class BranchDemo : MonoBehaviour {
 	}
 
 
-	public void OnBtn_PrintInstallParam()
-	{
+	public void OnBtn_PrintInstallParam() {
 		Dictionary<string, object> parameters = Branch.getFirstReferringParams();
 		Debug.Log("Install params: " + parameters.ToString());
 	}
 
 
-	public void OnBtn_BuyWithMetadata()
-	{
+	public void OnBtn_BuyWithMetadata() {
 		Dictionary<string, object> parameters = new Dictionary<string, object>();
 		parameters.Add("name", "Alex");
 		parameters.Add("boolean", true);
@@ -173,10 +143,8 @@ public class BranchDemo : MonoBehaviour {
 	}
 
 
-	public void OnBtn_ShareLink()
-	{
-		try
-		{
+	public void OnBtn_ShareLink() {
+		try {
 			Dictionary<string, object> shareParameters = new Dictionary<string, object>();
 			shareParameters.Add("name", "test name");
 			shareParameters.Add("auto_deeplink_key_1", "This is an auto deep linked value");
@@ -190,32 +158,25 @@ public class BranchDemo : MonoBehaviour {
 			tags.Add("tag2");
 
 			Branch.shareLink(shareParameters, tags, "Test message", "feature1", "1", "https://play.google.com/store/apps/details?id=com.kindred.android", (parameters, error) => {
-				if (error != null)
-				{
+				if (error != null) {
 					Debug.LogError("Branch.shareLink failed: " + error);
-				}
-				else
-				{
+				} else {
 					Debug.Log("Branch.shareLink shared params: " + parameters.ToString());
 				}
 			});
-		}
-		catch(Exception e)
-		{
+		} catch(Exception e) {
 			Debug.Log(e);
 		}
 	}
 
 
-	public void OnBtn_GetCreditHistory()
-	{
+	public void OnBtn_GetCreditHistory() {
 		creditsHistoryPanel.SetActive(true);
 		mainPanel.SetActive(false);
 	}
 	
 	
-	public void OnBtn_ReferralCode()
-	{
+	public void OnBtn_ReferralCode() {
 		referralCodePanel.SetActive(true);
 		mainPanel.SetActive(false);
 	}
@@ -225,8 +186,7 @@ public class BranchDemo : MonoBehaviour {
 
 	#region CreditsHistoryPanel
 
-	public void OnBtn_CreditsHistoryPanel_Back()
-	{
+	public void OnBtn_CreditsHistoryPanel_Back() {
 		creditsHistoryPanel.SetActive(false);
 		mainPanel.SetActive(true);
 	}
@@ -236,8 +196,7 @@ public class BranchDemo : MonoBehaviour {
 
 	#region ReferralCodePanel
 	
-	public void OnBtn_ReferralCodePanel_Back()
-	{
+	public void OnBtn_ReferralCodePanel_Back() {
 		referralCodePanel.SetActive(false);
 		mainPanel.SetActive(true);
 	}

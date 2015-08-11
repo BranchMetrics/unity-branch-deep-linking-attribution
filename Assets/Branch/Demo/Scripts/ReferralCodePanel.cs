@@ -17,12 +17,10 @@ public class ReferralCodePanel : MonoBehaviour {
 	public InputField inputExpiration;
 
 
-	public void OnBtn_GetCode()
-	{
+	public void OnBtn_GetCode() {
 		// amount
 		int amount = 5;
-		if (inputAmount.text.Length > 0)
-		{
+		if (inputAmount.text.Length > 0) {
 			try {
 				amount = Convert.ToInt32(inputAmount.text);
 			} catch (Exception e) {
@@ -38,8 +36,7 @@ public class ReferralCodePanel : MonoBehaviour {
 
 		// date
 		DateTime? expiration = null;
-		if (inputExpiration.text.Length > 0)
-		{
+		if (inputExpiration.text.Length > 0) {
 			try {
 				expiration = Convert.ToDateTime(inputExpiration.text);
 			} catch (Exception e) {
@@ -51,38 +48,35 @@ public class ReferralCodePanel : MonoBehaviour {
 
 		// calculation type
 		int calcType = 0;
-		if (toggleUnique.isOn)
+		if (toggleUnique.isOn) {
 			calcType = 1;
+		}
 
 		// location
 		int location = 0;
-		if (toggleReferrerUser.isOn)
+		if (toggleReferrerUser.isOn) {
 			location = 2;
-		else if (toggleBoth.isOn)
+		} else if (toggleBoth.isOn) {
 			location = 3;
+		}
 
 		Branch.getReferralCode(prefix, amount, expiration, "", calcType, location, (referralCode, error) => {
 
 			lblCodeState.text = "updating...";
 
-			if (error != null)
-			{
+			if (error != null) {
 				Debug.Log("Branch.getReferralCode error: " + error);
 				lblCodeState.text = "error";
-			}
-			else
-			{
-				if (referralCode.ContainsKey("error_message"))
-				{
+			} else {
+				if (referralCode.ContainsKey("error_message")) {
 					inputReferralCode.text = "";
 					lblCodeState.text = referralCode["error_message"].ToString();
-				}
-				else
-				{
-					if (referralCode.ContainsKey("referral_code"))
+				} else {
+					if (referralCode.ContainsKey("referral_code")) {
 						inputReferralCode.text = referralCode["referral_code"].ToString();
-					else if (referralCode.ContainsKey("promo_code"))
+					} else if (referralCode.ContainsKey("promo_code")) {
 						inputReferralCode.text = referralCode["promo_code"].ToString();
+					}
 
 					lblCodeState.text = "";
 				}
@@ -91,38 +85,32 @@ public class ReferralCodePanel : MonoBehaviour {
 	}
 
 
-	public void OnBtn_Validate()
-	{
+	public void OnBtn_Validate() {
 		string referral_code = inputReferralCode.text.Trim();
 
-		if (referral_code.Length > 0)
-		{
+		if (referral_code.Length > 0) {
 			Branch.validateReferralCode(referral_code, (referralCode, error) => {
 
-				if (error != null)
-				{
+				if (error != null) {
 					Debug.Log("Branch.validateReferralCode error: " + error);
 					lblCodeState.text = "error";
-				}
-				else
-				{
-					if (referralCode.ContainsKey("error_message"))
-					{
+				} else {
+					if (referralCode.ContainsKey("error_message")) {
 						lblCodeState.text = "Invalid";
-					}
-					else
-					{
+					} else {
 						string code = "";
 
-						if (referralCode.ContainsKey("referral_code"))
+						if (referralCode.ContainsKey("referral_code")) {
 							code = referralCode["referral_code"].ToString();
-						else if (referralCode.ContainsKey("promo_code"))
+						} else if (referralCode.ContainsKey("promo_code")) {
 							code = referralCode["promo_code"].ToString();
+						}
 
-						if (referral_code.Equals(code))
+						if (referral_code.Equals(code)) {
 							lblCodeState.text = "valid";
-						else
+						} else {
 							lblCodeState.text = "mismatch";
+						}
 					}
 				}
 			});
@@ -130,38 +118,32 @@ public class ReferralCodePanel : MonoBehaviour {
 	}
 
 
-	public void OnBtn_Redeem()
-	{
+	public void OnBtn_Redeem() {
 		string referral_code = inputReferralCode.text.Trim();
 
-		if (referral_code.Length > 0)
-		{
+		if (referral_code.Length > 0) {
 			Branch.applyReferralCode(referral_code, (referralCode, error) => {
 
-				if (error != null)
-				{
+				if (error != null) {
 					Debug.Log("Branch.applyReferralCode error: " + error);
 					lblCodeState.text = "error";
-				}
-				else
-				{
-					if (referralCode.ContainsKey("error_message"))
-					{
+				} else {
+					if (referralCode.ContainsKey("error_message")) {
 						lblCodeState.text = "Invalid";
-					}
-					else
-					{
+					} else {
 						string code = "";
 						
-						if (referralCode.ContainsKey("referral_code"))
+						if (referralCode.ContainsKey("referral_code")) {
 							code = referralCode["referral_code"].ToString();
-						else if (referralCode.ContainsKey("promo_code"))
+						} else if (referralCode.ContainsKey("promo_code")) {
 							code = referralCode["promo_code"].ToString();
+						}
 
-						if (referral_code.Equals(code))
+						if (referral_code.Equals(code)) {
 							lblCodeState.text = "applied";
-						else
+						} else {
 							lblCodeState.text = "mismatch";
+						}
 					}
 				}
 			});

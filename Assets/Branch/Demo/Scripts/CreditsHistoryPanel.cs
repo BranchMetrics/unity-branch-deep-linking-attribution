@@ -11,49 +11,40 @@ public class CreditsHistoryPanel : MonoBehaviour {
 	private List<CreditTransactionItem> items = new List<CreditTransactionItem>();
 
 
-	void OnEnable()
-	{
+	void OnEnable() {
 		Branch.getCreditHistory( (historyList, error) =>  {
 
-			if (error != null)
-			{
+			if (error != null) {
 				Debug.LogError("Branch.getCreditHistory failed: " + error);
 				AddItem("error");
-			}
-			else if (historyList != null && historyList.Count > 0)
-			{
+
+			} else if (historyList != null && historyList.Count > 0) {
 				List<string> resList = new List<string>();
 				Parse(historyList, resList);
 
-				foreach(string str in resList)
-				{
+				foreach(string str in resList) {
 					Debug.Log(str);
 					AddItem(str);
 				}
 
 				scroll.verticalNormalizedPosition = 1.0f;
-			}
-			else
-			{
+			} else {
 				AddItem("empty");
 			}
 		});
 	}
 
-	void OnDisable()
-	{
+	void OnDisable() {
 		foreach(CreditTransactionItem obj in items)
 			Destroy(obj.gameObject);
 
 		items.Clear();
 	}
 
-	void AddItem(string text)
-	{
+	void AddItem(string text) {
 		GameObject item = Instantiate(itemPrefab);
 		
-		if (item != null)
-		{
+		if (item != null) {
 			item.GetComponent<CreditTransactionItem>().label.text = text;
 			item.transform.SetParent(contentContainer.transform, false);
 			items.Add(item.GetComponent<CreditTransactionItem>());
@@ -88,14 +79,11 @@ public class CreditsHistoryPanel : MonoBehaviour {
 	//   referrer : string (optional)
 	//   referree : string (optional)
 	
-	void Parse(List<object> list, List<string> resList)
-	{
+	void Parse(List<object> list, List<string> resList) {
 		string res = "";
 		
-		foreach(object dict in list)
-		{
-			if (dict != null && dict.GetType() == typeof(Dictionary<string, object>))
-			{
+		foreach(object dict in list) {
+			if (dict != null && dict.GetType() == typeof(Dictionary<string, object>)) {
 				res = ParseTransaction(dict as Dictionary<string, object>);
 				res += "   ";
 				res += ParseEvent(dict as Dictionary<string, object>);
@@ -109,55 +97,53 @@ public class CreditsHistoryPanel : MonoBehaviour {
 		}
 	}
 	
-	string ParseTransaction(Dictionary<string, object> dict)
-	{
+	string ParseTransaction(Dictionary<string, object> dict) {
 		string strRes = "";
 		
-		if (dict.ContainsKey("transaction"))
-		{
+		if (dict.ContainsKey("transaction")) {
 			Dictionary<string, object> transactionDict = dict["transaction"] as Dictionary<string, object>;
 			
-			if (transactionDict != null)
-			{
-				if (transactionDict.ContainsKey("type") && transactionDict["type"] != null)
+			if (transactionDict != null) {
+				if (transactionDict.ContainsKey("type") && transactionDict["type"] != null) {
 					strRes += "type = " + transactionDict["type"].ToString();
+				}
 				
-				if (transactionDict.ContainsKey("id") && transactionDict["id"] != null)
+				if (transactionDict.ContainsKey("id") && transactionDict["id"] != null) {
 					strRes += "  id = " + transactionDict["id"].ToString();
+				}
 				
-				if (transactionDict.ContainsKey("type") && transactionDict["type"] != null)
+				if (transactionDict.ContainsKey("type") && transactionDict["type"] != null) {
 					strRes += "  bucket = " + transactionDict["bucket"].ToString();
+				}
 				
-				if (transactionDict.ContainsKey("type") && transactionDict["type"] != null)
+				if (transactionDict.ContainsKey("type") && transactionDict["type"] != null) {
 					strRes += "  amount = " + transactionDict["amount"].ToString();
+				}
 				
-				if (transactionDict.ContainsKey("type") && transactionDict["type"] != null)
+				if (transactionDict.ContainsKey("type") && transactionDict["type"] != null) {
 					strRes += "  date = " + transactionDict["date"].ToString();
+				}
 			}
 		}
 		
 		return strRes;
 	}
 	
-	string ParseEvent(Dictionary<string, object> dict)
-	{
+	string ParseEvent(Dictionary<string, object> dict) {
 		string strRes = "";
 		
-		if (dict.ContainsKey("event"))
-		{
+		if (dict.ContainsKey("event")) {
 			Dictionary<string, object> transactionDict = dict["event"] as Dictionary<string, object>;
 			
-			if (transactionDict != null)
-			{
-				if (transactionDict.ContainsKey("name") && transactionDict["name"] != null)
+			if (transactionDict != null) {
+				if (transactionDict.ContainsKey("name") && transactionDict["name"] != null) {
 					strRes += "  name = " + transactionDict["name"].ToString();
+				}
 				
-				if (transactionDict.ContainsKey("metadata") && transactionDict["metadata"] != null)
-				{
+				if (transactionDict.ContainsKey("metadata") && transactionDict["metadata"] != null) {
 					Dictionary<string, object> dictMetadata = transactionDict["metadata"] as Dictionary<string, object>;
 					
-					if (dictMetadata != null && dictMetadata.ContainsKey("ip") && dictMetadata["ip"] != null)
-					{
+					if (dictMetadata != null && dictMetadata.ContainsKey("ip") && dictMetadata["ip"] != null) {
 						strRes += "  ip = " + dictMetadata["ip"].ToString();
 					}
 				}
@@ -167,24 +153,20 @@ public class CreditsHistoryPanel : MonoBehaviour {
 		return strRes;
 	}
 	
-	string ParseReferrer(Dictionary<string, object> dict)
-	{
+	string ParseReferrer(Dictionary<string, object> dict) {
 		string strRes = "";
 		
-		if (dict != null && dict.ContainsKey("referrer") && dict["referrer"] != null )
-		{
+		if (dict != null && dict.ContainsKey("referrer") && dict["referrer"] != null ) {
 			strRes += "  referrer = " + dict["referrer"].ToString();
 		}
 		
 		return strRes;
 	}
 	
-	string ParseReferree(Dictionary<string, object> dict)
-	{
+	string ParseReferree(Dictionary<string, object> dict) {
 		string strRes = "";
 		
-		if (dict != null && dict.ContainsKey("referree") && dict["referree"] != null )
-		{
+		if (dict != null && dict.ContainsKey("referree") && dict["referree"] != null ) {
 			strRes += "  referree = " + dict["referree"].ToString();
 		}
 		
