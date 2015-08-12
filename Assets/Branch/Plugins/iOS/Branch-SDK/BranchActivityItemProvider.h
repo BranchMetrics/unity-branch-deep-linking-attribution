@@ -8,20 +8,27 @@
 
 #import <UIKit/UIKit.h>
 
+/**
+ The `BranchActivityItemProviderDelegate` allows you  to customize the link parameters based on the channel chosen by the user.
+ This is useful in the case that you want to add specific items only for Facebook or Twitter for instance.
+
+ Every item is optional, and if not provided, will fallback to the item provided with the constructor.
+ */
+@protocol BranchActivityItemProviderDelegate <NSObject>
+
+@optional
+- (NSDictionary *)activityItemParamsForChannel:(NSString *)channel;
+- (NSArray *)activityItemTagsForChannel:(NSString *)channel;
+- (NSString *)activityItemFeatureForChannel:(NSString *)channel;
+- (NSString *)activityItemStageForChannel:(NSString *)channel;
+- (NSString *)activityItemAliasForChannel:(NSString *)channel;
+- (NSString *)activityItemOverrideChannelForChannel:(NSString *)channel;
+
+@end
+
 @interface BranchActivityItemProvider : UIActivityItemProvider
 
-@property (strong, nonatomic) NSString *branchURL;
-@property (strong, nonatomic) NSDictionary *params;
-@property (strong, nonatomic) NSArray *tags;
-@property (strong, nonatomic) NSString *feature;
-@property (strong, nonatomic) NSString *stage;
-@property (strong, nonatomic) NSString *alias;
-@property (strong, nonatomic) NSString *userAgentString;
-
-- (id)initWithParams:(NSDictionary *)params
-             andTags:(NSArray *)tags
-          andFeature:(NSString *)feature
-            andStage:(NSString *)stage
-            andAlias:(NSString *)alias;
+- (id)initWithParams:(NSDictionary *)params andTags:(NSArray *)tags andFeature:(NSString *)feature andStage:(NSString *)stage andAlias:(NSString *)alias  __attribute__((deprecated(("Use the delegate method instead"))));;
+- (id)initWithParams:(NSDictionary *)params tags:(NSArray *)tags feature:(NSString *)feature stage:(NSString *)stage alias:(NSString *)alias delegate:(id <BranchActivityItemProviderDelegate>)delegate;
 
 @end

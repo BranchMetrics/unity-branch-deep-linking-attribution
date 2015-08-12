@@ -13,6 +13,7 @@
 + (NSString *)getUniqueHardwareId:(BOOL *)isReal andIsDebug:(BOOL)debug;
 + (NSString *)getDefaultUriScheme;
 + (NSString *)getAppVersion;
++ (NSString *)getBundleID;
 + (NSString *)getCarrier;
 + (NSString *)getBrand;
 + (NSString *)getModel;
@@ -20,9 +21,10 @@
 + (NSString *)getOSVersion;
 + (NSNumber *)getScreenWidth;
 + (NSNumber *)getScreenHeight;
-+ (NSNumber *)getUpdateState:(BOOL)updatePrefs;
++ (NSNumber *)getUpdateState;
++ (void)setUpdateState;
 + (NSString *)getDeviceName;
-+ (NSDictionary *)getListOfApps;
++ (NSDictionary *)getOpenableAppDictFromList:(NSArray *)apps;
 + (BOOL)isSimulator;
 + (BOOL)adTrackingSafe;
 

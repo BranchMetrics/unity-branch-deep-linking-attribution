@@ -11,9 +11,7 @@
 
 @interface BNCLinkCache : NSObject
 
-@property (nonatomic, strong) NSMutableDictionary *cache;
-
-- (void)setObject:(NSString *)anObject forKey:(id <NSCopying>)aKey;
-- (NSString *)objectForKey:(id)aKey;
+- (void)setObject:(NSString *)anObject forKey:(BNCLinkData *)aKey;
+- (NSString *)objectForKey:(BNCLinkData *)aKey;
 
 @end

@@ -66,6 +66,10 @@ extern "C" {
     void _getShortURLWithParamsChannelFeatureStageTypeAndCallback(char *paramsDict, char *channel, char *feature, char *stage, int type, char *callbackId);
     void _getShortURLWithParamsChannelFeatureStageMatchDurationAndCallback(char *paramsDict, char *channel, char *feature, char *stage, int matchDuration, char *callbackId);
 
+    #pragma mark - Share Link methods
+    
+    void _shareLink(char *parameterDict, char *tagList, char *message, char *feature, char *stage, char *defaultUrl, char *callbackId);
+    
     #pragma mark - Referral methods
 
     void _getReferralUrlWithParamsTagsChannelAndCallback(char *paramsDict, char *tagList, char *channel, char *callbackId);

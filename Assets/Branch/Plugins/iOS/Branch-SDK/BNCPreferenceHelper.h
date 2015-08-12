@@ -11,110 +11,46 @@
 #define FILE_NAME   [[NSString stringWithUTF8String:__FILE__] lastPathComponent]
 #define LINE_NUM    __LINE__
 
-static NSString *KEY_BRANCH_KEY = @"branch_key";
-static NSString *NO_STRING_VALUE = @"bnc_no_value";
-
-@protocol BNCDebugConnectionDelegate <NSObject>
-
-- (void)bnc_debugConnectionEstablished;
-
-@end
-
-@protocol BNCTestDelegate <NSObject>
-
-- (void)simulateInitFinished;
-
-@end
-
 @interface BNCPreferenceHelper : NSObject
 
-@property (strong, nonatomic) NSString *uriScheme;
+@property (strong, nonatomic) NSString *branchKey;
+@property (strong, nonatomic) NSString *appKey;
+@property (strong, nonatomic) NSString *lastRunBranchKey;
+@property (strong, nonatomic) NSString *appVersion;
+@property (strong, nonatomic) NSString *deviceFingerprintID;
+@property (strong, nonatomic) NSString *sessionID;
+@property (strong, nonatomic) NSString *identityID;
+@property (strong, nonatomic) NSString *linkClickIdentifier;
+@property (strong, nonatomic) NSString *userUrl;
+@property (strong, nonatomic) NSString *userIdentity;
+@property (strong, nonatomic) NSString *sessionParams;
+@property (strong, nonatomic) NSString *installParams;
+@property (assign, nonatomic) BOOL explicitlyRequestedReferrable;
+@property (assign, nonatomic) BOOL isReferrable;
+@property (assign, nonatomic) BOOL isDebug;
+@property (assign, nonatomic) BOOL isConnectedToRemoteDebug;
 @property (assign, nonatomic) NSInteger retryCount;
-@property (assign, nonatomic) NSInteger retryInterval;
-@property (assign, nonatomic) NSInteger timeout;
+@property (assign, nonatomic) NSTimeInterval retryInterval;
+@property (assign, nonatomic) NSTimeInterval timeout;
 
-+ (NSString *)getAPIBaseURL;
-+ (NSString *)getAPIURL:(NSString *) endpoint;
++ (BNCPreferenceHelper *)preferenceHelper;
 
-+ (void)setTimeout:(NSInteger)timeout;
-+ (NSInteger)getTimeout;
+- (NSString *)getAPIBaseURL;
+- (NSString *)getAPIURL:(NSString *)endpoint;
+- (NSString *)getBranchKey:(BOOL)isLive;
 
-+ (void)setRetryInterval:(NSInteger)retryInterval;
-+ (NSInteger)getRetryInterval;
+- (void)clearUserCreditsAndCounts;
 
-+ (void)setRetryCount:(NSInteger)retryCount;
-+ (NSInteger)getRetryCount;
+- (void)setCreditCount:(NSInteger)count;
+- (void)setCreditCount:(NSInteger)count forBucket:(NSString *)bucket;
+- (NSInteger)getCreditCount;
+- (NSInteger)getCreditCountForBucket:(NSString *)bucket;
 
-+ (NSString *)getAppKey;
-+ (void)setAppKey:(NSString *)appKey;
+- (void)setActionTotalCount:(NSString *)action withCount:(NSInteger)count;
+- (void)setActionUniqueCount:(NSString *)action withCount:(NSInteger)count;
+- (NSInteger)getActionTotalCount:(NSString *)action;
+- (NSInteger)getActionUniqueCount:(NSString *)action;
 
-+ (NSString *)getBranchKey;
-+ (NSString *)getBranchKey:(BOOL)isLive;
-+ (void)setBranchKey:(NSString *)branchKey;
-
-+ (NSString *)getAppVersion;
-+ (void)setAppVersion:(NSString *)appVersion;
-
-+ (void)setDeviceFingerprintID:(NSString *)deviceID;
-+ (NSString *)getDeviceFingerprintID;
-
-+ (void)setSessionID:(NSString *)sessionID;
-+ (NSString *)getSessionID;
-
-+ (void)setIdentityID:(NSString *)identityID;
-+ (NSString *)getIdentityID;
-
-+ (void)setLinkClickIdentifier:(NSString *)linkClickIdentifier;
-+ (NSString *)getLinkClickIdentifier;
-
-+ (void)setLinkClickID:(NSString *)linkClickId;
-+ (NSString *)getLinkClickID;
-
-+ (void)setSessionParams:(NSString *)sessionParams;
-+ (NSString *)getSessionParams;
-
-+ (void)setInstallParams:(NSString *)installParams;
-+ (NSString *)getInstallParams;
-
-+ (void)setUserURL:(NSString *)userUrl;
-+ (NSString *)getUserURL;
-
-+ (void)setUserIdentity:(NSString *)userIdentity;
-+ (NSString *)getUserIdentity;
-
-+ (void)setUriScheme:(NSString *)uriScheme;
-+ (NSString *)getUriScheme;
-
-+ (void)setAppListCheckDone;
-+ (BOOL)getNeedAppListCheck;
-
-+ (BOOL)getIsReferrable;
-+ (void)setIsReferrable;
-+ (void)clearIsReferrable;
-
-+ (void)clearUserCreditsAndCounts;
-
-+ (void)setCreditCount:(NSInteger)count;
-+ (void)setCreditCount:(NSInteger)count forBucket:(NSString *)bucket;
-+ (NSInteger)getCreditCount;
-+ (NSInteger)getCreditCountForBucket:(NSString *)bucket;
-
-+ (void)setActionTotalCount:(NSString *)action withCount:(NSInteger)count;
-+ (void)setActionUniqueCount:(NSString *)action withCount:(NSInteger)count;
-+ (NSInteger)getActionTotalCount:(NSString *)action;
-+ (NSInteger)getActionUniqueCount:(NSString *)action;
-
-+ (void)setDevDebug;
-+ (BOOL)getDevDebug;
-+ (void)setDebug;
-+ (void)clearDebug;
-+ (BOOL)isDebug;
-+ (void)log:(NSString *)filename line:(int)line message:(NSString *)format, ...;
-+ (void)sendScreenshot:(NSData *)data;
-+ (void)setDebugConnectionDelegate:(id<BNCDebugConnectionDelegate>) debugConnectionDelegate;
-+ (void)keepDebugAlive;
-+ (void)setTestDelegate:(id<BNCTestDelegate>) testDelegate;
-+ (void)simulateInitFinished;
-+ (BOOL)isRemoteDebug;
+- (void)log:(NSString *)filename line:(int)line message:(NSString *)format, ...;
 
 @end

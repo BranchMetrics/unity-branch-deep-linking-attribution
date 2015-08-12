@@ -6,15 +6,13 @@
 //  Copyright (c) 2014 Branch Metrics. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
 #include <sys/utsname.h>
 #import "BNCPreferenceHelper.h"
 #import "BNCSystemObserver.h"
-#import "BranchServerInterface.h"
 #import <UIKit/UIDevice.h>
 #import <UIKit/UIScreen.h>
 #import <SystemConfiguration/SystemConfiguration.h>
-
-NSString * const BRANCH_URI_SCHEME_NAME = @"io.branch.sdk";
 
 @implementation BNCSystemObserver
 
@@ -81,6 +79,10 @@ NSString * const BRANCH_URI_SCHEME_NAME = @"io.branch.sdk";
     return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
 }
 
++ (NSString *)getBundleID {
+    return [[NSBundle mainBundle] bundleIdentifier];
+}
+
 + (NSString *)getCarrier {
     NSString *carrierName = nil;
     
@@ -125,37 +127,47 @@ NSString * const BRANCH_URI_SCHEME_NAME = @"io.branch.sdk";
     }
 }
 
-+ (NSNumber *)getUpdateState:(BOOL)updatePrefs {
-    NSString *storedAppVersion = [BNCPreferenceHelper getAppVersion];
++ (NSNumber *)getUpdateState {
+    NSString *storedAppVersion = [BNCPreferenceHelper preferenceHelper].appVersion;
     NSString *currentAppVersion = [BNCSystemObserver getAppVersion];
     NSFileManager *manager = [NSFileManager defaultManager];
     
     // for creation date
-    NSURL *documentsDirRoot = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+    NSURL *documentsDirRoot = [[manager URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
     NSDictionary *documentsDirAttributes = [manager attributesOfItemAtPath:documentsDirRoot.path error:nil];
-    int appCreationDay = (int)([[documentsDirAttributes fileCreationDate] timeIntervalSince1970]/(60*60*24));
-
+    NSDate *creationDate = [documentsDirAttributes fileCreationDate];
+    
     // for modification date
     NSString *bundleRoot = [[NSBundle mainBundle] bundlePath];
     NSDictionary *bundleAttributes = [manager attributesOfItemAtPath:bundleRoot error:nil];
-    int appModificationDay = (int)([[bundleAttributes fileModificationDate] timeIntervalSince1970]/(60*60*24));
-
+    NSDate *modificationDate = [bundleAttributes fileModificationDate];
+    
+    // No stored version
     if (!storedAppVersion) {
-        if (updatePrefs) {
-            [BNCPreferenceHelper setAppVersion:currentAppVersion];
+        // Modification and Creation date are more than 24 hours' worth of seconds different indicates
+        // an update. This would be the case that they were installing a new version of the app that was
+        // adding Branch for the first time, where we don't already have an NSUserDefaults value.
+        if (ABS([modificationDate timeIntervalSinceDate:creationDate]) > 86400) {
+            return @2;
         }
-        if ([documentsDirAttributes fileCreationDate] && [bundleAttributes fileModificationDate] && (appCreationDay != appModificationDay)) {
-            return [NSNumber numberWithInt:2];
-        }
-        return nil;
-    } else if (![storedAppVersion isEqualToString:currentAppVersion]) {
-        if (updatePrefs) {
-            [BNCPreferenceHelper setAppVersion:currentAppVersion];
-        }
-        return [NSNumber numberWithInt:2];
-    } else {
-        return [NSNumber numberWithInt:1];
+        
+        // If we don't have one of the previous dates, or they're less than 60 apart,
+        // we understand this to be an install.
+        return @0;
     }
+    // Have a stored version, but it isn't the same as the current value indicates an update
+    else if (![storedAppVersion isEqualToString:currentAppVersion]) {
+        return @2;
+    }
+    
+    // Otherwise, we have a stored version, and it is equal.
+    // Not an update, not an install.
+    return @1;
+}
+
++ (void)setUpdateState {
+    NSString *currentAppVersion = [BNCSystemObserver getAppVersion];
+    [BNCPreferenceHelper preferenceHelper].appVersion = currentAppVersion;
 }
 
 + (NSString *)getOS {
@@ -181,30 +193,24 @@ NSString * const BRANCH_URI_SCHEME_NAME = @"io.branch.sdk";
     return [NSNumber numberWithInteger:(NSInteger)height];
 }
 
-+ (NSDictionary *)getListOfApps {
++ (NSDictionary *)getOpenableAppDictFromList:(NSArray *)apps {
     NSMutableArray *appsPresent = [[NSMutableArray alloc] init];
     NSMutableArray *appsNotPresent = [[NSMutableArray alloc] init];
-    NSDictionary *appsData = [NSDictionary dictionaryWithObjects:@[appsPresent, appsNotPresent] forKeys:@[@"canOpen", @"notOpen"]];
+    NSDictionary *appsData = @{ @"canOpen": appsPresent, @"notOpen": appsNotPresent };
     
-    BNCServerResponse *serverResponse = [[[BranchServerInterface alloc] init] retrieveAppsToCheck];
-    [BNCPreferenceHelper log:FILE_NAME line:LINE_NUM message:@"returned from app check with %@", serverResponse.data];
-    if (serverResponse && serverResponse.data) {
-        NSInteger status = [serverResponse.statusCode integerValue];
-        NSArray *apps = [serverResponse.data objectForKey:@"potential_apps"];
-        UIApplication *application = [UIApplication sharedApplication];
-        if (status == 200 && apps && application) {
-            for (NSString *app in apps) {
-                NSString *uriScheme = app;
-                if ([uriScheme rangeOfString:@"://"].location != NSNotFound) {  // if (![uriScheme containsString:@"://"]) {
-                    uriScheme = [uriScheme stringByAppendingString:@"://"];
-                }
-                NSURL *url = [NSURL URLWithString:uriScheme];
-                if ([application canOpenURL:url]) {
-                    [appsPresent addObject:app];
-                } else {
-                    [appsNotPresent addObject:app];
-                }
-            }
+    UIApplication *application = [UIApplication sharedApplication];
+    for (NSString *app in apps) {
+        NSString *uriScheme = app;
+        if ([uriScheme rangeOfString:@"://"].location != NSNotFound) {
+            uriScheme = [uriScheme stringByAppendingString:@"://"];
+        }
+
+        NSURL *url = [NSURL URLWithString:uriScheme];
+        if ([application canOpenURL:url]) {
+            [appsPresent addObject:app];
+        }
+        else {
+            [appsNotPresent addObject:app];
         }
     }
     
