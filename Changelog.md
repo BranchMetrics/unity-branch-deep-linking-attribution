@@ -1,15 +1,16 @@
 Branch Unity SDK change log
 
-- v0.1.4 Updating Branch to v.0.8.10
-         Updating parameter type "List<string> list" to "List<object> list" in callback BranchCallbackWithList
-         Updating parameter "DateTime expiration" to "DateTime? expiration" in methods getReferralCode
-         Adding share link functional for Android/iOS
-         Adding source code of demo app into BranchUnityWrapper.unitypackage
-         Adding full demo project archive into github
-         Fixing return value in method getTotalCountsForAction
-         Fixing return value in method getUniqueCountsForAction
-         Fixing methods for converting string to date in Android/iOS wrappers
-         Deleting method _runBlockOnThread because this method throws AndroidJavaException: java.lang.RuntimeException: Only one Looper may be created per thread
+- v0.1.4
+  * Updating Branch to Android version 1.8.0 and iOS version 0.10.7
+  * Updating parameter type "List<string> list" to "List<object> list" in callback BranchCallbackWithList
+  * Updating parameter "DateTime expiration" to "DateTime? expiration" in methods getReferralCode
+  * Adding share link functional for Android/iOS
+  * Adding source code of demo app into BranchUnityWrapper.unitypackage
+  * Adding full demo project archive into github
+  * Fixing return value in method getTotalCountsForAction
+  * Fixing return value in method getUniqueCountsForAction
+  * Fixing methods for converting string to date in Android/iOS wrappers
+  * Deleting method _runBlockOnThread because this method throws AndroidJavaException: java.lang.RuntimeException: Only one Looper may be created per thread
 
 - v0.1.3 Fixing a potential null pointer in the Android wrapper when no Activity was provided in the init.
 
