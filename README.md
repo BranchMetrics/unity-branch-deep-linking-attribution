@@ -79,20 +79,20 @@ Typically, you would register some sort of splash activitiy that handles routing
 
 ```xml
 <activity
-	android:name="com.yourapp.SplashActivity"
-	android:label="@string/app_name" >
-	<intent-filter>
-		<action android:name="android.intent.action.MAIN" />
-		<category android:name="android.intent.category.LAUNCHER" />
-	</intent-filter>
+    android:name="com.yourapp.SplashActivity"
+    android:label="@string/app_name" >
+    <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+    </intent-filter>
 
-	<!-- Add this intent filter below, and change yourapp to your app name -->
-	<intent-filter>
-		<data android:scheme="yourapp" android:host="open" />
-		<action android:name="android.intent.action.VIEW" />
-		<category android:name="android.intent.category.DEFAULT" />
-		<category android:name="android.intent.category.BROWSABLE" />
-	</intent-filter>
+    <!-- Add this intent filter below, and change yourapp to your app name -->
+    <intent-filter>
+        <data android:scheme="yourapp" android:host="open" />
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+    </intent-filter>
 </activity>
 ```
 
@@ -184,8 +184,8 @@ OR if you want to store some state with the event
 ```csharp
 Dictionary<string, object> stateItems = new Dictionary<string, object>
 {
-	{ "username", "Joe" },
-	{ "description", "Joe likes long walks on the beach..." }
+    { "username", "Joe" },
+    { "description", "Joe likes long walks on the beach..." }
 };
 Branch.userCompletedAction("your_custom_event", stateItems); // same 63 characters max limit
 ```
@@ -216,17 +216,17 @@ For more details on how to create links, see the [Branch link creation guide](ht
 
 Dictionary<string, object> parameters = new Dictionary<string, object>
 {
-	{ "user", "Joe" },
-	{ "profile_pic", "https://s3-us-west-1.amazonaws.com/myapp/joes_pic.jpg" },
-	{ "description", "Joe likes long walks on the beach..." },
+    { "user", "Joe" },
+    { "profile_pic", "https://s3-us-west-1.amazonaws.com/myapp/joes_pic.jpg" },
+    { "description", "Joe likes long walks on the beach..." },
 
-	// Customize the display of the link
-	{ "$og_title", "Joe's My App Referral" },
-	{ "$og_image_url", "https://s3-us-west-1.amazonaws.com/myapp/joes_pic.jpg" },
-	{ "$og_description", "Join Joe in My App - it's awesome" },
+    // Customize the display of the link
+    { "$og_title", "Joe's My App Referral" },
+    { "$og_image_url", "https://s3-us-west-1.amazonaws.com/myapp/joes_pic.jpg" },
+    { "$og_description", "Join Joe in My App - it's awesome" },
 
-	// Customize the redirect performance
-	{ "$desktop_url", "http://myapp.com/desktop_splash" }
+    // Customize the redirect performance
+    { "$desktop_url", "http://myapp.com/desktop_splash" }
 }
 
 // associate a url with a set of tags, channel, feature, and stage for better analytics.
@@ -394,7 +394,7 @@ Retrieve the referral code created by current user
 ```csharp
 Branch.getReferralCode(delegate(Dictionary<string, object> referralObject, string error) {
     if (error == null) {
-		string referralCode = referralObject["referral_code"];
+        string referralCode = referralObject["referral_code"];
     }
 });
 ```
@@ -415,7 +415,7 @@ The returned referral code is a 6 character long unique alpha-numeric string wra
 int amount = 5;
 Branch.getCreditHistory(amount, delegate(Dictionary<string, object> referralObject, string error) {
     if (error == null) {
-		string referralCode = referralObject["referral_code"];
+        string referralCode = referralObject["referral_code"];
     }
 });
 ```
@@ -434,7 +434,7 @@ int amount = 5;
 string prefix = "BRANCH";
 Branch.getCreditHistory(prefix, amount, delegate(Dictionary<string, object> referralObject, string error) {
     if (error == null) {
-		string referralCode = referralObject["referral_code"];
+        string referralCode = referralObject["referral_code"];
     }
 });
 ```
@@ -453,7 +453,7 @@ string prefix = "BRANCH";
 DateTime expiration = DateTime.Now.AddDays(1);
 Branch.getCreditHistory(prefix, amount, delegate(Dictionary<string, object> referralObject, string error) {
     if (error == null) {
-		string referralCode = referralObject["referral_code"];
+        string referralCode = referralObject["referral_code"];
     }
 });
 ```
@@ -487,7 +487,7 @@ int calcType = 1;
 int location = 2;
 Branch.getCreditHistory(prefix, amount, bucket, calcType, location, delegate(Dictionary<string, object> referralObject, string error) {
     if (error == null) {
-		string referralCode = referralObject["referral_code"];
+        string referralCode = referralObject["referral_code"];
     }
 });
 ```
@@ -511,17 +511,17 @@ If valid, returns the referral code JSONObject in the call back.
 ```csharp
 Branch.validateReferralCode(code, delegate(Dictionary<string, object> referralObject, string error) {
     if (error != null) {
-    	System.Console.WriteLine("Error in validating referral code: " + error);
-    	return;
-   	}
+        System.Console.WriteLine("Error in validating referral code: " + error);
+        return;
+       }
 
-	string referralCode = referralObject["referral_code"];
-	if (referralCode == code) {
-		// valid
-	}
-	else {
-		// invalid (should never happen)
-	}
+    string referralCode = referralObject["referral_code"];
+    if (referralCode == code) {
+        // valid
+    }
+    else {
+        // invalid (should never happen)
+    }
 });
 ```
 

@@ -75,20 +75,20 @@ Typically, you would register some sort of splash activitiy that handles routing
 
 ```xml
 <activity
-	android:name="com.yourapp.SplashActivity"
-	android:label="@string/app_name" >
-	<intent-filter>
-		<action android:name="android.intent.action.MAIN" />
-		<category android:name="android.intent.category.LAUNCHER" />
-	</intent-filter>
+  android:name="com.yourapp.SplashActivity"
+  android:label="@string/app_name" >
+  <intent-filter>
+    <action android:name="android.intent.action.MAIN" />
+    <category android:name="android.intent.category.LAUNCHER" />
+  </intent-filter>
 
-	<!-- Add this intent filter below, and change yourapp to your app name -->
-	<intent-filter>
-		<data android:scheme="yourapp" android:host="open" />
-		<action android:name="android.intent.action.VIEW" />
-		<category android:name="android.intent.category.DEFAULT" />
-		<category android:name="android.intent.category.BROWSABLE" />
-	</intent-filter>
+  <!-- Add this intent filter below, and change yourapp to your app name -->
+  <intent-filter>
+    <data android:scheme="yourapp" android:host="open" />
+    <action android:name="android.intent.action.VIEW" />
+    <category android:name="android.intent.category.DEFAULT" />
+    <category android:name="android.intent.category.BROWSABLE" />
+  </intent-filter>
 </activity>
 ```
 
@@ -171,8 +171,8 @@ OR if you want to store some state with the event
 ```
 Dictionary<string, object> stateItems = new Dictionary<string, object>
 {
-	{ "username", "Joe" },
-	{ "description", "Joe likes long walks on the beach..." }
+  { "username", "Joe" },
+  { "description", "Joe likes long walks on the beach..." }
 };
 Branch.userCompletedAction("your_custom_event", stateItems); // same 63 characters max limit
 ```
@@ -180,8 +180,8 @@ Branch.userCompletedAction("your_custom_event", stateItems); // same 63 characte
 Some example events you might want to track:
 ###### C Sharp
 ```
-"complete_purchase"  
-"wrote_message"  
+"complete_purchase"
+"wrote_message"
 "finished_level_ten"
 ```
 
@@ -200,17 +200,17 @@ For more details on how to create links, see the [Branch link creation guide](ht
 
 Dictionary<string, object> parameters = new Dictionary<string, object>
 {
-	{ "user", "Joe" },
-	{ "profile_pic", "https://s3-us-west-1.amazonaws.com/myapp/joes_pic.jpg" },
-	{ "description", "Joe likes long walks on the beach..." },
+  { "user", "Joe" },
+  { "profile_pic", "https://s3-us-west-1.amazonaws.com/myapp/joes_pic.jpg" },
+  { "description", "Joe likes long walks on the beach..." },
 
-	// Customize the display of the link
-	{ "$og_title", "Joe's My App Referral" },
-	{ "$og_image_url", "https://s3-us-west-1.amazonaws.com/myapp/joes_pic.jpg" },
-	{ "$og_description", "Join Joe in My App - it's awesome" },
+  // Customize the display of the link
+  { "$og_title", "Joe's My App Referral" },
+  { "$og_image_url", "https://s3-us-west-1.amazonaws.com/myapp/joes_pic.jpg" },
+  { "$og_description", "Join Joe in My App - it's awesome" },
 
-	// Customize the redirect performance
-	{ "$desktop_url", "http://myapp.com/desktop_splash" }
+  // Customize the redirect performance
+  { "$desktop_url", "http://myapp.com/desktop_splash" }
 }
 
 // associate a url with a set of tags, channel, feature, and stage for better analytics.
@@ -248,7 +248,7 @@ You can customize the Facebook OG tags of each URL if you want to dynamically sh
 | "$og_title" | The title you'd like to appear for the link in social media
 | "$og_description" | The description you'd like to appear for the link in social media
 | "$og_image_url" | The URL for the image you'd like to appear for the link in social media
-| "$og_video" | The URL for the video 
+| "$og_video" | The URL for the video
 | "$og_url" | The URL you'd like to appear
 | "$og_app_id" | Your OG app ID. Optional and rarely used.
 
@@ -268,7 +268,7 @@ You have the ability to control the direct deep linking of each link by insertin
 
 | Key | Value
 | --- | ---
-| "$deeplink_path" | The value of the deep link path that you'd like us to append to your URI. For example, you could specify "$deeplink_path": "radio/station/456" and we'll open the app with the URI "yourapp://radio/station/456?link_click_id=branch-identifier". This is primarily for supporting legacy deep linking infrastructure. 
+| "$deeplink_path" | The value of the deep link path that you'd like us to append to your URI. For example, you could specify "$deeplink_path": "radio/station/456" and we'll open the app with the URI "yourapp://radio/station/456?link_click_id=branch-identifier". This is primarily for supporting legacy deep linking infrastructure.
 | "$always_deeplink" | true or false. (default is not to deep link first) This key can be specified to have our linking service force try to open the app, even if we're not sure the user has the app installed. If the app is not installed, we fall back to the respective app store or $platform_url key. By default, we only open the app if we've seen a user initiate a session in your app from a Branch link (has been cookied and deep linked by Branch)
 
 ## Referral system rewarding functionality
@@ -372,7 +372,7 @@ Retrieve the referral code created by current user
 ```
 Branch.getReferralCode(delegate(Dictionary<string, object> referralObject, string error) {
     if (error == null) {
-		string referralCode = referralObject["referral_code"];
+        string referralCode = referralObject["referral_code"];
     }
 });
 ```
@@ -392,7 +392,7 @@ The returned referral code is a 6 character long unique alpha-numeric string wra
 int amount = 5;
 Branch.getCreditHistory(amount, delegate(Dictionary<string, object> referralObject, string error) {
     if (error == null) {
-		string referralCode = referralObject["referral_code"];
+        string referralCode = referralObject["referral_code"];
     }
 });
 ```
@@ -410,7 +410,7 @@ int amount = 5;
 string prefix = "BRANCH";
 Branch.getCreditHistory(prefix, amount, delegate(Dictionary<string, object> referralObject, string error) {
     if (error == null) {
-		string referralCode = referralObject["referral_code"];
+        string referralCode = referralObject["referral_code"];
     }
 });
 ```
@@ -428,7 +428,7 @@ string prefix = "BRANCH";
 DateTime expiration = DateTime.Now.AddDays(1);
 Branch.getCreditHistory(prefix, amount, delegate(Dictionary<string, object> referralObject, string error) {
     if (error == null) {
-		string referralCode = referralObject["referral_code"];
+        string referralCode = referralObject["referral_code"];
     }
 });
 ```
@@ -441,14 +441,14 @@ You can also tune the referral code to the finest granularity, with the followin
 **calculation_type**  _int_
 : This defines whether the referral code can be applied indefinitely, or only once per user
 
-0 (_BranchUnlimitedRewards_) - referral code can be applied continually  
+0 (_BranchUnlimitedRewards_) - referral code can be applied continually
 1 (_BranchUniqueRewards_) - a user can only apply a specific referral code once
 
 **location** _int_
 : The user to reward for applying the referral code
 
-0 (_BranchReferreeUser_) - the user applying the referral code receives credit  
-1 (_BranchReferringUser_) - the user who created the referral code receives credit  
+0 (_BranchReferreeUser_) - the user applying the referral code receives credit
+1 (_BranchReferringUser_) - the user who created the referral code receives credit
 2 (_BranchBothUsers_) - both the creator and applicant receive credit
 
 ###### C Sharp
@@ -461,7 +461,7 @@ int calcType = 1;
 int location = 2;
 Branch.getCreditHistory(prefix, amount, bucket, calcType, location, delegate(Dictionary<string, object> referralObject, string error) {
     if (error == null) {
-		string referralCode = referralObject["referral_code"];
+        string referralCode = referralObject["referral_code"];
     }
 });
 ```
@@ -483,18 +483,18 @@ If valid, returns the referral code JSONObject in the call back.
 ###### C Sharp
 ```
 Branch.validateReferralCode(code, delegate(Dictionary<string, object> referralObject, string error) {
-    if (error != null) {
-    	System.Console.WriteLine("Error in validating referral code: " + error);
-    	return;
-   	}
+  if (error != null) {
+    System.Console.WriteLine("Error in validating referral code: " + error);
+    return;
+  }
 
-	string referralCode = referralObject["referral_code"];
-	if (referralCode == code) {
-		// valid
-	}
-	else {
-		// invalid (should never happen)
-	}
+  string referralCode = referralObject["referral_code"];
+  if (referralCode == code) {
+    // valid
+  }
+  else {
+    // invalid (should never happen)
+  }
 });
 ```
 
