@@ -1,10 +1,5 @@
 # Branch Unity SDK
 
-## Full Documentation
-This is the readme file of our open source Unity SDK. 
-
-=======
-
 ## Integration Checklist
 
 - Create Branch Account and get your [Branch Key](https://dashboard.branch.io/#/settings)
