@@ -68,7 +68,7 @@ public class Branch : MonoBehaviour {
      * Get the referring parameters from the initial install.
      */
     public static Dictionary<string, object> getFirstReferringParams() {
-        string firstReferringParamsString = _getFirstReferringParams();
+        string firstReferringParamsString = Marshal.PtrToStringAnsi(_getFirstReferringParams());
 
         return MiniJSON.Json.Deserialize(firstReferringParamsString) as Dictionary<string, object>;
     }
@@ -77,7 +77,7 @@ public class Branch : MonoBehaviour {
      * Get the referring parameters from the last open.
      */
     public static Dictionary<string, object> getLatestReferringParams() {
-        string latestReferringParamsString = _getLatestReferringParams();
+        string latestReferringParamsString = Marshal.PtrToStringAnsi(_getLatestReferringParams());
 
         return MiniJSON.Json.Deserialize(latestReferringParamsString) as Dictionary<string, object>;
     }
@@ -582,8 +582,10 @@ public class Branch : MonoBehaviour {
         name = "Branch";
 
         DontDestroyOnLoad(gameObject);
-
-        _setBranchKey(branchKey);
+        
+        #if !UNITY_EDITOR
+            _setBranchKey(branchKey);
+        #endif
     }
 
     #region Platform Loading Methods
@@ -608,10 +610,10 @@ public class Branch : MonoBehaviour {
     private static void _closeSession() { }
 
     [DllImport ("__Internal")]
-    private static extern string _getFirstReferringParams();
+    private static extern IntPtr _getFirstReferringParams();
 
     [DllImport ("__Internal")]
-    private static extern string _getLatestReferringParams();
+    private static extern IntPtr _getLatestReferringParams();
 
     [DllImport ("__Internal")]
     private static extern void _resetUserSession();
