@@ -68,18 +68,32 @@ public class Branch : MonoBehaviour {
      * Get the referring parameters from the initial install.
      */
     public static Dictionary<string, object> getFirstReferringParams() {
-        string firstReferringParamsString = _getFirstReferringParams();
-
-        return MiniJSON.Json.Deserialize(firstReferringParamsString) as Dictionary<string, object>;
+	string firstReferringParamsString = "";
+	
+	#if (UNITY_IOS || UNITY_IPHONE) && !UNITY_EDITOR
+	IntPtr ptrResult = _getFirstReferringParams();
+	firstReferringParamsString = Marshal.PtrToStringAnsi(ptrResult);
+	#else
+	firstReferringParamsString = _getFirstReferringParams();
+	#endif
+	
+	return MiniJSON.Json.Deserialize(firstReferringParamsString) as Dictionary<string, object>;
     }
 
     /**
      * Get the referring parameters from the last open.
      */
     public static Dictionary<string, object> getLatestReferringParams() {
-        string latestReferringParamsString = _getLatestReferringParams();
-
-        return MiniJSON.Json.Deserialize(latestReferringParamsString) as Dictionary<string, object>;
+	string latestReferringParamsString = "";
+	
+	#if (UNITY_IOS || UNITY_IPHONE) && !UNITY_EDITOR
+	IntPtr ptrResult = _getLatestReferringParams();
+	latestReferringParamsString = Marshal.PtrToStringAnsi(ptrResult);
+	#else
+	latestReferringParamsString = _getLatestReferringParams();
+	#endif
+	
+	return MiniJSON.Json.Deserialize(latestReferringParamsString) as Dictionary<string, object>;
     }
 
     /**
@@ -608,10 +622,10 @@ public class Branch : MonoBehaviour {
     private static void _closeSession() { }
 
     [DllImport ("__Internal")]
-    private static extern string _getFirstReferringParams();
+    private IntPtr extern string _getFirstReferringParams();
 
     [DllImport ("__Internal")]
-    private static extern string _getLatestReferringParams();
+    private IntPtr extern string _getLatestReferringParams();
 
     [DllImport ("__Internal")]
     private static extern void _resetUserSession();
