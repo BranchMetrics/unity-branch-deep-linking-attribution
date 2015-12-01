@@ -1,6 +1,14 @@
-## [New documentation portal](https://dev.branch.io) and [support portal with user forums](http://support.branch.io)
+## FAQ
+
+1. __What if you go down?! Or there is a poor connection?__
+
+At Branch, we live, breath uptime and performance. Just in case, we've got mechanisms internal to the SDK to deal with network issues. We always call the callbacks with the error parameter describing the issue. If the phone is in airplane mode and the connection is not available, the callbacks are called immediately. If there is a server latency, we timeout after 3 seconds and will retry 4 more times with a 3 second pause in between each. These timeouts are adjustable on the singleton instance by calling setNetworkTimeout (s), setRetryCount and setRetryInterval (s).
 
 ## Installation
+
+#### Get it on the Unity Store
+
+Install the package from Unity here: [http://u3d.as/eX3](http://u3d.as/eX3)
 
 #### Download the raw files
 
@@ -10,12 +18,7 @@ Download code from here: [S3 Package](https://s3-us-west-1.amazonaws.com/branchh
 
 After acquiring the `BranchUnityWrapper.unityPackage` through one of these choices, you can import it into your project by clicking `Assets -> Import Package`.
 
-## Move Plugins Folder
-Due to Unity requirements, our UnityPackage file must have all of its contents in a single folder. This means that you'll have to manually move the `Plugins` folder out of our `Branch` folder, and into the root of your `Assets` folder. If you have an existing Plugins folder, just merge our contents into it.
-
-![Move Plugins Folder](https://raw.githubusercontent.com/BranchMetrics/Branch-Unity-SDK/8670cf9347e4d7c9a88e7c9c4263aa2eed3f2a27/Docs/Screenshots/move-to-assets.gif)
-
-### Register your app
+### Register you app
 
 You can sign up for your own app id at [https://dashboard.branch.io](https://dashboard.branch.io)
 
@@ -30,65 +33,50 @@ Ideally, you want to use our links any time you have an external link pointing t
 Our linking infrastructure will support anything you want to build. If it doesn't, we'll fix it so that it does: just reach out to alex@branch.io with requests.
 
 #### Unity Scene
-
-To allow Branch to configure itself, you must add a BranchPrefab asset to your scene. Simply drag into your scene, and then specify your APP_KEY in the properties.
-
 ![Branch Unity Config](https://raw.githubusercontent.com/BranchMetrics/Branch-Unity-SDK/8670cf9347e4d7c9a88e7c9c4263aa2eed3f2a27/Docs/Screenshots/branch-key.png)
 
+#### Setup Branch parameters
+To allow Branch to configure itself, you must add a BranchPrefab asset to your scene. Simply drag into your scene, and then specify your APP_KEY and APP_URI in the properties.
+
 #### iOS Note
+After building iOS project:
 
-If you're creating an iOS app for your Unity project, you must enable Objective C exceptions in the Build Settings in order for Branch to compile.
+1. All required frameworks will be added automatically
+2. Objective C exceptions will be enabled automatically
+3. URL Scheme will be added into .plist automatically
 
-![iOS Project Settings](https://raw.githubusercontent.com/BranchMetrics/Branch-Unity-SDK/8670cf9347e4d7c9a88e7c9c4263aa2eed3f2a27/Docs/Screenshots/enable-exceptions.png)
+#### iOS + Unity 4.6 Note
+Branch requires ARC, and we don’t intend to add if checks thoughout the SDK to try to support pre-ARC. However, you can add flags to the project to compile the Branch files with ARC, which should work fine for you.
 
-#### iOS + Unity 4.6
+Simple add **-fobjc-arc** to all Branch files.
 
-There seem to be some issues with 4.6 pulling all of the Branch-SDK files into the Xcode project. A simple solution is to pull all of the files from the `Branch-SDK` folder directly into the `Assets/Plugins/iOS` folder as siblings to the `BranchiOSWrapper.mm` file.
+*Note:* *we already have added this flag, but check it before building.*
 
-Additionally, the Xcode project template for Unity 4.6.x (tested with 4.6.1, but may be all the way up through 4.6.6) *does not* use ARC. Branch requires ARC, and we don't intend to add if checks thoughout the SDK to try to support pre-ARC. However, you can add flags to the project to compile the Branch files with ARC, which should work fine for you. Simple add `-fobjc-arc` to all Branch files in the Compile Sources region under Build Phases within your target.
 
-![iOS ARC Flags](https://github.com/BranchMetrics/Branch-Unity-SDK/blob/9a43bf3bfed07428f136f06e66c36c79d9683f72/Docs/Screenshots/ios-compile-source-flags.png)
+#### Android Note
+Click button "Update Android Manifest" to change or add a android manifest for support deep linking, or you can change android manifest by your hands. 
 
-### Register a URI scheme direct deep linking (optional but recommended)
-
-You can register your app to respond to direct deep links (yourapp:// in a mobile browser) by adding a URI scheme in the YourProject-Info.plist file. Make sure to change **yourapp** to a unique string that represents your app name.
-
-1. In Xcode, click on YourProject-Info.plist on the left.
-1. Find URL Types and click the right arrow. (If it doesn't exist, right click anywhere and choose Add Row. Scroll down and choose URL Types)
-1. Add "yourapp", where yourapp is a unique string for your app, as an item in URL Schemes as below:
-
-![URL Scheme Demo](https://raw.githubusercontent.com/BranchMetrics/Branch-Unity-SDK/8670cf9347e4d7c9a88e7c9c4263aa2eed3f2a27/Docs/Screenshots/ios-uri-scheme-project.png)
-
-Alternatively, you can add the URI scheme in your project's Info page.
-
-1. In Xcode, click your project in the Navigator (on the left side).
-1. Select the "Info" tab.
-1. Expand the "URL Types" section at the bottom.
-1. Click the "+" sign to add a new URI Scheme, as below:
-
-![URL Scheme Demo](https://raw.githubusercontent.com/BranchMetrics/Branch-Unity-SDK/8670cf9347e4d7c9a88e7c9c4263aa2eed3f2a27/Docs/Screenshots/ios-uri-scheme-plist.png)
-
-#### Android
+#### Changing android manifest manyally
 In your project's manifest file, you can register your app to respond to direct deep links (yourapp:// in a mobile browser) by adding the second intent filter block. Also, make sure to change **yourapp** to a unique string that represents your app name.
 
 Typically, you would register some sort of splash activitiy that handles routing for your app.
 
 ```xml
 <activity
-    android:name="com.yourapp.SplashActivity"
-    android:label="@string/app_name" >
-    <intent-filter>
-        <action android:name="android.intent.action.MAIN" />
-        <category android:name="android.intent.category.LAUNCHER" />
-    </intent-filter>
+	android:name="com.yourapp.SplashActivity"
+	android:label="@string/app_name" >
+	<intent-filter>
+		<action android:name="android.intent.action.MAIN" />
+		<category android:name="android.intent.category.LAUNCHER" />
+	</intent-filter>
 
-    <!-- Add this intent filter below, and change yourapp to your app name -->
-    <intent-filter>
-        <data android:scheme="yourapp" android:host="open" />
-        <action android:name="android.intent.action.VIEW" />
-        <category android:name="android.intent.category.DEFAULT" />
-        <category android:name="android.intent.category.BROWSABLE" />
-    </intent-filter>
+	<!-- Add this intent filter below, and change yourapp to your app name -->
+	<intent-filter>
+		<data android:scheme="yourapp" android:host="open" />
+		<action android:name="android.intent.action.VIEW" />
+		<category android:name="android.intent.category.DEFAULT" />
+		<category android:name="android.intent.category.BROWSABLE" />
+	</intent-filter>
 </activity>
 ```
 
@@ -99,8 +87,7 @@ Called when app first initializes a session, ideally in a class that is initiate
 This deep link routing callback is called 100% of the time on init, with your link params or an empty dictionary if none present.
 
 ###### C Sharp
-
-```csharp
+```
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -117,28 +104,57 @@ public class MyCoolBehaviorScript : MonoBehaviour {
     }
 }
 ```
+**Initalization with BranchUniversalObject and LinkProperties**
+###### C Sharp
+```
+using UnityEngine;
+using System.Collections.Generic;
+
+public class MyCoolBehaviorScript : MonoBehaviour {
+    void Start () {
+        Branch.initSession(delegate(universalObject, linkProperties, error) {
+            if (error != null) {
+                System.Console.WriteLine("Oh no, something went wrong: " + error);
+            }
+            else if (parameters.Count > 0) {
+                System.Console.WriteLine("Branch initialization completed with the following params: " + universalObject.ToJsonString() + linkProperties.ToJsonString());
+            }
+        });
+    }
+}
+```
+
+
 
 #### Retrieve session (install or open) parameters
 
 These session parameters will be available at any point later on with this command. If no params, the dictionary will be empty. This refreshes with every new session (app installs AND app opens)
 
 ###### C Sharp
-
-```csharp
+```
 Dictionary<string, object> sessionParams = Branch.getLatestReferringParams();
 ```
-
+**Retrive parameters with BranchUniversalObject and LinkProperties**
+###### C Sharp
+```
+BranchUniversalObject obj = Branch.getLatestReferringBranchUniversalObject();
+BranchLinkProperties link = Branch.getLatestReferringBranchLinkProperties();
+```
 
 #### Retrieve install (install only) parameters
 
 If you ever want to access the original session params (the parameters passed in for the first install event only), you can use this line. This is useful if you only want to reward users who newly installed the app from a referral link or something.
 
 ###### C Sharp
-
-```csharp
+```
 Dictionary<string, object> installParams = Branch.getFirstReferringParams();
 ```
-
+**Retrive parameters with BranchUniversalObject and LinkProperties**
+###### C Sharp
+```
+BranchUniversalObject obj = Branch.getFirstReferringBranchUniversalObject();
+BranchLinkProperties link = Branch.getFirstReferringBranchLinkProperties();
+```
 
 ### Persistent identities
 
@@ -148,8 +164,7 @@ To identify a user, just call:
 
 
 ###### C Sharp
-
-```csharp
+```
 Branch.setIdentity("your user id");
 ```
 
@@ -160,39 +175,32 @@ If you provide a logout function in your app, be sure to clear the user when the
 **Warning** this call will clear the referral credits and attribution on the device.
 
 ###### C Sharp
-
-```csharp
+```
 Branch.logout();
 ```
 
 ### Register custom events
-
 ###### C Sharp
-
-```csharp
+```
 Branch.userCompletedAction("your_custom_event"); // your custom event name should not exceed 63 characters
 ```
 
 OR if you want to store some state with the event
-
 ###### C Sharp
-
-```csharp
+```
 Dictionary<string, object> stateItems = new Dictionary<string, object>
 {
-    { "username", "Joe" },
-    { "description", "Joe likes long walks on the beach..." }
+	{ "username", "Joe" },
+	{ "description", "Joe likes long walks on the beach..." }
 };
 Branch.userCompletedAction("your_custom_event", stateItems); // same 63 characters max limit
 ```
 
 Some example events you might want to track:
-
 ###### C Sharp
-
-```csharp
-"complete_purchase"
-"wrote_message"
+```
+"complete_purchase"  
+"wrote_message"  
 "finished_level_ten"
 ```
 
@@ -205,24 +213,23 @@ There are a bunch of options for creating these links. You can tag them for anal
 For more details on how to create links, see the [Branch link creation guide](https://github.com/BranchMetrics/Branch-Integration-Guides/blob/master/url-creation-guide.md)
 
 ###### C Sharp
-
-```csharp
+```
 // associate data with a link
 // you can access this data from any instance that installs or opens the app from this link (amazing...)
 
 Dictionary<string, object> parameters = new Dictionary<string, object>
 {
-    { "user", "Joe" },
-    { "profile_pic", "https://s3-us-west-1.amazonaws.com/myapp/joes_pic.jpg" },
-    { "description", "Joe likes long walks on the beach..." },
+	{ "user", "Joe" },
+	{ "profile_pic", "https://s3-us-west-1.amazonaws.com/myapp/joes_pic.jpg" },
+	{ "description", "Joe likes long walks on the beach..." },
 
-    // Customize the display of the link
-    { "$og_title", "Joe's My App Referral" },
-    { "$og_image_url", "https://s3-us-west-1.amazonaws.com/myapp/joes_pic.jpg" },
-    { "$og_description", "Join Joe in My App - it's awesome" },
+	// Customize the display of the link
+	{ "$og_title", "Joe's My App Referral" },
+	{ "$og_image_url", "https://s3-us-west-1.amazonaws.com/myapp/joes_pic.jpg" },
+	{ "$og_description", "Join Joe in My App - it's awesome" },
 
-    // Customize the redirect performance
-    { "$desktop_url", "http://myapp.com/desktop_splash" }
+	// Customize the redirect performance
+	{ "$desktop_url", "http://myapp.com/desktop_splash" }
 }
 
 // associate a url with a set of tags, channel, feature, and stage for better analytics.
@@ -260,7 +267,7 @@ You can customize the Facebook OG tags of each URL if you want to dynamically sh
 | "$og_title" | The title you'd like to appear for the link in social media
 | "$og_description" | The description you'd like to appear for the link in social media
 | "$og_image_url" | The URL for the image you'd like to appear for the link in social media
-| "$og_video" | The URL for the video
+| "$og_video" | The URL for the video 
 | "$og_url" | The URL you'd like to appear
 | "$og_app_id" | Your OG app ID. Optional and rarely used.
 
@@ -280,7 +287,7 @@ You have the ability to control the direct deep linking of each link by insertin
 
 | Key | Value
 | --- | ---
-| "$deeplink_path" | The value of the deep link path that you'd like us to append to your URI. For example, you could specify "$deeplink_path": "radio/station/456" and we'll open the app with the URI "yourapp://radio/station/456?link_click_id=branch-identifier". This is primarily for supporting legacy deep linking infrastructure.
+| "$deeplink_path" | The value of the deep link path that you'd like us to append to your URI. For example, you could specify "$deeplink_path": "radio/station/456" and we'll open the app with the URI "yourapp://radio/station/456?link_click_id=branch-identifier". This is primarily for supporting legacy deep linking infrastructure. 
 | "$always_deeplink" | true or false. (default is not to deep link first) This key can be specified to have our linking service force try to open the app, even if we're not sure the user has the app installed. If the app is not installed, we fall back to the respective app store or $platform_url key. By default, we only open the app if we've seen a user initiate a session in your app from a Branch link (has been cookied and deep linked by Branch)
 
 ## Referral system rewarding functionality
@@ -302,8 +309,7 @@ Warning: For a referral program, you should not use unique awards for custom eve
 Reward balances change randomly on the backend when certain actions are taken (defined by your rules), so you'll need to make an asynchronous call to retrieve the balance. Here is the syntax:
 
 ###### C Sharp
-
-```csharp
+```
 Branch.loadRewards(delegate(bool changed, string error) {
     // changed boolean will indicate if the balance changed from what is currently in memory
 
@@ -318,8 +324,7 @@ Branch.loadRewards(delegate(bool changed, string error) {
 We will store how many of the rewards have been deployed so that you don't have to track it on your end. In order to save that you gave the credits to the user, you can call redeem. Redemptions will reduce the balance of outstanding credits permanently.
 
 ###### C Sharp
-
-```csharp
+```
 // Save that the user has redeemed 5 credits
 Branch.redeemRewards(5);
 ```
@@ -329,8 +334,7 @@ Branch.redeemRewards(5);
 This call will retrieve the entire history of credits and redemptions from the individual user. To use this call, implement like so:
 
 ###### C Sharp
-
-```csharp
+```
 Branch.getCreditHistory(delegate(List<string> historyItems, string error) {
     if (error == null) {
         // process history
@@ -339,7 +343,6 @@ Branch.getCreditHistory(delegate(List<string> historyItems, string error) {
 ```
 
 The response will return an array that has been parsed from the following JSON:
-
 ```json
 [
     {
@@ -366,7 +369,6 @@ The response will return an array that has been parsed from the following JSON:
     }
 ]
 ```
-
 **referrer**
 : The id of the referring user for this credit transaction. Returns null if no referrer is involved. Note this id is the user id in developer's own system that's previously passed to Branch's identify user API call.
 
@@ -386,11 +388,10 @@ The response will return an array that has been parsed from the following JSON:
 Retrieve the referral code created by current user
 
 ###### C Sharp
-
-```csharp
+```
 Branch.getReferralCode(delegate(Dictionary<string, object> referralObject, string error) {
     if (error == null) {
-        string referralCode = referralObject["referral_code"];
+		string referralCode = referralObject["referral_code"];
     }
 });
 ```
@@ -406,12 +407,11 @@ The returned referral code is a 6 character long unique alpha-numeric string wra
 : The amount of credit to redeem when user applies the referral code
 
 ###### C Sharp
-
-```csharp
+```
 int amount = 5;
 Branch.getCreditHistory(amount, delegate(Dictionary<string, object> referralObject, string error) {
     if (error == null) {
-        string referralCode = referralObject["referral_code"];
+		string referralCode = referralObject["referral_code"];
     }
 });
 ```
@@ -424,13 +424,12 @@ The resulting code will have your prefix, concatenated with a 4 character long u
 
 
 ###### C Sharp
-
-```csharp
+```
 int amount = 5;
 string prefix = "BRANCH";
 Branch.getCreditHistory(prefix, amount, delegate(Dictionary<string, object> referralObject, string error) {
     if (error == null) {
-        string referralCode = referralObject["referral_code"];
+		string referralCode = referralObject["referral_code"];
     }
 });
 ```
@@ -442,14 +441,13 @@ The prefix parameter is optional here, i.e. it could be getReferralCodeWithAmoun
 : The expiration date of the referral code
 
 ###### C Sharp
-
-```csharp
+```
 int amount = 5;
 string prefix = "BRANCH";
 DateTime expiration = DateTime.Now.AddDays(1);
 Branch.getCreditHistory(prefix, amount, delegate(Dictionary<string, object> referralObject, string error) {
     if (error == null) {
-        string referralCode = referralObject["referral_code"];
+		string referralCode = referralObject["referral_code"];
     }
 });
 ```
@@ -462,19 +460,18 @@ You can also tune the referral code to the finest granularity, with the followin
 **calculation_type**  _int_
 : This defines whether the referral code can be applied indefinitely, or only once per user
 
-0 (_BranchUnlimitedRewards_) - referral code can be applied continually
+0 (_BranchUnlimitedRewards_) - referral code can be applied continually  
 1 (_BranchUniqueRewards_) - a user can only apply a specific referral code once
 
 **location** _int_
 : The user to reward for applying the referral code
 
-0 (_BranchReferreeUser_) - the user applying the referral code receives credit
-1 (_BranchReferringUser_) - the user who created the referral code receives credit
+0 (_BranchReferreeUser_) - the user applying the referral code receives credit  
+1 (_BranchReferringUser_) - the user who created the referral code receives credit  
 2 (_BranchBothUsers_) - both the creator and applicant receive credit
 
 ###### C Sharp
-
-```csharp
+```
 int amount = 5;
 string prefix = "BRANCH";
 DateTime expiration = DateTime.Now.AddDays(1);
@@ -483,7 +480,7 @@ int calcType = 1;
 int location = 2;
 Branch.getCreditHistory(prefix, amount, bucket, calcType, location, delegate(Dictionary<string, object> referralObject, string error) {
     if (error == null) {
-        string referralCode = referralObject["referral_code"];
+		string referralCode = referralObject["referral_code"];
     }
 });
 ```
@@ -503,21 +500,20 @@ If valid, returns the referral code JSONObject in the call back.
 : The referral code to validate
 
 ###### C Sharp
-
-```csharp
+```
 Branch.validateReferralCode(code, delegate(Dictionary<string, object> referralObject, string error) {
     if (error != null) {
-        System.Console.WriteLine("Error in validating referral code: " + error);
-        return;
-       }
+    	System.Console.WriteLine("Error in validating referral code: " + error);
+    	return;
+   	}
 
-    string referralCode = referralObject["referral_code"];
-    if (referralCode == code) {
-        // valid
-    }
-    else {
-        // invalid (should never happen)
-    }
+	string referralCode = referralObject["referral_code"];
+	if (referralCode == code) {
+		// valid
+	}
+	else {
+		// invalid (should never happen)
+	}
 });
 ```
 
@@ -529,8 +525,7 @@ Apply a referral code if it exists in Branch system and is still valid (see abov
 : The referral code to apply
 
 ###### C Sharp
-
-```csharp
+```
 Branch.applyReferralCode(code, delegate(Dictionary<string, object> referralObject, string error) {
     if (error == null) {
         // applied. you can get the referral code amount from the params and deduct it in your UI.
@@ -538,5 +533,62 @@ Branch.applyReferralCode(code, delegate(Dictionary<string, object> referralObjec
     else {
         System.Console.WriteLine("Error in applying referral code: " + error);
     }
+});
+```
+
+### Share link
+You can share link with your friends via:
+
+1. E-mail
+2. SMS
+3. Facebook
+4. etc.
+
+###### C Sharp
+```
+Dictionary<string, object> shareParameters = new Dictionary<string, object>();
+shareParameters.Add("name", "test name");
+shareParameters.Add("auto_deeplink_key_1", "This is an auto deep linked value");
+shareParameters.Add("message", "hello there with short url");
+shareParameters.Add("$og_title", "this is new sharing title");
+shareParameters.Add("$og_description", "this is new sharing description");
+shareParameters.Add("$og_image_url", "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png");
+
+List<string> tags = new List<string>();
+tags.Add("tag1");
+tags.Add("tag2");
+
+Branch.shareLink(shareParameters, tags, "Test message", "feature1", "1", "https://play.google.com/store/apps/details?id=com.kindred.android", (url, error) => {
+	if (error != null) {
+		Debug.LogError("Branch.shareLink failed: " + error);
+	} else {
+		Debug.Log("Branch.shareLink shared params: " + url);
+	}
+});
+```
+**Sharing with BranchUniversalObject and LinkProperties**
+###### C Sharp
+```
+BranchUniversalObject universalObject = new BranchUniversalObject();
+universalObject.canonicalIdentifier = "id12345";
+universalObject.title = "id12345 title";
+universalObject.contentDescription = "My awesome piece of content!";
+universalObject.imageUrl = "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png";
+universalObject.metadata.Add("foo", "bar");
+
+BranchLinkProperties linkProperties = new BranchLinkProperties();
+linkProperties.tags.Add("tag1");
+linkProperties.tags.Add("tag2");
+linkProperties.feature = "invite";
+linkProperties.channel = "Twitter";
+linkProperties.stage = "2";
+linkProperties.controlParams.Add("$desktop_url", "http://example.com");
+
+Branch.shareLink(universalObject, linkProperties, "hello there with short url", (url, error) => {
+	if (error != null) {
+		Debug.LogError("Branch.shareLink failed: " + error);
+	} else {
+		Debug.Log("Branch.shareLink shared params: " + url);
+	}
 });
 ```
