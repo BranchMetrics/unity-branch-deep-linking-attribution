@@ -1,8 +1,16 @@
-## FAQ
+# Branch Metrics Unity SDK Reference
 
-1. __What if you go down?! Or there is a poor connection?__
+This is a repository of our open source Unity SDK, which is a wrapper on top of our iOS and Android SDKs. See the table of contents below for a complete list of the content featured in this document.
 
-At Branch, we live, breath uptime and performance. Just in case, we've got mechanisms internal to the SDK to deal with network issues. We always call the callbacks with the error parameter describing the issue. If the phone is in airplane mode and the connection is not available, the callbacks are called immediately. If there is a server latency, we timeout after 3 seconds and will retry 4 more times with a 3 second pause in between each. These timeouts are adjustable on the singleton instance by calling setNetworkTimeout (s), setRetryCount and setRetryInterval (s).
+## Get the Demo App
+
+There's a full demo app embedded in this repository, which you can find in the *BranchUnityTestBed* folder. Please use that as a reference.
+
+## Additional Resources
+- [Integration guide](https://dev.branch.io/recipes/quickstart_guide/unity/) *Start Here*
+- [Changelog](https://github.com/BranchMetrics/Unity-Deferred-Deep-Linking-SDK/blob/master/ChangeLog.md)
+- [Testing](https://dev.branch.io/recipes/testing_your_integration/unity/)
+- [Support portal, FAQ](http://support.branch.io)
 
 ## Installation
 
@@ -27,6 +35,7 @@ You can sign up for your own app id at [https://dashboard.branch.io](https://das
 To allow Branch to configure itself, you must add a BranchPrefab asset to your scene. Simply drag into your scene, and then specify your APP_KEY and APP_URI in the properties.
 
 #### iOS Note
+
 After building iOS project:
 
 1. All required frameworks will be added automatically
@@ -34,6 +43,7 @@ After building iOS project:
 3. URL Scheme will be added into .plist automatically
 
 #### iOS + Unity 4.6 Note
+
 Branch requires ARC, and we don’t intend to add if checks thoughout the SDK to try to support pre-ARC. However, you can add flags to the project to compile the Branch files with ARC, which should work fine for you.
 
 Simple add **-fobjc-arc** to all Branch files.
@@ -41,9 +51,11 @@ Simple add **-fobjc-arc** to all Branch files.
 *Note:* *we already have added this flag, but check it before building.*
 
 #### Android Note
+
 Click button "Update Android Manifest" to change or add a android manifest for support deep linking, or you can change android manifest by your hands. 
 
-#### Changing android manifest manyally
+#### Changing android manifest manually
+
 In your project's manifest file, you can register your app to respond to direct deep links (yourapp:// in a mobile browser) by adding the second intent filter block. Also, make sure to change **yourapp** to a unique string that represents your app name.
 
 Typically, you would register some sort of splash activitiy that handles routing for your app.
