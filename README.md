@@ -85,8 +85,6 @@ Called when app first initializes a session, ideally in a class that is initiate
 
 This deep link routing callback is called 100% of the time on init, with your link params or an empty dictionary if none present.
 
-###### C Sharp
-
 ```cs
 using UnityEngine;
 using System.Collections.Generic;
@@ -106,8 +104,6 @@ public class MyCoolBehaviorScript : MonoBehaviour {
 ```
 
 **Initalization with BranchUniversalObject and LinkProperties**
-
-###### C Sharp
 
 ```cs
 using UnityEngine;
@@ -131,15 +127,11 @@ public class MyCoolBehaviorScript : MonoBehaviour {
 
 These session parameters will be available at any point later on with this command. If no params, the dictionary will be empty. This refreshes with every new session (app installs AND app opens)
 
-###### C Sharp
-
 ```cs
 Dictionary<string, object> sessionParams = Branch.getLatestReferringParams();
 ```
 
 **Retrive parameters with BranchUniversalObject and LinkProperties**
-
-###### C Sharp
 
 ```cs
 BranchUniversalObject obj = Branch.getLatestReferringBranchUniversalObject();
@@ -150,15 +142,11 @@ BranchLinkProperties link = Branch.getLatestReferringBranchLinkProperties();
 
 If you ever want to access the original session params (the parameters passed in for the first install event only), you can use this line. This is useful if you only want to reward users who newly installed the app from a referral link or something.
 
-###### C Sharp
-
 ```cs
 Dictionary<string, object> installParams = Branch.getFirstReferringParams();
 ```
 
 **Retrive parameters with BranchUniversalObject and LinkProperties**
-
-###### C Sharp
 
 ```cs
 BranchUniversalObject obj = Branch.getFirstReferringBranchUniversalObject();
@@ -171,9 +159,6 @@ Often, you might have your own user IDs, or want referral and event data to pers
 
 To identify a user, just call:
 
-
-###### C Sharp
-
 ```cs
 Branch.setIdentity("your user id");
 ```
@@ -184,23 +169,17 @@ If you provide a logout function in your app, be sure to clear the user when the
 
 **Warning** this call will clear the referral credits and attribution on the device.
 
-###### C Sharp
-
 ```cs
 Branch.logout();
 ```
 
 ### Register custom events
 
-###### C Sharp
-
 ```cs
 Branch.userCompletedAction("your_custom_event"); // your custom event name should not exceed 63 characters
 ```
 
 OR if you want to store some state with the event
-
-###### C Sharp
 
 ```cs
 Dictionary<string, object> stateItems = new Dictionary<string, object>
@@ -211,16 +190,6 @@ Dictionary<string, object> stateItems = new Dictionary<string, object>
 Branch.userCompletedAction("your_custom_event", stateItems); // same 63 characters max limit
 ```
 
-Some example events you might want to track:
-
-###### C Sharp
-
-```cs
-"complete_purchase"  
-"wrote_message"  
-"finished_level_ten"
-```
-
 ## Generate Tracked, Deep Linking URLs (pass data across install and open)
 
 ### Shortened links
@@ -228,8 +197,6 @@ Some example events you might want to track:
 There are a bunch of options for creating these links. You can tag them for analytics in the dashboard, or you can even pass data to the new installs or opens that come from the link click. How awesome is that? You need to pass a callback for when you link is prepared (which should return very quickly, ~ 50 ms to process).
 
 For more details on how to create links, see the [Branch link creation guide](https://dev.branch.io/link_creation_guide/)
-
-###### C Sharp
 
 ```cs
 // associate data with a link
@@ -256,17 +223,10 @@ Dictionary<string, object> parameters = new Dictionary<string, object>
 // feature: null or examples: FEATURE_TAG_SHARE, FEATURE_TAG_REFERRAL, "unlock", etc; should not exceed 128 characters
 // stage: null or examples: "past_customer", "logged_in", "level_6"; should not exceed 128 characters
 
-// Link 'type' can be used for scenarios where you want the link to only deep link the first time.
-// Use 0, 1 (BranchLinkTypeUnlimitedUse), or 2 (BranchLinkTypeOneTimeUse)
-
-// Link 'alias' can be used to label the endpoint on the link. For example: http://bnc.lt/AUSTIN28. Should not exceed 128 characters
-// Be careful about aliases: these are immutable objects permanently associated with the data and associated paramters you pass into the link. When you create one in the SDK, it's tied to that user identity as well (automatically specified by the Branch internals). If you want to retrieve the same link again, you'll need to call getShortUrl with all of the same parameters from before.
-
 List<strings> tags = [ "version1", "trial6" ];
 string channel = "text_message";
-string feature = "SHARE";
+string feature = "share";
 string stage = "level_6";
-string alias = "AUSTIN68";
 Branch.getShortURLWithTags(parameters, tags, channel, feature, stage, alias, delegate(string url, string error) {
     // show the link to the user or share it immediately
 });
@@ -274,22 +234,7 @@ Branch.getShortURLWithTags(parameters, tags, channel, feature, stage, alias, del
 // The callback will return null if the link generation fails (or if the alias specified is aleady taken.)
 ```
 
-
-There are other methods which exclude tag and data if you don't want to pass those.
-
-**Note**
-You can customize the Facebook OG tags of each URL if you want to dynamically share content by using the following _optional keys in the data dictionary_:
-
-| Key | Value
-| --- | ---
-| "$og_title" | The title you'd like to appear for the link in social media
-| "$og_description" | The description you'd like to appear for the link in social media
-| "$og_image_url" | The URL for the image you'd like to appear for the link in social media
-| "$og_video" | The URL for the video 
-| "$og_url" | The URL you'd like to appear
-| "$og_app_id" | Your OG app ID. Optional and rarely used.
-
-Also, you do custom redirection by inserting the following _optional keys in the dictionary_:
+**Note** You do custom redirection by inserting the following _optional keys in the dictionary_:
 
 | Key | Value
 | --- | ---
@@ -310,42 +255,15 @@ You have the ability to control the direct deep linking of each link by insertin
 
 ### Share link
 
-You can share link with your friends via:
+This will launch the native share sheet for both Android and iOS. You can share link with your friends via:
 
 1. E-mail
 2. SMS
 3. Facebook
 4. etc.
 
-###### C Sharp
-
 ```cs
-Dictionary<string, object> shareParameters = new Dictionary<string, object>();
-shareParameters.Add("name", "test name");
-shareParameters.Add("auto_deeplink_key_1", "This is an auto deep linked value");
-shareParameters.Add("message", "hello there with short url");
-shareParameters.Add("$og_title", "this is new sharing title");
-shareParameters.Add("$og_description", "this is new sharing description");
-shareParameters.Add("$og_image_url", "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png");
-
-List<string> tags = new List<string>();
-tags.Add("tag1");
-tags.Add("tag2");
-
-Branch.shareLink(shareParameters, tags, "Test message", "feature1", "1", "https://play.google.com/store/apps/details?id=com.kindred.android", (url, error) => {
-    if (error != null) {
-        Debug.LogError("Branch.shareLink failed: " + error);
-    } else {
-        Debug.Log("Branch.shareLink shared params: " + url);
-    }
-});
-```
-
-**Sharing with BranchUniversalObject and LinkProperties**
-
-###### C Sharp
-
-```cs
+// Create the content object with all accompanying metadata
 BranchUniversalObject universalObject = new BranchUniversalObject();
 universalObject.canonicalIdentifier = "id12345";
 universalObject.title = "id12345 title";
@@ -353,6 +271,7 @@ universalObject.contentDescription = "My awesome piece of content!";
 universalObject.imageUrl = "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png";
 universalObject.metadata.Add("foo", "bar");
 
+// Define properties of the Branch link
 BranchLinkProperties linkProperties = new BranchLinkProperties();
 linkProperties.tags.Add("tag1");
 linkProperties.tags.Add("tag2");
@@ -361,6 +280,7 @@ linkProperties.channel = "Twitter";
 linkProperties.stage = "2";
 linkProperties.controlParams.Add("$desktop_url", "http://example.com");
 
+// Invoke the share sheet
 Branch.shareLink(universalObject, linkProperties, "hello there with short url", (url, error) => {
     if (error != null) {
         Debug.LogError("Branch.shareLink failed: " + error);
@@ -388,7 +308,7 @@ Warning: For a referral program, you should not use unique awards for custom eve
 
 Reward balances change randomly on the backend when certain actions are taken (defined by your rules), so you'll need to make an asynchronous call to retrieve the balance. Here is the syntax:
 
-###### C Sharp
+
 
 ```cs
 Branch.loadRewards(delegate(bool changed, string error) {
@@ -404,7 +324,7 @@ Branch.loadRewards(delegate(bool changed, string error) {
 
 We will store how many of the rewards have been deployed so that you don't have to track it on your end. In order to save that you gave the credits to the user, you can call redeem. Redemptions will reduce the balance of outstanding credits permanently.
 
-###### C Sharp
+
 
 ```cs
 // Save that the user has redeemed 5 credits
@@ -415,7 +335,7 @@ Branch.redeemRewards(5);
 
 This call will retrieve the entire history of credits and redemptions from the individual user. To use this call, implement like so:
 
-###### C Sharp
+
 
 ```cs
 Branch.getCreditHistory(delegate(List<string> historyItems, string error) {
@@ -471,7 +391,7 @@ The response will return an array that has been parsed from the following JSON:
 
 Retrieve the referral code created by current user
 
-###### C Sharp
+
 
 ```cs
 Branch.getReferralCode(delegate(Dictionary<string, object> referralObject, string error) {
@@ -491,7 +411,7 @@ The returned referral code is a 6 character long unique alpha-numeric string wra
 **amount** _int_
 : The amount of credit to redeem when user applies the referral code
 
-###### C Sharp
+
 
 ```cs
 int amount = 5;
@@ -509,7 +429,7 @@ The resulting code will have your prefix, concatenated with a 4 character long u
 : The prefix to the referral code that you desire
 
 
-###### C Sharp
+
 
 ```cs
 int amount = 5;
@@ -527,7 +447,7 @@ The prefix parameter is optional here, i.e. it could be getReferralCodeWithAmoun
 **expiration** _DateTime_
 : The expiration date of the referral code
 
-###### C Sharp
+
 
 ```cs
 int amount = 5;
@@ -558,7 +478,7 @@ You can also tune the referral code to the finest granularity, with the followin
 1 (_BranchReferringUser_) - the user who created the referral code receives credit  
 2 (_BranchBothUsers_) - both the creator and applicant receive credit
 
-###### C Sharp
+
 
 ```cs
 int amount = 5;
@@ -588,7 +508,7 @@ If valid, returns the referral code JSONObject in the call back.
 **code** _string_
 : The referral code to validate
 
-###### C Sharp
+
 
 ```cs
 Branch.validateReferralCode(code, delegate(Dictionary<string, object> referralObject, string error) {
@@ -614,7 +534,7 @@ Apply a referral code if it exists in Branch system and is still valid (see abov
 **code** _string_
 : The referral code to apply
 
-###### C Sharp
+
 
 ```cs
 Branch.applyReferralCode(code, delegate(Dictionary<string, object> referralObject, string error) {
