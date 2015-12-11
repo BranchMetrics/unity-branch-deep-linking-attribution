@@ -242,6 +242,10 @@ public class Branch : MonoBehaviour {
         _setNetworkTimeout(timeout);
     }
 
+	public static void registerView(BranchUniversalObject universalObject) {
+		_registerView(universalObject.ToJsonString());
+	}
+
     #endregion
 
     #region User Action methods
@@ -444,6 +448,17 @@ public class Branch : MonoBehaviour {
         
         _getShortURLWithParamsAndCallback(MiniJSON.Json.Serialize(parameters), callbackId);
     }
+
+	/**
+     * Get a short url given a BranchUniversalObject, BranchLinkProperties
+     */
+	public static void getShortURL(BranchUniversalObject universalObject, BranchLinkProperties linkProperties, BranchCallbackWithUrl callback) {
+		var callbackId = _getNextCallbackId();
+		
+		_branchCallbacks[callbackId] = callback;
+		
+		_getShortURLWithBranchUniversalObjectAndCallback(universalObject.ToJsonString(), linkProperties.ToJsonString(), callbackId);
+	}
 
     /**
      * Get a short url given a set of params, tags, channel, feature, and stage
@@ -764,6 +779,9 @@ public class Branch : MonoBehaviour {
     [DllImport ("__Internal")]
     private static extern void _setNetworkTimeout(int timeout);
     
+	[DllImport ("__Internal")]
+	private static extern void _registerView(string universalObject);
+
     [DllImport ("__Internal")]
     private static extern void _loadActionCountsWithCallback(string callbackId);
     
@@ -818,6 +836,9 @@ public class Branch : MonoBehaviour {
     [DllImport ("__Internal")]
     private static extern void _getShortURLWithParamsAndCallback(string parametersDict, string callbackId);
     
+	[DllImport ("__Internal")]
+	private static extern void _getShortURLWithBranchUniversalObjectAndCallback(string universalObject, string linkProperties, string callbackId);
+
     [DllImport ("__Internal")]
     private static extern void _getShortURLWithParamsTagsChannelFeatureStageAndCallback(string parametersDict, string tags, string channel, string feature, string stage, string callbackId);
     
@@ -967,6 +988,10 @@ public class Branch : MonoBehaviour {
         BranchAndroidWrapper.setNetworkTimeout(timeout);
     }
     
+	private static void _registerView(string universalObject) {
+		BranchAndroidWrapper.registerView(universalObject);
+	}
+
     private static void _loadActionCountsWithCallback(string callbackId) {
         BranchAndroidWrapper.loadActionCountsWithCallback(callbackId);
     }
@@ -1047,6 +1072,10 @@ public class Branch : MonoBehaviour {
         BranchAndroidWrapper.getShortURLWithParamsAndCallback(parametersDict, callbackId);
     }
     
+	private static void _getShortURLWithBranchUniversalObjectAndCallback(string universalObject, string linkProperties, string callbackId) {
+		BranchAndroidWrapper.getShortURLWithBranchUniversalObjectAndCallback(universalObject, linkProperties, callbackId);
+	}
+
     private static void _getShortURLWithParamsTagsChannelFeatureStageAndCallback(string parametersDict, string tags, string channel, string feature, string stage, string callbackId) {
         BranchAndroidWrapper.getShortURLWithParamsTagsChannelFeatureStageAndCallback(parametersDict, tags, channel, feature, stage, callbackId);
     }
@@ -1190,6 +1219,8 @@ public class Branch : MonoBehaviour {
     private static void _setMaxRetries(int maxRetries) { }
     
     private static void _setNetworkTimeout(int timeout) { }
+
+	private static void _registerView(string universalObject) { }
     
     private static void _loadActionCountsWithCallback(string callbackId) {
         callNotImplementedCallbackForStatusCallback(callbackId);
@@ -1263,6 +1294,10 @@ public class Branch : MonoBehaviour {
         callNotImplementedCallbackForUrlCallback(callbackId);
     }
     
+	private static void _getShortURLWithBranchUniversalObjectAndCallback(string universalObject, string linkProperties, string callbackId) {
+		callNotImplementedCallbackForUrlCallback(callbackId);
+	}
+
     private static void _getShortURLWithParamsTagsChannelFeatureStageAndCallback(string parametersDict, string tags, string channel, string feature, string stage, string callbackId) {
         callNotImplementedCallbackForUrlCallback(callbackId);
     }

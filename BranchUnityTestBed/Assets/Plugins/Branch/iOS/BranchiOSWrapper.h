@@ -30,7 +30,8 @@ extern "C" {
     void _setRetryInterval(int retryInterval);
     void _setMaxRetries(int maxRetries);
     void _setNetworkTimeout(int timeout);
-
+    void _registerView(char *universalObjectJson);
+    
     #pragma mark - User Action methods
 
     void _loadActionCountsWithCallback(char *callbackId);
@@ -60,6 +61,7 @@ extern "C" {
     #pragma mark - Short URL Generation methods
 
     void _getShortURLWithCallback(char *callbackId);
+    void _getShortURLWithBranchUniversalObjectAndCallback(char *universalObjectJson, char *linkPropertiesJson, char *callbackId);
     void _getShortURLWithParamsAndCallback(char *paramsDict, char *callbackId);
     void _getShortURLWithParamsTagsChannelFeatureStageAndCallback(char *paramsDict, char *tagList, char *channel, char *feature, char *stage, char *callbackId);
     void _getShortURLWithParamsTagsChannelFeatureStageAliasAndCallback(char *paramsDict, char *tagList, char *channel, char *feature, char *stage, char *alias, char *callbackId);

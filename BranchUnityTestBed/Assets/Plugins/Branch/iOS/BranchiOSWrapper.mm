@@ -340,6 +340,13 @@ void _setNetworkTimeout(int timeout) {
     [[Branch getInstance:_branchKey] setNetworkTimeout:timeout];
 }
 
+void _registerView(char *universalObjectJson) {
+    NSDictionary *universalObjectDict = dictionaryFromJsonString(universalObjectJson);
+    BranchUniversalObject *obj = branchuniversalObjectFormDict(universalObjectDict);
+    
+    [obj registerView];
+}
+
 #pragma mark - User Action methods
 
 void _loadActionCountsWithCallback(char *callbackId) {
@@ -416,6 +423,16 @@ void _getShortURLWithCallback(char *callbackId) {
     [[Branch getInstance:_branchKey] getShortURLWithCallback:callbackWithUrlForCallbackId(callbackId)];
 }
 
+void _getShortURLWithBranchUniversalObjectAndCallback(char *universalObjectJson, char *linkPropertiesJson, char *callbackId) {
+    NSDictionary *universalObjectDict = dictionaryFromJsonString(universalObjectJson);
+    NSDictionary *linkPropertiesDict = dictionaryFromJsonString(linkPropertiesJson);
+    
+    BranchUniversalObject *obj = branchuniversalObjectFormDict(universalObjectDict);
+    BranchLinkProperties *prop = branchLinkPropertiesFormDict(linkPropertiesDict);
+    
+    [obj getShortUrlWithLinkProperties:prop andCallback:callbackWithUrlForCallbackId(callbackId)];
+}
+
 void _getShortURLWithParamsAndCallback(char *paramsDict, char *callbackId) {
     [[Branch getInstance:_branchKey] getShortURLWithParams:dictionaryFromJsonString(paramsDict) andCallback:callbackWithUrlForCallbackId(callbackId)];
 }
@@ -475,9 +492,6 @@ void _shareLinkWithLinkProperties(char *universalObjectJson, char *linkPropertie
     
     BranchUniversalObject *obj = branchuniversalObjectFormDict(universalObjectDict);
     BranchLinkProperties *prop = branchLinkPropertiesFormDict(linkPropertiesDict);
-
-    NSLog(@"BranchUniversalObject  %@", obj.description);
-    NSLog(@"BranchLinkProperties  %@", prop.description);
     
     [obj showShareSheetWithLinkProperties:prop andShareText:CreateNSString(message) fromViewController:nil andCallback:nil];
 }

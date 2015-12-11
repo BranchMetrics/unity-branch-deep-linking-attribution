@@ -131,7 +131,13 @@ public class BranchAndroidWrapper {
 		});
     }
     
-    #endregion
+	public static void registerView(string universalObject) {
+		_runBlockOnThread(() => {
+			_getBranchClass().CallStatic("registerView", universalObject);
+		});
+	}
+	
+	#endregion
     
     #region User Action methods
     
@@ -263,6 +269,12 @@ public class BranchAndroidWrapper {
 		});
     }
     
+	public static void getShortURLWithBranchUniversalObjectAndCallback(string universalObject, string linkProperties, string callbackId) {
+		_runBlockOnThread(() => {
+			_getBranchClass().CallStatic("getShortURLWithBranchUniversalObject", universalObject, linkProperties, callbackId);
+		});
+	}
+
     public static void getShortURLWithParamsTagsChannelFeatureStageAndCallback(string parameterDict, string tagList, string channel, string feature, string stage, string callbackId) {
 		_runBlockOnThread(() => {
         	_getBranchClass().CallStatic("getShortURLWithTags", parameterDict, tagList, channel, feature, stage, callbackId);

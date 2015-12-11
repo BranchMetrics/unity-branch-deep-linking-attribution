@@ -41,25 +41,54 @@ public class BranchDemo : MonoBehaviour {
 	#region MainPanel
 
 	public void OnBtn_RefreshShortUrl() {
-		Dictionary<string, object> parameters = new Dictionary<string, object>();
-		parameters.Add("name", "test name");
-		parameters.Add("message", "hello there with short url");
-		parameters.Add("$og_title", "this is a title");
-		parameters.Add("$og_description", "this is a description");
-		parameters.Add("$og_image_url", "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png");
+		// old functional
+//		Dictionary<string, object> parameters = new Dictionary<string, object>();
+//		parameters.Add("name", "test name");
+//		parameters.Add("message", "hello there with short url");
+//		parameters.Add("$og_title", "this is a title");
+//		parameters.Add("$og_description", "this is a description");
+//		parameters.Add("$og_image_url", "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png");
+//
+//		List<string> tags = new List<string>();
+//		tags.Add("tag1");
+//		tags.Add("tag2");
+//
+//		Branch.getShortURLWithTags(parameters, tags, "channel1", "feature1", "1", (url, error) => {
+//			if (error != null) {
+//				Debug.LogError("Branch.getShortURL failed: " + error);
+//			} else {
+//				Debug.Log("Branch.getShortURL url: " + url);
+//				inputShortLink.text = url;
+//			}
+//		});
 
-		List<string> tags = new List<string>();
-		tags.Add("tag1");
-		tags.Add("tag2");
+		// new functional
+		try {
+			BranchUniversalObject universalObject = new BranchUniversalObject();
+			universalObject.canonicalIdentifier = "id12345";
+			universalObject.title = "id12345 title";
+			universalObject.contentDescription = "My awesome piece of content!";
+			universalObject.imageUrl = "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png";
+			universalObject.metadata.Add("foo", "bar");
 
-		Branch.getShortURLWithTags(parameters, tags, "channel1", "feature1", "1", (url, error) => {
-			if (error != null) {
-				Debug.LogError("Branch.getShortURL failed: " + error);
-			} else {
-				Debug.Log("Branch.getShortURL url: " + url);
-				inputShortLink.text = url;
-			}
-		});
+			BranchLinkProperties linkProperties = new BranchLinkProperties();
+			linkProperties.tags.Add("tag1");
+			linkProperties.tags.Add("tag2");
+			linkProperties.feature = "sharing";
+			linkProperties.channel = "facebook";
+			linkProperties.controlParams.Add("$desktop_url", "http://example.com");
+			
+			Branch.getShortURL(universalObject, linkProperties, (url, error) => {
+				if (error != null) {
+					Debug.LogError("Branch.getShortURL failed: " + error);
+				} else {
+					Debug.Log("Branch.getShortURL url: " + url);
+					inputShortLink.text = url;
+				}
+			});
+		} catch(Exception e) {
+			Debug.Log(e);
+		}
 	}
 
 
