@@ -89,7 +89,7 @@ Called when app first initializes a session, ideally in a class that is initiate
 
 This deep link routing callback is called 100% of the time on init, with your link params or an empty dictionary if none present.
 
-```c#
+```csharp
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -109,7 +109,7 @@ public class MyCoolBehaviorScript : MonoBehaviour {
 
 **Initalization with BranchUniversalObject and LinkProperties**
 
-```c#
+```csharp
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -162,13 +162,13 @@ Branch returns explicit parameters every time. Here is a list, and a description
 
 These session parameters will be available at any point later on with this command. If no params, the dictionary will be empty. This refreshes with every new session (app installs AND app opens)
 
-```c#
+```csharp
 Dictionary<string, object> sessionParams = Branch.getLatestReferringParams();
 ```
 
 **Retrive parameters with BranchUniversalObject and LinkProperties**
 
-```c#
+```csharp
 BranchUniversalObject obj = Branch.getLatestReferringBranchUniversalObject();
 BranchLinkProperties link = Branch.getLatestReferringBranchLinkProperties();
 ```
@@ -177,13 +177,13 @@ BranchLinkProperties link = Branch.getLatestReferringBranchLinkProperties();
 
 If you ever want to access the original session params (the parameters passed in for the first install event only), you can use this line. This is useful if you only want to reward users who newly installed the app from a referral link or something.
 
-```c#
+```csharp
 Dictionary<string, object> installParams = Branch.getFirstReferringParams();
 ```
 
 **Retrive parameters with BranchUniversalObject and LinkProperties**
 
-```c#
+```csharp
 BranchUniversalObject obj = Branch.getFirstReferringBranchUniversalObject();
 BranchLinkProperties link = Branch.getFirstReferringBranchLinkProperties();
 ```
@@ -194,7 +194,7 @@ Often, you might have your own user IDs, or want referral and event data to pers
 
 To identify a user, just call:
 
-```c#
+```csharp
 Branch.setIdentity("your user id");
 ```
 
@@ -204,19 +204,19 @@ If you provide a logout function in your app, be sure to clear the user when the
 
 **Warning** this call will clear the referral credits and attribution on the device.
 
-```c#
+```csharp
 Branch.logout();
 ```
 
 ### Register custom events
 
-```c#
+```csharp
 Branch.userCompletedAction("your_custom_event"); // your custom event name should not exceed 63 characters
 ```
 
 OR if you want to store some state with the event
 
-```c#
+```csharp
 Dictionary<string, object> stateItems = new Dictionary<string, object>
 {
 	{ "username", "Joe" },
@@ -235,7 +235,7 @@ As more methods have evolved in iOS, we've found that it was increasingly hard t
 
 ###### Objective-C
 
-```c#
+```csharp
 BranchUniversalObject universalObject = new BranchUniversalObject();
 universalObject.canonicalIdentifier = "id12345";
 universalObject.title = "id12345 title";
@@ -274,7 +274,7 @@ If you want to track how many times a user views a particular piece of content, 
 
 #### Methods
 
-```c#
+```csharp
 Branch.registerView(universalObject);
 ```
 
@@ -292,7 +292,7 @@ Once you've created your `Branch Universal Object`, which is the reference to th
 
 #### Methods
 
-```c#
+```csharp
 // Define properties of the Branch link
 BranchLinkProperties linkProperties = new BranchLinkProperties();
 linkProperties.tags.Add("tag1");
@@ -303,7 +303,7 @@ linkProperties.stage = "2";
 linkProperties.controlParams.Add("$desktop_url", "http://example.com");
 ```
 
-```c#
+```csharp
 Branch.getShortURL(universalObject, linkProperties, (url, error) => {
     if (error != null) {
         Debug.LogError("Branch.getShortURL failed: " + error);
@@ -368,7 +368,7 @@ The Branch iOS and Android SDKs includes a wrapper on the share sheets, that wil
 
 #### Methods
 
-```c#
+```csharp
 // Define properties of the Branch link
 BranchLinkProperties linkProperties = new BranchLinkProperties();
 linkProperties.tags.Add("tag1");
@@ -379,7 +379,7 @@ linkProperties.stage = "2";
 linkProperties.controlParams.Add("$desktop_url", "http://example.com");
 ```
 
-```c#
+```csharp
 Branch.shareLink(universalObject, linkProperties, "hello there with short url", (url, error) => {
     if (error != null) {
         Debug.LogError("Branch.shareLink failed: " + error);
@@ -424,7 +424,7 @@ Reward balances change randomly on the backend when certain actions are taken (d
 
 
 
-```c#
+```csharp
 Branch.loadRewards(delegate(bool changed, string error) {
     // changed boolean will indicate if the balance changed from what is currently in memory
 
@@ -440,7 +440,7 @@ We will store how many of the rewards have been deployed so that you don't have 
 
 
 
-```c#
+```csharp
 // Save that the user has redeemed 5 credits
 Branch.redeemRewards(5);
 ```
@@ -451,7 +451,7 @@ This call will retrieve the entire history of credits and redemptions from the i
 
 
 
-```c#
+```csharp
 Branch.getCreditHistory(delegate(List<string> historyItems, string error) {
     if (error == null) {
         // process history
