@@ -379,7 +379,7 @@ linkProperties.stage = "2";
 linkProperties.controlParams.Add("$desktop_url", "http://example.com");
 ```
 
-```cs#
+```c#
 Branch.shareLink(universalObject, linkProperties, "hello there with short url", (url, error) => {
     if (error != null) {
         Debug.LogError("Branch.shareLink failed: " + error);
