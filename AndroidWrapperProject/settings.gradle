@@ -1,5 +1,0 @@
-include ':app'
-
-//Uncomment these two and update the path to include your local Branch
-//include ':Branch-SDK'
-//project(':Branch-SDK').projectDir = new File('/Users/grahammueller/dev/branch-android-sdk/Branch-SDK')

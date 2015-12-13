@@ -1,5 +1,14 @@
 Branch Unity SDK change log
 
+- v0.2.0
+  * Bunch of bug fixes
+  * Cleaner integration steps
+  * Updating Branch to Android version 1.10.1 and iOS version 0.11.8
+  * Added setDebug
+  * Support for Universal Links on iOS
+  * Support for content analytics
+  * Support for native share sheet
+
 - v0.1.4
   * Updating Branch to Android version 1.8.0 and iOS version 0.10.7
   * Updating parameter type "List<string> list" to "List<object> list" in callback BranchCallbackWithList
