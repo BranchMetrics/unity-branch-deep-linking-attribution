@@ -20,7 +20,7 @@ There's a full demo app embedded in this repository, which you can find in the *
 
 #### Download the raw files
 
-Download code from here: [S3 Package](https://s3-us-west-1.amazonaws.com/branchhost/BranchUnityWrapperV2.unitypackage)
+Download code from here: [S3 Package](https://s3-us-west-1.amazonaws.com/branchhost/BranchUnityWrapper.unitypackage)
 
 #### Or just clone this project!
 
@@ -33,7 +33,7 @@ You can sign up for your own app id at [https://dashboard.branch.io](https://das
 ## Configuration (for tracking)
 
 #### Unity Scene
-![Branch Unity Config](https://raw.githubusercontent.com/BranchMetrics/Unity-Deferred-Deep-Linking-SDK/unity-sdk-v2/Docs/Screenshots/branch-key.png)
+![Branch Unity Config](https://raw.githubusercontent.com/BranchMetrics/Unity-Deferred-Deep-Linking-SDK/master/Docs/Screenshots/branch-key.png)
 
 #### Setup Branch parameters
 To allow Branch to configure itself, you must add a BranchPrefab asset to your scene. Simply drag into your scene, and then specify your APP_KEY and APP_URI in the properties.
