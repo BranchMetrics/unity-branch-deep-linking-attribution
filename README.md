@@ -32,11 +32,14 @@ You can sign up for your own app id at [https://dashboard.branch.io](https://das
 
 ## Configuration (for tracking)
 
-#### Unity Scene
-![Branch Unity Config](https://raw.githubusercontent.com/BranchMetrics/Unity-Deferred-Deep-Linking-SDK/master/Docs/Screenshots/branch-key.png)
+#### Unity Scene and Branch Parameters
 
-#### Setup Branch parameters
-To allow Branch to configure itself, you must add a BranchPrefab asset to your scene. Simply drag into your scene, and then specify your APP_KEY and APP_URI in the properties.
+To allow Branch to configure itself, you must add a BranchPrefab asset to your scene. Simply drag into your scene, and then specify your `APP_KEY` and `APP_URI` in the properties.
+
+* `APP_KEY`: This is your Branch key from the dashboard
+* `APP_URI`: This is the URI scheme you would like to use to open the app. This must be the same value as you entered in [the Branch link settings](https://dashboard.branch.io/#/settings/link) as well.
+
+![Branch Unity Config](https://raw.githubusercontent.com/BranchMetrics/Unity-Deferred-Deep-Linking-SDK/master/Docs/Screenshots/branch-key.png)
 
 #### iOS Note
 
