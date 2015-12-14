@@ -236,8 +236,6 @@ As more methods have evolved in iOS, we've found that it was increasingly hard t
 
 #### Methods
 
-###### Objective-C
-
 ```csharp
 BranchUniversalObject universalObject = new BranchUniversalObject();
 universalObject.canonicalIdentifier = "id12345";
@@ -377,7 +375,6 @@ BranchLinkProperties linkProperties = new BranchLinkProperties();
 linkProperties.tags.Add("tag1");
 linkProperties.tags.Add("tag2");
 linkProperties.feature = "invite";
-linkProperties.channel = "Twitter";
 linkProperties.stage = "2";
 linkProperties.controlParams.Add("$desktop_url", "http://example.com");
 ```
