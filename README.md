@@ -11,7 +11,7 @@ We released a completely revamped version of the Unity package today which autom
 There's a full demo app embedded in this repository, which you can find in the *BranchUnityTestBed* folder. Please use that as a reference.
 
 ## Additional Resources
-- [Integration guide](https://dev.branch.io/recipes/quickstart_guide/unity/) *Start Here*
+- [Integration guide](https://dev.branch.io/recipes/add_the_sdk/unity/) *Start Here*
 - [Changelog](https://github.com/BranchMetrics/Unity-Deferred-Deep-Linking-SDK/blob/master/ChangeLog.md)
 - [Testing](https://dev.branch.io/recipes/testing_your_integration/unity/)
 - [Support portal, FAQ](http://support.branch.io)
@@ -20,7 +20,7 @@ There's a full demo app embedded in this repository, which you can find in the *
 
 #### Download the raw files
 
-Download code from here: [S3 Package](https://s3-us-west-1.amazonaws.com/branchhost/BranchUnityWrapperV2.unitypackage)
+Download code from here: [S3 Package](https://s3-us-west-1.amazonaws.com/branchhost/BranchUnityWrapper.unitypackage)
 
 #### Or just clone this project!
 
@@ -32,11 +32,14 @@ You can sign up for your own app id at [https://dashboard.branch.io](https://das
 
 ## Configuration (for tracking)
 
-#### Unity Scene
-![Branch Unity Config](https://raw.githubusercontent.com/BranchMetrics/Unity-Deferred-Deep-Linking-SDK/unity-sdk-v2/Docs/Screenshots/branch-key.png)
+#### Unity Scene and Branch Parameters
 
-#### Setup Branch parameters
-To allow Branch to configure itself, you must add a BranchPrefab asset to your scene. Simply drag into your scene, and then specify your APP_KEY and APP_URI in the properties.
+To allow Branch to configure itself, you must add a BranchPrefab asset to your scene. Simply drag into your scene, and then specify your `APP_KEY` and `APP_URI` in the properties.
+
+* `APP_KEY`: This is your Branch key from the dashboard
+* `APP_URI`: This is the URI scheme you would like to use to open the app. This must be the same value as you entered in [the Branch link settings](https://dashboard.branch.io/#/settings/link) as well.
+
+![Branch Unity Config](https://raw.githubusercontent.com/BranchMetrics/Unity-Deferred-Deep-Linking-SDK/master/Docs/Screenshots/branch-key.png)
 
 #### iOS Note
 
@@ -233,8 +236,6 @@ As more methods have evolved in iOS, we've found that it was increasingly hard t
 
 #### Methods
 
-###### Objective-C
-
 ```csharp
 BranchUniversalObject universalObject = new BranchUniversalObject();
 universalObject.canonicalIdentifier = "id12345";
@@ -374,7 +375,6 @@ BranchLinkProperties linkProperties = new BranchLinkProperties();
 linkProperties.tags.Add("tag1");
 linkProperties.tags.Add("tag2");
 linkProperties.feature = "invite";
-linkProperties.channel = "Twitter";
 linkProperties.stage = "2";
 linkProperties.controlParams.Add("$desktop_url", "http://example.com");
 ```
