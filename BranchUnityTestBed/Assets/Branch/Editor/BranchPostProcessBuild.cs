@@ -85,6 +85,10 @@ public class BranchPostProcessBuild {
 			proj.AddFrameworkToProject(target, "CoreSpotlight.framework", false);
 		}
 
+		if (!proj.HasFramework("Security.framework")) {
+			proj.AddFrameworkToProject(target, "Security.framework", false);
+		}
+
 		File.WriteAllText(pathToProject, proj.WriteToString());
 	}
 }

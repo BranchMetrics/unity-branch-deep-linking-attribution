@@ -72,31 +72,39 @@ static const char *jsonCStringFromDictionary(NSDictionary *dictionary) {
 }
 
 static NSDictionary *dictFromBranchUniversalObject(BranchUniversalObject *universalObject) {
-    NSDictionary *universalObjectDict = @{
-                                          BRANCH_LINK_DATA_KEY_CANONICAL_IDENTIFIER: universalObject ? universalObject.canonicalIdentifier : @"",
-                                          BRANCH_LINK_DATA_KEY_OG_TITLE: universalObject ? universalObject.title : @"",
-                                          BRANCH_LINK_DATA_KEY_OG_DESCRIPTION: universalObject ? universalObject.contentDescription : @"",
-                                          BRANCH_LINK_DATA_KEY_OG_IMAGE_URL: universalObject ? universalObject.imageUrl : @"",
-                                          BRANCH_LINK_DATA_KEY_CONTENT_TYPE: universalObject ? universalObject.type: @"",
-                                          BRANCH_LINK_DATA_KEY_PUBLICLY_INDEXABLE: universalObject ? [[NSNumber numberWithInteger:universalObject.contentIndexMode] stringValue]: @"",
-                                          BRANCH_LINK_DATA_KEY_KEYWORDS: universalObject ? universalObject.keywords : @"",
-                                          BRANCH_LINK_DATA_KEY_CONTENT_EXPIRATION_DATE: universalObject ? CreateNSStringFromNSDate(universalObject.expirationDate) : @"",
-                                          @"$metadata": universalObject ? universalObject.metadata : @"",
-                                          };
+    NSDictionary *universalObjectDict = [NSDictionary dictionary];
+    
+    if (universalObject) {
+        universalObjectDict = @{
+            BRANCH_LINK_DATA_KEY_CANONICAL_IDENTIFIER: universalObject.canonicalIdentifier ? universalObject.canonicalIdentifier : @"",
+            BRANCH_LINK_DATA_KEY_OG_TITLE: universalObject.title ? universalObject.title : @"",
+            BRANCH_LINK_DATA_KEY_OG_DESCRIPTION: universalObject.contentDescription ? universalObject.contentDescription : @"",
+            BRANCH_LINK_DATA_KEY_OG_IMAGE_URL: universalObject.imageUrl ? universalObject.imageUrl : @"",
+            BRANCH_LINK_DATA_KEY_CONTENT_TYPE: universalObject.type ? universalObject.type: @"",
+            BRANCH_LINK_DATA_KEY_PUBLICLY_INDEXABLE: universalObject.contentIndexMode ? [[NSNumber numberWithInteger:universalObject.contentIndexMode] stringValue]: @"",
+            BRANCH_LINK_DATA_KEY_KEYWORDS: universalObject.keywords ? universalObject.keywords : @"",
+            BRANCH_LINK_DATA_KEY_CONTENT_EXPIRATION_DATE: universalObject.expirationDate ? CreateNSStringFromNSDate(universalObject.expirationDate) : @"",
+            @"$metadata": universalObject.metadata ? universalObject.metadata : @"",
+        };
+    }
     
     return universalObjectDict;
 }
 
 static NSDictionary *dictFromBranchLinkProperties(BranchLinkProperties *linkProperties) {
-    NSDictionary *linkPropertiesDict = @{
-                                         BRANCH_REQUEST_KEY_URL_TAGS: linkProperties ? linkProperties.tags : @"",
-                                         BRANCH_REQUEST_KEY_URL_FEATURE: linkProperties ? linkProperties.feature : @"",
-                                         BRANCH_REQUEST_KEY_URL_ALIAS: linkProperties ? linkProperties.alias : @"",
-                                         BRANCH_REQUEST_KEY_URL_CHANNEL: linkProperties ? linkProperties.channel : @"",
-                                         BRANCH_REQUEST_KEY_URL_STAGE: linkProperties ? linkProperties.stage : @"",
-                                         BRANCH_REQUEST_KEY_URL_DURATION: linkProperties ? [[NSNumber numberWithInteger:linkProperties.matchDuration] stringValue] : @"",
-                                         @"control_params": linkProperties ? linkProperties.controlParams : @""
-                                         };
+    NSDictionary *linkPropertiesDict = [NSDictionary dictionary];
+    
+    if (linkProperties) {
+        linkPropertiesDict = @{
+            BRANCH_REQUEST_KEY_URL_TAGS: linkProperties.tags ? linkProperties.tags : @"",
+            BRANCH_REQUEST_KEY_URL_FEATURE: linkProperties.feature ? linkProperties.feature : @"",
+            BRANCH_REQUEST_KEY_URL_ALIAS: linkProperties.alias ? linkProperties.alias : @"",
+            BRANCH_REQUEST_KEY_URL_CHANNEL: linkProperties.channel ? linkProperties.channel : @"",
+            BRANCH_REQUEST_KEY_URL_STAGE: linkProperties.stage ? linkProperties.stage : @"",
+            BRANCH_REQUEST_KEY_URL_DURATION: linkProperties.matchDuration ? [[NSNumber numberWithInteger:linkProperties.matchDuration] stringValue] : @"",
+            @"control_params": linkProperties.controlParams ? linkProperties.controlParams : @""
+        };
+    }
     
     return linkPropertiesDict;
 }
