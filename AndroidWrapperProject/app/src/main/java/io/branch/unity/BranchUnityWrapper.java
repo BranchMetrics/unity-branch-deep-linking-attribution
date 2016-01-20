@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Console;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -177,6 +178,7 @@ public class BranchUnityWrapper {
     public static String getLatestReferringBranchUniversalObject() {
         BranchUniversalObject branchUniversalObject = null;
         Branch branchInstance = Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey);
+
         if (branchInstance != null && branchInstance.getLatestReferringParams() != null) {
             JSONObject latestParam = branchInstance.getLatestReferringParams();
             try {
@@ -227,27 +229,26 @@ public class BranchUnityWrapper {
         Branch branchInstance = Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey);
         if (branchInstance != null && branchInstance.getLatestReferringParams() != null) {
             JSONObject latestParam = branchInstance.getLatestReferringParams();
-
             try {
                 if (latestParam.has("+clicked_branch_link") && latestParam.getBoolean("+clicked_branch_link")) {
                     linkProperties = new LinkProperties();
-                    if (latestParam.has("channel")) {
-                        linkProperties.setChannel(latestParam.getString("channel"));
+                    if (latestParam.has("~channel")) {
+                        linkProperties.setChannel(latestParam.getString("~channel"));
                     }
-                    if (latestParam.has("feature")) {
-                        linkProperties.setFeature(latestParam.getString("feature"));
+                    if (latestParam.has("~feature")) {
+                        linkProperties.setFeature(latestParam.getString("~feature"));
                     }
-                    if (latestParam.has("stage")) {
-                        linkProperties.setStage(latestParam.getString("stage"));
+                    if (latestParam.has("~stage")) {
+                        linkProperties.setStage(latestParam.getString("~stage"));
                     }
-                    if (latestParam.has("duration")) {
-                        linkProperties.setDuration(latestParam.getInt("duration"));
+                    if (latestParam.has("~duration")) {
+                        linkProperties.setDuration(latestParam.getInt("~duration"));
                     }
                     if (latestParam.has("$match_duration")) {
                         linkProperties.setDuration(latestParam.getInt("$match_duration"));
                     }
-                    if (latestParam.has("tags")) {
-                        JSONArray tagsArray = latestParam.getJSONArray("tags");
+                    if (latestParam.has("~tags")) {
+                        JSONArray tagsArray = latestParam.getJSONArray("~tags");
                         for (int i = 0; i < tagsArray.length(); i++) {
                             linkProperties.addTag(tagsArray.getString(i));
                         }
@@ -714,50 +715,44 @@ public class BranchUnityWrapper {
     }
 
     private static JSONObject _jsonObjectFromBranchUniversalObject(BranchUniversalObject obj) {
-        JSONObject jsonObject = null;
+        JSONObject jsonObject = new JSONObject();
 
-        if (obj == null) {
-            return null;
-        }
+        if (obj != null) {
+            try {
+                jsonObject.put(Defines.Jsonkey.CanonicalIdentifier.getKey(), obj.getCanonicalIdentifier());
+                jsonObject.put(Defines.Jsonkey.ContentTitle.getKey(), obj.getTitle());
+                jsonObject.put(Defines.Jsonkey.ContentDesc.getKey(), obj.getDescription());
+                jsonObject.put(Defines.Jsonkey.ContentImgUrl.getKey(), obj.getImageUrl());
+                jsonObject.put(Defines.Jsonkey.ContentType.getKey(), obj.getType());
+                jsonObject.put(Defines.Jsonkey.PublicallyIndexable.getKey(), obj.isPublicallyIndexable() ? "0" : "1");
+                jsonObject.put(Defines.Jsonkey.ContentKeyWords.getKey(), new JSONArray(obj.getKeywords()));
+                jsonObject.put(Defines.Jsonkey.ContentExpiryTime.getKey(), Long.toString(obj.getExpirationTime()));
+                jsonObject.put("metadata", new JSONObject(obj.getMetadata()));
 
-        try {
-            jsonObject = new JSONObject();
-            jsonObject.put(Defines.Jsonkey.CanonicalIdentifier.getKey(), obj.getCanonicalIdentifier());
-            jsonObject.put(Defines.Jsonkey.ContentTitle.getKey(), obj.getTitle());
-            jsonObject.put(Defines.Jsonkey.ContentDesc.getKey(), obj.getDescription());
-            jsonObject.put(Defines.Jsonkey.ContentImgUrl.getKey(), obj.getImageUrl());
-            jsonObject.put(Defines.Jsonkey.ContentType.getKey(), obj.getType());
-            jsonObject.put(Defines.Jsonkey.PublicallyIndexable.getKey(), obj.isPublicallyIndexable() ? "0" : "1");
-            jsonObject.put(Defines.Jsonkey.ContentKeyWords.getKey(), new JSONArray(obj.getKeywords()));
-            jsonObject.put(Defines.Jsonkey.ContentExpiryTime.getKey(), (new Date(obj.getExpirationTime())).toString());
-            jsonObject.put("$metadata", new JSONObject(obj.getMetadata()));
-        }
-        catch (JSONException jsone) {
-            jsone.printStackTrace();
+            } catch (JSONException jsone) {
+                jsone.printStackTrace();
+            }
         }
 
         return jsonObject;
     }
 
     private static JSONObject _jsonObjectFromLinkProperties(LinkProperties link) {
-        JSONObject jsonObject = null;
+        JSONObject jsonObject = new JSONObject();
 
-        if (link == null) {
-            return null;
-        }
+        if (link != null) {
+            try {
+                jsonObject.put("~tags", new JSONArray(link.getTags()));
+                jsonObject.put("~feature", link.getFeature());
+                jsonObject.put("~alias", link.getAlias());
+                jsonObject.put("~stage", link.getStage());
+                jsonObject.put("~duration", link.getMatchDuration());
+                jsonObject.put("~channel", link.getChannel());
+                jsonObject.put("control_params", new JSONObject(link.getControlParams()));
 
-        try {
-            jsonObject = new JSONObject();
-            jsonObject.put("tags", new JSONArray(link.getTags()));
-            jsonObject.put("feature", link.getFeature());
-            jsonObject.put("alias", link.getAlias());
-            jsonObject.put("stage", link.getStage());
-            jsonObject.put("duration", String.valueOf(link.getMatchDuration()));
-            jsonObject.put("channel", link.getChannel());
-            jsonObject.put("control_params", new JSONObject(link.getControlParams()));
-        }
-        catch (JSONException jsone) {
-            jsone.printStackTrace();
+            } catch (JSONException jsone) {
+                jsone.printStackTrace();
+            }
         }
 
         return jsonObject;
@@ -789,7 +784,7 @@ public class BranchUnityWrapper {
                 branchUniversalObject.setContentType(params.getString(Defines.Jsonkey.ContentType.getKey()));
             }
             if (params.has(Defines.Jsonkey.ContentExpiryTime.getKey())) {
-                branchUniversalObject.setContentExpiration(new Date(params.getString(Defines.Jsonkey.ContentExpiryTime.getKey())));
+                branchUniversalObject.setContentExpiration(new Date(Long.decode(params.getString(Defines.Jsonkey.ContentExpiryTime.getKey()))));
             }
 
             Iterator<String> keys = params.keys();
@@ -807,27 +802,27 @@ public class BranchUnityWrapper {
         LinkProperties linkProperties = new LinkProperties();
 
         try {
-            if (params.has("channel")) {
-                linkProperties.setChannel(params.getString("channel"));
+            if (params.has("~channel")) {
+                linkProperties.setChannel(params.getString("~channel"));
             }
-            if (params.has("feature")) {
-                linkProperties.setFeature(params.getString("feature"));
+            if (params.has("~feature")) {
+                linkProperties.setFeature(params.getString("~feature"));
             }
-            if (params.has("stage")) {
-                linkProperties.setStage(params.getString("stage"));
+            if (params.has("~stage")) {
+                linkProperties.setStage(params.getString("~stage"));
             }
-            if (params.has("duration")) {
-                linkProperties.setDuration(Long.valueOf(params.getString("duration")).intValue());
+            if (params.has("~duration")) {
+                linkProperties.setDuration(Long.valueOf(params.getString("~duration")).intValue());
             }
-            if (params.has("tags")) {
-                JSONArray tagsArray = params.getJSONArray("tags");
+            if (params.has("~tags")) {
+                JSONArray tagsArray = params.getJSONArray("~tags");
                 for (int i = 0; i < tagsArray.length(); i++) {
                     linkProperties.addTag(tagsArray.getString(i));
                 }
             }
 
             Iterator<String> keys = params.keys();
-            while (keys.hasNext()) {
+                while (keys.hasNext()) {
                 String key = keys.next();
                 if (key.startsWith("$")) {
                     linkProperties.addControlParameter(key, params.getString(key));

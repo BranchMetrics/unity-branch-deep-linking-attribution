@@ -1,6 +1,13 @@
-﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench />
+﻿<Properties StartupItem="Assembly-CSharp.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Branch/Branch.cs">
+    <Files>
+      <File FileName="Assets/Branch/Demo/Scripts/BranchDemo.cs" Line="30" Column="2" />
+      <File FileName="Assets/Branch/Branch.cs" Line="1482" Column="2" />
+      <File FileName="Assets/Branch/BranchUniversalObject.cs" Line="146" Column="89" />
+      <File FileName="Assets/Branch/BranchLinkProperties.cs" Line="77" Column="4" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

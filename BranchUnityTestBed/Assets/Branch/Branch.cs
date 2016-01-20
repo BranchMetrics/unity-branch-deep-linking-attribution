@@ -13,7 +13,6 @@ public class Branch : MonoBehaviour {
     public delegate void BranchCallbackWithList(List<object> list, string error);
 	public delegate void BranchCallbackWithBranchUniversalObject(BranchUniversalObject universalObject, BranchLinkProperties linkProperties, string error);
 
-
     #region Public methods
 
     #region InitSession methods
@@ -22,54 +21,79 @@ public class Branch : MonoBehaviour {
      * Just initialize session.
      */
     public static void initSession() {
-        _initSession();
+		if (_sessionCounter == 0) {
+			++_sessionCounter;
+			_isFirstSessionInited = true;
+        	_initSession();
+		}
     }
 
     /**
      * Just initialize session, specifying whether is should be referrable.
      */
     public static void  initSession(bool isReferrable) {
-        _initSessionAsReferrable(isReferrable);
+		if (_sessionCounter == 0) {
+			++_sessionCounter;
+			_isFirstSessionInited = true;
+        	_initSessionAsReferrable(isReferrable);
+		}
     }
 
     /**
      * Initialize session and receive information about how it opened.
      */
     public static void initSession(BranchCallbackWithParams callback) {
-        var callbackId = _getNextCallbackId();
+		if (_sessionCounter == 0) {
+			++_sessionCounter;
+			_isFirstSessionInited = true;
+			autoInitCallbackWithParams = callback;
 
-        _branchCallbacks[callbackId] = callback;
-
-        _initSessionWithCallback(callbackId);
+	        var callbackId = _getNextCallbackId();
+	        _branchCallbacks[callbackId] = callback;
+	        _initSessionWithCallback(callbackId);
+		}
     }
 
     /**
      * Initialize session and receive information about how it opened, specifying whether is should be referrable.
      */
     public static void initSession(bool isReferrable, BranchCallbackWithParams callback) {
-        var callbackId = _getNextCallbackId();
+		if (_sessionCounter == 0) {
+			++_sessionCounter;
+			_isFirstSessionInited = true;
+			autoInitCallbackWithParams = callback;
 
-        _branchCallbacks[callbackId] = callback;
-
-        _initSessionAsReferrableWithCallback(isReferrable, callbackId);
+	        var callbackId = _getNextCallbackId();
+	        _branchCallbacks[callbackId] = callback;
+	        _initSessionAsReferrableWithCallback(isReferrable, callbackId);
+		}
     }
 
 	/**
      * Initialize session and receive information about how it opened.
      */
 	public static void initSession(BranchCallbackWithBranchUniversalObject callback) {
-		var callbackId = _getNextCallbackId();
-		
-		_branchCallbacks[callbackId] = callback;
-		
-		_initSessionWithUniversalObjectCallback(callbackId);
+		if (_sessionCounter == 0) {
+			++_sessionCounter;
+			_isFirstSessionInited = true;
+			autoInitCallbackWithBUO = callback;
+
+			var callbackId = _getNextCallbackId();
+			_branchCallbacks[callbackId] = callback;
+			_initSessionWithUniversalObjectCallback(callbackId);
+		}
 	}
 
     /**
      * Close session, necessary for some platforms to track when to cut off a Branch session.
      */
     public static void closeSession() {
-        _closeSession();
+		#if UNITY_ANDROID || UNITY_EDITOR
+		if (_sessionCounter > 0) {
+        	_closeSession();
+			_sessionCounter--;
+		}
+		#endif
     }
 
     #endregion
@@ -218,7 +242,7 @@ public class Branch : MonoBehaviour {
      * Make sure to remove setDebug before releasing.
      */
     public static void setDebug() {
-        
+		_setDebug();
     }
 
     /**
@@ -708,6 +732,27 @@ public class Branch : MonoBehaviour {
         DontDestroyOnLoad(gameObject);
         _setBranchKey(BranchData.Instance.branchKey);
     }
+		
+	void OnApplicationPause(bool pauseStatus) {
+		if (!_isFirstSessionInited)
+			return;
+
+		if (!pauseStatus) {
+			if (autoInitCallbackWithParams != null) {
+				initSession(autoInitCallbackWithParams);
+			}
+			else if (autoInitCallbackWithBUO != null) {
+				initSession(autoInitCallbackWithBUO);
+			}
+			else {
+				initSession();
+				Debug.Log("initSession()");
+			}
+		}
+		else {
+			closeSession();
+		}
+	}
 
 	#endregion
 
@@ -1173,7 +1218,7 @@ public class Branch : MonoBehaviour {
     }
 
 	private static void _initSessionWithUniversalObjectCallback(string callbackId) {
-		callNotImplementedCallbackForParamCallback(callbackId);
+		callNotImplementedCallbackForBUOCallback(callbackId);
 	}
 
     private static void _closeSession() { }
@@ -1394,6 +1439,11 @@ public class Branch : MonoBehaviour {
         callback(false, "Not implemented on this platform");
     }
 
+	private static void callNotImplementedCallbackForBUOCallback(string callbackId) {
+		var callback = _branchCallbacks[callbackId] as BranchCallbackWithBranchUniversalObject;
+		callback(null, null, "Not implemented on this platform");
+	}
+
     #endif
     
     #endregion
@@ -1443,10 +1493,11 @@ public class Branch : MonoBehaviour {
 	public void _asyncCallbackWithBranchUniversalObject(string callbackDictString) {
 		var callbackDict = MiniJSON.Json.Deserialize(callbackDictString) as Dictionary<string, object>;
 		var callbackId = callbackDict["callbackId"] as string;
-		var universalObject = callbackDict.ContainsKey("universalObject") ? callbackDict["universalObject"] as Dictionary<string, object> : null;
-		var linkProperties = callbackDict.ContainsKey("linkProperties") ? callbackDict["linkProperties"] as Dictionary<string, object> : null;
+		var paramsDict = callbackDict.ContainsKey("params") ? callbackDict["params"] as Dictionary<string, object> : null;
+		var universalObject = paramsDict != null && paramsDict.ContainsKey("universalObject") ? paramsDict["universalObject"] as Dictionary<string, object> : null;
+		var linkProperties = paramsDict != null && paramsDict.ContainsKey("linkProperties") ? paramsDict["linkProperties"] as Dictionary<string, object> : null;
 		string error = callbackDict.ContainsKey("error") ? callbackDict["error"] as string : null;
-		
+
 		var callback = _branchCallbacks[callbackId] as BranchCallbackWithBranchUniversalObject;
 		callback(new BranchUniversalObject(universalObject), new BranchLinkProperties(linkProperties), error);
 	}
@@ -1460,5 +1511,9 @@ public class Branch : MonoBehaviour {
     #endregion
 
     private static int _nextCallbackId = 0;
+	private static int _sessionCounter = 0;
+	private static bool _isFirstSessionInited = false;
+	private static BranchCallbackWithParams autoInitCallbackWithParams = null;
+	private static BranchCallbackWithBranchUniversalObject autoInitCallbackWithBUO = null;
     private static Dictionary<string, object> _branchCallbacks = new Dictionary<string, object>();
 }

@@ -60,29 +60,35 @@ public class BranchLinkProperties {
 		if (data == null)
 			return;
 
-		if (data.ContainsKey("tags")) {
-			tags = data["tags"] as List<String>;
+		if (data.ContainsKey("~tags")) {
+			tags = data["~tags"] as List<String>;
 		}
-		if (data.ContainsKey("feature")) {
-			feature = data["feature"] as string;
+		if (data.ContainsKey("~feature")) {
+			feature = data["~feature"] as string;
 		}
-		if (data.ContainsKey("alias")) {
-			alias = data["alias"] as string;
+		if (data.ContainsKey("~alias")) {
+			alias = data["~alias"] as string;
 		}
-		if (data.ContainsKey("channel")) {
-			channel = data["channel"] as string;
+		if (data.ContainsKey("~channel")) {
+			channel = data["~channel"] as string;
 		}
-		if (data.ContainsKey("stage")) {
-			stage = data["stage"] as string;
+		if (data.ContainsKey("~stage")) {
+			stage = data["~stage"] as string;
 		}
-		if (data.ContainsKey("duration")) {
-			if (!string.IsNullOrEmpty(data["duration"] as string)) {
-				matchDuration = Convert.ToInt32(data["duration"] as string);
+		if (data.ContainsKey("~duration")) {
+			if (!string.IsNullOrEmpty(data["~duration"] as string)) {
+				matchDuration = Convert.ToInt32(data["~duration"] as string);
 			}
 		}
 		if (data.ContainsKey("control_params")) {
 			if (data["control_params"] != null) {
-				controlParams = data["control_params"] as Dictionary<String, String>;
+				Dictionary<string, object> paramsTemp = data["control_params"] as Dictionary<string, object>;
+
+				if (paramsTemp != null) {
+					foreach(string key in paramsTemp.Keys) {
+						controlParams.Add(key, paramsTemp[key] as string);
+					}
+				}
 			}
 		}
 	}
@@ -90,12 +96,12 @@ public class BranchLinkProperties {
 	public string ToJsonString() {
 		var data = new Dictionary<string, object>();
 		
-		data.Add("tags", tags);
-		data.Add("feature", feature);
-		data.Add("alias", alias);
-		data.Add("channel", channel);
-		data.Add("stage", stage);
-		data.Add("duration", matchDuration.ToString());
+		data.Add("~tags", tags);
+		data.Add("~feature", feature);
+		data.Add("~alias", alias);
+		data.Add("~channel", channel);
+		data.Add("~stage", stage);
+		data.Add("~duration", matchDuration.ToString());
 		data.Add("control_params", controlParams);
 		
 		return MiniJSON.Json.Serialize(data);

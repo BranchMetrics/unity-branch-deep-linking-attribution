@@ -1,5 +1,12 @@
 Branch Unity SDK change log
 
+-v0.2.1
+  * Updating Branch to Android version 1.10.4 and iOS version 0.10.14
+  * Adding auto management for Branch session
+  * Fixing method Branch.SetDebug()
+  * Fixing URI Scheme postprocesser (now postprocesser doesn't delete all existing settings)
+  * Fixing parsing of BranchUniversalObject and LinkProperties
+
 - v0.2.0
   * Bunch of bug fixes
   * Cleaner integration steps
