@@ -20,22 +20,42 @@ public class BranchDemo : MonoBehaviour {
 		Branch.setDebug();
 
 		//init Branch
-		Branch.initSession( (universalObject, linkProperties, error) => {
-			if (error != null) {
-				Debug.LogError("Branch Error: " + error);
-			} else {
-				Debug.Log("Branch initialization completed: ");
-				Debug.Log("Universal Object: " + universalObject.ToJsonString());
-				Debug.Log("Link Properties: " + linkProperties.ToJsonString());
 
-				// get latest referring params
-				BranchUniversalObject obj = Branch.getLatestReferringBranchUniversalObject();
-				BranchLinkProperties link = Branch.getLatestReferringBranchLinkProperties();
+		// old realization
+		//Branch.initSession(CallbackWithParams);
 
-				Debug.Log("LatestReferringBranchUniversalObject: " + universalObject.ToJsonString());
-				Debug.Log("LatestReferringBranchLinkProperties: " + linkProperties.ToJsonString());
+		// new realization
+		Branch.initSession(CallbackWithBranchUniversalObject);
+	}
+
+	public void CallbackWithBranchUniversalObject(BranchUniversalObject universalObject, BranchLinkProperties linkProperties, string error) {
+		if (error != null) {
+			Debug.LogError("Branch Error: " + error);
+		} else {
+			Debug.Log("Branch initialization completed: ");
+			Debug.Log("Universal Object: " + universalObject.ToJsonString());
+			Debug.Log("Link Properties: " + linkProperties.ToJsonString());
+
+			// get latest referring params
+			BranchUniversalObject obj = Branch.getLatestReferringBranchUniversalObject();
+			BranchLinkProperties link = Branch.getLatestReferringBranchLinkProperties();
+
+			Debug.Log("LatestReferringBranchUniversalObject: " + obj.ToJsonString());
+			Debug.Log("LatestReferringBranchLinkProperties: " + link.ToJsonString());
+		}
+	}
+
+	public void CallbackWithParams(Dictionary<string, object> parameters, string error) {
+		if (error != null) {
+			Debug.Log("Branch Error: " + error);
+		}
+		else {
+			Debug.Log("Branch initialization completed: ");
+
+			foreach(string str in parameters.Keys) {
+				Debug.Log(str + " : " + parameters[str].ToString());
 			}
-		});
+		}
 	}
 
 	#region MainPanel

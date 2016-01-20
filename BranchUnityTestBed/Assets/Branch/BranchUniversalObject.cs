@@ -84,7 +84,7 @@ public class BranchUniversalObject {
 	public void loadFromDictionary(Dictionary<string, object> data) {
 		if (data == null)
 			return;
-
+		
 		if (data.ContainsKey("$canonical_identifier")) {
 			canonicalIdentifier = data["$canonical_identifier"] as string;
 		}
@@ -107,17 +107,29 @@ public class BranchUniversalObject {
 		}
 		if (data.ContainsKey("$exp_date")) {
 			if (!string.IsNullOrEmpty(data["$exp_date"] as string)) {
-				expirationDate = Convert.ToDateTime(data["$exp_date"] as string);
-			}
-		}
-		if (data.ContainsKey("$metadata")) {
-			if (data["$metadata"] != null) {
-				metadata = data["$metadata"] as Dictionary<string, string>;
+				expirationDate = new DateTime(Convert.ToInt64(data["$exp_date"] as string));
 			}
 		}
 		if (data.ContainsKey("$keywords")) {
 			if (data["$keywords"] != null) {
-				keywords = data["$keywords"] as List<string>;
+				List<object> keywordsTemp = data["$keywords"] as List<object>;
+
+				if (keywordsTemp != null) {
+					foreach(object obj in keywordsTemp) {
+						keywords.Add(obj as string);
+					}
+				}
+			}
+		}
+		if (data.ContainsKey("metadata")) {
+			if (data["metadata"] != null) {
+				Dictionary<string, object> metaTemp = data["metadata"] as Dictionary<string, object>;
+
+				if (metaTemp != null) {
+					foreach(string key in metaTemp.Keys) {
+						metadata.Add(key, metaTemp[key] as string);
+					}
+				}
 			}
 		}
 	}
@@ -132,8 +144,8 @@ public class BranchUniversalObject {
 		data.Add("$content_type", type);
 		data.Add("$publicly_indexable", contentIndexMode.ToString());
 		data.Add("$exp_date", expirationDate.HasValue ? expirationDate.Value.ToString() : "");
-		data.Add("$metadata", metadata);
 		data.Add("$keywords", keywords);
+		data.Add("metadata", metadata);
 
 		return MiniJSON.Json.Serialize(data);
 	}

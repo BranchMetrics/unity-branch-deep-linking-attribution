@@ -23,17 +23,54 @@ public class BranchPostProcessBuild {
 		
 		// Get root
 		PlistElementDict rootDict = plist.root;
+		PlistElementArray urlTypesArray = null;
+		PlistElementDict  urlTypesItems = null;
+		PlistElementArray urlSchemesArray = null;
 
-		// Is key "URL types" exist then delete
-		if (rootDict.values.ContainsKey("URL types")) {
-			rootDict.values.Remove("URL types");
+		if (!rootDict.values.ContainsKey("URL types")) {
+			urlTypesArray = rootDict.CreateArray("URL types");
+		}
+		else {
+			urlTypesArray = rootDict.values["URL types"].AsArray();
+
+			if (urlTypesArray == null) {
+				urlTypesArray = rootDict.CreateArray("URL types");
+			}
 		}
 
-		// Add branchUri
-		PlistElementArray urlTypesArray = rootDict.CreateArray("URL types");
-		PlistElementDict  urlTypesItem01 = urlTypesArray.AddDict();
-		PlistElementArray urlSchemesArray = urlTypesItem01.CreateArray("URL Schemes");
-		urlSchemesArray.AddString(BranchData.Instance.branchUri);
+		if (urlTypesArray.values.Count == 0) {
+			urlTypesItems = urlTypesArray.AddDict();
+		}
+		else {
+			urlTypesItems = urlTypesArray.values[0].AsDict();
+
+			if (urlTypesItems == null) {
+				urlTypesItems = urlTypesArray.AddDict();
+			}
+		}
+
+		if (!urlTypesItems.values.ContainsKey("URL Schemes")) {
+			urlSchemesArray = urlTypesItems.CreateArray("URL Schemes");
+		}
+		else {
+			urlSchemesArray = urlTypesItems.values["URL Schemes"].AsArray();
+
+			if (urlSchemesArray == null) {
+				urlSchemesArray = urlTypesItems.CreateArray("URL Schemes");
+			}
+		}
+
+		bool isExist = false;
+		foreach(PlistElement elem in urlSchemesArray.values) {
+			if (elem.AsString() != null && elem.AsString().Equals(BranchData.Instance.branchUri)) {
+				isExist = true;
+				break;
+			}
+		}
+
+		if (!isExist) {
+			urlSchemesArray.AddString(BranchData.Instance.branchUri);
+		}
 
 		// Write to file
 		File.WriteAllText(plistPath, plist.WriteToString());

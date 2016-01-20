@@ -83,11 +83,11 @@ static NSDictionary *dictFromBranchUniversalObject(BranchUniversalObject *univer
             BRANCH_LINK_DATA_KEY_CONTENT_TYPE: universalObject.type ? universalObject.type: @"",
             BRANCH_LINK_DATA_KEY_PUBLICLY_INDEXABLE: universalObject.contentIndexMode ? [[NSNumber numberWithInteger:universalObject.contentIndexMode] stringValue]: @"",
             BRANCH_LINK_DATA_KEY_KEYWORDS: universalObject.keywords ? universalObject.keywords : @"",
-            BRANCH_LINK_DATA_KEY_CONTENT_EXPIRATION_DATE: universalObject.expirationDate ? CreateNSStringFromNSDate(universalObject.expirationDate) : @"",
-            @"$metadata": universalObject.metadata ? universalObject.metadata : @"",
+            BRANCH_LINK_DATA_KEY_CONTENT_EXPIRATION_DATE: universalObject.expirationDate ? @(1000 * [universalObject.expirationDate timeIntervalSince1970]) : @"",
+            @"metadata": universalObject.metadata ? universalObject.metadata : @"",
         };
     }
-    
+
     return universalObjectDict;
 }
 
@@ -96,12 +96,12 @@ static NSDictionary *dictFromBranchLinkProperties(BranchLinkProperties *linkProp
     
     if (linkProperties) {
         linkPropertiesDict = @{
-            BRANCH_REQUEST_KEY_URL_TAGS: linkProperties.tags ? linkProperties.tags : @"",
-            BRANCH_REQUEST_KEY_URL_FEATURE: linkProperties.feature ? linkProperties.feature : @"",
-            BRANCH_REQUEST_KEY_URL_ALIAS: linkProperties.alias ? linkProperties.alias : @"",
-            BRANCH_REQUEST_KEY_URL_CHANNEL: linkProperties.channel ? linkProperties.channel : @"",
-            BRANCH_REQUEST_KEY_URL_STAGE: linkProperties.stage ? linkProperties.stage : @"",
-            BRANCH_REQUEST_KEY_URL_DURATION: linkProperties.matchDuration ? [[NSNumber numberWithInteger:linkProperties.matchDuration] stringValue] : @"",
+            @"~tags": linkProperties.tags ? linkProperties.tags : @"",
+            @"~feature": linkProperties.feature ? linkProperties.feature : @"",
+            @"~alias": linkProperties.alias ? linkProperties.alias : @"",
+            @"~channel": linkProperties.channel ? linkProperties.channel : @"",
+            @"~stage": linkProperties.stage ? linkProperties.stage : @"",
+            @"~duration": linkProperties.matchDuration ? [[NSNumber numberWithInteger:linkProperties.matchDuration] stringValue] : @"",
             @"control_params": linkProperties.controlParams ? linkProperties.controlParams : @""
         };
     }
@@ -138,7 +138,7 @@ static BranchUniversalObject* branchuniversalObjectFormDict(NSDictionary *univer
     }
     
     if (universalObjectDict[BRANCH_LINK_DATA_KEY_CONTENT_EXPIRATION_DATE]) {
-        universalObject.expirationDate = CreateNSDate(universalObjectDict[BRANCH_LINK_DATA_KEY_CONTENT_EXPIRATION_DATE]);
+        universalObject.expirationDate = [NSDate dateWithTimeIntervalSince1970:[universalObjectDict[BRANCH_LINK_DATA_KEY_CONTENT_EXPIRATION_DATE] integerValue]/1000];
     }
     
     if (universalObjectDict[BRANCH_LINK_DATA_KEY_KEYWORDS]) {
@@ -155,26 +155,23 @@ static BranchUniversalObject* branchuniversalObjectFormDict(NSDictionary *univer
 static BranchLinkProperties *branchLinkPropertiesFormDict(NSDictionary *linkPropertiesDict) {
     BranchLinkProperties *linkProperties = [[BranchLinkProperties alloc] init];
     
-    if (linkPropertiesDict[BRANCH_REQUEST_KEY_URL_TAGS]) {
-        linkProperties.tags = linkPropertiesDict[BRANCH_REQUEST_KEY_URL_TAGS];
+    if (linkPropertiesDict[@"~tags"]) {
+        linkProperties.tags = linkPropertiesDict[@"~tags"];
     }
-    if (linkPropertiesDict[BRANCH_REQUEST_KEY_URL_FEATURE]) {
-        linkProperties.feature = linkPropertiesDict[BRANCH_REQUEST_KEY_URL_FEATURE];
+    if (linkPropertiesDict[@"~feature"]) {
+        linkProperties.feature = linkPropertiesDict[@"~feature"];
     }
-    if (linkPropertiesDict[BRANCH_REQUEST_KEY_URL_ALIAS]) {
-        linkProperties.alias = linkPropertiesDict[BRANCH_REQUEST_KEY_URL_ALIAS];
+    if (linkPropertiesDict[@"~alias"]) {
+        linkProperties.alias = linkPropertiesDict[@"~alias"];
     }
-    if (linkPropertiesDict[BRANCH_REQUEST_KEY_URL_CHANNEL]) {
-        linkProperties.channel = linkPropertiesDict[BRANCH_REQUEST_KEY_URL_CHANNEL];
+    if (linkPropertiesDict[@"~channel"]) {
+        linkProperties.channel = linkPropertiesDict[@"~channel"];
     }
-    if (linkPropertiesDict[BRANCH_REQUEST_KEY_URL_STAGE]) {
-        linkProperties.stage = linkPropertiesDict[BRANCH_REQUEST_KEY_URL_STAGE];
+    if (linkPropertiesDict[@"~stage"]) {
+        linkProperties.stage = linkPropertiesDict[@"~stage"];
     }
-    if (linkPropertiesDict[BRANCH_REQUEST_KEY_URL_DURATION]) {
-        linkProperties.matchDuration = [linkPropertiesDict[BRANCH_REQUEST_KEY_URL_DURATION] intValue];
-    }
-    if (linkPropertiesDict[BRANCH_REQUEST_KEY_URL_STAGE]) {
-        linkProperties.stage = linkPropertiesDict[BRANCH_REQUEST_KEY_URL_STAGE];
+    if (linkPropertiesDict[@"~duration"]) {
+        linkProperties.matchDuration = [linkPropertiesDict[@"~duration"] intValue];
     }
     if (linkPropertiesDict[@"control_params"]) {
         linkProperties.controlParams = [linkPropertiesDict[@"control_params"] copy];
@@ -234,7 +231,8 @@ static callbackWithBranchUniversalObject callbackWithBranchUniversalObjectForCal
     return ^(BranchUniversalObject *universalObject, BranchLinkProperties *linkProperties, NSError *error) {
         id errorDictItem = error ? [error description] : [NSNull null];
         
-        NSDictionary *callbackDict = @{ @"callbackId": callbackString, @"universalObject": dictFromBranchUniversalObject(universalObject), @"linkProperties": dictFromBranchLinkProperties(linkProperties), @"error": errorDictItem };
+        NSDictionary *params = @{@"universalObject": dictFromBranchUniversalObject(universalObject), @"linkProperties": dictFromBranchLinkProperties(linkProperties)};
+        NSDictionary *callbackDict = @{ @"callbackId": callbackString, @"params": params, @"error": errorDictItem };
         
         UnitySendMessage("Branch", "_asyncCallbackWithBranchUniversalObject", jsonCStringFromDictionary(callbackDict));
     };
@@ -280,17 +278,11 @@ const char *_getFirstReferringParams() {
 
 const char *_getFirstReferringBranchUniversalObject() {
     BranchUniversalObject* universalObject = [[Branch getInstance:_branchKey] getFirstReferringBranchUniversalObject];
-    
-    NSLog(@"universalObject  %@", universalObject.description);
-    
     return jsonCStringFromDictionary(dictFromBranchUniversalObject(universalObject));
 }
 
 const char *_getFirstReferringBranchLinkProperties() {
     BranchLinkProperties *linkProperties = [[Branch getInstance:_branchKey] getFirstReferringBranchLinkProperties];
-    
-    NSLog(@"linkProperties  %@", linkProperties.description);
-    
     return jsonCStringFromDictionary(dictFromBranchLinkProperties(linkProperties));
 }
 
@@ -300,17 +292,11 @@ const char *_getLatestReferringParams() {
 
 const char *_getLatestReferringBranchUniversalObject() {
     BranchUniversalObject *universalObject = [[Branch getInstance:_branchKey]getLatestReferringBranchUniversalObject];
-    
-    NSLog(@"universalObject  %@", universalObject.description);
-    
     return jsonCStringFromDictionary(dictFromBranchUniversalObject(universalObject));
 }
 
 const char *_getLatestReferringBranchLinkProperties() {
     BranchLinkProperties *linkProperties = [[Branch getInstance:_branchKey] getLatestReferringBranchLinkProperties];
-    
-    NSLog(@"linkProperties  %@", linkProperties.description);
-    
     return jsonCStringFromDictionary(dictFromBranchLinkProperties(linkProperties));
 }
 
