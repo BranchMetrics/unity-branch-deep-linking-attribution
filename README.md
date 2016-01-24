@@ -34,7 +34,7 @@ You can sign up for your own app id at [https://dashboard.branch.io](https://das
 
 #### Unity Scene and Branch Parameters
 
-To allow Branch to configure itself, you must add a BranchPrefab asset to your scene. Simply drag into your scene, and then specify your `APP_KEY` and `APP_URI` in the properties.
+To allow Branch to configure itself, you must add a BranchPrefab asset to your first scene. Simply drag into your first scene, and then specify your `APP_KEY` and `APP_URI` in the properties.
 
 * `APP_KEY`: This is your Branch key from the dashboard
 * `APP_URI`: This is the URI scheme you would like to use to open the app. This must be the same value as you entered in [the Branch link settings](https://dashboard.branch.io/#/settings/link) as well. Please do *not* include the `://` characters.
@@ -86,9 +86,24 @@ Typically, you would register some sort of splash activitiy that handles routing
 </activity>
 ```
 
-### Initialize SDK And Register Deep Link Routing Function
+### Initialize SDK, Session And Register Deep Link Routing Function
 
-Called when app first initializes a session, ideally in a class that is initiated with the start of your scene. If you created a custom link with your own custom dictionary data, you probably want to know when the user session init finishes, so you can check that data. Think of this callback as your "deep link router". If your app opens with some data, you want to route the user depending on the data you passed in. Otherwise, send them to a generic install flow.
+#### Initialize SDK
+
+Branch SDK will be initilized automatically, just add BranchPrefab to your scene and set parameters.
+
+We recommend to add BranchPrefab to your first scene, before any calling of Branch SDK API.
+
+Don't worry about several instances of Branch SDK even if your first scene is scene that will be launched several times (for example: content loading scene).
+
+
+#### Initialize Session And Register Deep Linking Routing Function
+
+When you created a custom link with your own custom dictionary data, you probably want to know which data is sent to your app and then check that data. For example, if your app opens with some data, you want to route the user depending on the data you passed in.
+
+To catch sent data, you need to register a callback. Think of this callback as your "deep link router". Important note: your callback must be visible from all your scenes, if you plan to process data in each scene.
+
+Initialization of session and registration of callback called when app first initializes a session, ideally in a class that is initiated with the start of your scene. When your app will be hidden and then will be opened, initialization of new session will be called automatically and your registered callback will be called.
 
 This deep link routing callback is called 100% of the time on init, with your link params or an empty dictionary if none present.
 
@@ -98,14 +113,16 @@ using System.Collections.Generic;
 
 public class MyCoolBehaviorScript : MonoBehaviour {
     void Start () {
-        Branch.initSession(delegate(Dictionary<string, object> parameters, string error) {
-            if (error != null) {
-                System.Console.WriteLine("Oh no, something went wrong: " + error);
-            }
-            else if (parameters.Count > 0) {
-                System.Console.WriteLine("Branch initialization completed with the following params: " + parameters.Keys);
-            }
-        });
+        Branch.initSession(CallbackWithParams);
+    }
+     
+    void CallbackWithParams(Dictionary<string, object> parameters, string error) {
+        if (error != null) {
+            System.Console.WriteLine("Oh no, something went wrong: " + error);
+        }
+        else if (parameters.Count > 0) {
+            System.Console.WriteLine("Branch initialization completed with the following params: " + parameters.Keys);
+        }
     }
 }
 ```
@@ -118,14 +135,16 @@ using System.Collections.Generic;
 
 public class MyCoolBehaviorScript : MonoBehaviour {
     void Start () {
-        Branch.initSession(delegate(universalObject, linkProperties, error) {
-            if (error != null) {
-                System.Console.WriteLine("Oh no, something went wrong: " + error);
-            }
-            else if (parameters.Count > 0) {
-                System.Console.WriteLine("Branch initialization completed with the following params: " + universalObject.ToJsonString() + linkProperties.ToJsonString());
-            }
-        });
+        Branch.initSession(CallbackWithBranchUniversalObject);
+    }
+    
+    void CallbackWithBranchUniversalObject(universalObject, linkProperties, error) {
+        if (error != null) {
+            System.Console.WriteLine("Oh no, something went wrong: " + error);
+        }
+        else if (parameters.Count > 0) {
+            System.Console.WriteLine("Branch initialization completed with the following params: " + universalObject.ToJsonString() + linkProperties.ToJsonString());
+        }
     }
 }
 ```
