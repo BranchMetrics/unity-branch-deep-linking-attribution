@@ -1,3 +1,16 @@
+#import "AppDelegateListener.h"
+
+#pragma mark - Private notification class interface
+
+@interface BranchUnityWrapper : NSObject<AppDelegateListener>
+@property (strong, nonatomic) NSDictionary *launchOptions;
+
++ (BranchUnityWrapper *)sharedInstance;
+@end
+
+
+#pragma mark - Unity plugin methods
+
 extern "C" {
     #pragma mark - Key methods
 
@@ -91,3 +104,5 @@ extern "C" {
     void _validateReferralCodeWithCallback(char *code, char *callbackId);
     void _applyReferralCodeWithCallback(char *code, char *callbackId);
 }
+
+
