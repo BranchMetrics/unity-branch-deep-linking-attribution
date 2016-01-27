@@ -12,7 +12,12 @@
 @implementation BranchAppController
 
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray *))restorationHandler {
+
+    [super application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
+
     BOOL handledByBranch = [[Branch getInstance] continueUserActivity:userActivity];
+    
+    NSLog(@"Branch continueUserActivity");
     
     return handledByBranch;
 }

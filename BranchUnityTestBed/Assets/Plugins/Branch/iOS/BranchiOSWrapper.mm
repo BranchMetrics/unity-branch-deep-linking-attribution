@@ -2,17 +2,51 @@
 #include "Branch.h"
 #include "BranchConstants.h"
 #include "BranchUniversalObject.h"
-#import "AppDelegateListener.h"
 #import "UnityAppController.h"
 
 
-#pragma mark - Private notification class interface
+static NSString *_branchKey;
+static BranchUnityWrapper *_wrapper = [BranchUnityWrapper sharedInstance];
 
-@interface BranchUnityWrapper : NSObject
 
-@property (strong, nonatomic) NSDictionary *launchOptions;
+#pragma mark - Private notification class implementation
+
+@implementation BranchUnityWrapper
+
++ (BranchUnityWrapper *)sharedInstance
+{
+    return _wrapper;
+}
+
++ (void)initialize {
+    if(!_wrapper) {
+        _wrapper = [[BranchUnityWrapper alloc] init];
+    }
+}
+
+- (id)init {
+    if (self = [super init]) {
+        UnityRegisterAppDelegateListener(self);
+    }
+    
+    return self;
+}
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)didFinishLaunching:(NSNotification *)notification {
+    self.launchOptions = notification.userInfo;
+}
+
+- (void)onOpenURL:(NSNotification *)notification {
+    NSURL *openURL = notification.userInfo[@"url"];
+    [[Branch getInstance:_branchKey] handleDeepLink:openURL];
+}
 
 @end
+
 
 #pragma mark - Converter methods
 
@@ -240,12 +274,8 @@ static callbackWithBranchUniversalObject callbackWithBranchUniversalObjectForCal
 
 #pragma mark - Key methods
 
-static NSString *_branchKey;
-static BranchUnityWrapper *_wrapper;
 void _setBranchKey(char *branchKey) {
     _branchKey = CreateNSString(branchKey);
-    
-    _wrapper = [[BranchUnityWrapper alloc] init];
 }
 
 #pragma mark - InitSession methods
@@ -532,30 +562,3 @@ void _applyReferralCodeWithCallback(char *code, char *callbackId) {
     [[Branch getInstance:_branchKey] applyPromoCode:CreateNSString(code) callback:callbackWithParamsForCallbackId(callbackId)];
 }
 
-#pragma mark - Private notification class implementation
-
-@implementation BranchUnityWrapper
-
-- (id)init {
-    if (self = [super init]) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidFinishLaunching:) name:UIApplicationDidFinishLaunchingNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onAppOpenURL:) name:kUnityOnOpenURL object:nil];
-    }
-    
-    return self;
-}
-
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-- (void)applicationDidFinishLaunching:(NSNotification *)notification {
-    self.launchOptions = notification.userInfo;
-}
-
-- (void)onAppOpenURL:(NSNotification *)notification {
-    NSURL *openURL = notification.userInfo[@"url"];
-    [[Branch getInstance:_branchKey] handleDeepLink:openURL];
-}
-
-@end
