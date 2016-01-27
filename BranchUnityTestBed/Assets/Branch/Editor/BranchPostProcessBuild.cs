@@ -7,7 +7,7 @@ using System.IO;
 
 public class BranchPostProcessBuild {
 
-	[PostProcessBuild(100)]
+	[PostProcessBuild(900)]
 	public static void ChangeBranchBuiltProject(BuildTarget buildTarget, string pathToBuiltProject) {
 		if ( buildTarget == BuildTarget.iOS ) {
 			ChangeXcodePlist(pathToBuiltProject);
@@ -27,14 +27,14 @@ public class BranchPostProcessBuild {
 		PlistElementDict  urlTypesItems = null;
 		PlistElementArray urlSchemesArray = null;
 
-		if (!rootDict.values.ContainsKey("URL types")) {
-			urlTypesArray = rootDict.CreateArray("URL types");
+		if (!rootDict.values.ContainsKey("CFBundleURLTypes")) {
+			urlTypesArray = rootDict.CreateArray("CFBundleURLTypes");
 		}
 		else {
-			urlTypesArray = rootDict.values["URL types"].AsArray();
+			urlTypesArray = rootDict.values["CFBundleURLTypes"].AsArray();
 
 			if (urlTypesArray == null) {
-				urlTypesArray = rootDict.CreateArray("URL types");
+				urlTypesArray = rootDict.CreateArray("CFBundleURLTypes");
 			}
 		}
 
@@ -49,14 +49,14 @@ public class BranchPostProcessBuild {
 			}
 		}
 
-		if (!urlTypesItems.values.ContainsKey("URL Schemes")) {
-			urlSchemesArray = urlTypesItems.CreateArray("URL Schemes");
+		if (!urlTypesItems.values.ContainsKey("CFBundleURLSchemes")) {
+			urlSchemesArray = urlTypesItems.CreateArray("CFBundleURLSchemes");
 		}
 		else {
-			urlSchemesArray = urlTypesItems.values["URL Schemes"].AsArray();
+			urlSchemesArray = urlTypesItems.values["CFBundleURLSchemes"].AsArray();
 
 			if (urlSchemesArray == null) {
-				urlSchemesArray = urlTypesItems.CreateArray("URL Schemes");
+				urlSchemesArray = urlTypesItems.CreateArray("CFBundleURLSchemes");
 			}
 		}
 
