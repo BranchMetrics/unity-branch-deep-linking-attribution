@@ -112,15 +112,15 @@ typedef NS_ENUM(NSUInteger, BranchCreditHistoryOrder) {
     BranchLeastRecentFirst
 };
 
-typedef NS_ENUM(NSUInteger, BranchPromoCodeRewardLocation) {
-    BranchPromoCodeRewardReferredUser = 0,
-    BranchPromoCodeRewardReferringUser = 2,
-    BranchPromoCodeRewardBothUsers = 3
+typedef NS_ENUM(NSUInteger, BranchPromoCodeRewardLocation ) {
+    BranchPromoCodeRewardReferredUser __attribute__((deprecated(("This property has been deprecated. Branch will no longer provide any improvements or modifications to referral/promo code functionality.")))) = 0,
+    BranchPromoCodeRewardReferringUser __attribute__((deprecated(("This property has been deprecated. Branch will no longer provide any improvements or modifications to referral/promo code functionality.")))) = 2,
+    BranchPromoCodeRewardBothUsers __attribute__((deprecated(("This property has been deprecated. Branch will no longer provide any improvements or modifications to referral/promo code functionality.")))) = 3
 };
 
 typedef NS_ENUM(NSUInteger, BranchPromoCodeUsageType) {
-    BranchPromoCodeUsageTypeOncePerUser = 1,
-    BranchPromoCodeUsageTypeUnlimitedUses = 0
+    BranchPromoCodeUsageTypeOncePerUser __attribute__((deprecated(("This property has been deprecated. Branch will no longer provide any improvements or modifications to referral/promo code functionality.")))) = 1,
+    BranchPromoCodeUsageTypeUnlimitedUses __attribute__((deprecated(("This property has been deprecated. Branch will no longer provide any improvements or modifications to referral/promo code functionality.")))) = 0
 };
 
 @interface Branch : NSObject
@@ -242,43 +242,12 @@ typedef NS_ENUM(NSUInteger, BranchPromoCodeUsageType) {
 ///---------------------
 
 /**
- Just initialize the Branch session.
- 
- @warning This is not the recommended method of initializing Branch, as you potentially lose deep linking info, and any ability to do anything with the callback.
- */
-- (void)initSession;
-
-/**
  Just initialize the Branch session with the app launch options.
  
  @param options The launch options provided by the AppDelegate's `didFinishLaunchingWithOptions:` method.
  @warning This is not the recommended method of initializing Branch. While Branch is able to properly attribute deep linking info with the launch options, you lose the ability to do anything with a callback.
  */
 - (void)initSessionWithLaunchOptions:(NSDictionary *)options;
-
-/**
- Just initialize the Branch session, specifying whether to allow it to be treated as a referral.
- 
- @param isReferrable Boolean representing whether to allow the session to be marked as referred, overriding the default behavior.
- @warning This is not the recommended method of initializing Branch, as you potentially lose deep linking info, and any ability to do anything with the callback.
- */
-- (void)initSession:(BOOL)isReferrable;
-
-/**
- Just initialize the Branch session, specifying whether to allow it to automatically display matching deep linked controllers
- 
- @param automaticallyDisplayController Boolean indicating whether we will automatically launch into deep linked controller matched in the init session dictionary.
- @warning This is not the recommended method of initializing Branch, as you potentially lose deep linking info by not passing the launch options.
- */
-- (void)initSessionAndAutomaticallyDisplayDeepLinkController:(BOOL)automaticallyDisplayController;
-
-/**
- Initialize the Branch session and handle the completion with a callback
- 
- @param callback A callback that is called when the session is opened. This will be called multiple times during the apps life, including any time the app goes through a background / foreground cycle.
- @warning This is not the recommended method of initializing Branch, as you potentially lose deep linking info by not passing the launch options.
- */
-- (void)initSessionAndRegisterDeepLinkHandler:(callbackWithParams)callback;
 
 /**
  Just initialize the Branch session with the app launch options, specifying whether to allow it to be treated as a referral.
@@ -288,15 +257,6 @@ typedef NS_ENUM(NSUInteger, BranchPromoCodeUsageType) {
  @warning This is not the recommended method of initializing Branch. While Branch is able to properly attribute deep linking info with the launch options, you lose the ability to do anything with a callback.
  */
 - (void)initSessionWithLaunchOptions:(NSDictionary *)options isReferrable:(BOOL)isReferrable;
-
-/**
- Initialize the Branch session and handle the completion with a callback
- 
- @param isReferrable Boolean representing whether to allow the session to be marked as referred, overriding the default behavior.
- @param callback A callback that is called when the session is opened. This will be called multiple times during the apps life, including any time the app goes through a background / foreground cycle.
- @warning This is not the recommended method of initializing Branch, as you potentially lose deep linking info by not passing the launch options.
- */
-- (void)initSession:(BOOL)isReferrable andRegisterDeepLinkHandler:(callbackWithParams)callback;
 
 /**
  Initialize the Branch session with the app launch options and handle the completion with a callback
@@ -321,24 +281,6 @@ typedef NS_ENUM(NSUInteger, BranchPromoCodeUsageType) {
  @param automaticallyDisplayController Boolean indicating whether we will automatically launch into deep linked controller matched in the init session dictionary.
  */
 - (void)initSessionWithLaunchOptions:(NSDictionary *)options automaticallyDisplayDeepLinkController:(BOOL)automaticallyDisplayController;
-
-/**
- Initialize the Branch session and handle the completion with a callback
- 
- @param isReferrable Boolean representing whether to allow the session to be marked as referred, overriding the default behavior.
- @param automaticallyDisplayController Boolean indicating whether we will automatically launch into deep linked controller matched in the init session dictionary.
- @warning This is not the recommended method of initializing Branch, as you potentially lose deep linking info by not passing the launch options.
- */
-- (void)initSession:(BOOL)isReferrable automaticallyDisplayDeepLinkController:(BOOL)automaticallyDisplayController;
-
-/**
- Initialize the Branch session and handle the completion with a callback
- 
- @param automaticallyDisplayController Boolean indicating whether we will automatically launch into deep linked controller matched in the init session dictionary.
- @param callback A callback that is called when the session is opened. This will be called multiple times during the apps life, including any time the app goes through a background / foreground cycle.
- @warning This is not the recommended method of initializing Branch, as you potentially lose deep linking info by not passing the launch options.
- */
-- (void)initSessionAndAutomaticallyDisplayDeepLinkController:(BOOL)automaticallyDisplayController deepLinkHandler:(callbackWithParams)callback;
 
 /**
  Initialize the Branch session with the app launch options and handle the completion with a callback
@@ -370,16 +312,6 @@ typedef NS_ENUM(NSUInteger, BranchPromoCodeUsageType) {
 /**
  Initialize the Branch session with the app launch options and handle the completion with a callback
  
- @param automaticallyDisplayController Boolean indicating whether we will automatically launch into deep linked controller matched in the init session dictionary.
- @param isReferrable Boolean representing whether to allow the session to be marked as referred, overriding the default behavior.
- @param callback A callback that is called when the session is opened. This will be called multiple times during the apps life, including any time the app goes through a background / foreground cycle.
- @warning This is not the recommended method of initializing Branch, as you potentially lose deep linking info by not passing the launch options.
- */
-- (void)initSessionAndAutomaticallyDisplayDeepLinkController:(BOOL)automaticallyDisplayController isReferrable:(BOOL)isReferrable deepLinkHandler:(callbackWithParams)callback;
-
-/**
- Initialize the Branch session with the app launch options and handle the completion with a callback
- 
  @param options The launch options provided by the AppDelegate's `didFinishLaunchingWithOptions:` method.
  @param automaticallyDisplayController Boolean indicating whether we will automatically launch into deep linked controller matched in the init session dictionary.
  @param isReferrable Boolean representing whether to allow the session to be marked as referred, overriding the default behavior.
@@ -400,6 +332,21 @@ typedef NS_ENUM(NSUInteger, BranchPromoCodeUsageType) {
  @param userActivity The NSUserActivity that caused the app to be opened.
  */
 - (BOOL)continueUserActivity:(NSUserActivity *)userActivity;
+
+///--------------------------------
+/// @name Push Notification Support
+///--------------------------------
+
+#pragma mark - Push Notification support
+
+/**
+ Allow Branch to handle a push notification with a Branch link.
+ 
+ To make use of this, when creating a push notification, specify the Branch Link as an NSString, for key @"branch".
+ 
+ NSDictionary userInfo = @{@"branch": @"https://bnc.lt/...", ... };
+ */
+- (void)handlePushNotification:(NSDictionary *)userInfo;
 
 #pragma mark - Deep Link Controller methods
 
@@ -431,6 +378,14 @@ typedef NS_ENUM(NSUInteger, BranchPromoCodeUsageType) {
 + (void)setDebug __attribute__((deprecated(("Use the instance method instead"))));
 
 /**
+ Specify additional constant parameters to be included in the response
+ 
+ @param debugParams dictionary of keystrings/valuestrings that will be added to response 
+ */
+-(void) setDeepLinkDebugMode:(NSDictionary *)debugParams;
+
+
+/**
  Specify the time to wait in seconds between retries in the case of a Branch server error
  
  @param retryInterval Number of seconds to wait between retries.
@@ -452,9 +407,17 @@ typedef NS_ENUM(NSUInteger, BranchPromoCodeUsageType) {
 - (void)setNetworkTimeout:(NSTimeInterval)timeout;
 
 /**
- Specify that Branch should use an invisible SFSafariViewController to attempt cookie-based matching. Default is NO.
+ Specify that Branch should use an invisible SFSafariViewController to attempt cookie-based matching. Enabled by default.
+ 
+ @warning Please import SafariServices in order for this to work.
  */
-- (void)enableCookieBasedMatching;
+- (void)disableCookieBasedMatching;
+
+/**
+ If you're using a version of the Facebook SDK that prevents application:didFinishLaunchingWithOptions: from returning
+ YES/true when a Universal Link is clicked, you should enable this option.
+ */
+- (void)accountForFacebookSDKPreventingAppLaunch;
 
 #pragma mark - Session Item methods
 
@@ -530,6 +493,8 @@ typedef NS_ENUM(NSUInteger, BranchPromoCodeUsageType) {
  @warning If the request to logout fails, the items will not be cleared.
  */
 - (void)logout;
+
+- (void)logoutWithCallback:(callbackWithStatus)callback;
 
 #pragma mark - Credit methods
 
@@ -1294,7 +1259,39 @@ typedef NS_ENUM(NSUInteger, BranchPromoCodeUsageType) {
  @param callback Callback called with the Branch url this will fallback to.
  @warning These functions are only usable on iOS 9 or above. Earlier versions will simply receive the callback with an error.
  */
+
 - (void)createDiscoverableContentWithTitle:(NSString *)title description:(NSString *)description thumbnailUrl:(NSURL *)thumbnailUrl linkParams:(NSDictionary *)linkParams type:(NSString *)type publiclyIndexable:(BOOL)publiclyIndexable keywords:(NSSet *)keywords callback:(callbackWithUrl)callback;
+/**
+ Take the current screen and make it discoverable, adding it to Apple's Core Spotlight index. Will be public if specified. You can override the type as desired, using one of the types provided in MobileCoreServices.
+ 
+ @param title Title for the spotlight preview item.
+ @param description Description for the spotlight preview item.
+ @param thumbnailUrl Url to an image to be used for the thumnbail in spotlight.
+ @param linkParams Additional params to be added to the NSUserActivity. These will also be added to the Branch link.
+ @param publiclyIndexable Whether or not this item should be added to Apple's public search index.
+ @param type The type to use for the NSUserActivity, taken from the list of constants provided in the MobileCoreServices framework.
+ @param keywords A set of keywords to be used in Apple's search index.
+ @param expirationDate ExpirationDate after which this will not appear in Apple's search index.
+ @param callback Callback called with the Branch url this will fallback to.
+ @warning These functions are only usable on iOS 9 or above. Earlier versions will simply receive the callback with an error.
+ */
+- (void)createDiscoverableContentWithTitle:(NSString *)title description:(NSString *)description thumbnailUrl:(NSURL *)thumbnailUrl linkParams:(NSDictionary *)linkParams type:(NSString *)type publiclyIndexable:(BOOL)publiclyIndexable keywords:(NSSet *)keywords expirationDate:(NSDate *)expirationDate callback:(callbackWithUrl)callback;
+
+/**
+ Take the current screen and make it discoverable, adding it to Apple's Core Spotlight index. Will be public if specified. You can override the type as desired, using one of the types provided in MobileCoreServices.
+ 
+ @param title Title for the spotlight preview item.
+ @param description Description for the spotlight preview item.
+ @param thumbnailUrl Url to an image to be used for the thumnbail in spotlight.
+ @param linkParams Additional params to be added to the NSUserActivity. These will also be added to the Branch link.
+ @param publiclyIndexable Whether or not this item should be added to Apple's public search index.
+ @param type The type to use for the NSUserActivity, taken from the list of constants provided in the MobileCoreServices framework.
+ @param keywords A set of keywords to be used in Apple's search index.
+ @param expirationDate ExpirationDate after which this will not appear in Apple's search index.
+ @param callback Callback called with the Branch url this will fallback to.
+ @warning These functions are only usable on iOS 9 or above. Earlier versions will simply receive the callback with an error.
+ */
+- (void)createDiscoverableContentWithTitle:(NSString *)title description:(NSString *)description thumbnailUrl:(NSURL *)thumbnailUrl linkParams:(NSDictionary *)linkParams type:(NSString *)type publiclyIndexable:(BOOL)publiclyIndexable keywords:(NSSet *)keywords expirationDate:(NSDate *)expirationDate spotlightCallback:(callbackWithUrlAndSpotlightIdentifier)spotlightCallback;
 
 #pragma mark - Referral Code methods
 
@@ -1302,13 +1299,14 @@ typedef NS_ENUM(NSUInteger, BranchPromoCodeUsageType) {
 /// @name Promo Code methods
 ///-------------------------
 
+
 /**
  Get a promo code without providing any parameters.
  
  @param callback The callback that is called with the created referral code object.
  */
-- (void)getPromoCodeWithCallback:(callbackWithParams)callback;
-- (void)getReferralCodeWithCallback:(callbackWithParams)callback __attribute__((deprecated(("Use getPromoCodeCallback: instead"))));;
+- (void)getPromoCodeWithCallback:(callbackWithParams)callback __attribute__((deprecated(("This method has been deprecated. Branch will no longer provide improvements or modifications to referral/promo code functionality."))));
+- (void)getReferralCodeWithCallback:(callbackWithParams)callback __attribute__((deprecated(("This method has been deprecated. Branch will no longer provide improvements or modifications to referral/promo code functionality."))));
 
 /**
  Get a promo code with an amount of credits the code will be worth.
@@ -1316,8 +1314,8 @@ typedef NS_ENUM(NSUInteger, BranchPromoCodeUsageType) {
  @param amount Number of credits generating user will earn when a user is referred by this code.
  @param callback The callback that is called with the created referral code object.
  */
-- (void)getPromoCodeWithAmount:(NSInteger)amount callback:(callbackWithParams)callback;
-- (void)getReferralCodeWithAmount:(NSInteger)amount andCallback:(callbackWithParams)callback __attribute__((deprecated(("Use getPromoCodeWithAmount:callback: instead"))));;
+- (void)getPromoCodeWithAmount:(NSInteger)amount callback:(callbackWithParams)callback __attribute__((deprecated(("This method has been deprecated. Branch will no longer provide any improvements or modifications to referral/promo code functionality."))));
+- (void)getReferralCodeWithAmount:(NSInteger)amount andCallback:(callbackWithParams)callback  __attribute__((deprecated(("This method has been deprecated. Branch will no longer provide any improvements or modifications to referral/promo code functionality."))));
 
 /**
  Get a promo code with an amount of credits the code will be worth, and a prefix for the code.
@@ -1326,8 +1324,8 @@ typedef NS_ENUM(NSUInteger, BranchPromoCodeUsageType) {
  @param amount Number of credits generating user will earn when a user is referred by this code.
  @param callback The callback that is called with the created referral code object.
  */
-- (void)getPromoCodeWithPrefix:(NSString *)prefix amount:(NSInteger)amount callback:(callbackWithParams)callback;
-- (void)getReferralCodeWithPrefix:(NSString *)prefix amount:(NSInteger)amount andCallback:(callbackWithParams)callback __attribute__((deprecated(("Use getPromoCodeWithPrefix:amount:callback: instead"))));;
+- (void)getPromoCodeWithPrefix:(NSString *)prefix amount:(NSInteger)amount callback:(callbackWithParams)callback __attribute__((deprecated(("This method has been deprecated. Branch will no longer provide any improvements or modifications to referral/promo code functionality."))));
+- (void)getReferralCodeWithPrefix:(NSString *)prefix amount:(NSInteger)amount andCallback:(callbackWithParams)callback  __attribute__((deprecated(("This method has been deprecated. Branch will no longer provide any improvements or modifications to referral/promo code functionality."))));
 
 /**
  Get a promo code with an amount of credits the code will be worth, and an expiration date.
@@ -1336,8 +1334,8 @@ typedef NS_ENUM(NSUInteger, BranchPromoCodeUsageType) {
  @param expiration The date when the code should be invalidated.
  @param callback The callback that is called with the created referral code object.
  */
-- (void)getPromoCodeWithAmount:(NSInteger)amount expiration:(NSDate *)expiration callback:(callbackWithParams)callback;
-- (void)getReferralCodeWithAmount:(NSInteger)amount expiration:(NSDate *)expiration andCallback:(callbackWithParams)callback __attribute__((deprecated(("Use getPromoCodeWithAmount:expiration:callback: instead"))));
+- (void)getPromoCodeWithAmount:(NSInteger)amount expiration:(NSDate *)expiration callback:(callbackWithParams)callback __attribute__((deprecated(("This method has been deprecated. Branch will no longer provide any improvements or modifications to referral/promo code functionality."))));
+- (void)getReferralCodeWithAmount:(NSInteger)amount expiration:(NSDate *)expiration andCallback:(callbackWithParams)callback  __attribute__((deprecated(("This method has been deprecated. Branch will no longer provide any improvements or modifications to referral/promo code functionality."))));
 
 /**
  Get a promo code with an amount of credits the code will be worth, the prefix to put in front of it, and an expiration date.
@@ -1347,8 +1345,8 @@ typedef NS_ENUM(NSUInteger, BranchPromoCodeUsageType) {
  @param expiration The date when the code should be invalidated.
  @param callback The callback that is called with the created referral code object.
  */
-- (void)getPromoCodeWithPrefix:(NSString *)prefix amount:(NSInteger)amount expiration:(NSDate *)expiration callback:(callbackWithParams)callback;
-- (void)getReferralCodeWithPrefix:(NSString *)prefix amount:(NSInteger)amount expiration:(NSDate *)expiration andCallback:(callbackWithParams)callback __attribute__((deprecated(("Use getPromoCodeWithPrefix:amount:expiration:callback: instead"))));
+- (void)getPromoCodeWithPrefix:(NSString *)prefix amount:(NSInteger)amount expiration:(NSDate *)expiration callback:(callbackWithParams)callback __attribute__((deprecated(("This method has been deprecated. Branch will no longer provide any improvements or modifications to referral/promo code functionality."))));
+- (void)getReferralCodeWithPrefix:(NSString *)prefix amount:(NSInteger)amount expiration:(NSDate *)expiration andCallback:(callbackWithParams)callback __attribute__((deprecated(("This method has been deprecated. Branch will no longer provide any improvements or modifications to referral/promo code functionality."))));
 
 /**
  Get a promo code with an amount of credits the code will be worth, the prefix to put in front of it, an expiration date, the bucket it will be part of, the calculation method, and location of user earning credits.
@@ -1361,8 +1359,8 @@ typedef NS_ENUM(NSUInteger, BranchPromoCodeUsageType) {
  @param location The location of the user who earns credits for the referral, one of Referrer, Referree (the referred user), or Both.
  @param callback The callback that is called with the created referral code object.
  */
-- (void)getPromoCodeWithPrefix:(NSString *)prefix amount:(NSInteger)amount expiration:(NSDate *)expiration bucket:(NSString *)bucket usageType:(BranchPromoCodeUsageType)usageType rewardLocation:(BranchPromoCodeRewardLocation)rewardLocation callback:(callbackWithParams)callback;
-- (void)getReferralCodeWithPrefix:(NSString *)prefix amount:(NSInteger)amount expiration:(NSDate *)expiration bucket:(NSString *)bucket calculationType:(BranchPromoCodeUsageType)calcType location:(BranchPromoCodeRewardLocation)location andCallback:(callbackWithParams)callback __attribute__((deprecated(("Use getPromoCodeWithPrefix:amount:expiration:bucket:usageType:rewardLocation:callback: instead"))));
+- (void)getPromoCodeWithPrefix:(NSString *)prefix amount:(NSInteger)amount expiration:(NSDate *)expiration bucket:(NSString *)bucket usageType:(BranchPromoCodeUsageType)usageType rewardLocation:(BranchPromoCodeRewardLocation)rewardLocation callback:(callbackWithParams)callback __attribute__((deprecated(("This method has been deprecated. Branch will no longer provide any improvements or modifications to referral/promo code functionality."))));
+- (void)getReferralCodeWithPrefix:(NSString *)prefix amount:(NSInteger)amount expiration:(NSDate *)expiration bucket:(NSString *)bucket calculationType:(BranchPromoCodeUsageType)calcType location:(BranchPromoCodeRewardLocation)location andCallback:(callbackWithParams)callback  __attribute__((deprecated(("This method has been deprecated. Branch will no longer provide any improvements or modifications to referral/promo code functionality."))));
 
 /**
  Validate a promo code. Will callback with the referral code object on success, or an error if it's invalid.
@@ -1370,8 +1368,8 @@ typedef NS_ENUM(NSUInteger, BranchPromoCodeUsageType) {
  @param code The referral code to validate
  @param callback The callback that is called with the referral code object on success, or an error if it's invalid.
  */
-- (void)validatePromoCode:(NSString *)code callback:(callbackWithParams)callback;
-- (void)validateReferralCode:(NSString *)code andCallback:(callbackWithParams)callback __attribute__((deprecated(("Use validatePromoCode:callback: instead"))));
+- (void)validatePromoCode:(NSString *)code callback:(callbackWithParams)callback __attribute__((deprecated(("This method has been deprecated. Branch will no longer provide any improvements or modifications to referral/promo code functionality."))));
+- (void)validateReferralCode:(NSString *)code andCallback:(callbackWithParams)callback  __attribute__((deprecated(("This method has been deprecated. Branch will no longer provide any improvements or modifications to referral/promo code functionality."))));
 
 /**
  Apply a promo code, awarding the referral points. Will callback with the referral code object on success, or an error if it's invalid.
@@ -1379,8 +1377,8 @@ typedef NS_ENUM(NSUInteger, BranchPromoCodeUsageType) {
  @param code The referral code to validate
  @param callback The callback that is called with the referral code object on success, or an error if it's invalid.
  */
-- (void)applyPromoCode:(NSString *)code callback:(callbackWithParams)callback;
-- (void)applyReferralCode:(NSString *)code andCallback:(callbackWithParams)callback __attribute__((deprecated(("Use applyPromoCode:callback: instead"))));
+- (void)applyPromoCode:(NSString *)code callback:(callbackWithParams)callback __attribute__((deprecated(("This method has been deprecated. Branch will no longer provide any improvements or modifications to referral/promo code functionality."))));
+- (void)applyReferralCode:(NSString *)code andCallback:(callbackWithParams)callback  __attribute__((deprecated(("This method has been deprecated. Branch will no longer provide any improvements or modifications to referral/promo code functionality."))));
 
 /**
  Method for creating a one of Branch instance and specifying its dependencies.
@@ -1390,17 +1388,15 @@ typedef NS_ENUM(NSUInteger, BranchPromoCodeUsageType) {
 - (id)initWithInterface:(BNCServerInterface *)interface queue:(BNCServerRequestQueue *)queue cache:(BNCLinkCache *)cache preferenceHelper:(BNCPreferenceHelper *)preferenceHelper key:(NSString *)key;
 
 /**
- Method for logging a message to the Branch server, used when remote debugging is enabled.
- 
- @warning This is meant for use internally only (exposed for the sake of testing) and should not be used by apps.
- */
-- (void)log:(NSString *)log;
-
-/**
  Method used by BranchUniversalObject to register a view on content
  
  @warning This is meant for use internally only and should not be used by apps.
  */
 - (void)registerViewWithParams:(NSDictionary *)params andCallback:(callbackWithParams)callback;
+
+/**
+ Method used by external Branch libs to initiate server requests
+ */
+- (void)executeGenericRequest:(BNCServerRequest*)request;
 
 @end

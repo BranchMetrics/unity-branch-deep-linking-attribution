@@ -35,9 +35,6 @@
 #import "BranchCloseRequest.h"
 #import "BranchOpenRequest.h"
 #import "BranchInstallRequest.h"
-#import "BranchConnectDebugRequest.h"
-#import "BranchDisconnectDebugRequest.h"
-#import "BranchLogRequest.h"
 #import "BranchSpotlightUrlRequest.h"
 #import "BranchRegisterViewRequest.h"
 
@@ -57,15 +54,12 @@ NSString * const BRANCH_INIT_KEY_REFERRER = @"+referrer";
 NSString * const BRANCH_INIT_KEY_PHONE_NUMBER = @"+phone_number";
 NSString * const BRANCH_INIT_KEY_IS_FIRST_SESSION = @"+is_first_session";
 NSString * const BRANCH_INIT_KEY_CLICKED_BRANCH_LINK = @"+clicked_branch_link";
+NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
 
-static int BNCDebugTriggerDuration = 3;
-static int BNCDebugTriggerFingers = 4;
-static int BNCDebugTriggerFingersSimulator = 2;
+@interface Branch() <BranchDeepLinkingControllerCompletionDelegate>
 
-@interface Branch() <UIGestureRecognizerDelegate, BranchDeepLinkingControllerCompletionDelegate>
 
 @property (strong, nonatomic) BNCServerInterface *bServerInterface;
-
 @property (strong, nonatomic) NSTimer *sessionTimer;
 @property (strong, nonatomic) BNCServerRequestQueue *requestQueue;
 @property (strong, nonatomic) dispatch_semaphore_t processing_sema;
@@ -83,7 +77,10 @@ static int BNCDebugTriggerFingersSimulator = 2;
 @property (strong, nonatomic) NSString *branchKey;
 @property (strong, nonatomic) NSMutableDictionary *deepLinkControllers;
 @property (weak, nonatomic) UIViewController *deepLinkPresentingController;
-@property (nonatomic) BOOL cookieBasedMatchingEnabled;
+@property (assign, nonatomic) BOOL useCookieBasedMatching;
+@property (strong, nonatomic) NSDictionary *deepLinkDebugParams;
+@property (assign, nonatomic) BOOL accountForFacebookSDK;
+
 
 @end
 
@@ -96,7 +93,7 @@ static int BNCDebugTriggerFingersSimulator = 2;
 
 + (Branch *)getInstance {
     BNCPreferenceHelper *preferenceHelper = [BNCPreferenceHelper preferenceHelper];
-
+    
     // If no Branch Key
     NSString *branchKey = [preferenceHelper getBranchKey:YES];
     NSString *keyToUse = branchKey;
@@ -112,13 +109,13 @@ static int BNCDebugTriggerFingersSimulator = 2;
             NSLog(@"Usage of App Key is deprecated, please move toward using a Branch key");
         }
     }
-
+    
     return [Branch getInstanceInternal:keyToUse returnNilIfNoCurrentInstance:NO];
 }
 
 + (Branch *)getTestInstance {
     BNCPreferenceHelper *preferenceHelper = [BNCPreferenceHelper preferenceHelper];
-
+    
     // If no Branch Key
     NSString *branchKey = [preferenceHelper getBranchKey:NO];
     NSString *keyToUse = branchKey;
@@ -135,13 +132,13 @@ static int BNCDebugTriggerFingersSimulator = 2;
             keyToUse = appKey;
         }
     }
-
+    
     return [Branch getInstanceInternal:keyToUse returnNilIfNoCurrentInstance:NO];
 }
 
 + (Branch *)getInstance:(NSString *)branchKey {
     BNCPreferenceHelper *preferenceHelper = [BNCPreferenceHelper preferenceHelper];
-
+    
     if ([branchKey rangeOfString:@"key_"].location != NSNotFound) {
         preferenceHelper.branchKey = branchKey;
     }
@@ -167,6 +164,7 @@ static int BNCDebugTriggerFingersSimulator = 2;
         _processing_sema = dispatch_semaphore_create(1);
         _networkCount = 0;
         _deepLinkControllers = [[NSMutableDictionary alloc] init];
+        _useCookieBasedMatching = YES;
         
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
         [notificationCenter addObserver:self selector:@selector(applicationWillResignActive) name:UIApplicationWillResignActiveNotification object:nil];
@@ -253,31 +251,18 @@ static int BNCDebugTriggerFingersSimulator = 2;
     self.preferenceHelper.retryInterval = retryInterval;
 }
 
-- (void)enableCookieBasedMatching {
-    self.cookieBasedMatchingEnabled = YES;
+- (void)disableCookieBasedMatching {
+    self.useCookieBasedMatching = NO;
 }
 
+- (void)accountForFacebookSDKPreventingAppLaunch {
+    self.accountForFacebookSDK = YES;
+}
 
 #pragma mark - InitSession Permutation methods
 
-- (void)initSession {
-    [self initSessionWithLaunchOptions:nil isReferrable:YES explicitlyRequestedReferrable:NO automaticallyDisplayController:NO registerDeepLinkHandler:nil];
-}
-
-- (void)initSessionAndAutomaticallyDisplayDeepLinkController:(BOOL)automaticallyDisplayController {
-    [self initSessionWithLaunchOptions:nil isReferrable:YES explicitlyRequestedReferrable:NO automaticallyDisplayController:automaticallyDisplayController registerDeepLinkHandler:nil];
-}
-
 - (void)initSessionWithLaunchOptions:(NSDictionary *)options {
     [self initSessionWithLaunchOptions:options isReferrable:YES explicitlyRequestedReferrable:NO automaticallyDisplayController:NO registerDeepLinkHandler:nil];
-}
-
-- (void)initSession:(BOOL)isReferrable {
-    [self initSessionWithLaunchOptions:nil isReferrable:isReferrable explicitlyRequestedReferrable:YES automaticallyDisplayController:NO registerDeepLinkHandler:nil];
-}
-
-- (void)initSessionAndRegisterDeepLinkHandler:(callbackWithParams)callback {
-    [self initSessionWithLaunchOptions:nil isReferrable:YES explicitlyRequestedReferrable:NO automaticallyDisplayController:NO registerDeepLinkHandler:callback];
 }
 
 - (void)initSessionWithLaunchOptions:(NSDictionary *)options andRegisterDeepLinkHandler:(callbackWithParams)callback {
@@ -296,18 +281,6 @@ static int BNCDebugTriggerFingersSimulator = 2;
     [self initSessionWithLaunchOptions:options isReferrable:YES explicitlyRequestedReferrable:NO automaticallyDisplayController:automaticallyDisplayController registerDeepLinkHandler:nil];
 }
 
-- (void)initSession:(BOOL)isReferrable andRegisterDeepLinkHandler:(callbackWithParams)callback {
-    [self initSessionWithLaunchOptions:nil isReferrable:isReferrable explicitlyRequestedReferrable:YES automaticallyDisplayController:NO registerDeepLinkHandler:callback];
-}
-
-- (void)initSession:(BOOL)isReferrable automaticallyDisplayDeepLinkController:(BOOL)automaticallyDisplayController {
-    [self initSessionWithLaunchOptions:nil isReferrable:isReferrable explicitlyRequestedReferrable:YES automaticallyDisplayController:automaticallyDisplayController registerDeepLinkHandler:nil];
-}
-
-- (void)initSessionAndAutomaticallyDisplayDeepLinkController:(BOOL)automaticallyDisplayController deepLinkHandler:(callbackWithParams)callback {
-    [self initSessionWithLaunchOptions:nil isReferrable:YES explicitlyRequestedReferrable:NO automaticallyDisplayController:automaticallyDisplayController registerDeepLinkHandler:callback];
-}
-
 - (void)initSessionWithLaunchOptions:(NSDictionary *)options isReferrable:(BOOL)isReferrable andRegisterDeepLinkHandler:(callbackWithParams)callback {
     [self initSessionWithLaunchOptions:options isReferrable:isReferrable explicitlyRequestedReferrable:YES automaticallyDisplayController:NO registerDeepLinkHandler:callback];
 }
@@ -318,10 +291,6 @@ static int BNCDebugTriggerFingersSimulator = 2;
 
 - (void)initSessionWithLaunchOptions:(NSDictionary *)options isReferrable:(BOOL)isReferrable automaticallyDisplayDeepLinkController:(BOOL)automaticallyDisplayController {
     [self initSessionWithLaunchOptions:options isReferrable:isReferrable explicitlyRequestedReferrable:YES automaticallyDisplayController:automaticallyDisplayController registerDeepLinkHandler:nil];
-}
-
-- (void)initSessionAndAutomaticallyDisplayDeepLinkController:(BOOL)automaticallyDisplayController isReferrable:(BOOL)isReferrable deepLinkHandler:(callbackWithParams)callback {
-    [self initSessionWithLaunchOptions:nil isReferrable:isReferrable explicitlyRequestedReferrable:YES automaticallyDisplayController:automaticallyDisplayController registerDeepLinkHandler:callback];
 }
 
 - (void)initSessionWithLaunchOptions:(NSDictionary *)options automaticallyDisplayDeepLinkController:(BOOL)automaticallyDisplayController isReferrable:(BOOL)isReferrable deepLinkHandler:(callbackWithParams)callback {
@@ -341,11 +310,20 @@ static int BNCDebugTriggerFingersSimulator = 2;
     [self initSessionWithLaunchOptions:options isReferrable:isReferrable explicitlyRequestedReferrable:explicitlyRequestedReferrable automaticallyDisplayController:automaticallyDisplayController];
 }
 
+
 - (void)initSessionWithLaunchOptions:(NSDictionary *)options isReferrable:(BOOL)isReferrable explicitlyRequestedReferrable:(BOOL)explicitlyRequestedReferrable automaticallyDisplayController:(BOOL)automaticallyDisplayController {
     self.shouldAutomaticallyDeepLink = automaticallyDisplayController;
     
     self.preferenceHelper.isReferrable = isReferrable;
     self.preferenceHelper.explicitlyRequestedReferrable = explicitlyRequestedReferrable;
+
+    // Handle push notification on app launch
+    if ([options objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey]) {
+        id branchUrlFromPush = [options objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey][BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY];
+        if ([branchUrlFromPush isKindOfClass:[NSString class]]) {
+            self.preferenceHelper.universalLinkUrl = branchUrlFromPush;
+        }
+    }
     
     if ([BNCSystemObserver getOSVersion].integerValue >= 8) {
         if (![options objectForKey:UIApplicationLaunchOptionsURLKey] && ![options objectForKey:UIApplicationLaunchOptionsUserActivityDictionaryKey]) {
@@ -353,18 +331,33 @@ static int BNCDebugTriggerFingersSimulator = 2;
         }
         else if ([options objectForKey:UIApplicationLaunchOptionsUserActivityDictionaryKey]) {
             self.preferenceHelper.isContinuingUserActivity = YES;
+            if (self.accountForFacebookSDK) {
+                id activity = [[options objectForKey:UIApplicationLaunchOptionsUserActivityDictionaryKey] objectForKey:@"UIApplicationLaunchOptionsUserActivityKey"];
+                if (activity && [activity isKindOfClass:[NSUserActivity class]]) {
+                    [self continueUserActivity:activity];
+                }
+            }
         }
     }
-    else {
-        if (![options objectForKey:UIApplicationLaunchOptionsURLKey]) {
-            [self initUserSessionAndCallCallback:YES];
-        }
+    else if (![options objectForKey:UIApplicationLaunchOptionsURLKey]) {
+        [self initUserSessionAndCallCallback:YES];
     }
 }
+
+
+
+//these params will be added
+- (void) setDeepLinkDebugMode:(NSDictionary *)debugParams {
+    self.deepLinkDebugParams = debugParams;
+}
+
 
 - (BOOL)handleDeepLink:(NSURL *)url {
     BOOL handled = NO;
     if (url) {
+        //always save the incoming url in the preferenceHelper in the externalIntentURI field
+        self.preferenceHelper.externalIntentURI = [url absoluteString];
+
         NSString *query = [url fragment];
         if (!query) {
             query = [url query];
@@ -383,15 +376,28 @@ static int BNCDebugTriggerFingersSimulator = 2;
 }
 
 - (BOOL)continueUserActivity:(NSUserActivity *)userActivity {
+    //check to see if a browser activity needs to be handled
     if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb]) {
         self.preferenceHelper.universalLinkUrl = [userActivity.webpageURL absoluteString];
-        
         [self initUserSessionAndCallCallback:YES];
         self.preferenceHelper.isContinuingUserActivity = NO;
+        
+        id branchUniversalLinkDomains = [self.preferenceHelper getBranchUniversalLinkDomains];
+        if ([branchUniversalLinkDomains isKindOfClass:[NSString class]] && [[userActivity.webpageURL absoluteString] containsString:branchUniversalLinkDomains]) {
+            return YES;
+        }
+        else if ([branchUniversalLinkDomains isKindOfClass:[NSArray class]]) {
+            for (id oneDomain in branchUniversalLinkDomains) {
+                if ([oneDomain isKindOfClass:[NSString class]] && [[userActivity.webpageURL absoluteString] containsString:oneDomain]) {
+                    return YES;
+                }
+            }
+        }
         
         return [[userActivity.webpageURL absoluteString] containsString:@"bnc.lt"];
     }
     
+    //check to see if a spotlight activity needs to be handled
     NSString *spotlightIdentifier = [self.contentDiscoveryManager spotlightIdentifierFromActivity:userActivity];
     
     if (spotlightIdentifier) {
@@ -407,6 +413,37 @@ static int BNCDebugTriggerFingersSimulator = 2;
     self.preferenceHelper.isContinuingUserActivity = NO;
     
     return spotlightIdentifier != nil;
+}
+
+#pragma mark - Generic Request support
+
+- (void)executeGenericRequest:(BNCServerRequest*)request {
+    [self initSessionIfNeededAndNotInProgress];
+    [self.requestQueue enqueue:request];
+    [self processNextQueueItem];
+}
+
+
+#pragma mark - Push Notification support
+
+// handle push notification if app is already launched
+- (void)handlePushNotification:(NSDictionary *) userInfo {
+    // If app is active, then close out the session and start a new one
+    if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
+        [self callClose];
+    }
+
+    // look for a branch shortlink in the payload (shortlink because iOS7 only supports 256 bytes)
+    NSString *urlStr = [userInfo objectForKey:BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY];
+    if (urlStr) {
+        // reusing this field, so as not to create yet another url slot on prefshelper
+        self.preferenceHelper.universalLinkUrl = urlStr;
+    }
+
+    // Again, if app is active, then close out the session and start a new one
+    if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
+        [self applicationDidBecomeActive];
+    }
 }
 
 
@@ -431,10 +468,7 @@ static int BNCDebugTriggerFingersSimulator = 2;
         return;
     }
     
-    if (!self.isInitialized && !self.preferenceHelper.isContinuingUserActivity) {
-        [self initUserSessionAndCallCallback:NO];
-    }
-    
+    [self initSessionIfNeededAndNotInProgress];
     
     BranchSetIdentityRequest *req = [[BranchSetIdentityRequest alloc] initWithUserId:userId callback:callback];
     [self.requestQueue enqueue:req];
@@ -442,15 +476,34 @@ static int BNCDebugTriggerFingersSimulator = 2;
 }
 
 - (void)logout {
+    [self logoutWithCallback:nil];
+}
+
+
+- (void)logoutWithCallback:(callbackWithStatus)callback {
     if (!self.isInitialized) {
         NSLog(@"Branch is not initialized, cannot logout");
-        return;
+        if (callback) {callback(NO, nil);}
     }
     
     BranchLogoutRequest *req = [[BranchLogoutRequest alloc] initWithCallback:^(BOOL success, NSError *error) {
         if (success) {
             // Clear cached links
             self.linkCache = [[BNCLinkCache alloc] init];
+            
+            if (callback) {
+                callback(YES, nil);
+            }
+            if (self.preferenceHelper.isDebug) {
+                NSLog(@"Logout Success");
+            }
+        } else /*failure*/ {
+            if (callback) {
+                callback(NO, error);
+            }
+            if (self.preferenceHelper.isDebug) {
+                NSLog(@"Logout Failure");
+            }
         }
     }];
     
@@ -459,12 +512,11 @@ static int BNCDebugTriggerFingersSimulator = 2;
 }
 
 
+
 #pragma mark - User Action methods
 
 - (void)loadActionCountsWithCallback:(callbackWithStatus)callback {
-    if (!self.isInitialized && !self.preferenceHelper.isContinuingUserActivity) {
-        [self initUserSessionAndCallCallback:NO];
-    }
+    [self initSessionIfNeededAndNotInProgress];
     
     BranchLoadActionsRequest *req = [[BranchLoadActionsRequest alloc] initWithCallback:callback];
     [self.requestQueue enqueue:req];
@@ -488,9 +540,7 @@ static int BNCDebugTriggerFingersSimulator = 2;
         return;
     }
     
-    if (!self.isInitialized && !self.preferenceHelper.isContinuingUserActivity) {
-        [self initUserSessionAndCallCallback:NO];
-    }
+    [self initSessionIfNeededAndNotInProgress];
     
     BranchUserCompletedActionRequest *req = [[BranchUserCompletedActionRequest alloc] initWithAction:action state:state];
     [self.requestQueue enqueue:req];
@@ -501,9 +551,7 @@ static int BNCDebugTriggerFingersSimulator = 2;
 #pragma mark - Credit methods
 
 - (void)loadRewardsWithCallback:(callbackWithStatus)callback {
-    if (!self.isInitialized && !self.preferenceHelper.isContinuingUserActivity) {
-        [self initUserSessionAndCallCallback:NO];
-    }
+    [self initSessionIfNeededAndNotInProgress];
     
     BranchLoadRewardsRequest *req = [[BranchLoadRewardsRequest alloc] initWithCallback:callback];
     [self.requestQueue enqueue:req];
@@ -552,9 +600,7 @@ static int BNCDebugTriggerFingersSimulator = 2;
         return;
     }
     
-    if (!self.isInitialized && !self.preferenceHelper.isContinuingUserActivity) {
-        [self initUserSessionAndCallCallback:NO];
-    }
+    [self initSessionIfNeededAndNotInProgress];
     
     BranchRedeemRewardsRequest *req = [[BranchRedeemRewardsRequest alloc] initWithAmount:count bucket:bucket callback:callback];
     [self.requestQueue enqueue:req];
@@ -574,9 +620,7 @@ static int BNCDebugTriggerFingersSimulator = 2;
 }
 
 - (void)getCreditHistoryForBucket:(NSString *)bucket after:(NSString *)creditTransactionId number:(NSInteger)length order:(BranchCreditHistoryOrder)order andCallback:(callbackWithList)callback {
-    if (!self.isInitialized && !self.preferenceHelper.isContinuingUserActivity) {
-        [self initUserSessionAndCallCallback:NO];
-    }
+    [self initSessionIfNeededAndNotInProgress];
     
     BranchCreditHistoryRequest *req = [[BranchCreditHistoryRequest alloc] initWithBucket:bucket creditTransactionId:creditTransactionId length:length order:order callback:callback];
     [self.requestQueue enqueue:req];
@@ -600,11 +644,25 @@ static int BNCDebugTriggerFingersSimulator = 2;
 }
 
 - (NSDictionary *)getFirstReferringParams {
-    return [BNCEncodingUtils decodeJsonStringToDictionary:self.preferenceHelper.installParams];
+    NSDictionary *origInstallParams = [BNCEncodingUtils decodeJsonStringToDictionary:self.preferenceHelper.installParams];
+    
+    if (self.deepLinkDebugParams) {
+        NSMutableDictionary* debugInstallParams = [[BNCEncodingUtils decodeJsonStringToDictionary:self.preferenceHelper.sessionParams] mutableCopy];
+        [debugInstallParams addEntriesFromDictionary:self.deepLinkDebugParams];
+        return debugInstallParams;
+    }
+    return origInstallParams;
 }
 
 - (NSDictionary *)getLatestReferringParams {
-    return [BNCEncodingUtils decodeJsonStringToDictionary:self.preferenceHelper.sessionParams];
+    NSDictionary *origSessionParams = [BNCEncodingUtils decodeJsonStringToDictionary:self.preferenceHelper.sessionParams];
+    
+    if (self.deepLinkDebugParams) {
+        NSMutableDictionary* debugSessionParams = [origSessionParams mutableCopy];
+        [debugSessionParams addEntriesFromDictionary:self.deepLinkDebugParams];
+        return debugSessionParams;
+    }
+    return origSessionParams;
 }
 
 - (BranchUniversalObject *)getLatestReferringBranchUniversalObject {
@@ -749,9 +807,7 @@ static int BNCDebugTriggerFingersSimulator = 2;
 }
 
 - (void)getSpotlightUrlWithParams:(NSDictionary *)params callback:(callbackWithParams)callback {
-    if (!self.isInitialized && !self.preferenceHelper.isContinuingUserActivity) {
-        [self initUserSessionAndCallCallback:NO];
-    }
+    [self initSessionIfNeededAndNotInProgress];
     
     BranchSpotlightUrlRequest *req = [[BranchSpotlightUrlRequest alloc] initWithParams:params callback:callback];
     [self.requestQueue enqueue:req];
@@ -828,6 +884,14 @@ static int BNCDebugTriggerFingersSimulator = 2;
 - (void)createDiscoverableContentWithTitle:(NSString *)title description:(NSString *)description thumbnailUrl:(NSURL *)thumbnailUrl linkParams:(NSDictionary *)linkParams type:(NSString *)type publiclyIndexable:(BOOL)publiclyIndexable keywords:(NSSet *)keywords callback:(callbackWithUrl)callback {
     [self.contentDiscoveryManager indexContentWithTitle:title description:description publiclyIndexable:publiclyIndexable type:type thumbnailUrl:thumbnailUrl keywords:keywords userInfo:linkParams callback:callback];
 }
+- (void)createDiscoverableContentWithTitle:(NSString *)title description:(NSString *)description thumbnailUrl:(NSURL *)thumbnailUrl linkParams:(NSDictionary *)linkParams type:(NSString *)type publiclyIndexable:(BOOL)publiclyIndexable keywords:(NSSet *)keywords expirationDate:(NSDate *)expirationDate callback:(callbackWithUrl)callback {
+    [self.contentDiscoveryManager indexContentWithTitle:title description:description publiclyIndexable:publiclyIndexable type:type thumbnailUrl:thumbnailUrl keywords:keywords userInfo:linkParams expirationDate:expirationDate callback:callback];
+}
+
+//Use this with iOS 9+ only
+- (void)createDiscoverableContentWithTitle:(NSString *)title description:(NSString *)description thumbnailUrl:(NSURL *)thumbnailUrl linkParams:(NSDictionary *)linkParams type:(NSString *)type publiclyIndexable:(BOOL)publiclyIndexable keywords:(NSSet *)keywords expirationDate:(NSDate *)expirationDate spotlightCallback:(callbackWithUrlAndSpotlightIdentifier)spotlightCallback {
+    [self.contentDiscoveryManager indexContentWithTitle:title description:description publiclyIndexable:publiclyIndexable type:type thumbnailUrl:thumbnailUrl keywords:keywords userInfo:linkParams expirationDate:expirationDate callback:nil spotlightCallback:spotlightCallback];
+}
 
 #pragma mark - Referral methods
 
@@ -896,9 +960,7 @@ static int BNCDebugTriggerFingersSimulator = 2;
 }
 
 - (void)getPromoCodeWithPrefix:(NSString *)prefix amount:(NSInteger)amount expiration:(NSDate *)expiration bucket:(NSString *)bucket usageType:(BranchPromoCodeUsageType)usageType rewardLocation:(BranchPromoCodeRewardLocation)rewardLocation useOld:(BOOL)useOld callback:(callbackWithParams)callback {
-    if (!self.isInitialized && !self.preferenceHelper.isContinuingUserActivity) {
-        [self initUserSessionAndCallCallback:NO];
-    }
+    [self initSessionIfNeededAndNotInProgress];
     
     if (!bucket) {
         bucket = @"default";
@@ -925,9 +987,7 @@ static int BNCDebugTriggerFingersSimulator = 2;
         return;
     }
     
-    if (!self.isInitialized && !self.preferenceHelper.isContinuingUserActivity) {
-        [self initUserSessionAndCallCallback:NO];
-    }
+    [self initSessionIfNeededAndNotInProgress];
     
     BranchValidatePromoCodeRequest *req = [[BranchValidatePromoCodeRequest alloc] initWithCode:code useOld:useOld callback:callback];
     [self.requestQueue enqueue:req];
@@ -950,21 +1010,10 @@ static int BNCDebugTriggerFingersSimulator = 2;
         return;
     }
     
-    if (!self.isInitialized && !self.preferenceHelper.isContinuingUserActivity) {
-        [self initUserSessionAndCallCallback:NO];
-    }
-    
+    [self initSessionIfNeededAndNotInProgress];
     
     BranchApplyPromoCodeRequest *req = [[BranchApplyPromoCodeRequest alloc] initWithCode:code useOld:useOld callback:callback];
     [self.requestQueue enqueue:req];
-    [self processNextQueueItem];
-}
-
-
-#pragma mark - Logging
-- (void)log:(NSString *)log {
-    BranchLogRequest *request = [[BranchLogRequest alloc] initWithLog:log];
-    [self.requestQueue enqueue:request];
     [self processNextQueueItem];
 }
 
@@ -1010,9 +1059,7 @@ static int BNCDebugTriggerFingersSimulator = 2;
 #pragma mark - URL Generation methods
 
 - (void)generateShortUrl:(NSArray *)tags andAlias:(NSString *)alias andType:(BranchLinkType)type andMatchDuration:(NSUInteger)duration andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andParams:(NSDictionary *)params andCallback:(callbackWithUrl)callback {
-    if (!self.isInitialized && !self.preferenceHelper.isContinuingUserActivity) {
-        [self initUserSessionAndCallCallback:NO];
-    }
+    [self initSessionIfNeededAndNotInProgress];
     
     BNCLinkData *linkData = [self prepareLinkDataFor:tags andAlias:alias andType:type andMatchDuration:duration andChannel:channel andFeature:feature andStage:stage andParams:params ignoreUAString:nil];
     
@@ -1122,9 +1169,7 @@ static int BNCDebugTriggerFingersSimulator = 2;
 #pragma mark - BranchUniversalObject methods
 
 - (void)registerViewWithParams:(NSDictionary *)params andCallback:(callbackWithParams)callback {
-    if (!self.isInitialized && !self.preferenceHelper.isContinuingUserActivity) {
-        [self initUserSessionAndCallCallback:NO];
-    }
+    [self initSessionIfNeededAndNotInProgress];
     
     BranchRegisterViewRequest *req = [[BranchRegisterViewRequest alloc] initWithParams:params andCallback:callback];
     [self.requestQueue enqueue:req];
@@ -1135,11 +1180,9 @@ static int BNCDebugTriggerFingersSimulator = 2;
 #pragma mark - Application State Change methods
 
 - (void)applicationDidBecomeActive {
-    if (!self.isInitialized && !self.preferenceHelper.isContinuingUserActivity) {
+    if (!self.isInitialized && !self.preferenceHelper.isContinuingUserActivity && ![self.requestQueue containsInstallOrOpen]) {
         [self initUserSessionAndCallCallback:YES];
     }
-    
-    [self addDebugGestureRecognizer];
 }
 
 - (void)applicationWillResignActive {
@@ -1252,6 +1295,12 @@ static int BNCDebugTriggerFingersSimulator = 2;
 
 #pragma mark - Session Initialization
 
+- (void)initSessionIfNeededAndNotInProgress {
+    if (!self.isInitialized && !self.preferenceHelper.isContinuingUserActivity && ![self.requestQueue containsInstallOrOpen]) {
+        [self initUserSessionAndCallCallback:NO];
+    }
+}
+
 - (void)initUserSessionAndCallCallback:(BOOL)callCallback {
     self.shouldCallSessionInitCallback = callCallback;
     
@@ -1297,7 +1346,7 @@ static int BNCDebugTriggerFingersSimulator = 2;
         }
     };
     
-    if ([BNCSystemObserver getOSVersion].integerValue >= 9 && self.cookieBasedMatchingEnabled) {
+    if ([BNCSystemObserver getOSVersion].integerValue >= 9 && self.useCookieBasedMatching) {
         [[BNCStrongMatchHelper strongMatchHelper] createStrongMatchWithBranchKey:self.branchKey];
     }
     
@@ -1342,7 +1391,12 @@ static int BNCDebugTriggerFingersSimulator = 2;
         if ([keysInParams count]) {
             NSString *key = [[keysInParams allObjects] firstObject];
             UIViewController <BranchDeepLinkingController> *branchSharingController = self.deepLinkControllers[key];
-            [branchSharingController configureControlWithData:latestReferringParams];
+            if ([branchSharingController respondsToSelector:@selector(configureControlWithData:)]) {
+                [branchSharingController configureControlWithData:latestReferringParams];
+            }
+            else {
+                [self.preferenceHelper log:FILE_NAME line:LINE_NUM message:@"[Branch Warning] View controller does not implement configureControlWithData:"];
+            }
             branchSharingController.deepLinkingCompletionDelegate = self;
             self.deepLinkPresentingController = [[[UIApplication sharedApplication].delegate window] rootViewController];
             
@@ -1382,80 +1436,5 @@ static int BNCDebugTriggerFingersSimulator = 2;
     [self.deepLinkPresentingController dismissViewControllerAnimated:YES completion:NULL];
 }
 
-
-#pragma mark - Debugger functions
-
-- (void)addDebugGestureRecognizer {
-    [self addGesterRecognizer:@selector(connectToDebug:)];
-}
-
-- (void)addCancelDebugGestureRecognizer {
-    [self addGesterRecognizer:@selector(endRemoteDebugging:)];
-}
-
-- (void)addGesterRecognizer:(SEL)action {
-    UIWindow *window = [UIApplication sharedApplication].keyWindow;
-    [window removeGestureRecognizer:self.debugGestureRecognizer]; // Remove existing gesture
-    
-    self.debugGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:action];
-    self.debugGestureRecognizer.delegate = self;
-    self.debugGestureRecognizer.minimumPressDuration = BNCDebugTriggerDuration;
-    
-    if ([BNCSystemObserver isSimulator]) {
-        self.debugGestureRecognizer.numberOfTouchesRequired = BNCDebugTriggerFingersSimulator;
-    }
-    else {
-        self.debugGestureRecognizer.numberOfTouchesRequired = BNCDebugTriggerFingers;
-    }
-    
-    [window addGestureRecognizer:self.debugGestureRecognizer];
-}
-
-- (void)connectToDebug:(UILongPressGestureRecognizer *)sender {
-    if (sender.state == UIGestureRecognizerStateBegan){
-        NSLog(@"======= Start Debug Session =======");
-        BranchConnectDebugRequest *request = [[BranchConnectDebugRequest alloc] initWithCallback:^(BOOL success, NSError *error) {
-            [self startRemoteDebugging];
-        }];
-        
-        [self.requestQueue enqueue:request];
-        [self processNextQueueItem];
-    }
-}
-
-- (void)startRemoteDebugging {
-    NSLog(@"======= Connected to Branch Remote Debugger =======");
-    
-    [[UIApplication sharedApplication].keyWindow removeGestureRecognizer:self.debugGestureRecognizer];
-    [self addCancelDebugGestureRecognizer];
-    
-    //TODO: change to send screenshots instead in future
-    if (!self.debugHeartbeatTimer || !self.debugHeartbeatTimer.isValid) {
-        self.debugHeartbeatTimer = [NSTimer scheduledTimerWithTimeInterval:20 target:self selector:@selector(keepDebugAlive) userInfo:nil repeats:YES];
-    }
-}
-
-- (void)endRemoteDebugging:(UILongPressGestureRecognizer *)sender {
-    NSLog(@"======= End Debug Session =======");
-    
-    [[UIApplication sharedApplication].keyWindow removeGestureRecognizer:sender];
-    BranchDisconnectDebugRequest *request = [[BranchDisconnectDebugRequest alloc] init];
-    [self.requestQueue enqueue:request];
-    [self processNextQueueItem];
-    
-    [self.debugHeartbeatTimer invalidate];
-    [self addDebugGestureRecognizer];
-}
-
-- (void)keepDebugAlive {
-    NSLog(@"[Branch Debug] Sending Keep Alive");
-    [self log:@""];
-}
-
-#pragma mark - UIGestureRecognizerDelegate
-
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-    return YES;
-}
 
 @end

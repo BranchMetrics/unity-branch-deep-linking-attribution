@@ -10,9 +10,9 @@
 #import "BNCConfig.h"
 #import "Branch.h"
 
-static const NSTimeInterval DEFAULT_TIMEOUT = 5;
+static const NSTimeInterval DEFAULT_TIMEOUT = 5.5;
 static const NSTimeInterval DEFAULT_RETRY_INTERVAL = 0;
-static const NSInteger DEFAULT_RETRY_COUNT = 1;
+static const NSInteger DEFAULT_RETRY_COUNT = 3;
 
 NSString * const BRANCH_PREFS_FILE = @"BNCPreferences";
 
@@ -31,6 +31,8 @@ NSString * const BRANCH_PREFS_KEY_SESSION_PARAMS = @"bnc_session_params";
 NSString * const BRANCH_PREFS_KEY_INSTALL_PARAMS = @"bnc_install_params";
 NSString * const BRANCH_PREFS_KEY_USER_URL = @"bnc_user_url";
 NSString * const BRANCH_PREFS_KEY_IS_REFERRABLE = @"bnc_is_referrable";
+NSString * const BRANCH_PREFS_KEY_BRANCH_UNIVERSAL_LINK_DOMAINS = @"branch_universal_link_domains";
+NSString * const BRANCH_REQUEST_KEY_EXTERNAL_INTENT_URI = @"external_intent_uri";
 
 NSString * const BRANCH_PREFS_KEY_CREDITS = @"bnc_credits";
 NSString * const BRANCH_PREFS_KEY_CREDIT_BASE = @"bnc_credit_base_";
@@ -50,9 +52,28 @@ NSString * const BRANCH_PREFS_KEY_UNIQUE_BASE = @"bnc_unique_base_";
 
 @implementation BNCPreferenceHelper
 
-@synthesize branchKey = _branchKey, appKey = _appKey, lastRunBranchKey = _lastRunBranchKey, appVersion = _appVersion, deviceFingerprintID = _deviceFingerprintID, sessionID = _sessionID, spotlightIdentifier = _spotlightIdentifier,
-            identityID = _identityID, linkClickIdentifier = _linkClickIdentifier, userUrl = _userUrl, userIdentity = _userIdentity, sessionParams = _sessionParams, installParams = _installParams, universalLinkUrl = _universalLinkUrl,
-            isReferrable = _isReferrable, isDebug = _isDebug, isConnectedToRemoteDebug = _isConnectedToRemoteDebug, isContinuingUserActivity = _isContinuingUserActivity, retryCount = _retryCount, retryInterval = _retryInterval, timeout = _timeout, lastStrongMatchDate = _lastStrongMatchDate;
+@synthesize branchKey = _branchKey,
+            appKey = _appKey,
+            lastRunBranchKey = _lastRunBranchKey,
+            appVersion = _appVersion,
+            deviceFingerprintID = _deviceFingerprintID,
+            sessionID = _sessionID,
+            spotlightIdentifier = _spotlightIdentifier,
+            identityID = _identityID,
+            linkClickIdentifier = _linkClickIdentifier,
+            userUrl = _userUrl,
+            userIdentity = _userIdentity,
+            sessionParams = _sessionParams,
+            installParams = _installParams,
+            universalLinkUrl = _universalLinkUrl,
+            externalIntentURI = _externalIntentURI,
+            isReferrable = _isReferrable,
+            isDebug = _isDebug,
+            isContinuingUserActivity = _isContinuingUserActivity,
+            retryCount = _retryCount,
+            retryInterval = _retryInterval,
+            timeout = _timeout,
+            lastStrongMatchDate = _lastStrongMatchDate;
 
 + (BNCPreferenceHelper *)preferenceHelper {
     static BNCPreferenceHelper *preferenceHelper;
@@ -72,7 +93,6 @@ NSString * const BRANCH_PREFS_KEY_UNIQUE_BASE = @"bnc_unique_base_";
         _retryInterval = DEFAULT_RETRY_INTERVAL;
         
         _isDebug = NO;
-        _isConnectedToRemoteDebug = NO;
         _explicitlyRequestedReferrable = NO;
         _isReferrable = [self readBoolFromDefaults:BRANCH_PREFS_KEY_IS_REFERRABLE];
     }
@@ -91,6 +111,17 @@ NSString * const BRANCH_PREFS_KEY_UNIQUE_BASE = @"bnc_unique_base_";
     return preferenceHelper;
 }
 
+- (NSOperationQueue *)persistPrefsQueue {
+    static NSOperationQueue *persistPrefsQueue;
+    static dispatch_once_t persistOnceToken;
+    
+    dispatch_once(&persistOnceToken, ^{
+        persistPrefsQueue = [[NSOperationQueue alloc] init];
+        persistPrefsQueue.maxConcurrentOperationCount = 1;
+    });
+
+    return persistPrefsQueue;
+}
 
 #pragma mark - Debug methods
 
@@ -101,10 +132,6 @@ NSString * const BRANCH_PREFS_KEY_UNIQUE_BASE = @"bnc_unique_base_";
         NSString *log = [NSString stringWithFormat:@"[%@:%d] %@", filename, line, [[NSString alloc] initWithFormat:format arguments:args]];
         va_end(args);
         NSLog(@"%@", log);
-        
-        if (self.isConnectedToRemoteDebug) {
-            [[Branch getInstance] log:log];
-        }
     }
 }
 
@@ -251,7 +278,7 @@ NSString * const BRANCH_PREFS_KEY_UNIQUE_BASE = @"bnc_unique_base_";
 }
 
 - (NSString *)userIdentity {
-    if (_userIdentity) {
+    if (!_userIdentity) {
         _userIdentity = [self readStringFromDefaults:BRANCH_PREFS_KEY_IDENTITY];
     }
 
@@ -292,6 +319,20 @@ NSString * const BRANCH_PREFS_KEY_UNIQUE_BASE = @"bnc_unique_base_";
     if (![_spotlightIdentifier isEqualToString:spotlightIdentifier]) {
         _spotlightIdentifier = spotlightIdentifier;
         [self writeObjectToDefaults:BRANCH_PREFS_KEY_SPOTLIGHT_IDENTIFIER value:spotlightIdentifier];
+    }
+}
+
+- (NSString *)externalIntentURI {
+    if (!_externalIntentURI) {
+        _externalIntentURI = [self readStringFromDefaults:BRANCH_REQUEST_KEY_EXTERNAL_INTENT_URI];
+    }
+    return _externalIntentURI;
+}
+
+- (void)setExternalIntentURI:(NSString *)externalIntentURI {
+    if (![_externalIntentURI isEqualToString:externalIntentURI]) {
+        _externalIntentURI = externalIntentURI;
+        [self writeObjectToDefaults:BRANCH_REQUEST_KEY_EXTERNAL_INTENT_URI value:externalIntentURI];
     }
 }
 
@@ -340,7 +381,7 @@ NSString * const BRANCH_PREFS_KEY_UNIQUE_BASE = @"bnc_unique_base_";
     }
 }
 
-- (NSString *)userURL {
+- (NSString *)userUrl {
     if (!_userUrl) {
         _userUrl = [self readStringFromDefaults:BRANCH_PREFS_KEY_USER_URL];
     }
@@ -348,7 +389,7 @@ NSString * const BRANCH_PREFS_KEY_UNIQUE_BASE = @"bnc_unique_base_";
     return _userUrl;
 }
 
-- (void)setUserURL:(NSString *)userUrl {
+- (void)setUserUrl:(NSString *)userUrl {
     if (![_userUrl isEqualToString:userUrl]) {
         _userUrl = userUrl;
         [self writeObjectToDefaults:BRANCH_PREFS_KEY_USER_URL value:userUrl];
@@ -378,6 +419,10 @@ NSString * const BRANCH_PREFS_KEY_UNIQUE_BASE = @"bnc_unique_base_";
 - (void)clearUserCreditsAndCounts {
     self.creditsDictionary = [[NSMutableDictionary alloc] init];
     self.countsDictionary = [[NSMutableDictionary alloc] init];
+}
+
+- (id)getBranchUniversalLinkDomains {
+    return [[[NSBundle mainBundle] infoDictionary] objectForKey:BRANCH_PREFS_KEY_BRANCH_UNIVERSAL_LINK_DOMAINS];
 }
 
 #pragma mark - Credit Storage
@@ -493,11 +538,12 @@ NSString * const BRANCH_PREFS_KEY_UNIQUE_BASE = @"bnc_unique_base_";
 
 - (void)persistPrefsToDisk {
     NSDictionary *persistenceDict = [self.persistenceDict copy];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    NSBlockOperation *newPersistOp = [NSBlockOperation blockOperationWithBlock:^{
         if (![NSKeyedArchiver archiveRootObject:persistenceDict toFile:[self prefsFile]]) {
             NSLog(@"[Branch Warning] Failed to persist preferences to disk");
         }
-    });
+    }];
+    [self.persistPrefsQueue addOperation:newPersistOp];
 }
 
 #pragma mark - Reading From Persistence
