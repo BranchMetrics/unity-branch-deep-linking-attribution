@@ -2,7 +2,7 @@
 #import "UnityAppController.h"
 #import "UI/UnityView.h"
 #import "UI/UnityViewControllerBase.h"
-#import "Branch.h"
+#import "BranchiOSWrapper.h"
 
 @interface BranchAppController : UnityAppController
 {
@@ -12,7 +12,7 @@
 @implementation BranchAppController
 
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray *))restorationHandler {
-    BOOL handledByBranch = [[Branch getInstance] continueUserActivity:userActivity];
+    BOOL handledByBranch = [[BranchUnityWrapper sharedInstance] continueUserActivity:userActivity];
     return handledByBranch;
 }
 

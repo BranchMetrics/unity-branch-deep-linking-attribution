@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Collections;
+using System.Text.RegularExpressions;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Xml;
 using System.IO;
-using System.Text.RegularExpressions;
 
 [CustomEditor(typeof(Branch))]
 public class BranchEditor : Editor {
@@ -23,8 +26,37 @@ public class BranchEditor : Editor {
 		if (GUI.changed) {
 			AssetDatabase.SaveAssets();
 			EditorUtility.SetDirty(BranchData.Instance);
+			UpdateIOSKey();
 		}
 	}
+
+	#region IOS Key update
+
+	private void UpdateIOSKey() {
+		string iosWrapperPath = Path.Combine(Application.dataPath, "Plugins/Branch/iOS/BranchiOSWrapper.mm");
+
+		if (!File.Exists(iosWrapperPath)) {
+			return;
+		}
+
+		StreamReader sr = new StreamReader(iosWrapperPath, Encoding.Default);
+		string [] lines = sr.ReadToEnd().Split('\n').ToArray();
+		sr.Close();
+
+		StreamWriter sw = new StreamWriter(iosWrapperPath, false, Encoding.Default);
+		foreach (string line in lines)
+		{
+			if (line.Contains("static NSString *_branchKey")) {
+				sw.WriteLine("static NSString *_branchKey = @\"" + BranchData.Instance.branchKey + "\";");
+			}
+			else {
+				sw.WriteLine(line);
+			}
+		}
+		sw.Close();
+	}
+
+	#endregion
 
 	#region Manifest update
 

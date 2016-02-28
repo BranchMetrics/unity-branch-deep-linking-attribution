@@ -179,6 +179,15 @@ Branch returns explicit parameters every time. Here is a list, and a description
 | +clicked_branch_link | Denotes whether or not the user clicked a Branch link that triggered this session
 | +click_timestamp | Epoch timestamp of when the click occurred
 
+##### Initialization tips and tricks
+
+Very important thing is to call Branch.InitSession(...) at the start of your app else Branch has not time to registry callback and you will receive nothing.
+
+If you need to process deep linking parameters not at the start (for example after loading all asset bundles or from specific scene of after showing start video etc.) then you can use two ways:
+
+- you can use methods for retrieving install/open parameters (see below),
+- you can use callback listener (simple realization of callback listener you can see in our demo app).
+ 
 
 #### Retrieve session (install or open) parameters
 
