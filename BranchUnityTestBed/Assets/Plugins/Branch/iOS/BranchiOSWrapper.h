@@ -6,6 +6,7 @@
 @property (strong, nonatomic) NSDictionary *launchOptions;
 
 + (BranchUnityWrapper *)sharedInstance;
+- (BOOL)continueUserActivity:(NSUserActivity *)userActivity;
 @end
 
 

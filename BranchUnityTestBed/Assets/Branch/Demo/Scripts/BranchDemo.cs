@@ -11,9 +11,20 @@ public class BranchDemo : MonoBehaviour {
 	public Text lblInstallCountValue;
 	public Text lblBuyCountValue;
 	public Text lblIdentifyUser;
+	public Text lblLog;
 	public GameObject mainPanel;
 	public GameObject creditsHistoryPanel;
 	public GameObject referralCodePanel;
+	public GameObject logPanel;
+
+	public event Action<BranchUniversalObject, BranchLinkProperties> onBranchCallback;
+	private List<BranchUniversalObject> buoQueue = new List<BranchUniversalObject>();
+	private List<BranchLinkProperties> blpQueue = new List<BranchLinkProperties>();
+
+	void Awake() {
+		Application.logMessageReceived += OnLogMessage;
+		lblLog.text = "";
+	}
 
 	void Start() {
 		//init debug mode
@@ -26,6 +37,9 @@ public class BranchDemo : MonoBehaviour {
 
 		// new realization
 		Branch.initSession(CallbackWithBranchUniversalObject);
+
+		// start callback listener to allow defferd processing
+		StartCoroutine(CallbackListener());
 	}
 
 	public void CallbackWithBranchUniversalObject(BranchUniversalObject universalObject, BranchLinkProperties linkProperties, string error) {
@@ -33,15 +47,12 @@ public class BranchDemo : MonoBehaviour {
 			Debug.LogError("Branch Error: " + error);
 		} else {
 			Debug.Log("Branch initialization completed: ");
+
 			Debug.Log("Universal Object: " + universalObject.ToJsonString());
 			Debug.Log("Link Properties: " + linkProperties.ToJsonString());
 
-			// get latest referring params
-			BranchUniversalObject obj = Branch.getLatestReferringBranchUniversalObject();
-			BranchLinkProperties link = Branch.getLatestReferringBranchLinkProperties();
-
-			Debug.Log("LatestReferringBranchUniversalObject: " + obj.ToJsonString());
-			Debug.Log("LatestReferringBranchLinkProperties: " + link.ToJsonString());
+			buoQueue.Add(universalObject);
+			blpQueue.Add(linkProperties);
 		}
 	}
 
@@ -55,6 +66,24 @@ public class BranchDemo : MonoBehaviour {
 			foreach(string str in parameters.Keys) {
 				Debug.Log(str + " : " + parameters[str].ToString());
 			}
+		}
+	}
+
+	private void OnLogMessage(string condition, string stackTrace, LogType type)
+	{
+		var typePrefix = type != LogType.Log ? type + ": " : "";
+		lblLog.text += DateTime.Now.ToLongTimeString() + "> " + typePrefix + condition + "\n";
+	}
+
+	private IEnumerator CallbackListener() {
+		while(true) {
+			if (onBranchCallback != null && buoQueue.Count > 0 && blpQueue.Count > 0) {
+				onBranchCallback(buoQueue[0], blpQueue[0]);
+				buoQueue.RemoveAt(0);
+				blpQueue.RemoveAt(0);
+			}
+
+			yield return new WaitForSeconds(0.5f);
 		}
 	}
 
@@ -269,6 +298,11 @@ public class BranchDemo : MonoBehaviour {
 		mainPanel.SetActive(false);
 	}
 
+	public void OnBtn_LogPanel() {
+		logPanel.SetActive(true);
+		mainPanel.SetActive(false);
+	}
+
 	#endregion
 
 
@@ -286,6 +320,15 @@ public class BranchDemo : MonoBehaviour {
 	
 	public void OnBtn_ReferralCodePanel_Back() {
 		referralCodePanel.SetActive(false);
+		mainPanel.SetActive(true);
+	}
+
+	#endregion
+
+	#region LogPanel
+
+	public void OnBtn_LogPanel_Back() {
+		logPanel.SetActive(false);
 		mainPanel.SetActive(true);
 	}
 

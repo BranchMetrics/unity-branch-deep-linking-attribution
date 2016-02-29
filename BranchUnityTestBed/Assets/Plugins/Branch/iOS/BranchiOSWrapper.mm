@@ -5,7 +5,7 @@
 #import "UnityAppController.h"
 
 
-static NSString *_branchKey;
+static NSString *_branchKey = @"";
 static BranchUnityWrapper *_wrapper = [BranchUnityWrapper sharedInstance];
 
 
@@ -43,6 +43,10 @@ static BranchUnityWrapper *_wrapper = [BranchUnityWrapper sharedInstance];
 - (void)onOpenURL:(NSNotification *)notification {
     NSURL *openURL = notification.userInfo[@"url"];
     [[Branch getInstance:_branchKey] handleDeepLink:openURL];
+}
+
+- (BOOL)continueUserActivity:(NSUserActivity *)userActivity {
+    return [[Branch getInstance:_branchKey] continueUserActivity:userActivity];
 }
 
 @end
@@ -561,4 +565,13 @@ void _validateReferralCodeWithCallback(char *code, char *callbackId) {
 void _applyReferralCodeWithCallback(char *code, char *callbackId) {
     [[Branch getInstance:_branchKey] applyPromoCode:CreateNSString(code) callback:callbackWithParamsForCallbackId(callbackId)];
 }
+
+
+
+
+
+
+
+
+
 
