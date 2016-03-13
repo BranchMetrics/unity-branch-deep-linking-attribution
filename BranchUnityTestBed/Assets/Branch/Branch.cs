@@ -7,6 +7,8 @@ using System.Runtime.InteropServices;
 
 public class Branch : MonoBehaviour {
 
+	public static string sdkVersion = "0.2.3";
+
     public delegate void BranchCallbackWithParams(Dictionary<string, object> parameters, string error);
     public delegate void BranchCallbackWithUrl(string url, string error);
     public delegate void BranchCallbackWithStatus(bool changed, string error);
@@ -268,6 +270,10 @@ public class Branch : MonoBehaviour {
 
 	public static void registerView(BranchUniversalObject universalObject) {
 		_registerView(universalObject.ToJsonString());
+	}
+
+	public static void accountForFacebookSDKPreventingAppLaunch() {
+		_accountForFacebookSDKPreventingAppLaunch();
 	}
 
     #endregion
@@ -827,6 +833,9 @@ public class Branch : MonoBehaviour {
 	[DllImport ("__Internal")]
 	private static extern void _registerView(string universalObject);
 
+	[DllImport ("__Internal")]
+	private static extern void _accountForFacebookSDKPreventingAppLaunch();
+
     [DllImport ("__Internal")]
     private static extern void _loadActionCountsWithCallback(string callbackId);
     
@@ -1035,6 +1044,10 @@ public class Branch : MonoBehaviour {
     
 	private static void _registerView(string universalObject) {
 		BranchAndroidWrapper.registerView(universalObject);
+	}
+
+	private static void _accountForFacebookSDKPreventingAppLaunch() {
+		BranchAndroidWrapper.accountForFacebookSDKPreventingAppLaunch();
 	}
 
     private static void _loadActionCountsWithCallback(string callbackId) {
@@ -1266,6 +1279,8 @@ public class Branch : MonoBehaviour {
     private static void _setNetworkTimeout(int timeout) { }
 
 	private static void _registerView(string universalObject) { }
+
+	private static void _accountForFacebookSDKPreventingAppLaunch() { }
     
     private static void _loadActionCountsWithCallback(string callbackId) {
         callNotImplementedCallbackForStatusCallback(callbackId);

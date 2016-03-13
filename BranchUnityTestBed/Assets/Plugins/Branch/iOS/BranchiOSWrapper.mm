@@ -375,6 +375,10 @@ void _registerView(char *universalObjectJson) {
     [obj registerView];
 }
 
+void _accountForFacebookSDKPreventingAppLaunch() {
+    [[Branch getInstance:_branchKey] accountForFacebookSDKPreventingAppLaunch];
+}
+
 #pragma mark - User Action methods
 
 void _loadActionCountsWithCallback(char *callbackId) {

@@ -136,7 +136,13 @@ public class BranchAndroidWrapper {
 			_getBranchClass().CallStatic("registerView", universalObject);
 		});
 	}
-	
+
+	public static void accountForFacebookSDKPreventingAppLaunch() {
+		_runBlockOnThread(() => {
+		_getBranchClass().CallStatic("accountForFacebookSDKPreventingAppLaunch");
+		});
+	}
+
 	#endregion
     
     #region User Action methods
