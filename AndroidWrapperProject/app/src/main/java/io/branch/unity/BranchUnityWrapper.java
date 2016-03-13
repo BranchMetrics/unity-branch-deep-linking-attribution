@@ -314,6 +314,11 @@ public class BranchUnityWrapper {
         }
     }
 
+    public static void accountForFacebookSDKPreventingAppLaunch() {
+
+    }
+
+
     /**
      * User Action methods
      */

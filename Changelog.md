@@ -1,4 +1,9 @@
 Branch Unity SDK change log
+-v0.2.3
+  * Updating Branch to Android version 1.10.8 and iOS version 0.10.17
+  * Adding accountForFacebookSDKPreventingAppLaunch
+  * Fixing cold launch
+
 -v0.2.2
   * Updating Branch to Android version 1.10.5 and iOS version 0.10.16
   * Fixing BranchAppController

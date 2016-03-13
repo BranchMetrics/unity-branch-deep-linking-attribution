@@ -45,6 +45,7 @@ extern "C" {
     void _setMaxRetries(int maxRetries);
     void _setNetworkTimeout(int timeout);
     void _registerView(char *universalObjectJson);
+    void _accountForFacebookSDKPreventingAppLaunch();
     
     #pragma mark - User Action methods
 
