@@ -519,3 +519,40 @@ The response will return an array that has been parsed from the following JSON:
 1. _1_ - A reward that was added manually
 2. _2_ - A redemption of credits that occurred through our API or SDKs
 3. _3_ - This is a very unique case where we will subtract credits automatically when we detect fraud
+
+##Troubleshooting
+###Several IMPL_APP_CONTROLLER_SUBCLASS
+
+Unity Branch SDK plugin use own UnityAppController that expands default AppController.
+We need to have our own AppController to catch Universal Links.
+
+```
+@interface BranchAppController : UnityAppController
+{
+}
+@end
+
+@implementation BranchAppController
+
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray *))restorationHandler {
+    BOOL handledByBranch = [[BranchUnityWrapper sharedInstance] continueUserActivity:userActivity];
+    return handledByBranch;
+}
+
+@end
+
+IMPL_APP_CONTROLLER_SUBCLASS(BranchAppController)
+```
+
+But some plugins use the same way to expand default AppController, for example:
+
+- Cardboard SDK plugin
+
+#####Solving
+In case when several plugins have custom AppController and expand default AppController through IMPL_APP_CONTROLLER_SUBCLASS you need to do the next:
+
+1. Merge all custom AppControllers in one.
+2. Comment code in other AppControllers (or delete other AppControllers).
+
+
+
