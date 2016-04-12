@@ -5,7 +5,7 @@
 #import "UnityAppController.h"
 
 
-static NSString *_branchKey = @"";
+static NSString *_branchKey =  @"";
 static BranchUnityWrapper *_wrapper = [BranchUnityWrapper sharedInstance];
 
 
@@ -183,8 +183,8 @@ static BranchUniversalObject* branchuniversalObjectFormDict(NSDictionary *univer
         universalObject.keywords = [universalObjectDict[BRANCH_LINK_DATA_KEY_KEYWORDS] copy];
     }
     
-    if (universalObjectDict[@"$metadata"]) {
-        universalObject.metadata = [universalObjectDict[@"$metadata"] copy];
+    if (universalObjectDict[@"metadata"]) {
+        universalObject.metadata = [universalObjectDict[@"metadata"] copy];
     }
     
     return universalObject;
@@ -569,13 +569,3 @@ void _validateReferralCodeWithCallback(char *code, char *callbackId) {
 void _applyReferralCodeWithCallback(char *code, char *callbackId) {
     [[Branch getInstance:_branchKey] applyPromoCode:CreateNSString(code) callback:callbackWithParamsForCallbackId(callbackId)];
 }
-
-
-
-
-
-
-
-
-
-
