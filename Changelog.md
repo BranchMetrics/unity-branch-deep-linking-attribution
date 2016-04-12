@@ -1,4 +1,8 @@
 Branch Unity SDK change log
+-v0.2.4
+  * Fixing metadata
+  * Fixing non-string parameters
+
 -v0.2.3
   * Updating Branch to Android version 1.10.8 and iOS version 0.10.17
   * Adding accountForFacebookSDKPreventingAppLaunch

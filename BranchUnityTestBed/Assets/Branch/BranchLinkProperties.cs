@@ -64,20 +64,20 @@ public class BranchLinkProperties {
 			tags = data["~tags"] as List<String>;
 		}
 		if (data.ContainsKey("~feature")) {
-			feature = data["~feature"] as string;
+			feature = data["~feature"].ToString();
 		}
 		if (data.ContainsKey("~alias")) {
-			alias = data["~alias"] as string;
+			alias = data["~alias"].ToString();
 		}
 		if (data.ContainsKey("~channel")) {
-			channel = data["~channel"] as string;
+			channel = data["~channel"].ToString();
 		}
 		if (data.ContainsKey("~stage")) {
-			stage = data["~stage"] as string;
+			stage = data["~stage"].ToString();
 		}
 		if (data.ContainsKey("~duration")) {
-			if (!string.IsNullOrEmpty(data["~duration"] as string)) {
-				matchDuration = Convert.ToInt32(data["~duration"] as string);
+			if (!string.IsNullOrEmpty(data["~duration"].ToString())) {
+				matchDuration = Convert.ToInt32(data["~duration"].ToString());
 			}
 		}
 		if (data.ContainsKey("control_params")) {
@@ -86,7 +86,7 @@ public class BranchLinkProperties {
 
 				if (paramsTemp != null) {
 					foreach(string key in paramsTemp.Keys) {
-						controlParams.Add(key, paramsTemp[key] as string);
+						controlParams.Add(key, paramsTemp[key].ToString());
 					}
 				}
 			}
