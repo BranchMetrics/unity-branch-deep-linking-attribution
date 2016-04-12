@@ -139,13 +139,15 @@ public class MyCoolBehaviorScript : MonoBehaviour {
         Branch.initSession(CallbackWithBranchUniversalObject);
     }
     
-    void CallbackWithBranchUniversalObject(universalObject, linkProperties, error) {
+    void CallbackWithBranchUniversalObject(BranchUniversalObject universalObject, BranchLinkProperties linkProperties, string error) {
         if (error != null) {
-            System.Console.WriteLine("Oh no, something went wrong: " + error);
-        }
-        else if (parameters.Count > 0) {
-            System.Console.WriteLine("Branch initialization completed with the following params: " + universalObject.ToJsonString() + linkProperties.ToJsonString());
-        }
+			Debug.LogError("Branch Error: " + error);
+		} else {
+			Debug.Log("Branch initialization completed: ");
+
+			Debug.Log("Universal Object: " + universalObject.ToJsonString());
+			Debug.Log("Link Properties: " + linkProperties.ToJsonString());
+		}
     }
 }
 ```
