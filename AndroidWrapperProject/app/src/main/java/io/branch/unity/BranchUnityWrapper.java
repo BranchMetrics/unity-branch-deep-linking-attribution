@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Console;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -789,13 +790,17 @@ public class BranchUnityWrapper {
                 branchUniversalObject.setContentType(params.getString(Defines.Jsonkey.ContentType.getKey()));
             }
             if (params.has(Defines.Jsonkey.ContentExpiryTime.getKey())) {
-                branchUniversalObject.setContentExpiration(new Date(Long.decode(params.getString(Defines.Jsonkey.ContentExpiryTime.getKey()))));
+                if (params.getString(Defines.Jsonkey.ContentExpiryTime.getKey()) != "") {
+                    branchUniversalObject.setContentExpiration(new Date(Long.decode(params.getString(Defines.Jsonkey.ContentExpiryTime.getKey()))));
+                }
             }
-
-            Iterator<String> keys = params.keys();
-            while (keys.hasNext()) {
-                String key = keys.next();
-                branchUniversalObject.addContentMetadata(key, params.getString(key));
+            if (params.has("metadata")) {
+                JSONObject dict = params.getJSONObject("metadata");
+                Iterator<String> keys = dict.keys();
+                while (keys.hasNext()) {
+                    String key = keys.next();
+                    branchUniversalObject.addContentMetadata(key, dict.getString(key));
+                }
             }
         } catch (Exception ignore) {
         }
@@ -825,12 +830,12 @@ public class BranchUnityWrapper {
                     linkProperties.addTag(tagsArray.getString(i));
                 }
             }
-
-            Iterator<String> keys = params.keys();
+            if (params.has("control_params")) {
+                JSONObject dict = params.getJSONObject("control_params");
+                Iterator<String> keys = dict.keys();
                 while (keys.hasNext()) {
-                String key = keys.next();
-                if (key.startsWith("$")) {
-                    linkProperties.addControlParameter(key, params.getString(key));
+                    String key = keys.next();
+                    linkProperties.addControlParameter(key, dict.getString(key));
                 }
             }
         } catch (Exception ignore) {

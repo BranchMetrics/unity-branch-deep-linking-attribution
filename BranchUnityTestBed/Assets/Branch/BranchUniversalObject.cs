@@ -107,7 +107,7 @@ public class BranchUniversalObject {
 		}
 		if (data.ContainsKey("$exp_date")) {
 			if (!string.IsNullOrEmpty(data["$exp_date"] as string)) {
-				expirationDate = new DateTime(Convert.ToInt64(data["$exp_date"] as string));
+				expirationDate = new DateTime(Convert.ToInt64(data["$exp_date"] as string) * 10000); // milliseconds to ticks
 			}
 		}
 		if (data.ContainsKey("$keywords")) {
@@ -143,7 +143,7 @@ public class BranchUniversalObject {
 		data.Add("$og_image_url", imageUrl);
 		data.Add("$content_type", type);
 		data.Add("$publicly_indexable", contentIndexMode.ToString());
-		data.Add("$exp_date", expirationDate.HasValue ? expirationDate.Value.ToString() : "");
+		data.Add("$exp_date", expirationDate.HasValue ? (expirationDate.Value.Ticks / 10000).ToString() : ""); // ticks to milliseconds
 		data.Add("$keywords", keywords);
 		data.Add("metadata", metadata);
 
