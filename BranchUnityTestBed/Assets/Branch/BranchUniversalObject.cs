@@ -86,28 +86,28 @@ public class BranchUniversalObject {
 			return;
 		
 		if (data.ContainsKey("$canonical_identifier")) {
-			canonicalIdentifier = data["$canonical_identifier"] as string;
+			canonicalIdentifier = data["$canonical_identifier"].ToString();
 		}
 		if (data.ContainsKey("$og_title")) {
-			title = data["$og_title"] as string;
+			title = data["$og_title"].ToString();
 		}
 		if (data.ContainsKey("$og_description")) {
-			contentDescription = data["$og_description"] as string;
+			contentDescription = data["$og_description"].ToString();
 		}
 		if (data.ContainsKey("$og_image_url")) {
-			imageUrl = data["$og_image_url"] as string;
+			imageUrl = data["$og_image_url"].ToString();
 		}
 		if (data.ContainsKey("$content_type")) {
-			type = data["$content_type"] as string;
+			type = data["$content_type"].ToString();
 		}
 		if (data.ContainsKey("$publicly_indexable")) {
-			if (!string.IsNullOrEmpty(data["$publicly_indexable"] as string)) {
-				contentIndexMode = Convert.ToInt32(data["$publicly_indexable"] as string);
+			if (!string.IsNullOrEmpty(data["$publicly_indexable"].ToString())) {
+				contentIndexMode = Convert.ToInt32(data["$publicly_indexable"].ToString());
 			}
 		}
 		if (data.ContainsKey("$exp_date")) {
-			if (!string.IsNullOrEmpty(data["$exp_date"] as string)) {
-				expirationDate = new DateTime(Convert.ToInt64(data["$exp_date"] as string) * 10000); // milliseconds to ticks
+			if (!string.IsNullOrEmpty(data["$exp_date"].ToString())) {
+				expirationDate = new DateTime(Convert.ToInt64(data["$exp_date"].ToString()) * 10000); // milliseconds to ticks
 			}
 		}
 		if (data.ContainsKey("$keywords")) {
@@ -116,7 +116,7 @@ public class BranchUniversalObject {
 
 				if (keywordsTemp != null) {
 					foreach(object obj in keywordsTemp) {
-						keywords.Add(obj as string);
+						keywords.Add(obj.ToString());
 					}
 				}
 			}
@@ -127,7 +127,7 @@ public class BranchUniversalObject {
 
 				if (metaTemp != null) {
 					foreach(string key in metaTemp.Keys) {
-						metadata.Add(key, metaTemp[key] as string);
+						metadata.Add(key, metaTemp[key].ToString());
 					}
 				}
 			}
