@@ -1,4 +1,7 @@
 Branch Unity SDK change log
+-v0.2.5
+  * Fixing trouble with empty expired data
+
 -v0.2.4
   * Fixing metadata
   * Fixing non-string parameters

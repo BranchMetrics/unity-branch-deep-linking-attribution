@@ -143,7 +143,7 @@ public class BranchUniversalObject {
 		data.Add("$og_image_url", imageUrl);
 		data.Add("$content_type", type);
 		data.Add("$publicly_indexable", contentIndexMode.ToString());
-		data.Add("$exp_date", expirationDate.HasValue ? (expirationDate.Value.Ticks / 10000).ToString() : ""); // ticks to milliseconds
+		data.Add("$exp_date", expirationDate.HasValue ? (expirationDate.Value.Ticks / 10000).ToString() : "0"); // ticks to milliseconds
 		data.Add("$keywords", keywords);
 		data.Add("metadata", metadata);
 
