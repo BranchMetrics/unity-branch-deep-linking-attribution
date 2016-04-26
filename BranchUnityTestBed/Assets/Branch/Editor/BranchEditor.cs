@@ -84,7 +84,9 @@ public class BranchEditor : Editor {
 		UpdateIntentFilter(xmlDoc);
 
 		// Adding intent-filter for PathPrefix into UnityPlayerActivity activity
-		UpdatePathPrefixIntentFilter(xmlDoc);
+		if (!string.IsNullOrEmpty(BranchData.Instance.androidPathPrefix)) {
+			UpdatePathPrefixIntentFilter(xmlDoc);
+		}
 		
 		// Adding permissions
 		UpdatePermissions(xmlDoc);
