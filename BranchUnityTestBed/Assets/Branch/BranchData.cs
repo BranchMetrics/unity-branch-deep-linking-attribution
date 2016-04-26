@@ -10,16 +10,13 @@ using UnityEditor;
 public class BranchData : ScriptableObject {
 
 	public string branchUri;
+	public string androidPathPrefix;
 	public string branchKey;
 
 	private const string BDAssetPath = "Branch/Resources";
 	private const string BDAssetName = "BranchData";
 	private const string BDAssetExtension = ".asset";
 	private static BranchData instance;
-
-	static BranchData() {
-		LoadBranchData();
-	}
 
 	public static BranchData Instance {
 		get {

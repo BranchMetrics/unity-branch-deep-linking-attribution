@@ -1,4 +1,8 @@
 Branch Unity SDK change log
+-v0.2.6
+  * Fixing trouble with Unity5.4.x
+  * Adding generation intent-filter for Android Path Prefixs
+
 -v0.2.5
   * Fixing trouble with empty expired data
 
