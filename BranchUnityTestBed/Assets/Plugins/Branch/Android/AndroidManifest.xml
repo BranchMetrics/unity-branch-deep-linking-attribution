@@ -16,6 +16,13 @@
     	<category android:name="android.intent.category.BROWSABLE" />
       </intent-filter>
       
+      <intent-filter android:autoVerify="true">
+        <data android:scheme="https" android:host="bnc.lt" android:pathPrefix="/prefix" />
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+      </intent-filter>
+      
       <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
       <meta-data android:name="unityplayer.ForwardNativeEventsToDalvik" android:value="true" />
     </activity>
