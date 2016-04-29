@@ -393,7 +393,7 @@ UIActivityView and the Branch developed share sheet is the standard way of allow
 
 **Sample UIActivityView Share Sheet**
 
-![UIActivityView Share Sheet](https://dev.branch.io/img/ingredients/sdk_links/ios_share_sheet.jpg)
+![UIActivityView Share Sheet](https://dev.branch.io/img/pages/getting-started/branch-universal-object/combined_share_sheet.png)
 
 The Branch iOS and Android SDKs includes a wrapper on the share sheets, that will generate a Branch short URL and automatically tag it with the channel the user selects (Facebook, Twitter, etc.).
 
