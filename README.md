@@ -36,9 +36,9 @@ You can sign up for your own app id at [https://dashboard.branch.io](https://das
 
 To allow Branch to configure itself, you must add a BranchPrefab asset to your first scene. Simply drag into your first scene, and then specify your `APP_KEY`, `PATH_PREFIX` and `APP_URI` in the properties.
 
-* `APP_KEY`: This is your Branch key from the dashboard
-* `PATH_PREFIX`: This is your Branch android path prefux [Read more](https://github.com/BranchMetrics/Android-Deferred-Deep-Linking-SDK/blob/master/README.md#leverage-android-app-links-for-deep-linking)
-* `APP_URI`: This is the URI scheme you would like to use to open the app. This must be the same value as you entered in [the Branch link settings](https://dashboard.branch.io/#/settings/link) as well. Please do *not* include the `://` characters.
+* `branchKey`: This is your Branch key from the dashboard
+* `androidPathPrefix`: This is your Branch android path prefux [Read more](https://github.com/BranchMetrics/Android-Deferred-Deep-Linking-SDK/blob/master/README.md#leverage-android-app-links-for-deep-linking)
+* `branchUri`: This is the URI scheme you would like to use to open the app. This must be the same value as you entered in [the Branch link settings](https://dashboard.branch.io/#/settings/link) as well. Please do *not* include the `://` characters.
 
 ![Branch Unity Config](https://raw.githubusercontent.com/BranchMetrics/Unity-Deferred-Deep-Linking-SDK/master/Docs/Screenshots/branch-key.png)
 
@@ -87,11 +87,11 @@ Typically, you would register some sort of splash activitiy that handles routing
 	
 	<!-- App Link your activity to Branch links-->
 	<intent-filter android:autoVerify="true">
-        <data android:scheme="https" android:host="bnc.lt" android:pathPrefix="/prefix" />
-        <action android:name="android.intent.action.VIEW" />
-        <category android:name="android.intent.category.DEFAULT" />
-        <category android:name="android.intent.category.BROWSABLE" />
-    </intent-filter>
+	        <data android:scheme="https" android:host="bnc.lt" android:pathPrefix="/prefix" />
+	        <action android:name="android.intent.action.VIEW" />
+	        <category android:name="android.intent.category.DEFAULT" />
+	        <category android:name="android.intent.category.BROWSABLE" />
+	</intent-filter>
 </activity>
 ```
 
