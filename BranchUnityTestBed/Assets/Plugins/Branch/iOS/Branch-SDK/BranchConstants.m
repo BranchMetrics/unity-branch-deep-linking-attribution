@@ -52,12 +52,10 @@ NSString * const BRANCH_REQUEST_KEY_UPDATE = @"update";
 NSString * const BRANCH_REQUEST_KEY_LINK_IDENTIFIER = @"link_identifier";
 NSString * const BRANCH_REQUEST_KEY_SPOTLIGHT_IDENTIFIER = @"spotlight_identifier";
 NSString * const BRANCH_REQUEST_KEY_UNIVERSAL_LINK_URL = @"universal_link_url";
-NSString * const BRANCH_REQUEST_KEY_CARRIER = @"carrier";
 NSString * const BRANCH_REQUEST_KEY_BRAND = @"brand";
 NSString * const BRANCH_REQUEST_KEY_MODEL = @"model";
 NSString * const BRANCH_REQUEST_KEY_SCREEN_WIDTH = @"screen_width";
 NSString * const BRANCH_REQUEST_KEY_SCREEN_HEIGHT = @"screen_height";
-NSString * const BRANCH_REQUEST_KEY_DEVICE_NAME = @"device_name";
 NSString * const BRANCH_REQUEST_KEY_IS_SIMULATOR = @"is_simulator";
 NSString * const BRANCH_REQUEST_KEY_LOG = @"log";
 
@@ -102,6 +100,7 @@ NSString * const BRANCH_RESPONSE_KEY_DEVELOPER_IDENTITY = @"identity";
 NSString * const BRANCH_RESPONSE_KEY_DEVICE_FINGERPRINT_ID = @"device_fingerprint_id";
 NSString * const BRANCH_RESPONSE_KEY_SESSION_DATA = @"data";
 NSString * const BRANCH_RESPONSE_KEY_CLICKED_BRANCH_LINK = @"+clicked_branch_link";
+NSString * const BRANCH_RESPONSE_KEY_BRANCH_VIEW_DATA = @"branch_view_data";
 
 NSString * const BRANCH_LINK_DATA_KEY_OG_TITLE = @"$og_title";
 NSString * const BRANCH_LINK_DATA_KEY_OG_DESCRIPTION = @"$og_description";
