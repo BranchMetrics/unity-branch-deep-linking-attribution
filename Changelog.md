@@ -1,4 +1,7 @@
 Branch Unity SDK change log
+-v0.2.7
+  * Updating Branch to Android version 1.12.0 and iOS version 0.12.1
+
 -v0.2.6
   * Fixing trouble with Unity5.4.x
   * Adding generation intent-filter for Android Path Prefixs

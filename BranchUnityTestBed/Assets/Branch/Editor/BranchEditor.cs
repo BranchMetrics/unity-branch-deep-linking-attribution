@@ -128,6 +128,10 @@ public class BranchEditor : Editor {
 
 		// finding UnityPlayerActivity node
 		foreach(XmlNode node in appNode.ChildNodes) {
+			if (unityActivityNode != null) {
+				break;
+			}
+
 			if (node.Name == "activity") {
 				foreach(XmlAttribute attr in node.Attributes) {
 					if (attr.Value.Contains("UnityPlayerActivity")) {
@@ -145,11 +149,16 @@ public class BranchEditor : Editor {
 
 		// update or adding intent-filter
 		foreach(XmlNode node in unityActivityNode.ChildNodes) {
+			if (intentFilterNode != null) {
+				break;
+			}
+
 			if (node.Name == "intent-filter") {
 				foreach(XmlNode childNode in node.ChildNodes) {
 					foreach(XmlAttribute attr in childNode.Attributes) {
 						if (attr.Name.Contains("host") && attr.Value == "open") {
 							intentFilterNode = node;
+							break;
 						}
 					}
 				}
@@ -223,6 +232,10 @@ public class BranchEditor : Editor {
 
 		// finding UnityPlayerActivity node
 		foreach(XmlNode node in appNode.ChildNodes) {
+			if (unityActivityNode != null) {
+				break;
+			}
+
 			if (node.Name == "activity") {
 				foreach(XmlAttribute attr in node.Attributes) {
 					if (attr.Value.Contains("UnityPlayerActivity")) {
@@ -240,6 +253,10 @@ public class BranchEditor : Editor {
 
 		// update or adding intent-filter
 		foreach(XmlNode node in unityActivityNode.ChildNodes) {
+			if (intentFilterNode != null) {
+				break;
+			}
+
 			if (node.Name == "intent-filter") {
 				foreach(XmlNode childNode in node.ChildNodes) {
 					foreach(XmlAttribute attr in childNode.Attributes) {
@@ -286,8 +303,9 @@ public class BranchEditor : Editor {
 		else {
 			// changing intent-filter
 			XmlElement ifData = doc.CreateElement("data");
-			ifData.SetAttribute("android____scheme", BranchData.Instance.branchUri);
-			ifData.SetAttribute("android____host", "open");
+			ifData.SetAttribute("android____scheme", "https");
+			ifData.SetAttribute("android____host", "bnc.lt");
+			ifData.SetAttribute("android____pathPrefix", BranchData.Instance.androidPathPrefix);
 
 			foreach(XmlNode node in intentFilterNode.ChildNodes) {
 				if (node.Name == "data") {
