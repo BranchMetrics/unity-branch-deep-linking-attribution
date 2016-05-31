@@ -25,6 +25,7 @@ NSString * const BRANCH_PREFS_KEY_DEVICE_FINGERPRINT_ID = @"bnc_device_fingerpri
 NSString * const BRANCH_PREFS_KEY_SESSION_ID = @"bnc_session_id";
 NSString * const BRANCH_PREFS_KEY_IDENTITY_ID = @"bnc_identity_id";
 NSString * const BRANCH_PREFS_KEY_IDENTITY = @"bnc_identity";
+NSString * const BRANCH_PREFS_KEY_CHECKED_FACEBOOK_APP_LINKS = @"bnc_checked_fb_app_links";
 NSString * const BRANCH_PREFS_KEY_LINK_CLICK_IDENTIFIER = @"bnc_link_click_identifier";
 NSString * const BRANCH_PREFS_KEY_SPOTLIGHT_IDENTIFIER = @"bnc_spotlight_identifier";
 NSString * const BRANCH_PREFS_KEY_UNIVERSAL_LINK_URL = @"bnc_universal_link_url";
@@ -49,6 +50,7 @@ NSString * const BRANCH_PREFS_KEY_BRANCH_VIEW_USAGE_CNT = @"bnc_branch_view_usag
 @property (strong, nonatomic) NSMutableDictionary *persistenceDict;
 @property (strong, nonatomic) NSMutableDictionary *countsDictionary;
 @property (strong, nonatomic) NSMutableDictionary *creditsDictionary;
+@property (strong, nonatomic) NSMutableDictionary *requestMetadataDictionary;
 @property (assign, nonatomic) BOOL isUsingLiveKey;
 
 @end
@@ -72,12 +74,14 @@ NSString * const BRANCH_PREFS_KEY_BRANCH_VIEW_USAGE_CNT = @"bnc_branch_view_usag
             externalIntentURI = _externalIntentURI,
             isReferrable = _isReferrable,
             isDebug = _isDebug,
-            isContinuingUserActivity = _isContinuingUserActivity,
+            shouldWaitForInit = _shouldWaitForInit,
             suppressWarningLogs = _suppressWarningLogs,
             retryCount = _retryCount,
             retryInterval = _retryInterval,
             timeout = _timeout,
-            lastStrongMatchDate = _lastStrongMatchDate;
+            lastStrongMatchDate = _lastStrongMatchDate,
+            checkedFacebookAppLinks = _checkedFacebookAppLinks,
+            requestMetadataDictionary = _requestMetadataDictionary;
 
 + (BNCPreferenceHelper *)preferenceHelper {
     static BNCPreferenceHelper *preferenceHelper;
@@ -419,6 +423,16 @@ NSString * const BRANCH_PREFS_KEY_BRANCH_VIEW_USAGE_CNT = @"bnc_branch_view_usag
     }
 }
 
+- (BOOL)checkedFacebookAppLinks {
+    _checkedFacebookAppLinks = [self readBoolFromDefaults:BRANCH_PREFS_KEY_CHECKED_FACEBOOK_APP_LINKS];
+    return _checkedFacebookAppLinks;
+}
+
+- (void)setCheckedFacebookAppLinks:(BOOL)checked {
+    _checkedFacebookAppLinks = checked;
+    [self writeBoolToDefaults:BRANCH_PREFS_KEY_CHECKED_FACEBOOK_APP_LINKS value:checked];
+}
+
 - (BOOL)isReferrable {
     BOOL hasIdentity = self.identityID != nil;
     
@@ -446,6 +460,25 @@ NSString * const BRANCH_PREFS_KEY_BRANCH_VIEW_USAGE_CNT = @"bnc_branch_view_usag
 
 - (id)getBranchUniversalLinkDomains {
     return [[[NSBundle mainBundle] infoDictionary] objectForKey:BRANCH_PREFS_KEY_BRANCH_UNIVERSAL_LINK_DOMAINS];
+}
+
+- (NSMutableDictionary *)requestMetadataDictionary {
+    if (!_requestMetadataDictionary) {
+        _requestMetadataDictionary = [NSMutableDictionary dictionary];
+    }
+    return _requestMetadataDictionary;
+}
+
+- (void)setRequestMetadataKey:(NSString *)key value:(NSObject *)value {
+    if (!key) {
+        return;
+    }
+    if ([self.requestMetadataDictionary objectForKey:key] && !value) {
+        [self.requestMetadataDictionary removeObjectForKey:key];
+    }
+    else if (value) {
+        [self.requestMetadataDictionary setObject:value forKey:key];
+    }
 }
 
 #pragma mark - Credit Storage

@@ -39,8 +39,8 @@
 #import "BranchRegisterViewRequest.h"
 
 //Fabric
-#import "FABKitProtocol.h"
-#import "Fabric+FABKits.h"
+#import "../Fabric/FABKitProtocol.h"
+#import "../Fabric/Fabric+FABKits.h"
 
 
 NSString * const BRANCH_FEATURE_TAG_SHARE = @"share";
@@ -85,7 +85,7 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
 @property (assign, nonatomic) BOOL useCookieBasedMatching;
 @property (strong, nonatomic) NSDictionary *deepLinkDebugParams;
 @property (assign, nonatomic) BOOL accountForFacebookSDK;
-
+@property (assign, nonatomic) id FBSDKAppLinkUtility;
 
 @end
 
@@ -267,6 +267,11 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
 - (void)suppressWarningLogs {
     self.preferenceHelper.suppressWarningLogs = YES;
 }
+
+- (void)setRequestMetadataKey:(NSString *)key value:(NSObject *)value {
+    [self.preferenceHelper setRequestMetadataKey:key value:value];
+}
+
 #pragma mark - InitSession Permutation methods
 
 - (void)initSessionWithLaunchOptions:(NSDictionary *)options {
@@ -335,16 +340,20 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
     
     if ([BNCSystemObserver getOSVersion].integerValue >= 8) {
         if (![options objectForKey:UIApplicationLaunchOptionsURLKey] && ![options objectForKey:UIApplicationLaunchOptionsUserActivityDictionaryKey]) {
-            [self initUserSessionAndCallCallback:YES];
+            // If Facebook SDK is present, call deferred app link check here
+            if (![self checkFacebookAppLinks]) {
+                [self initUserSessionAndCallCallback:YES];
+            }
         }
         else if ([options objectForKey:UIApplicationLaunchOptionsUserActivityDictionaryKey]) {
-            self.preferenceHelper.isContinuingUserActivity = YES;
             if (self.accountForFacebookSDK) {
                 id activity = [[options objectForKey:UIApplicationLaunchOptionsUserActivityDictionaryKey] objectForKey:@"UIApplicationLaunchOptionsUserActivityKey"];
                 if (activity && [activity isKindOfClass:[NSUserActivity class]]) {
                     [self continueUserActivity:activity];
+                    return;
                 }
             }
+            self.preferenceHelper.shouldWaitForInit = YES;
         }
     }
     else if (![options objectForKey:UIApplicationLaunchOptionsURLKey]) {
@@ -362,7 +371,7 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
 
 - (BOOL)handleDeepLink:(NSURL *)url {
     BOOL handled = NO;
-    if (url) {
+    if (url && ![url isEqual:[NSNull null]]) {
         //always save the incoming url in the preferenceHelper in the externalIntentURI field
         self.preferenceHelper.externalIntentURI = [url absoluteString];
 
@@ -388,7 +397,7 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
     if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb]) {
         self.preferenceHelper.universalLinkUrl = [userActivity.webpageURL absoluteString];
         [self initUserSessionAndCallCallback:YES];
-        self.preferenceHelper.isContinuingUserActivity = NO;
+        self.preferenceHelper.shouldWaitForInit = NO;
         
         id branchUniversalLinkDomains = [self.preferenceHelper getBranchUniversalLinkDomains];
         if ([branchUniversalLinkDomains isKindOfClass:[NSString class]] && [[userActivity.webpageURL absoluteString] containsString:branchUniversalLinkDomains]) {
@@ -425,7 +434,7 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
         }
     }
     [self initUserSessionAndCallCallback:YES];
-    self.preferenceHelper.isContinuingUserActivity = NO;
+    self.preferenceHelper.shouldWaitForInit = NO;
     
     return spotlightIdentifier != nil;
 }
@@ -461,6 +470,33 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
     }
 }
 
+# pragma mark - Facebook App Link check
+
+- (void)registerFacebookDeepLinkingClass:(id)FBSDKAppLinkUtility {
+    self.FBSDKAppLinkUtility = FBSDKAppLinkUtility;
+}
+
+- (BOOL)checkFacebookAppLinks {
+    if (self.FBSDKAppLinkUtility) {
+        SEL fetchDeferredAppLink = NSSelectorFromString(@"fetchDeferredAppLink:");
+        
+        if ([self.FBSDKAppLinkUtility methodForSelector:fetchDeferredAppLink]) {
+            void (^__nullable completionBlock)(NSURL *appLink, NSError *error) = ^void(NSURL *__nullable appLink, NSError *__nullable error) {
+                self.preferenceHelper.shouldWaitForInit = NO;
+                [self handleDeepLink:appLink];
+            };
+        
+            self.preferenceHelper.checkedFacebookAppLinks = YES;
+            self.preferenceHelper.shouldWaitForInit = YES;
+        
+            ((void (*)(id, SEL, void (^ __nullable)(NSURL *__nullable appLink, NSError * __nullable error)))[self.FBSDKAppLinkUtility methodForSelector:fetchDeferredAppLink])(self.FBSDKAppLinkUtility, fetchDeferredAppLink, completionBlock);
+        
+            return YES;
+        }
+    }
+    
+    return NO;
+}
 
 #pragma mark - Deep Link Controller methods
 
@@ -1199,7 +1235,7 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
 #pragma mark - Application State Change methods
 
 - (void)applicationDidBecomeActive {
-    if (!self.isInitialized && !self.preferenceHelper.isContinuingUserActivity && ![self.requestQueue containsInstallOrOpen]) {
+    if (!self.isInitialized && !self.preferenceHelper.shouldWaitForInit && ![self.requestQueue containsInstallOrOpen]) {
         [self initUserSessionAndCallCallback:YES];
     }
 }
@@ -1315,7 +1351,7 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
 #pragma mark - Session Initialization
 
 - (void)initSessionIfNeededAndNotInProgress {
-    if (!self.isInitialized && !self.preferenceHelper.isContinuingUserActivity && ![self.requestQueue containsInstallOrOpen]) {
+    if (!self.isInitialized && !self.preferenceHelper.shouldWaitForInit && ![self.requestQueue containsInstallOrOpen]) {
         [self initUserSessionAndCallCallback:NO];
     }
 }

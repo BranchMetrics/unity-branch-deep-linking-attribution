@@ -1,4 +1,7 @@
 Branch Unity SDK change log
+-v0.2.8
+  * Updating Branch to Android version 1.12.1 and iOS version 0.12.2
+
 -v0.2.7
   * Updating Branch to Android version 1.12.0 and iOS version 0.12.1
 
