@@ -61,7 +61,13 @@ public class BranchLinkProperties {
 			return;
 
 		if (data.ContainsKey("~tags")) {
-			tags = data["~tags"] as List<String>;
+			List<object> tempList = data["~tags"] as List<object>;
+
+			if (tempList != null) {
+				foreach(object obj in tempList) {
+					tags.Add(obj.ToString());
+				}
+			}
 		}
 		if (data.ContainsKey("~feature")) {
 			feature = data["~feature"].ToString();
