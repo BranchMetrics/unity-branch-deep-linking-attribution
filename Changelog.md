@@ -1,5 +1,8 @@
 Branch Unity SDK change log
 
+-v0.2.10
+  * Updating Branch to Android version 1.14.3 and iOS version 0.12.3
+
 -v0.2.9
   * Fixing "~tags" parsing
   
