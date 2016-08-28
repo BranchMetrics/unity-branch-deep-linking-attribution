@@ -8,7 +8,7 @@ android {
     targetCompatibility = "1.6"
 
     defaultConfig {
-        minSdkVersion 8
+        minSdkVersion 14
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -22,7 +22,7 @@ android {
 }
 
 dependencies {
-    compile 'io.branch.sdk.android:library:1.14.3'
+    compile 'io.branch.sdk.android:library:2.1.0'
 //    Comment out the line above, uncomment the line below to use local Branch and update the settings.gradle file as well.
 //    compile project(':Branch-SDK')
 

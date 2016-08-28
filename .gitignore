@@ -2,4 +2,7 @@ AndroidWrapperProject/.gradle
 AndroidWrapperProject/app/build
 AndroidWrapperProject/build
 BranchUnityTestBed/Library
-BranchUnityTestBed/ProjectSettings
+BranchUnityTestBed/Temp
+BranchUnityTestBed/Build?
+UnityConnectSettings.asset
+ClusterInputManager.asset

@@ -52,6 +52,11 @@ PluginImporter:
     iOS:
       enabled: 1
       settings:
+        CompileFlags: -fobjc-arc
+        FrameworkDependencies: 
+    tvOS:
+      enabled: 0
+      settings:
         CompileFlags: 
         FrameworkDependencies: 
   userData: 

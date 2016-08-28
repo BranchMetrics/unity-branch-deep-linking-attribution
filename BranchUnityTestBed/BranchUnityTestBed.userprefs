@@ -1,11 +1,11 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Branch/Branch.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Branch/Demo/Scripts/ReferralCodePanel.cs">
     <Files>
-      <File FileName="Assets/Branch/Demo/Scripts/BranchDemo.cs" Line="30" Column="2" />
-      <File FileName="Assets/Branch/Branch.cs" Line="1482" Column="2" />
-      <File FileName="Assets/Branch/BranchUniversalObject.cs" Line="146" Column="89" />
-      <File FileName="Assets/Branch/BranchLinkProperties.cs" Line="77" Column="4" />
+      <File FileName="Assets/Branch/Branch.cs" Line="664" Column="3" />
+      <File FileName="Assets/Branch/Demo/Scripts/BranchDemo.cs" Line="217" Column="3" />
+      <File FileName="Assets/Branch/BranchAndroidWrapper.cs" Line="28" Column="5" />
+      <File FileName="Assets/Branch/Demo/Scripts/ReferralCodePanel.cs" Line="22" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

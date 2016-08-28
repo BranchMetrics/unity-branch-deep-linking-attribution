@@ -145,18 +145,18 @@ public class BranchDemo : MonoBehaviour {
 		lblInstallCountValue.text = "updating...";
 		lblBuyCountValue.text = "updating...";
 
-		Branch.loadActionCounts( (changed, error) => {
-			if (error != null) {
-				Debug.LogError("Branch.loadActionCounts failed: " + error);
-				lblInstallCountValue.text = "error";
-				lblBuyCountValue.text = "error";
-			} else {
-				Debug.Log("Branch.loadActionCounts changed: " + changed);
-
-				lblInstallCountValue.text = "install total - " + Branch.getTotalCountsForAction("install").ToString() + ", unique - " + Branch.getUniqueCountsForAction("install").ToString();
-				lblBuyCountValue.text = "buy total - " + Branch.getTotalCountsForAction("buy").ToString() + ", unique - " + Branch.getUniqueCountsForAction("buy").ToString();
-			}
-		});
+//		Branch.loadActionCounts( (changed, error) => {
+//			if (error != null) {
+//				Debug.LogError("Branch.loadActionCounts failed: " + error);
+//				lblInstallCountValue.text = "error";
+//				lblBuyCountValue.text = "error";
+//			} else {
+//				Debug.Log("Branch.loadActionCounts changed: " + changed);
+//
+//				lblInstallCountValue.text = "install total - " + Branch.getTotalCountsForAction("install").ToString() + ", unique - " + Branch.getUniqueCountsForAction("install").ToString();
+//				lblBuyCountValue.text = "buy total - " + Branch.getTotalCountsForAction("buy").ToString() + ", unique - " + Branch.getUniqueCountsForAction("buy").ToString();
+//			}
+//		});
 	}
 
 
@@ -213,8 +213,8 @@ public class BranchDemo : MonoBehaviour {
 
 
 	public void OnBtn_PrintInstallParam() {
-		Dictionary<string, object> parameters = Branch.getFirstReferringParams();
-		Debug.Log("Install params: " + parameters.ToString());
+//		Dictionary<string, object> parameters = Branch.getFirstReferringParams();
+//		Debug.Log("Install params: " + parameters.ToString());
 	}
 
 
