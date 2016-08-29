@@ -9,9 +9,25 @@ using UnityEditor;
 
 public class BranchData : ScriptableObject {
 
-	public string branchUri;
-	public string androidPathPrefix;
-	public string branchKey;
+	// release data
+	public string liveBranchKey;
+	public string liveBranchUri;
+	public string liveAndroidPathPrefix;
+	public string liveCustomDomain;
+	public string[] liveAppLinks;
+
+	// test data
+	public string testBranchKey;
+	public string testBranchUri;
+	public string testAndroidPathPrefix;
+	public string testCustomDomain;
+	public string[] testAppLinks;
+
+	// is simulation of fresh links enabled?
+	public bool simulateFreshInstalls = false;
+
+	// which set of data will we use, test or release?
+	public bool testMode = false;
 
 	private const string BDAssetPath = "Branch/Resources";
 	private const string BDAssetName = "BranchData";

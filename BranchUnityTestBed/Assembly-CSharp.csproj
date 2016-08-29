@@ -52,9 +52,8 @@
      <Compile Include="Assets\Branch\BranchUniversalObject.cs" />
      <Compile Include="Assets\Branch\Demo\Scripts\BranchDefferedProcessing.cs" />
      <Compile Include="Assets\Branch\Demo\Scripts\BranchDemo.cs" />
-     <Compile Include="Assets\Branch\Demo\Scripts\CreditTransactionItem.cs" />
-     <Compile Include="Assets\Branch\Demo\Scripts\CreditsHistoryPanel.cs" />
-     <Compile Include="Assets\Branch\Demo\Scripts\ReferralCodePanel.cs" />
+     <Compile Include="Assets\Branch\Demo\Scripts\RewardTransactionItem.cs" />
+     <Compile Include="Assets\Branch\Demo\Scripts\RewardsHistoryPanel.cs" />
      <Compile Include="Assets\Branch\MiniJSON.cs" />
      <None Include="Assets\Plugins\Branch\Android\AndroidManifest.xml" />
  <Reference Include="UnityEngine.UI">

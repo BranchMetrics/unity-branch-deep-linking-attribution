@@ -17,7 +17,7 @@
       </intent-filter>
       
       <intent-filter android:autoVerify="true">
-        <data android:scheme="https" android:host="bnc.lt" android:pathPrefix="/prefix" />
+        <data android:scheme="https" android:host="xxxx.app.link" />
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />

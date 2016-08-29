@@ -5,7 +5,7 @@
 #import "UnityAppController.h"
 
 
-static NSString *_branchKey =  @"";
+static NSString *_branchKey = @"";
 static BranchUnityWrapper *_wrapper = [BranchUnityWrapper sharedInstance];
 
 
@@ -437,4 +437,3 @@ void _shareLinkWithLinkProperties(char *universalObjectJson, char *linkPropertie
     
     [obj showShareSheetWithLinkProperties:prop andShareText:CreateNSString(message) fromViewController:nil completion:nil];
 }
-

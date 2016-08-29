@@ -31,8 +31,8 @@
       <file leaf-file-name="BranchUnityWrapper.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/io/branch/unity/BranchUnityWrapper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.42701226">
-              <caret line="410" column="0" selection-start-line="410" selection-start-column="0" selection-end-line="410" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.14324693">
+              <caret line="37" column="0" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
               <folding>
                 <element signature="docComment;class#BranchUnityWrapper#0" expanded="false" />
                 <element signature="method#initSession#0;class#BranchUnityWrapper#0" expanded="false" />
@@ -1746,7 +1746,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane" />
       <pane id="PackagesPane" />
       <pane id="Scratches" />
       <pane id="Scope" />
@@ -1770,6 +1769,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="ProjectPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1966,7 +1966,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1401" height="877" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34034166" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1982,7 +1982,7 @@
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24944812" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24944812" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24944812" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
@@ -2020,6 +2020,77 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/io/branch/unity/BranchUnityWrapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="docComment;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#initSession#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#initSessionWithUniversalObjectCallback#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getFirstReferringBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getFirstReferringBranchLinkProperties#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getLatestReferringBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getLatestReferringBranchLinkProperties#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#resetUserSession#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setIdentity#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setIdentity#1;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#logout#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setDebug#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setRetryInterval#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setMaxRetries#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setNetworkTimeout#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#registerView#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#listOnSpotlight#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#accountForFacebookSDKPreventingAppLaunch#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#userCompletedAction#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#userCompletedAction#1;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#loadRewards#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCredits#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#redeemRewards#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditsForBucket#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#redeemRewards#1;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditHistory#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditHistory#1;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditHistory#2;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditHistory#3;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getShortURLWithBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#shareLinkWithLinkProperties#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_dateFromString#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_jsonObjectFromBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_jsonObjectFromLinkProperties#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_branchUniversalObjectFromJSONObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_linkPropertiesFromJSONObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="class#BranchReferralInitListenerUnityCallback#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="class#BranchUniversalReferralInitListenerUnityCallback#0;class#BranchUnityWrapper#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="10" column="24" selection-start-line="10" selection-start-column="24" selection-end-line="10" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.branch.sdk.android/library/1.10.4/4d101ac6907ed012b4b42df9078adf56306d322f/library-1.10.4-sources.jar!/io/branch/referral/Defines.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -2065,8 +2136,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/io/branch/unity/BranchUnityWrapper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.42701226">
-          <caret line="410" column="0" selection-start-line="410" selection-start-column="0" selection-end-line="410" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.14324693">
+          <caret line="37" column="0" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
           <folding>
             <element signature="docComment;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#initSession#0;class#BranchUnityWrapper#0" expanded="false" />

@@ -336,7 +336,17 @@ public class Branch : MonoBehaviour {
 
         name = "Branch";
         DontDestroyOnLoad(gameObject);
-        _setBranchKey(BranchData.Instance.branchKey);
+
+		if (BranchData.Instance.testMode) {
+        	_setBranchKey(BranchData.Instance.testBranchKey);
+		}
+		else {
+			_setBranchKey(BranchData.Instance.liveBranchKey);
+		}
+
+		if (BranchData.Instance.simulateFreshInstalls) {
+			setDebug();
+		}
     }
 
 	#endregion
