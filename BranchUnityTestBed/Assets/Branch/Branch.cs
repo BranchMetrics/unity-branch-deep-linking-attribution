@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 public class Branch : MonoBehaviour {
 
-	public static string sdkVersion = "0.2.10";
+	public static string sdkVersion = "0.3.0";
 
     public delegate void BranchCallbackWithParams(Dictionary<string, object> parameters, string error);
     public delegate void BranchCallbackWithUrl(string url, string error);
@@ -23,100 +23,21 @@ public class Branch : MonoBehaviour {
      * Just initialize session.
      */
     public static void initSession() {
-		if (_sessionCounter == 0) {
-			++_sessionCounter;
-			_isFirstSessionInited = true;
-        	_initSession();
-		}
-    }
-
-    /**
-     * Just initialize session, specifying whether is should be referrable.
-     */
-    public static void  initSession(bool isReferrable) {
-		if (_sessionCounter == 0) {
-			++_sessionCounter;
-			_isFirstSessionInited = true;
-        	_initSessionAsReferrable(isReferrable);
-		}
-    }
-
-    /**
-     * Initialize session and receive information about how it opened.
-     */
-    public static void initSession(BranchCallbackWithParams callback) {
-		if (_sessionCounter == 0) {
-			++_sessionCounter;
-			_isFirstSessionInited = true;
-			autoInitCallbackWithParams = callback;
-
-	        var callbackId = _getNextCallbackId();
-	        _branchCallbacks[callbackId] = callback;
-	        _initSessionWithCallback(callbackId);
-		}
-    }
-
-    /**
-     * Initialize session and receive information about how it opened, specifying whether is should be referrable.
-     */
-    public static void initSession(bool isReferrable, BranchCallbackWithParams callback) {
-		if (_sessionCounter == 0) {
-			++_sessionCounter;
-			_isFirstSessionInited = true;
-			autoInitCallbackWithParams = callback;
-
-	        var callbackId = _getNextCallbackId();
-	        _branchCallbacks[callbackId] = callback;
-	        _initSessionAsReferrableWithCallback(isReferrable, callbackId);
-		}
+    	_initSession();
     }
 
 	/**
      * Initialize session and receive information about how it opened.
      */
 	public static void initSession(BranchCallbackWithBranchUniversalObject callback) {
-		if (_sessionCounter == 0) {
-			++_sessionCounter;
-			_isFirstSessionInited = true;
-			autoInitCallbackWithBUO = callback;
-
-			var callbackId = _getNextCallbackId();
-			_branchCallbacks[callbackId] = callback;
-			_initSessionWithUniversalObjectCallback(callbackId);
-		}
+		var callbackId = _getNextCallbackId();
+		_branchCallbacks[callbackId] = callback;
+		_initSessionWithUniversalObjectCallback(callbackId);
 	}
-
-    /**
-     * Close session, necessary for some platforms to track when to cut off a Branch session.
-     */
-    public static void closeSession() {
-		#if UNITY_ANDROID || UNITY_EDITOR
-		if (_sessionCounter > 0) {
-        	_closeSession();
-			_sessionCounter--;
-		}
-		#endif
-    }
 
     #endregion
 
     #region Session Item methods
-
-    /**
-     * Get the referring parameters from the initial install.
-     */
-    public static Dictionary<string, object> getFirstReferringParams() {
-		string firstReferringParamsString = "";
-
-		#if (UNITY_IOS || UNITY_IPHONE) && !UNITY_EDITOR
-		IntPtr ptrResult = _getFirstReferringParams();
-		firstReferringParamsString = Marshal.PtrToStringAnsi(ptrResult);
-		#else
-		firstReferringParamsString = _getFirstReferringParams();
-		#endif
-
-        return MiniJSON.Json.Deserialize(firstReferringParamsString) as Dictionary<string, object>;
-    }
 
 	/**
      * Get the BranchUniversalObject from the initial install.
@@ -151,23 +72,7 @@ public class Branch : MonoBehaviour {
 		BranchLinkProperties resultObject = new BranchLinkProperties(firstReferringParamsString);
 		return resultObject;
 	}
-
-    /**
-     * Get the referring parameters from the last open.
-     */
-    public static Dictionary<string, object> getLatestReferringParams() {
-		string latestReferringParamsString = "";
-
-		#if (UNITY_IOS || UNITY_IPHONE) && !UNITY_EDITOR
-		IntPtr ptrResult = _getLatestReferringParams();
-		latestReferringParamsString = Marshal.PtrToStringAnsi(ptrResult);
-		#else
-		latestReferringParamsString = _getLatestReferringParams();
-		#endif
-
-        return MiniJSON.Json.Deserialize(latestReferringParamsString) as Dictionary<string, object>;
-    }
-
+		
 	/**
      * Get the BranchUniversalObject from the last open.
      */
@@ -240,6 +145,7 @@ public class Branch : MonoBehaviour {
 
     /**
      * Puts Branch into debug mode, causing it to log all requests, and more importantly, not reference the hardware ID of the phone so you can register installs after just uninstalling/reinstalling the app.
+     *IMPORTANT! You need to change manifest or to enable Debug mode for Android. Methos setDebug works for iOS only.
      *
      * Make sure to remove setDebug before releasing.
      */
@@ -272,6 +178,10 @@ public class Branch : MonoBehaviour {
 		_registerView(universalObject.ToJsonString());
 	}
 
+	public static void listOnSpotlight(BranchUniversalObject universalObject) {
+		_listOnSpotlight(universalObject.ToJsonString());
+	}
+
 	public static void accountForFacebookSDKPreventingAppLaunch() {
 		_accountForFacebookSDKPreventingAppLaunch();
 	}
@@ -279,17 +189,6 @@ public class Branch : MonoBehaviour {
     #endregion
 
     #region User Action methods
-
-    /**
-     * Load counts for all actions. Callback indicates whether a change has occured in these numbers since you last called this method.
-     */
-    public static void loadActionCounts(BranchCallbackWithStatus callback) {
-        var callbackId = _getNextCallbackId();
-
-        _branchCallbacks[callbackId] = callback;
-
-        _loadActionCountsWithCallback(callbackId);
-    }
 
     /**
      * Mark a custom action completed
@@ -303,20 +202,6 @@ public class Branch : MonoBehaviour {
      */
     public static void userCompletedAction(string action, Dictionary<string, object> state) {
         _userCompletedActionWithState(action, MiniJSON.Json.Serialize(state));
-    }
-
-    /**
-     * Get the number of counts for an action
-     */
-    public static int getTotalCountsForAction(string action) {
-        return _getTotalCountsForAction(action);
-    }
-
-    /**
-     * Get the number of "unique" counts for an action
-     */
-    public static int getUniqueCountsForAction(string action) {
-       return _getUniqueCountsForAction(action);
     }
 
     #endregion
@@ -409,43 +294,9 @@ public class Branch : MonoBehaviour {
 
     #endregion
 
-    #region Content URL Methods
-
-    /**
-     * Get a content url given a set of params and a channel
-     */
-    public static void getContentURL(Dictionary<string, object> parameters, string channel, BranchCallbackWithUrl callback) {
-        var callbackId = _getNextCallbackId();
-        
-        _branchCallbacks[callbackId] = callback;
-        
-        _getContentUrlWithParamsChannelAndCallback(MiniJSON.Json.Serialize(parameters), channel, callbackId);
-    }
-
-    /**
-     * Get a content url given a set of params, tags, and a channel
-     */
-    public static void getContentURL(Dictionary<string, object> parameters, List<string> tags, string channel, BranchCallbackWithUrl callback) {
-        var callbackId = _getNextCallbackId();
-        
-        _branchCallbacks[callbackId] = callback;
-        
-        _getContentUrlWithParamsTagsChannelAndCallback(MiniJSON.Json.Serialize(parameters), MiniJSON.Json.Serialize(tags), channel, callbackId);
-    }
-
-    #endregion
-
 	#region Share Link methods
 
-	public static void shareLink(Dictionary<string, object> parameters, List<string> tags, string message, string feature, string stage, string defaultUrl, BranchCallbackWithUrl callback) {
-		var callbackId = _getNextCallbackId();
-		
-		_branchCallbacks[callbackId] = callback;
-
-		_shareLink(MiniJSON.Json.Serialize(parameters), MiniJSON.Json.Serialize(tags), message, feature, stage, defaultUrl, callbackId);
-	}
-
-	public static void shareLink(BranchUniversalObject universalObject, BranchLinkProperties linkProperties, string message, BranchCallbackWithUrl callback) {
+	public static void shareLink(BranchUniversalObject universalObject, BranchLinkProperties linkProperties, string message, BranchCallbackWithParams callback) {
 		var callbackId = _getNextCallbackId();
 		
 		_branchCallbacks[callbackId] = callback;
@@ -457,28 +308,6 @@ public class Branch : MonoBehaviour {
 	
 	#region Short URL Generation methods
 
-    /**
-     * Get an arbitrary short url
-     */
-    public static void getShortURL(BranchCallbackWithUrl callback) {
-        var callbackId = _getNextCallbackId();
-        
-        _branchCallbacks[callbackId] = callback;
-        
-        _getShortURLWithCallback(callbackId);
-    }
-
-    /**
-     * Get a short url given a set of params
-     */
-    public static void getShortURL(Dictionary<string, object> parameters, BranchCallbackWithUrl callback) {
-        var callbackId = _getNextCallbackId();
-        
-        _branchCallbacks[callbackId] = callback;
-        
-        _getShortURLWithParamsAndCallback(MiniJSON.Json.Serialize(parameters), callbackId);
-    }
-
 	/**
      * Get a short url given a BranchUniversalObject, BranchLinkProperties
      */
@@ -489,235 +318,6 @@ public class Branch : MonoBehaviour {
 		
 		_getShortURLWithBranchUniversalObjectAndCallback(universalObject.ToJsonString(), linkProperties.ToJsonString(), callbackId);
 	}
-
-    /**
-     * Get a short url given a set of params, tags, channel, feature, and stage
-     */
-    public static void getShortURLWithTags(Dictionary<string, object> parameters, List<string> tags, string channel, string feature, string stage, BranchCallbackWithUrl callback) {
-        var callbackId = _getNextCallbackId();
-        
-        _branchCallbacks[callbackId] = callback;
-        
-        _getShortURLWithParamsTagsChannelFeatureStageAndCallback(MiniJSON.Json.Serialize(parameters), MiniJSON.Json.Serialize(tags), channel, feature, stage, callbackId);
-	}
-
-    /**
-     * Get a short url given a set of params, tags, channel, feature, stage, and alias
-     */
-    public static void getShortURLWithTags(Dictionary<string, object> parameters, List<string> tags, string channel, string feature, string stage, string alias, BranchCallbackWithUrl callback) {
-        var callbackId = _getNextCallbackId();
-        
-        _branchCallbacks[callbackId] = callback;
-        
-        _getShortURLWithParamsTagsChannelFeatureStageAliasAndCallback(MiniJSON.Json.Serialize(parameters), MiniJSON.Json.Serialize(tags), channel, feature, stage, alias, callbackId);
-    }
-
-    /**
-     * Get a short url given a set of params, tags, channel, feature, stage, and type
-     */
-    public static void getShortURLWithTags(int type, Dictionary<string, object> parameters, List<string> tags, string channel, string feature, string stage, BranchCallbackWithUrl callback) {
-        var callbackId = _getNextCallbackId();
-        
-        _branchCallbacks[callbackId] = callback;
-        
-        _getShortURLWithParamsTagsChannelFeatureStageTypeAndCallback(MiniJSON.Json.Serialize(parameters), MiniJSON.Json.Serialize(tags), channel, feature, stage, type, callbackId);
-    }
-
-    /**
-     * Get a short url given a set of params, tags, channel, feature, stage, and matchDuration
-     */
-    public static void getShortURLWithTags(Dictionary<string, object> parameters, List<string>tags, string channel, string feature, string stage, int matchDuration, BranchCallbackWithUrl callback) {
-        var callbackId = _getNextCallbackId();
-        
-        _branchCallbacks[callbackId] = callback;
-        
-        _getShortURLWithParamsTagsChannelFeatureStageMatchDurationAndCallback(MiniJSON.Json.Serialize(parameters), MiniJSON.Json.Serialize(tags), channel, feature, stage, matchDuration, callbackId);
-    }
-
-    /**
-     * Get a short url given a set of params, channel, and feature
-     */
-    public static void getShortURL(Dictionary<string, object> parameters, string channel, string feature, BranchCallbackWithUrl callback) {
-        var callbackId = _getNextCallbackId();
-        
-        _branchCallbacks[callbackId] = callback;
-        
-        _getShortURLWithParamsChannelFeatureAndCallback(MiniJSON.Json.Serialize(parameters), channel, feature, callbackId);
-    }
-
-    /**
-     * Get a short url given a set of params, channel, feature, and stage
-     */
-    public static void getShortURL(Dictionary<string, object> parameters, string channel, string feature, string stage, BranchCallbackWithUrl callback) {
-        var callbackId = _getNextCallbackId();
-        
-        _branchCallbacks[callbackId] = callback;
-        
-        _getShortURLWithParamsChannelFeatureStageAndCallback(MiniJSON.Json.Serialize(parameters), channel, feature, stage, callbackId);
-    }
-
-    /**
-     * Get a short url given a set of params, channel, feature, stage, and alias
-     */
-    public static void getShortURL(Dictionary<string, object> parameters, string channel, string feature, string stage, string alias, BranchCallbackWithUrl callback) {
-        var callbackId = _getNextCallbackId();
-        
-        _branchCallbacks[callbackId] = callback;
-        
-        _getShortURLWithParamsChannelFeatureStageAliasAndCallback(MiniJSON.Json.Serialize(parameters), channel, feature, stage, alias, callbackId);
-    }
-
-    /**
-     * Get a short url given a set of params, channel, feature, stage, and type
-     */
-    public static void getShortURL(int type, Dictionary<string, object> parameters, string channel, string feature, string stage, BranchCallbackWithUrl callback) {
-        var callbackId = _getNextCallbackId();
-        
-        _branchCallbacks[callbackId] = callback;
-        
-        _getShortURLWithParamsChannelFeatureStageTypeAndCallback(MiniJSON.Json.Serialize(parameters), channel, feature, stage, type, callbackId);
-    }
-
-    /**
-     * Get a short url given a set of params, channel, feature, stage, and match duration
-     */
-    public static void getShortURL(Dictionary<string, object> parameters, string channel, string feature, string stage, int matchDuration, BranchCallbackWithUrl callback) {
-        var callbackId = _getNextCallbackId();
-        
-        _branchCallbacks[callbackId] = callback;
-        
-        _getShortURLWithParamsChannelFeatureStageMatchDurationAndCallback(MiniJSON.Json.Serialize(parameters), channel, feature, stage, matchDuration, callbackId);
-    }
-
-    #endregion
-
-    #region Referral Methods
-
-    /**
-     * Get a referral url given a set of params, tags, and channel
-     */
-    public static void getReferralURL(Dictionary<string, object> parameters, List<string> tags, string channel, BranchCallbackWithUrl callback) {
-        var callbackId = _getNextCallbackId();
-        
-        _branchCallbacks[callbackId] = callback;
-        
-        _getReferralUrlWithParamsTagsChannelAndCallback(MiniJSON.Json.Serialize(parameters), MiniJSON.Json.Serialize(tags), channel, callbackId);
-    }
-
-    /**
-     * Get a referral url given a set of params and channel
-     */
-    public static void getReferralURL(Dictionary<string, object> parameters, string channel, BranchCallbackWithUrl callback) {
-        var callbackId = _getNextCallbackId();
-        
-        _branchCallbacks[callbackId] = callback;
-        
-        _getReferralUrlWithParamsChannelAndCallback(MiniJSON.Json.Serialize(parameters), channel, callbackId);
-    }
-
-    /**
-     * Get an arbitrary referral code for this session
-     */
-    public static void getReferralCode(BranchCallbackWithParams callback) {
-        var callbackId = _getNextCallbackId();
-        
-        _branchCallbacks[callbackId] = callback;
-        
-        _getReferralCodeWithCallback(callbackId);
-    }
-
-    /**
-     * Get a referral code for this session for a specified amount
-     */
-    public static void getReferralCode(int amount, BranchCallbackWithParams callback) {
-        var callbackId = _getNextCallbackId();
-        
-        _branchCallbacks[callbackId] = callback;
-        
-        _getReferralCodeWithAmountAndCallback(amount, callbackId);
-    }
-
-    /**
-     * Get a referral code for this session with a prefix identifier for a specified amount
-     */
-    public static void getReferralCode(string prefix, int amount, BranchCallbackWithParams callback) {
-        var callbackId = _getNextCallbackId();
-        
-        _branchCallbacks[callbackId] = callback;
-        
-        _getReferralCodeWithPrefixAmountAndCallback(prefix, amount, callbackId);
-    }
-
-    /**
-     * Get a referral code for this session for a specified amount set to expire at the specified time
-     */
-    public static void getReferralCode(int amount, DateTime? expiration, BranchCallbackWithParams callback) {
-        var callbackId = _getNextCallbackId();
-        
-        _branchCallbacks[callbackId] = callback;
-        
-		if (expiration.HasValue) {
-			_getReferralCodeWithAmountExpirationAndCallback(amount, expiration.Value.ToString("yyyy-MM-ddTHH:mm:ssZ"), callbackId);
-		} else {
-			_getReferralCodeWithAmountExpirationAndCallback(amount, "", callbackId);
-		}
-    }
-
-    /**
-     * Get a referral code for this session with a prefix identifier for a specified amount set to expire at the specified time
-     */
-    public static void getReferralCode(string prefix, int amount, DateTime? expiration, BranchCallbackWithParams callback) {
-        var callbackId = _getNextCallbackId();
-        
-        _branchCallbacks[callbackId] = callback;
-        
-		if (expiration.HasValue) {
-        	_getReferralCodeWithPrefixAmountExpirationAndCallback(prefix, amount, expiration.Value.ToString("yyyy-MM-ddTHH:mm:ssZ"), callbackId);
-		} else {
-			_getReferralCodeWithPrefixAmountExpirationAndCallback(prefix, amount, "", callbackId);
-		}
-    }
-
-    /**
-     * Get a referral code for this session with a prefix identifier for a specified amount set to expire at the specified time in a specified bucket with a specified calculation type and location
-     * Calc Type can be one of 0 (unlimited, reward can be applied continually) or 1 (unique, user can only apply a specific code once)
-     * Location can be one of 0 (referree, user applying referral code receives credit), 1 (referrer, user who created code receives credit), or 2 (both, both the sender and receiver receive credit)
-     */
-    public static void getReferralCode(string prefix, int amount, DateTime? expiration, string bucket, int calcType, int location, BranchCallbackWithParams callback) {
-        var callbackId = _getNextCallbackId();
-        
-        _branchCallbacks[callbackId] = callback;
-        
-		if (expiration.HasValue) {
-			_getReferralCodeWithPrefixAmountExpirationBucketTypeLocationAndCallback(prefix, amount, expiration.Value.ToString("yyyy-MM-ddTHH:mm:ssZ"), bucket, calcType, location, callbackId);
-		} else {
-			_getReferralCodeWithPrefixAmountExpirationBucketTypeLocationAndCallback(prefix, amount, "", bucket, calcType, location, callbackId);
-		}
-    }
-
-    /**
-     * Validate if a referral code exists in Branch system and is still valid. A code is vaild if:
-     * 1. It hasn't expired.
-     * 2. If its calculation type is uniqe, it hasn't been applied by current user.
-     */
-    public static void validateReferralCode(string code, BranchCallbackWithParams callback) {
-        var callbackId = _getNextCallbackId();
-        
-        _branchCallbacks[callbackId] = callback;
-        
-        _validateReferralCodeWithCallback(code, callbackId);
-    }
-
-    /**
-     * Apply a referral code if it exists in Branch system and is still valid (see above). If the code is valid, returns the referral code object in the callback.
-     */
-    public static void applyReferralCode(string code, BranchCallbackWithParams callback) {
-        var callbackId = _getNextCallbackId();
-        
-        _branchCallbacks[callbackId] = callback;
-        
-        _applyReferralCodeWithCallback(code, callbackId);
-    }
 
     #endregion
 
@@ -736,29 +336,18 @@ public class Branch : MonoBehaviour {
 
         name = "Branch";
         DontDestroyOnLoad(gameObject);
-        _setBranchKey(BranchData.Instance.branchKey);
-    }
-		
-	void OnApplicationPause(bool pauseStatus) {
-		if (!_isFirstSessionInited)
-			return;
 
-		if (!pauseStatus) {
-			if (autoInitCallbackWithParams != null) {
-				initSession(autoInitCallbackWithParams);
-			}
-			else if (autoInitCallbackWithBUO != null) {
-				initSession(autoInitCallbackWithBUO);
-			}
-			else {
-				initSession();
-				Debug.Log("initSession()");
-			}
+		if (BranchData.Instance.testMode) {
+        	_setBranchKey(BranchData.Instance.testBranchKey);
 		}
 		else {
-			closeSession();
+			_setBranchKey(BranchData.Instance.liveBranchKey);
 		}
-	}
+
+		if (BranchData.Instance.simulateFreshInstalls) {
+			setDebug();
+		}
+    }
 
 	#endregion
 
@@ -774,31 +363,14 @@ public class Branch : MonoBehaviour {
     [DllImport ("__Internal")]
     private static extern void _initSession();
     
-    [DllImport ("__Internal")]
-    private static extern void _initSessionAsReferrable(bool isReferrable);
-    
-    [DllImport ("__Internal")]
-    private static extern void _initSessionWithCallback(string callbackId);
-    
-    [DllImport ("__Internal")]
-    private static extern void _initSessionAsReferrableWithCallback(bool isReferrable, string callbackId);
-
 	[DllImport ("__Internal")]
 	private static extern void _initSessionWithUniversalObjectCallback(string callbackId);
-	
-    private static void _closeSession() { }
-    
-    [DllImport ("__Internal")]
-	private static extern IntPtr _getFirstReferringParams();
-    
+        
 	[DllImport ("__Internal")]
 	private static extern IntPtr _getFirstReferringBranchUniversalObject();
 
 	[DllImport ("__Internal")]
 	private static extern IntPtr _getFirstReferringBranchLinkProperties();
-
-    [DllImport ("__Internal")]
-	private static extern IntPtr _getLatestReferringParams();
 
 	[DllImport ("__Internal")]
 	private static extern IntPtr _getLatestReferringBranchUniversalObject();
@@ -834,22 +406,16 @@ public class Branch : MonoBehaviour {
 	private static extern void _registerView(string universalObject);
 
 	[DllImport ("__Internal")]
+	private static extern void _listOnSpotlight(string universalObject);
+
+	[DllImport ("__Internal")]
 	private static extern void _accountForFacebookSDKPreventingAppLaunch();
 
-    [DllImport ("__Internal")]
-    private static extern void _loadActionCountsWithCallback(string callbackId);
-    
     [DllImport ("__Internal")]
     private static extern void _userCompletedAction(string action);
     
     [DllImport ("__Internal")]
     private static extern void _userCompletedActionWithState(string action, string stateDict);
-    
-    [DllImport ("__Internal")]
-    private static extern int _getTotalCountsForAction(string action);
-    
-    [DllImport ("__Internal")]
-    private static extern int _getUniqueCountsForAction(string action);
     
     [DllImport ("__Internal")]
     private static extern void _loadRewardsWithCallback(string callbackId);
@@ -878,84 +444,12 @@ public class Branch : MonoBehaviour {
     [DllImport ("__Internal")]
     private static extern void _getCreditHistoryForBucketWithTransactionLengthOrderAndCallback(string bucket, string creditTransactionId, int length, int order, string callbackId);
     
-    [DllImport ("__Internal")]
-    private static extern void _getContentUrlWithParamsChannelAndCallback(string parametersDict, string channel, string callbackId);
-    
-    [DllImport ("__Internal")]
-    private static extern void _getContentUrlWithParamsTagsChannelAndCallback(string parametersDict, string tags, string channel, string callbackId);
-    
-    [DllImport ("__Internal")]
-    private static extern void _getShortURLWithCallback(string callbackId);
-    
-    [DllImport ("__Internal")]
-    private static extern void _getShortURLWithParamsAndCallback(string parametersDict, string callbackId);
-    
 	[DllImport ("__Internal")]
 	private static extern void _getShortURLWithBranchUniversalObjectAndCallback(string universalObject, string linkProperties, string callbackId);
 
-    [DllImport ("__Internal")]
-    private static extern void _getShortURLWithParamsTagsChannelFeatureStageAndCallback(string parametersDict, string tags, string channel, string feature, string stage, string callbackId);
-    
-    [DllImport ("__Internal")]
-    private static extern void _getShortURLWithParamsTagsChannelFeatureStageAliasAndCallback(string parametersDict, string tags, string channel, string feature, string stage, string alias, string callbackId);
-    
-    [DllImport ("__Internal")]
-    private static extern void _getShortURLWithParamsTagsChannelFeatureStageTypeAndCallback(string parametersDict, string tags, string channel, string feature, string stage, int type, string callbackId);
-
-    [DllImport ("__Internal")]
-    private static extern void _getShortURLWithParamsTagsChannelFeatureStageMatchDurationAndCallback(string parametersDict, string tags, string channel, string feature, string stage, int matchDuration, string callbackId);
-    
-    [DllImport ("__Internal")]
-    private static extern void _getShortURLWithParamsChannelFeatureAndCallback(string parametersDict, string channel, string feature, string callbackId);
-    
-    [DllImport ("__Internal")]
-    private static extern void _getShortURLWithParamsChannelFeatureStageAndCallback(string parametersDict, string channel, string feature, string stage, string callbackId);
-    
-    [DllImport ("__Internal")]
-    private static extern void _getShortURLWithParamsChannelFeatureStageAliasAndCallback(string parametersDict, string channel, string feature, string stage, string alias, string callbackId);
-    
-    [DllImport ("__Internal")]
-    private static extern void _getShortURLWithParamsChannelFeatureStageTypeAndCallback(string parametersDict, string channel, string feature, string stage, int type, string callbackId);
-    
-    [DllImport ("__Internal")]
-    private static extern void _getShortURLWithParamsChannelFeatureStageMatchDurationAndCallback(string parametersDict, string channel, string feature, string stage, int matchDuration, string callbackId);
-
-    [DllImport ("__Internal")]
-    private static extern void _getReferralUrlWithParamsTagsChannelAndCallback(string parametersDict, string tags, string channel, string callbackId);
-    
-    [DllImport ("__Internal")]
-    private static extern void _getReferralUrlWithParamsChannelAndCallback(string parametersDict, string channel, string callbackId);
-
-	[DllImport ("__Internal")]
-	private static extern void _shareLink(string parameterDict, string tagList, string message, string feature, string stage, string defaultUrl, string callbackId);
-
 	[DllImport ("__Internal")]
 	private static extern void _shareLinkWithLinkProperties(string universalObject, string linkProperties, string message, string callbackId);
-
-    [DllImport ("__Internal")]
-    private static extern void _getReferralCodeWithCallback(string callbackId);
-    
-    [DllImport ("__Internal")]
-    private static extern void _getReferralCodeWithAmountAndCallback(int amount, string callbackId);
-    
-    [DllImport ("__Internal")]
-    private static extern void _getReferralCodeWithPrefixAmountAndCallback(string prefix, int amount, string callbackId);
-    
-    [DllImport ("__Internal")]
-    private static extern void _getReferralCodeWithAmountExpirationAndCallback(int amount, string expiration, string callbackId);
-    
-    [DllImport ("__Internal")]
-    private static extern void _getReferralCodeWithPrefixAmountExpirationAndCallback(string prefix, int amount, string expiration, string callbackId);
-    
-    [DllImport ("__Internal")]
-    private static extern void _getReferralCodeWithPrefixAmountExpirationBucketTypeLocationAndCallback(string prefix, int amount, string expiration, string bucket, int calcType, int location, string callbackId);
-    
-    [DllImport ("__Internal")]
-    private static extern void _validateReferralCodeWithCallback(string code, string callbackId);
-    
-    [DllImport ("__Internal")]
-    private static extern void _applyReferralCodeWithCallback(string code, string callbackId);
-    
+	    
 	#elif UNITY_ANDROID && !UNITY_EDITOR
 
     private static void _setBranchKey(string branchKey) {
@@ -966,30 +460,10 @@ public class Branch : MonoBehaviour {
         BranchAndroidWrapper.initSession();
     }
 
-    private static void _initSessionAsReferrable(bool isReferrable) {
-        BranchAndroidWrapper.initSessionAsReferrable(isReferrable);
-    }
-
-    private static void _initSessionWithCallback(string callbackId) {
-        BranchAndroidWrapper.initSessionWithCallback(callbackId);
-    }
-
-    private static void _closeSession() {
-        BranchAndroidWrapper.closeSession();
-    }
-
-    private static void _initSessionAsReferrableWithCallback(bool isReferrable, string callbackId) {
-        BranchAndroidWrapper.initSessionAsReferrableWithCallback(isReferrable, callbackId);
-    }
-
 	private static void _initSessionWithUniversalObjectCallback(string callbackId) {
 		BranchAndroidWrapper.initSessionWithUniversalObjectCallback(callbackId);
 	}
 
-	private static string _getFirstReferringParams() {
-        return BranchAndroidWrapper.getFirstReferringParams();
-    }
-    
 	private static string _getFirstReferringBranchUniversalObject() {
 		return BranchAndroidWrapper.getFirstReferringBranchUniversalObject();
 	}
@@ -998,10 +472,6 @@ public class Branch : MonoBehaviour {
 		return BranchAndroidWrapper.getFirstReferringBranchLinkProperties();
 	}
 
-	private static string _getLatestReferringParams() {
-        return BranchAndroidWrapper.getLatestReferringParams();
-    }
-    
 	private static string _getLatestReferringBranchUniversalObject() {
 		return BranchAndroidWrapper.getLatestReferringBranchUniversalObject();
 	}
@@ -1046,28 +516,20 @@ public class Branch : MonoBehaviour {
 		BranchAndroidWrapper.registerView(universalObject);
 	}
 
+	private static void _listOnSpotlight(string universalObject) {
+		BranchAndroidWrapper.listOnSpotlight(universalObject);
+	}
+
 	private static void _accountForFacebookSDKPreventingAppLaunch() {
 		BranchAndroidWrapper.accountForFacebookSDKPreventingAppLaunch();
 	}
 
-    private static void _loadActionCountsWithCallback(string callbackId) {
-        BranchAndroidWrapper.loadActionCountsWithCallback(callbackId);
-    }
-    
     private static void _userCompletedAction(string action) {
         BranchAndroidWrapper.userCompletedAction(action);
     }
     
     private static void _userCompletedActionWithState(string action, string stateDict) {
         BranchAndroidWrapper.userCompletedActionWithState(action, stateDict);
-    }
-    
-    private static int _getTotalCountsForAction(string action) {
-        return BranchAndroidWrapper.getTotalCountsForAction(action);
-    }
-    
-    private static int _getUniqueCountsForAction(string action) {
-        return BranchAndroidWrapper.getUniqueCountsForAction(action);
     }
     
     private static void _loadRewardsWithCallback(string callbackId) {
@@ -1105,110 +567,14 @@ public class Branch : MonoBehaviour {
     private static void _getCreditHistoryForBucketWithTransactionLengthOrderAndCallback(string bucket, string creditTransactionId, int length, int order, string callbackId) {
         BranchAndroidWrapper.getCreditHistoryForBucketWithTransactionLengthOrderAndCallback(bucket, creditTransactionId, length, order, callbackId);
     }
-    
-    private static void _getContentUrlWithParamsChannelAndCallback(string parametersDict, string channel, string callbackId) {
-        BranchAndroidWrapper.getContentUrlWithParamsChannelAndCallback(parametersDict, channel, callbackId);
-    }
-    
-    private static void _getContentUrlWithParamsTagsChannelAndCallback(string parametersDict, string tags, string channel, string callbackId) {
-        BranchAndroidWrapper.getContentUrlWithParamsTagsChannelAndCallback(parametersDict, tags, channel, callbackId);
-    }
-    
-	private static void _shareLink(string parameterDict, string tagList, string message, string feature, string stage, string defaultUrl, string callbackId) {
-		BranchAndroidWrapper.shareLink(parameterDict, tagList, message, feature, stage, defaultUrl, callbackId);
-	}
 
 	private static void _shareLinkWithLinkProperties(string universalObject, string linkProperties, string message, string callbackId) {
 		BranchAndroidWrapper.shareLinkWithLinkProperties(universalObject, linkProperties, message, callbackId);
 	}
-
-    private static void _getShortURLWithCallback(string callbackId) {
-        BranchAndroidWrapper.getShortURLWithCallback(callbackId);
-    }
-    
-    private static void _getShortURLWithParamsAndCallback(string parametersDict, string callbackId) {
-        BranchAndroidWrapper.getShortURLWithParamsAndCallback(parametersDict, callbackId);
-    }
-    
+	    
 	private static void _getShortURLWithBranchUniversalObjectAndCallback(string universalObject, string linkProperties, string callbackId) {
 		BranchAndroidWrapper.getShortURLWithBranchUniversalObjectAndCallback(universalObject, linkProperties, callbackId);
 	}
-
-    private static void _getShortURLWithParamsTagsChannelFeatureStageAndCallback(string parametersDict, string tags, string channel, string feature, string stage, string callbackId) {
-        BranchAndroidWrapper.getShortURLWithParamsTagsChannelFeatureStageAndCallback(parametersDict, tags, channel, feature, stage, callbackId);
-    }
-    
-    private static void _getShortURLWithParamsTagsChannelFeatureStageAliasAndCallback(string parametersDict, string tags, string channel, string feature, string stage, string alias, string callbackId) {
-        BranchAndroidWrapper.getShortURLWithParamsTagsChannelFeatureStageAliasAndCallback(parametersDict, tags, channel, feature, stage, alias, callbackId);
-    }
-    
-    private static void _getShortURLWithParamsTagsChannelFeatureStageTypeAndCallback(string parametersDict, string tags, string channel, string feature, string stage, int type, string callbackId) {
-        BranchAndroidWrapper.getShortURLWithParamsTagsChannelFeatureStageTypeAndCallback(parametersDict, tags, channel, feature, stage, type, callbackId);
-    }
-    
-    private static void _getShortURLWithParamsTagsChannelFeatureStageMatchDurationAndCallback(string parametersDict, string tags, string channel, string feature, string stage, int matchDuration, string callbackId) {
-        BranchAndroidWrapper.getShortURLWithParamsTagsChannelFeatureStageMatchDurationAndCallback(parametersDict, tags, channel, feature, stage, matchDuration, callbackId);
-    }
-    
-    private static void _getShortURLWithParamsChannelFeatureAndCallback(string parametersDict, string channel, string feature, string callbackId) {
-        BranchAndroidWrapper.getShortURLWithParamsChannelFeatureAndCallback(parametersDict, channel, feature, callbackId);
-    }
-    
-    private static void _getShortURLWithParamsChannelFeatureStageAndCallback(string parametersDict, string channel, string feature, string stage, string callbackId) {
-        BranchAndroidWrapper.getShortURLWithParamsChannelFeatureStageAndCallback(parametersDict, channel, feature, stage, callbackId);
-    }
-    
-    private static void _getShortURLWithParamsChannelFeatureStageAliasAndCallback(string parametersDict, string channel, string feature, string stage, string alias, string callbackId) {
-        BranchAndroidWrapper.getShortURLWithParamsChannelFeatureStageAliasAndCallback(parametersDict, channel, feature, stage, alias, callbackId);
-    }
-    
-    private static void _getShortURLWithParamsChannelFeatureStageTypeAndCallback(string parametersDict, string channel, string feature, string stage, int type, string callbackId) {
-        BranchAndroidWrapper.getShortURLWithParamsChannelFeatureStageTypeAndCallback(parametersDict, channel, feature, stage, type, callbackId);
-    }
-    
-    private static void _getShortURLWithParamsChannelFeatureStageMatchDurationAndCallback(string parametersDict, string channel, string feature, string stage, int matchDuration, string callbackId) {
-        BranchAndroidWrapper.getShortURLWithParamsChannelFeatureStageMatchDurationAndCallback(parametersDict, channel, feature, stage, matchDuration, callbackId);
-    }
-    
-    private static void _getReferralUrlWithParamsTagsChannelAndCallback(string parametersDict, string tags, string channel, string callbackId) {
-        BranchAndroidWrapper.getReferralUrlWithParamsTagsChannelAndCallback(parametersDict, tags, channel, callbackId);
-    }
-    
-    private static void _getReferralUrlWithParamsChannelAndCallback(string parametersDict, string channel, string callbackId) {
-        BranchAndroidWrapper.getReferralUrlWithParamsChannelAndCallback(parametersDict, channel, callbackId);
-    }
-    
-    private static void _getReferralCodeWithCallback(string callbackId) {
-        BranchAndroidWrapper.getReferralCodeWithCallback(callbackId);
-    }
-    
-    private static void _getReferralCodeWithAmountAndCallback(int amount, string callbackId) {
-        BranchAndroidWrapper.getReferralCodeWithAmountAndCallback(amount, callbackId);
-    }
-    
-    private static void _getReferralCodeWithPrefixAmountAndCallback(string prefix, int amount, string callbackId) {
-        BranchAndroidWrapper.getReferralCodeWithPrefixAmountAndCallback(prefix, amount, callbackId);
-    }
-    
-    private static void _getReferralCodeWithAmountExpirationAndCallback(int amount, string expiration, string callbackId) {
-        BranchAndroidWrapper.getReferralCodeWithAmountExpirationAndCallback(amount, expiration, callbackId);
-    }
-    
-    private static void _getReferralCodeWithPrefixAmountExpirationAndCallback(string prefix, int amount, string expiration, string callbackId) {
-        BranchAndroidWrapper.getReferralCodeWithPrefixAmountExpirationAndCallback(prefix, amount, expiration, callbackId);
-    }
-    
-    private static void _getReferralCodeWithPrefixAmountExpirationBucketTypeLocationAndCallback(string prefix, int amount, string expiration, string bucket, int calcType, int location, string callbackId) {
-        BranchAndroidWrapper.getReferralCodeWithPrefixAmountExpirationBucketTypeLocationAndCallback(prefix, amount, expiration, bucket, calcType, location, callbackId);
-    }
-    
-    private static void _validateReferralCodeWithCallback(string code, string callbackId) {
-        BranchAndroidWrapper.validateReferralCodeWithCallback(code, callbackId);
-    }
-    
-    private static void _applyReferralCodeWithCallback(string code, string callbackId) {
-        BranchAndroidWrapper.applyReferralCodeWithCallback(code, callbackId);
-    }
 
     #else
 
@@ -1218,28 +584,10 @@ public class Branch : MonoBehaviour {
         Debug.Log("Branch is not implemented on this platform");
     }
     
-    private static void _initSessionAsReferrable(bool isReferrable) {
-        Debug.Log("Branch is not implemented on this platform");
-    }
-    
-    private static void _initSessionWithCallback(string callbackId) {
-        callNotImplementedCallbackForParamCallback(callbackId);
-    }
-    
-    private static void _initSessionAsReferrableWithCallback(bool isReferrable, string callbackId) {
-        callNotImplementedCallbackForParamCallback(callbackId);
-    }
-
 	private static void _initSessionWithUniversalObjectCallback(string callbackId) {
 		callNotImplementedCallbackForBUOCallback(callbackId);
 	}
 
-    private static void _closeSession() { }
-    
-    private static string _getFirstReferringParams() {
-        return "{}";
-    }
-    
 	private static string _getFirstReferringBranchUniversalObject() {
 		return "{}";
 	}
@@ -1247,10 +595,6 @@ public class Branch : MonoBehaviour {
 	private static string _getFirstReferringBranchLinkProperties() {
 		return "{}";
 	}
-
-    private static string _getLatestReferringParams() {
-        return "{}";
-    }
 
 	private static string _getLatestReferringBranchUniversalObject() {
 		return "{}";
@@ -1280,23 +624,13 @@ public class Branch : MonoBehaviour {
 
 	private static void _registerView(string universalObject) { }
 
+	private static void _listOnSpotlight(string universalObject) { }
+
 	private static void _accountForFacebookSDKPreventingAppLaunch() { }
-    
-    private static void _loadActionCountsWithCallback(string callbackId) {
-        callNotImplementedCallbackForStatusCallback(callbackId);
-    }
     
     private static void _userCompletedAction(string action) { }
     
     private static void _userCompletedActionWithState(string action, string stateDict) { }
-    
-    private static int _getTotalCountsForAction(string action) {
-        return 0;
-    }
-    
-    private static int _getUniqueCountsForAction(string action) {
-        return 0;
-    }
     
     private static void _loadRewardsWithCallback(string callbackId) {
         callNotImplementedCallbackForStatusCallback(callbackId);
@@ -1330,109 +664,14 @@ public class Branch : MonoBehaviour {
         callNotImplementedCallbackForListCallback(callbackId);
     }
     
-    private static void _getContentUrlWithParamsChannelAndCallback(string parametersDict, string channel, string callbackId) {
-        callNotImplementedCallbackForUrlCallback(callbackId);
-    }
-    
-    private static void _getContentUrlWithParamsTagsChannelAndCallback(string parametersDict, string tags, string channel, string callbackId) {
-        callNotImplementedCallbackForUrlCallback(callbackId);
-    }
-    
-	private static void _shareLink(string parameterDict, string tagList, string message, string feature, string stage, string defaultUrl, string callbackId) {
-		callNotImplementedCallbackForUrlCallback(callbackId);
-	}
-
 	private static void _shareLinkWithLinkProperties(string universalObject, string linkProperties, string message,string callbackId) {
 		callNotImplementedCallbackForUrlCallback(callbackId);
 	}
 
-    private static void _getShortURLWithCallback(string callbackId) {
-        callNotImplementedCallbackForUrlCallback(callbackId);
-    }
-    
-    private static void _getShortURLWithParamsAndCallback(string parametersDict, string callbackId) {
-        callNotImplementedCallbackForUrlCallback(callbackId);
-    }
-    
 	private static void _getShortURLWithBranchUniversalObjectAndCallback(string universalObject, string linkProperties, string callbackId) {
 		callNotImplementedCallbackForUrlCallback(callbackId);
 	}
-
-    private static void _getShortURLWithParamsTagsChannelFeatureStageAndCallback(string parametersDict, string tags, string channel, string feature, string stage, string callbackId) {
-        callNotImplementedCallbackForUrlCallback(callbackId);
-    }
-    
-    private static void _getShortURLWithParamsTagsChannelFeatureStageAliasAndCallback(string parametersDict, string tags, string channel, string feature, string stage, string alias, string callbackId) {
-        callNotImplementedCallbackForUrlCallback(callbackId);
-    }
-    
-    private static void _getShortURLWithParamsTagsChannelFeatureStageTypeAndCallback(string parametersDict, string tags, string channel, string feature, string stage, int type, string callbackId) {
-        callNotImplementedCallbackForUrlCallback(callbackId);
-    }
-    
-    private static void _getShortURLWithParamsTagsChannelFeatureStageMatchDurationAndCallback(string parametersDict, string tags, string channel, string feature, string stage, int matchDuration, string callbackId) {
-        callNotImplementedCallbackForUrlCallback(callbackId);
-    }
-    
-    private static void _getShortURLWithParamsChannelFeatureAndCallback(string parametersDict, string channel, string feature, string callbackId) {
-        callNotImplementedCallbackForUrlCallback(callbackId);
-    }
-    
-    private static void _getShortURLWithParamsChannelFeatureStageAndCallback(string parametersDict, string channel, string feature, string stage, string callbackId) {
-        callNotImplementedCallbackForUrlCallback(callbackId);
-    }
-    
-    private static void _getShortURLWithParamsChannelFeatureStageAliasAndCallback(string parametersDict, string channel, string feature, string stage, string alias, string callbackId) {
-        callNotImplementedCallbackForUrlCallback(callbackId);
-    }
-    
-    private static void _getShortURLWithParamsChannelFeatureStageTypeAndCallback(string parametersDict, string channel, string feature, string stage, int type, string callbackId) {
-        callNotImplementedCallbackForUrlCallback(callbackId);
-    }
-    
-    private static void _getShortURLWithParamsChannelFeatureStageMatchDurationAndCallback(string parametersDict, string channel, string feature, string stage, int matchDuration, string callbackId) {
-        callNotImplementedCallbackForUrlCallback(callbackId);
-    }
-    
-    private static void _getReferralUrlWithParamsTagsChannelAndCallback(string parametersDict, string tags, string channel, string callbackId) {
-        callNotImplementedCallbackForUrlCallback(callbackId);
-    }
-    
-    private static void _getReferralUrlWithParamsChannelAndCallback(string parametersDict, string channel, string callbackId) {
-        callNotImplementedCallbackForUrlCallback(callbackId);
-    }
-    
-    private static void _getReferralCodeWithCallback(string callbackId) {
-        callNotImplementedCallbackForParamCallback(callbackId);
-    }
-    
-    private static void _getReferralCodeWithAmountAndCallback(int amount, string callbackId) {
-        callNotImplementedCallbackForParamCallback(callbackId);
-    }
-    
-    private static void _getReferralCodeWithPrefixAmountAndCallback(string prefix, int amount, string callbackId) {
-        callNotImplementedCallbackForParamCallback(callbackId);
-    }
-    
-    private static void _getReferralCodeWithAmountExpirationAndCallback(int amount, string expiration, string callbackId) {
-        callNotImplementedCallbackForParamCallback(callbackId);
-    }
-    
-    private static void _getReferralCodeWithPrefixAmountExpirationAndCallback(string prefix, int amount, string expiration, string callbackId) {
-        callNotImplementedCallbackForParamCallback(callbackId);
-    }
-    
-    private static void _getReferralCodeWithPrefixAmountExpirationBucketTypeLocationAndCallback(string prefix, int amount, string expiration, string bucket, int calcType, int location, string callbackId) {
-        callNotImplementedCallbackForParamCallback(callbackId);
-    }
-    
-    private static void _validateReferralCodeWithCallback(string code, string callbackId) {
-        callNotImplementedCallbackForParamCallback(callbackId);
-    }
-    
-    private static void _applyReferralCodeWithCallback(string code, string callbackId) {
-        callNotImplementedCallbackForParamCallback(callbackId);
-    }
+		
     
     private static void callNotImplementedCallbackForParamCallback(string callbackId) {
         var callback = _branchCallbacks[callbackId] as BranchCallbackWithParams;
@@ -1470,9 +709,11 @@ public class Branch : MonoBehaviour {
         var callbackId = callbackDict["callbackId"] as string;
         Dictionary<string, object> parameters = callbackDict.ContainsKey("params") ? callbackDict["params"] as Dictionary<string, object> : null;
         string error = callbackDict.ContainsKey("error") ? callbackDict["error"] as string : null;
-
-        var callback = _branchCallbacks[callbackId] as BranchCallbackWithParams;
-        callback(parameters, error);
+        
+		var callback = _branchCallbacks[callbackId] as BranchCallbackWithParams;
+		if (callback != null) {
+			callback(parameters, error);
+		}
     }
 
     public void _asyncCallbackWithStatus(string callbackDictString) {
@@ -1482,7 +723,9 @@ public class Branch : MonoBehaviour {
         string error = callbackDict.ContainsKey("error") ? callbackDict["error"] as string : null;
 
         var callback = _branchCallbacks[callbackId] as BranchCallbackWithStatus;
-        callback(status, error);
+		if (callback != null) {
+        	callback(status, error);
+		}
     }
 
     public void _asyncCallbackWithList(string callbackDictString) {
@@ -1492,7 +735,9 @@ public class Branch : MonoBehaviour {
         string error = callbackDict.ContainsKey("error") ? callbackDict["error"] as string : null;
 
         var callback = _branchCallbacks[callbackId] as BranchCallbackWithList;
-        callback(list, error);
+		if (callback != null) {
+        	callback(list, error);
+		}
     }
 
     public void _asyncCallbackWithUrl(string callbackDictString) {
@@ -1502,7 +747,9 @@ public class Branch : MonoBehaviour {
         string error = callbackDict.ContainsKey("error") ? callbackDict["error"] as string : null;
 
         var callback = _branchCallbacks[callbackId] as BranchCallbackWithUrl;
-        callback(url, error);
+		if (callback != null) {
+        	callback(url, error);
+		}
     }
 
 	public void _asyncCallbackWithBranchUniversalObject(string callbackDictString) {
@@ -1514,7 +761,13 @@ public class Branch : MonoBehaviour {
 		string error = callbackDict.ContainsKey("error") ? callbackDict["error"] as string : null;
 
 		var callback = _branchCallbacks[callbackId] as BranchCallbackWithBranchUniversalObject;
-		callback(new BranchUniversalObject(universalObject), new BranchLinkProperties(linkProperties), error);
+		if (callback != null) {
+			callback(new BranchUniversalObject(universalObject), new BranchLinkProperties(linkProperties), error);
+		}
+	}
+
+	public void _DebugLog(string val) {
+		Debug.Log(val);
 	}
 
     private static string _getNextCallbackId() {
@@ -1526,9 +779,5 @@ public class Branch : MonoBehaviour {
     #endregion
 
     private static int _nextCallbackId = 0;
-	private static int _sessionCounter = 0;
-	private static bool _isFirstSessionInited = false;
-	private static BranchCallbackWithParams autoInitCallbackWithParams = null;
-	private static BranchCallbackWithBranchUniversalObject autoInitCallbackWithBUO = null;
     private static Dictionary<string, object> _branchCallbacks = new Dictionary<string, object>();
 }

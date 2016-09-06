@@ -52,11 +52,13 @@ PluginImporter:
     iOS:
       enabled: 1
       settings:
-        CompileFlags: 
+        CompileFlags: -fobjc-arc
         FrameworkDependencies: 
     tvOS:
-      enabled: 1
-      settings: {}
+      enabled: 0
+      settings:
+        CompileFlags: 
+        FrameworkDependencies: 
   userData: 
   assetBundleName: 
   assetBundleVariant: 

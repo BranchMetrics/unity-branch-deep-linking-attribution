@@ -2,6 +2,8 @@
 
 #pragma mark - Private notification class interface
 
+typedef void (^callbackWithShareCompletion) (NSString *activityType, BOOL completed);
+
 @interface BranchUnityWrapper : NSObject<AppDelegateListener>
 @property (strong, nonatomic) NSDictionary *launchOptions;
 
@@ -20,17 +22,12 @@ extern "C" {
     #pragma mark - InitSession methods
 
     void _initSession();
-    void _initSessionAsReferrable(BOOL isReferrable);
-    void _initSessionWithCallback(char *callbackId);
-    void _initSessionAsReferrableWithCallback(BOOL isReferrable, char *callbackId);
     void _initSessionWithUniversalObjectCallback(char *callbackId);
 
     #pragma mark - Session Item methods
 
-    const char *_getFirstReferringParams();
     const char *_getFirstReferringBranchUniversalObject();
     const char *_getFirstReferringBranchLinkProperties();
-    const char *_getLatestReferringParams();
     const char *_getLatestReferringBranchUniversalObject();
     const char *_getLatestReferringBranchLinkProperties();
     void _resetUserSession();
@@ -45,15 +42,13 @@ extern "C" {
     void _setMaxRetries(int maxRetries);
     void _setNetworkTimeout(int timeout);
     void _registerView(char *universalObjectJson);
+    void _listOnSpotlight(char *universalObjectJson);
     void _accountForFacebookSDKPreventingAppLaunch();
     
     #pragma mark - User Action methods
 
-    void _loadActionCountsWithCallback(char *callbackId);
     void _userCompletedAction(char *action);
     void _userCompletedActionWithState(char *action, char *stateDict);
-    int _getTotalCountsForAction(char *action);
-    int _getUniqueCountsForAction(char *action);
 
     #pragma mark - Credit methods
 
@@ -68,43 +63,13 @@ extern "C" {
     void _getCreditHistoryForTransactionWithLengthOrderAndCallback(char *creditTransactionId, int length, int order, char *callbackId);
     void _getCreditHistoryForBucketWithTransactionLengthOrderAndCallback(char *bucket, char *creditTransactionId, int length, int order, char *callbackId);
 
-    #pragma mark - Content URL methods
-
-    void _getContentUrlWithParamsChannelAndCallback(char *paramsDict, char *channel, char *callbackId);
-    void _getContentUrlWithParamsTagsChannelAndCallback(char *paramsDict, char *tagList, char *channel, char *callbackId);
-
     #pragma mark - Short URL Generation methods
 
-    void _getShortURLWithCallback(char *callbackId);
     void _getShortURLWithBranchUniversalObjectAndCallback(char *universalObjectJson, char *linkPropertiesJson, char *callbackId);
-    void _getShortURLWithParamsAndCallback(char *paramsDict, char *callbackId);
-    void _getShortURLWithParamsTagsChannelFeatureStageAndCallback(char *paramsDict, char *tagList, char *channel, char *feature, char *stage, char *callbackId);
-    void _getShortURLWithParamsTagsChannelFeatureStageAliasAndCallback(char *paramsDict, char *tagList, char *channel, char *feature, char *stage, char *alias, char *callbackId);
-    void _getShortURLWithParamsTagsChannelFeatureStageTypeAndCallback(char *paramsDict, char *tagList, char *channel, char *feature, char *stage, int type, char *callbackId);
-    void _getShortURLWithParamsTagsChannelFeatureStageMatchDurationAndCallback(char *paramsDict, char *tagList, char *channel, char *feature, char *stage, int matchDuration, char *callbackId);
-    void _getShortURLWithParamsChannelFeatureAndCallback(char *paramsDict, char *channel, char *feature, char *callbackId);
-    void _getShortURLWithParamsChannelFeatureStageAndCallback(char *paramsDict, char *channel, char *feature, char *stage, char *callbackId);
-    void _getShortURLWithParamsChannelFeatureStageAliasAndCallback(char *paramsDict, char *channel, char *feature, char *stage, char *alias, char *callbackId);
-    void _getShortURLWithParamsChannelFeatureStageTypeAndCallback(char *paramsDict, char *channel, char *feature, char *stage, int type, char *callbackId);
-    void _getShortURLWithParamsChannelFeatureStageMatchDurationAndCallback(char *paramsDict, char *channel, char *feature, char *stage, int matchDuration, char *callbackId);
 
     #pragma mark - Share Link methods
     
-    void _shareLink(char *parameterDict, char *tagList, char *message, char *feature, char *stage, char *defaultUrl, char *callbackId);
     void _shareLinkWithLinkProperties(char *universalObjectJson, char *linkPropertiesJson, char *message, char *callbackId);
-    
-    #pragma mark - Referral methods
-
-    void _getReferralUrlWithParamsTagsChannelAndCallback(char *paramsDict, char *tagList, char *channel, char *callbackId);
-    void _getReferralUrlWithParamsChannelAndCallback(char *paramsDict, char *channel, char *callbackId);
-    void _getReferralCodeWithCallback(char *callbackId);
-    void _getReferralCodeWithAmountAndCallback(int amount, char *callbackId);
-    void _getReferralCodeWithPrefixAmountAndCallback(char *prefix, int amount, char *callbackId);
-    void _getReferralCodeWithAmountExpirationAndCallback(int amount, char *expiration, char *callbackId);
-    void _getReferralCodeWithPrefixAmountExpirationAndCallback(char *prefix, int amount, char *expiration, char *callbackId);
-    void _getReferralCodeWithPrefixAmountExpirationBucketTypeLocationAndCallback(char *prefix, int amount, char *expiration, char *bucket, int calcType, int location, char *callbackId);
-    void _validateReferralCodeWithCallback(char *code, char *callbackId);
-    void _applyReferralCodeWithCallback(char *code, char *callbackId);
 }
 
 

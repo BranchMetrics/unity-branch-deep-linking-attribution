@@ -7,39 +7,28 @@ using System;
 public class BranchDemo : MonoBehaviour {
 	
 	public InputField inputShortLink;
-	public Text lblCreditsValue;
-	public Text lblInstallCountValue;
-	public Text lblBuyCountValue;
-	public Text lblIdentifyUser;
+	public Text lblRewardPoints;
+	public Text lblSetUserID;
 	public Text lblLog;
 	public GameObject mainPanel;
-	public GameObject creditsHistoryPanel;
-	public GameObject referralCodePanel;
+	public GameObject rewardsHistoryPanel;
 	public GameObject logPanel;
 
-	public event Action<BranchUniversalObject, BranchLinkProperties> onBranchCallback;
-	private List<BranchUniversalObject> buoQueue = new List<BranchUniversalObject>();
-	private List<BranchLinkProperties> blpQueue = new List<BranchLinkProperties>();
+	private BranchUniversalObject universalObject = null;
+	private BranchLinkProperties linkProperties = null;
+	private string logString = "";
+
+	#region Init
 
 	void Awake() {
 		Application.logMessageReceived += OnLogMessage;
-		lblLog.text = "";
 	}
 
 	void Start() {
-		//init debug mode
-		Branch.setDebug();
+		//NOTE: enable toggle "simulation of fresh links" in Branch prefab to enable debug mode
 
 		//init Branch
-
-		// old realization
-		//Branch.initSession(CallbackWithParams);
-
-		// new realization
 		Branch.initSession(CallbackWithBranchUniversalObject);
-
-		// start callback listener to allow defferd processing
-		StartCoroutine(CallbackListener());
 	}
 
 	public void CallbackWithBranchUniversalObject(BranchUniversalObject universalObject, BranchLinkProperties linkProperties, string error) {
@@ -50,77 +39,33 @@ public class BranchDemo : MonoBehaviour {
 
 			Debug.Log("Universal Object: " + universalObject.ToJsonString());
 			Debug.Log("Link Properties: " + linkProperties.ToJsonString());
-
-			buoQueue.Add(universalObject);
-			blpQueue.Add(linkProperties);
 		}
 	}
 
-	public void CallbackWithParams(Dictionary<string, object> parameters, string error) {
-		if (error != null) {
-			Debug.Log("Branch Error: " + error);
-		}
-		else {
-			Debug.Log("Branch initialization completed: ");
+	#endregion
 
-			foreach(string str in parameters.Keys) {
-				Debug.Log(str + " : " + parameters[str].ToString());
-			}
-		}
-	}
+	#region Utils
 
 	private void OnLogMessage(string condition, string stackTrace, LogType type)
 	{
 		var typePrefix = type != LogType.Log ? type + ": " : "";
-		lblLog.text += DateTime.Now.ToLongTimeString() + "> " + typePrefix + condition + "\n";
+		logString += DateTime.Now.ToLongTimeString() + "> " + typePrefix + condition + "\n";
 	}
 
-	private IEnumerator CallbackListener() {
-		while(true) {
-			if (onBranchCallback != null && buoQueue.Count > 0 && blpQueue.Count > 0) {
-				onBranchCallback(buoQueue[0], blpQueue[0]);
-				buoQueue.RemoveAt(0);
-				blpQueue.RemoveAt(0);
-			}
-
-			yield return new WaitForSeconds(0.5f);
-		}
-	}
+	#endregion
 
 	#region MainPanel
 
-	public void OnBtn_RefreshShortUrl() {
-		// old functional
-//		Dictionary<string, object> parameters = new Dictionary<string, object>();
-//		parameters.Add("name", "test name");
-//		parameters.Add("message", "hello there with short url");
-//		parameters.Add("$og_title", "this is a title");
-//		parameters.Add("$og_description", "this is a description");
-//		parameters.Add("$og_image_url", "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png");
-//
-//		List<string> tags = new List<string>();
-//		tags.Add("tag1");
-//		tags.Add("tag2");
-//
-//		Branch.getShortURLWithTags(parameters, tags, "channel1", "feature1", "1", (url, error) => {
-//			if (error != null) {
-//				Debug.LogError("Branch.getShortURL failed: " + error);
-//			} else {
-//				Debug.Log("Branch.getShortURL url: " + url);
-//				inputShortLink.text = url;
-//			}
-//		});
-
-		// new functional
+	public void OnBtn_CreateBranchLink() {
 		try {
-			BranchUniversalObject universalObject = new BranchUniversalObject();
+			universalObject = new BranchUniversalObject();
 			universalObject.canonicalIdentifier = "id12345";
 			universalObject.title = "id12345 title";
 			universalObject.contentDescription = "My awesome piece of content!";
 			universalObject.imageUrl = "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png";
 			universalObject.metadata.Add("foo", "bar");
 
-			BranchLinkProperties linkProperties = new BranchLinkProperties();
+			linkProperties = new BranchLinkProperties();
 			linkProperties.tags.Add("tag1");
 			linkProperties.tags.Add("tag2");
 			linkProperties.feature = "sharing";
@@ -140,85 +85,55 @@ public class BranchDemo : MonoBehaviour {
 		}
 	}
 
-
-	public void OnBtn_RefreshCounts() {
-		lblInstallCountValue.text = "updating...";
-		lblBuyCountValue.text = "updating...";
-
-		Branch.loadActionCounts( (changed, error) => {
-			if (error != null) {
-				Debug.LogError("Branch.loadActionCounts failed: " + error);
-				lblInstallCountValue.text = "error";
-				lblBuyCountValue.text = "error";
-			} else {
-				Debug.Log("Branch.loadActionCounts changed: " + changed);
-
-				lblInstallCountValue.text = "install total - " + Branch.getTotalCountsForAction("install").ToString() + ", unique - " + Branch.getUniqueCountsForAction("install").ToString();
-				lblBuyCountValue.text = "buy total - " + Branch.getTotalCountsForAction("buy").ToString() + ", unique - " + Branch.getUniqueCountsForAction("buy").ToString();
-			}
-		});
+	public void OnBtn_Redeem5() {
+		Branch.redeemRewards(5);
+		OnBtn_RefreshRewards();
 	}
 
-
 	public void OnBtn_RefreshRewards() {
-		lblCreditsValue.text = "updating...";
+		lblRewardPoints.text = "updating...";
 
 		Branch.loadRewards( (changed, error) => {
 			if (error != null) {
 				Debug.LogError("Branch.loadRewards failed: " + error);
-				lblCreditsValue.text = "error";
+				lblRewardPoints.text = "error";
 			} else {
 				Debug.Log("Branch.loadRewards changed: " + changed);
-				lblCreditsValue.text = Branch.getCredits().ToString();
+				lblRewardPoints.text = Branch.getCredits().ToString();
 			}
 		});
 	}
-	
-	
-	public void OnBtn_Redeem5() {
-		lblCreditsValue.text = "updating...";
-		Branch.redeemRewards(5);
+
+	public void OnBtn_SendBuyEvent() {
+		Branch.userCompletedAction("buy");
 		OnBtn_RefreshRewards();
 	}
-	
-	
-	public void OnBtn_ExecuteBuy() {
-		Branch.userCompletedAction("buy");
-		OnBtn_RefreshCounts();
+
+	public void OnBtn_ShowRewardsHistory() {
+		rewardsHistoryPanel.SetActive(true);
+		mainPanel.SetActive(false);
 	}
 
-
-	public void OnBtn_IdentifyUser() {
-		lblIdentifyUser.text = "Identify User";
-
+	public void OnBtn_SetUserID() {
 		Branch.setIdentity("test_user_10", (parameters, error) => {
 			if (error != null) {
 				Debug.LogError("Branch.setIdentity failed: " + error);
+				lblSetUserID.text = "Set User ID";
 			} else {
 				Debug.Log("Branch.setIdentity install params: " + parameters.ToString());
-				lblIdentifyUser.text = "test_user_10";
+				lblSetUserID.text = "test_user_10";
+				OnBtn_RefreshRewards();
 			}
 		});
 	}
 
-
-	public void OnBtn_ClearUser() {
+	public void OnBtn_SimualteLogout() {
 		Branch.logout();
-
-		lblCreditsValue.text = "";
-		lblInstallCountValue.text = "";
-		lblBuyCountValue.text = "";
-		lblIdentifyUser.text = "Identify User";
+		lblSetUserID.text = "Set User ID";
+		lblRewardPoints.text = "";
 	}
 
-
-	public void OnBtn_PrintInstallParam() {
-		Dictionary<string, object> parameters = Branch.getFirstReferringParams();
-		Debug.Log("Install params: " + parameters.ToString());
-	}
-
-
-	public void OnBtn_BuyWithMetadata() {
+	public void OnBtn_SendComplexEvent() {
 		Dictionary<string, object> parameters = new Dictionary<string, object>();
 		parameters.Add("name", "Alex");
 		parameters.Add("boolean", true);
@@ -226,59 +141,36 @@ public class BranchDemo : MonoBehaviour {
 		parameters.Add("double", 0.13415512301);
 
 		Branch.userCompletedAction("buy", parameters);
-		OnBtn_RefreshCounts();
+		OnBtn_RefreshRewards();
 	}
 
-
 	public void OnBtn_ShareLink() {
-//      old ShareLink functional
-//
-//		try {
-//			Dictionary<string, object> shareParameters = new Dictionary<string, object>();
-//			shareParameters.Add("name", "test name");
-//			shareParameters.Add("auto_deeplink_key_1", "This is an auto deep linked value");
-//			shareParameters.Add("message", "hello there with short url");
-//			shareParameters.Add("$og_title", "this is new sharing title");
-//			shareParameters.Add("$og_description", "this is new sharing description");
-//			shareParameters.Add("$og_image_url", "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png");
-//
-//			List<string> tags = new List<string>();
-//			tags.Add("tag1");
-//			tags.Add("tag2");
-//
-//			Branch.shareLink(shareParameters, tags, "Test message", "feature1", "1", "https://play.google.com/store/apps/details?id=com.kindred.android", (url, error) => {
-//				if (error != null) {
-//					Debug.LogError("Branch.shareLink failed: " + error);
-//				} else {
-//					Debug.Log("Branch.shareLink shared params: " + url);
-//				}
-//			});
-//		} catch(Exception e) {
-//			Debug.Log(e);
-//		}
-
-		// new share link functional
 		try {
-			BranchUniversalObject universalObject = new BranchUniversalObject();
-			universalObject.canonicalIdentifier = "id12345";
-			universalObject.title = "id12345 title";
-			universalObject.contentDescription = "My awesome piece of content!";
-			universalObject.imageUrl = "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png";
-			universalObject.metadata.Add("foo", "bar");
+			if (universalObject == null) {
+				universalObject = new BranchUniversalObject();
+				universalObject.canonicalIdentifier = "id12345";
+				universalObject.title = "id12345 title";
+				universalObject.contentDescription = "My awesome piece of content!";
+				universalObject.imageUrl = "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png";
+				universalObject.metadata.Add("foo", "bar");
+			}
 
-			BranchLinkProperties linkProperties = new BranchLinkProperties();
-			linkProperties.tags.Add("tag1");
-			linkProperties.tags.Add("tag2");
-			linkProperties.feature = "invite";
-			linkProperties.channel = "Twitter";
-			linkProperties.stage = "2";
-			linkProperties.controlParams.Add("$desktop_url", "http://example.com");
+			if (linkProperties == null) {
+				linkProperties = new BranchLinkProperties();
+				linkProperties.tags.Add("tag1");
+				linkProperties.tags.Add("tag2");
+				linkProperties.feature = "invite";
+				linkProperties.channel = "Twitter";
+				linkProperties.stage = "2";
+				linkProperties.controlParams.Add("$desktop_url", "http://example.com");
+			}
 
-			Branch.shareLink(universalObject, linkProperties, "hello there with short url", (url, error) => {
+			Branch.shareLink(universalObject, linkProperties, "hello there with short url", (parameters, error) => {
+
 				if (error != null) {
 					Debug.LogError("Branch.shareLink failed: " + error);
-				} else {
-					Debug.Log("Branch.shareLink shared params: " + url);
+				} else if (parameters != null) {
+					Debug.Log("Branch.shareLink: " + parameters["sharedLink"].ToString() + " " + parameters["sharedChannel"].ToString());
 				}
 			});
 		} catch(Exception e) {
@@ -286,40 +178,47 @@ public class BranchDemo : MonoBehaviour {
 		}
 	}
 
+	public void OnBtn_ViewFirstReferringParams() {
+		lblLog.text =  Branch.getFirstReferringBranchUniversalObject().ToJsonString() + "\n\n";
+		lblLog.text += Branch.getFirstReferringBranchLinkProperties().ToJsonString();
 
-	public void OnBtn_GetCreditHistory() {
-		creditsHistoryPanel.SetActive(true);
+		logPanel.SetActive(true);
 		mainPanel.SetActive(false);
 	}
-	
-	
-	public void OnBtn_ReferralCode() {
-		referralCodePanel.SetActive(true);
+
+	public void OnBtn_ViewLatestReferringParams() {
+		lblLog.text =  Branch.getLatestReferringBranchUniversalObject().ToJsonString() + "\n\n";
+		lblLog.text += Branch.getLatestReferringBranchLinkProperties().ToJsonString();
+
+		logPanel.SetActive(true);
 		mainPanel.SetActive(false);
+	}
+
+	public void OnBtn_SimulateContentAccess() {
+		if (universalObject != null) {
+			Branch.registerView(universalObject);
+		}
+	}
+
+	public void OnBtn_RegisterForSpotlight() {
+		if (universalObject != null) {
+			universalObject.metadata.Add("deeplink_text", "This link was generated for Spotlight registration");
+			Branch.listOnSpotlight(universalObject);
+		}
 	}
 
 	public void OnBtn_LogPanel() {
+		lblLog.text = logString;
 		logPanel.SetActive(true);
 		mainPanel.SetActive(false);
 	}
 
 	#endregion
 
+	#region RewardsHistoryPanel
 
-	#region CreditsHistoryPanel
-
-	public void OnBtn_CreditsHistoryPanel_Back() {
-		creditsHistoryPanel.SetActive(false);
-		mainPanel.SetActive(true);
-	}
-
-	#endregion
-
-
-	#region ReferralCodePanel
-	
-	public void OnBtn_ReferralCodePanel_Back() {
-		referralCodePanel.SetActive(false);
+	public void OnBtn_RewardsHistoryPanel_Back() {
+		rewardsHistoryPanel.SetActive(false);
 		mainPanel.SetActive(true);
 	}
 

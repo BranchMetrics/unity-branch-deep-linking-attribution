@@ -3,12 +3,12 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class CreditsHistoryPanel : MonoBehaviour {
+public class RewardsHistoryPanel : MonoBehaviour {
 
 	public ScrollRect scroll;
 	public GameObject contentContainer;
 	public GameObject itemPrefab;
-	private List<CreditTransactionItem> items = new List<CreditTransactionItem>();
+	private List<RewardTransactionItem> items = new List<RewardTransactionItem>();
 
 
 	void OnEnable() {
@@ -35,7 +35,7 @@ public class CreditsHistoryPanel : MonoBehaviour {
 	}
 
 	void OnDisable() {
-		foreach(CreditTransactionItem obj in items)
+		foreach(RewardTransactionItem obj in items)
 			Destroy(obj.gameObject);
 
 		items.Clear();
@@ -45,9 +45,9 @@ public class CreditsHistoryPanel : MonoBehaviour {
 		GameObject item = Instantiate(itemPrefab) as GameObject;
 		
 		if (item != null) {
-			item.GetComponent<CreditTransactionItem>().label.text = text;
+			item.GetComponent<RewardTransactionItem>().label.text = text;
 			item.transform.SetParent(contentContainer.transform, false);
-			items.Add(item.GetComponent<CreditTransactionItem>());
+			items.Add(item.GetComponent<RewardTransactionItem>());
 			item.SetActive(true);
 		}
 	}

@@ -22,14 +22,10 @@
 #import "BranchUniversalObject.h"
 #import "BranchSetIdentityRequest.h"
 #import "BranchLogoutRequest.h"
-#import "BranchLoadActionsRequest.h"
 #import "BranchUserCompletedActionRequest.h"
 #import "BranchLoadRewardsRequest.h"
 #import "BranchRedeemRewardsRequest.h"
 #import "BranchCreditHistoryRequest.h"
-#import "BranchGetPromoCodeRequest.h"
-#import "BranchValidatePromoCodeRequest.h"
-#import "BranchApplyPromoCodeRequest.h"
 #import "BranchShortUrlRequest.h"
 #import "BranchShortUrlSyncRequest.h"
 #import "BranchCloseRequest.h"
@@ -76,8 +72,6 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
 @property (strong, nonatomic) BNCLinkCache *linkCache;
 @property (strong, nonatomic) BNCPreferenceHelper *preferenceHelper;
 @property (strong, nonatomic) BNCContentDiscoveryManager *contentDiscoveryManager;
-@property (strong, nonatomic) UILongPressGestureRecognizer *debugGestureRecognizer;
-@property (strong, nonatomic) NSTimer *debugHeartbeatTimer;
 @property (strong, nonatomic) NSString *branchKey;
 @property (strong, nonatomic) NSMutableDictionary *deepLinkControllers;
 @property (weak, nonatomic) UIViewController *deepLinkPresentingController;
@@ -85,6 +79,7 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
 @property (strong, nonatomic) NSDictionary *deepLinkDebugParams;
 @property (assign, nonatomic) BOOL accountForFacebookSDK;
 @property (assign, nonatomic) id FBSDKAppLinkUtility;
+@property (strong, nonatomic) NSMutableArray *whiteListedSchemeList;
 
 @end
 
@@ -102,18 +97,10 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
     NSString *branchKey = [preferenceHelper getBranchKey:YES];
     NSString *keyToUse = branchKey;
     if (!branchKey) {
-        // If no app key
-        NSString *appKey = preferenceHelper.appKey;
-        if (!appKey) {
-            [preferenceHelper logWarning:@"Please enter your branch_key in the plist!"];
-            return nil;
-        }
-        else {
-            keyToUse = appKey;
-            NSLog(@"Usage of App Key is deprecated, please move toward using a Branch key");
-        }
+        [preferenceHelper logWarning:@"Please enter your branch_key in the plist!"];
+        return nil;
     }
-    
+
     return [Branch getInstanceInternal:keyToUse returnNilIfNoCurrentInstance:NO];
 }
 
@@ -124,17 +111,8 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
     NSString *branchKey = [preferenceHelper getBranchKey:NO];
     NSString *keyToUse = branchKey;
     if (!branchKey) {
-        // If no app key
-        NSString *appKey = preferenceHelper.appKey;
-        if (!appKey) {
-            [preferenceHelper logWarning:@"Please enter your branch_key in the plist!"];
-            return nil;
-        }
-        // If they did provide an app key, show them a warning. Shouldn't use app key with a test instance.
-        else {
-            [preferenceHelper logWarning:@"You requested the test instance, but provided an app key. App Keys cannot be used for test instances. Additionally, usage of App Key is deprecated, please move toward using a Branch key"];
-            keyToUse = appKey;
-        }
+        [preferenceHelper logWarning:@"Please enter your branch_key in the plist!"];
+        return nil;
     }
     
     return [Branch getInstanceInternal:keyToUse returnNilIfNoCurrentInstance:NO];
@@ -143,11 +121,12 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
 + (Branch *)getInstance:(NSString *)branchKey {
     BNCPreferenceHelper *preferenceHelper = [BNCPreferenceHelper preferenceHelper];
     
-    if ([branchKey rangeOfString:@"key_"].location != NSNotFound) {
+    if ([branchKey hasPrefix:@"key_"]) {
         preferenceHelper.branchKey = branchKey;
     }
     else {
-        preferenceHelper.appKey = branchKey;
+        [preferenceHelper logWarning:@"Invalid Branch Key format!"];
+        return nil;
     }
     
     return [Branch getInstanceInternal:branchKey returnNilIfNoCurrentInstance:NO];
@@ -168,6 +147,7 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
         _processing_sema = dispatch_semaphore_create(1);
         _networkCount = 0;
         _deepLinkControllers = [[NSMutableDictionary alloc] init];
+        _whiteListedSchemeList = [[NSMutableArray alloc] init];
         _useCookieBasedMatching = YES;
         
         NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
@@ -182,54 +162,35 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
 #pragma mark - BrachActivityItemProvider methods
 
 + (BranchActivityItemProvider *)getBranchActivityItemWithParams:(NSDictionary *)params {
-    return [[BranchActivityItemProvider alloc] initWithParams:params tags:nil feature:nil stage:nil alias:nil delegate:nil];
+    return [[BranchActivityItemProvider alloc] initWithParams:params tags:nil feature:nil stage:nil campaign:nil alias:nil delegate:nil];
 }
 
 + (BranchActivityItemProvider *)getBranchActivityItemWithParams:(NSDictionary *)params feature:(NSString *)feature {
-    return [[BranchActivityItemProvider alloc] initWithParams:params tags:nil feature:feature stage:nil alias:nil delegate:nil];
+    return [[BranchActivityItemProvider alloc] initWithParams:params tags:nil feature:feature stage:nil campaign:nil alias:nil delegate:nil];
 }
 
 + (BranchActivityItemProvider *)getBranchActivityItemWithParams:(NSDictionary *)params feature:(NSString *)feature stage:(NSString *)stage {
-    return [[BranchActivityItemProvider alloc] initWithParams:params tags:nil feature:feature stage:stage alias:nil delegate:nil];
+    return [[BranchActivityItemProvider alloc] initWithParams:params tags:nil feature:feature stage:stage campaign:nil alias:nil delegate:nil];
 }
 
 + (BranchActivityItemProvider *)getBranchActivityItemWithParams:(NSDictionary *)params feature:(NSString *)feature stage:(NSString *)stage tags:(NSArray *)tags {
-    return [[BranchActivityItemProvider alloc] initWithParams:params tags:tags feature:feature stage:stage alias:nil delegate:nil];
+    return [[BranchActivityItemProvider alloc] initWithParams:params tags:tags feature:feature stage:stage campaign:nil alias:nil delegate:nil];
+}
+
++ (BranchActivityItemProvider *)getBranchActivityItemWithParams:(NSDictionary *)params feature:(NSString *)feature stage:(NSString *)stage campaign:(NSString *)campaign tags:(NSArray *)tags alias:(NSString *)alias {
+    return [[BranchActivityItemProvider alloc] initWithParams:params tags:tags feature:feature stage:stage campaign:campaign alias:alias delegate:nil];
 }
 
 + (BranchActivityItemProvider *)getBranchActivityItemWithParams:(NSDictionary *)params feature:(NSString *)feature stage:(NSString *)stage tags:(NSArray *)tags alias:(NSString *)alias {
-    return [[BranchActivityItemProvider alloc] initWithParams:params tags:tags feature:feature stage:stage alias:alias delegate:nil];
+    return [[BranchActivityItemProvider alloc] initWithParams:params tags:tags feature:feature stage:stage campaign:nil alias:alias delegate:nil];
 }
 
 + (BranchActivityItemProvider *)getBranchActivityItemWithParams:(NSDictionary *)params feature:(NSString *)feature stage:(NSString *)stage tags:(NSArray *)tags alias:(NSString *)alias delegate:(id <BranchActivityItemProviderDelegate>)delegate {
-    return [[BranchActivityItemProvider alloc] initWithParams:params tags:tags feature:feature stage:stage alias:alias delegate:delegate];
+    return [[BranchActivityItemProvider alloc] initWithParams:params tags:tags feature:feature stage:stage campaign:nil alias:alias delegate:delegate];
 }
 
-+ (BranchActivityItemProvider *)getBranchActivityItemWithParams:(NSDictionary *)params andFeature:(NSString *)feature {
-    return [[BranchActivityItemProvider alloc] initWithParams:params tags:nil feature:feature stage:nil alias:nil delegate:nil];
-}
-
-+ (BranchActivityItemProvider *)getBranchActivityItemWithParams:(NSDictionary *)params andFeature:(NSString *)feature andStage:(NSString *)stage {
-    return [[BranchActivityItemProvider alloc] initWithParams:params tags:nil feature:feature stage:stage alias:nil delegate:nil];
-}
-
-+ (BranchActivityItemProvider *)getBranchActivityItemWithParams:(NSDictionary *)params andFeature:(NSString *)feature andStage:(NSString *)stage andTags:(NSArray *)tags {
-    return [[BranchActivityItemProvider alloc] initWithParams:params tags:tags feature:feature stage:stage alias:nil delegate:nil];
-}
-
-+ (BranchActivityItemProvider *)getBranchActivityItemWithParams:(NSDictionary *)params andFeature:(NSString *)feature andStage:(NSString *)stage andAlias:(NSString *)alias {
-    return [[BranchActivityItemProvider alloc] initWithParams:params tags:nil feature:feature stage:stage alias:alias delegate:nil];
-}
-
-+ (BranchActivityItemProvider *)getBranchActivityItemWithParams:(NSDictionary *)params andTags:(NSArray *)tags andFeature:(NSString *)feature andStage:(NSString *)stage andAlias:(NSString *)alias {
-    return [[BranchActivityItemProvider alloc] initWithParams:params tags:tags feature:feature stage:stage alias:alias delegate:nil];
-}
 
 #pragma mark - Configuration methods
-
-+ (void)setDebug {
-    [[Branch getInstance] setDebug];
-}
 
 - (void)setDebug {
     self.preferenceHelper.isDebug = YES;
@@ -325,8 +286,6 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
 
 - (void)initSessionWithLaunchOptions:(NSDictionary *)options isReferrable:(BOOL)isReferrable explicitlyRequestedReferrable:(BOOL)explicitlyRequestedReferrable automaticallyDisplayController:(BOOL)automaticallyDisplayController {
     self.shouldAutomaticallyDeepLink = automaticallyDisplayController;
-    self.preferenceHelper.isReferrable = isReferrable;
-    self.preferenceHelper.explicitlyRequestedReferrable = explicitlyRequestedReferrable;
 
     // Handle push notification on app launch
     if ([options objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey]) {
@@ -366,12 +325,29 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
     self.deepLinkDebugParams = debugParams;
 }
 
+-(void)setWhiteListedSchemes:(NSArray *)schemes {
+    self.whiteListedSchemeList = [schemes mutableCopy];
+}
+
+-(void)addWhiteListedScheme:(NSString *)scheme {
+    [self.whiteListedSchemeList addObject:scheme];
+}
 
 - (BOOL)handleDeepLink:(NSURL *)url {
     BOOL handled = NO;
     if (url && ![url isEqual:[NSNull null]]) {
-        //always save the incoming url in the preferenceHelper in the externalIntentURI field
-        self.preferenceHelper.externalIntentURI = [url absoluteString];
+        
+        // save the incoming url in the preferenceHelper in the externalIntentURI field
+        if ([self.whiteListedSchemeList count]) {
+            for (NSString *scheme in self.whiteListedSchemeList) {
+                if ([scheme isEqualToString:[url scheme]]) {
+                    self.preferenceHelper.externalIntentURI = [url absoluteString];
+                    break;
+                }
+            }
+        } else {
+            self.preferenceHelper.externalIntentURI = [url absoluteString];
+        }
 
         NSString *query = [url fragment];
         if (!query) {
@@ -435,14 +411,6 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
     self.preferenceHelper.shouldWaitForInit = NO;
     
     return spotlightIdentifier != nil;
-}
-
-#pragma mark - Generic Request support
-
-- (void)executeGenericRequest:(BNCServerRequest*)request {
-    [self initSessionIfNeededAndNotInProgress];
-    [self.requestQueue enqueue:request];
-    [self processNextQueueItem];
 }
 
 
@@ -564,21 +532,6 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
 
 #pragma mark - User Action methods
 
-- (void)loadActionCountsWithCallback:(callbackWithStatus)callback {
-    [self initSessionIfNeededAndNotInProgress];
-    
-    BranchLoadActionsRequest *req = [[BranchLoadActionsRequest alloc] initWithCallback:callback];
-    [self.requestQueue enqueue:req];
-    [self processNextQueueItem];
-}
-
-- (NSInteger)getTotalCountsForAction:(NSString *)action {
-    return [self.preferenceHelper getActionTotalCount:action];
-}
-
-- (NSInteger)getUniqueCountsForAction:(NSString *)action {
-    return [self.preferenceHelper getActionUniqueCount:action];
-}
 
 - (void)userCompletedAction:(NSString *)action {
     [self userCompletedAction:action withState:nil withDelegate:nil];
@@ -734,129 +687,118 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
     return nil;
 }
 
-#pragma mark - ContentUrl methods
-
-- (NSString *)getContentUrlWithParams:(NSDictionary *)params andChannel:(NSString *)channel {
-    return [self generateShortUrl:nil andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:channel andFeature:BRANCH_FEATURE_TAG_SHARE andStage:nil andParams:params ignoreUAString:nil forceLinkCreation:NO];
-}
-
-- (NSString *)getContentUrlWithParams:(NSDictionary *)params andTags:(NSArray *)tags andChannel:(NSString *)channel {
-    return [self generateShortUrl:tags andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:channel andFeature:BRANCH_FEATURE_TAG_SHARE andStage:nil andParams:params ignoreUAString:nil forceLinkCreation:NO];
-}
-
-- (void)getContentUrlWithParams:(NSDictionary *)params andTags:(NSArray *)tags andChannel:(NSString *)channel andCallback:(callbackWithUrl)callback {
-    [self generateShortUrl:tags andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:channel andFeature:BRANCH_FEATURE_TAG_SHARE andStage:nil andParams:params andCallback:callback];
-}
-
-- (void)getContentUrlWithParams:(NSDictionary *)params andChannel:(NSString *)channel andCallback:(callbackWithUrl)callback {
-    [self generateShortUrl:nil andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:channel andFeature:BRANCH_FEATURE_TAG_SHARE andStage:nil andParams:params andCallback:callback];
-}
-
-
 #pragma mark - ShortUrl methods
 
 - (NSString *)getShortURL {
-    return [self generateShortUrl:nil andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:nil andFeature:nil andStage:nil andParams:nil ignoreUAString:nil forceLinkCreation:NO];
+    return [self generateShortUrl:nil andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:nil andFeature:nil andStage:nil andCampaign:nil andParams:nil ignoreUAString:nil forceLinkCreation:NO];
 }
 
 - (NSString *)getShortURLWithParams:(NSDictionary *)params {
-    return [self generateShortUrl:nil andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:nil andFeature:nil andStage:nil andParams:params ignoreUAString:nil forceLinkCreation:NO];
+    return [self generateShortUrl:nil andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:nil andFeature:nil andStage:nil andCampaign:nil andParams:params ignoreUAString:nil forceLinkCreation:NO];
 }
 
 - (NSString *)getShortURLWithParams:(NSDictionary *)params andTags:(NSArray *)tags andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage {
-    return [self generateShortUrl:tags andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:channel andFeature:feature andStage:stage andParams:params ignoreUAString:nil forceLinkCreation:NO];
+    return [self generateShortUrl:tags andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:channel andFeature:feature andStage:stage andCampaign:nil andParams:params ignoreUAString:nil forceLinkCreation:NO];
 }
 
 - (NSString *)getShortURLWithParams:(NSDictionary *)params andTags:(NSArray *)tags andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andAlias:(NSString *)alias {
-    return [self generateShortUrl:tags andAlias:alias andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:channel andFeature:feature andStage:stage andParams:params ignoreUAString:nil forceLinkCreation:NO];
+    return [self generateShortUrl:tags andAlias:alias andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:channel andFeature:feature andStage:stage andCampaign:nil andParams:params ignoreUAString:nil forceLinkCreation:NO];
 }
 
 - (NSString *)getShortURLWithParams:(NSDictionary *)params andTags:(NSArray *)tags andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andAlias:(NSString *)alias ignoreUAString:(NSString *)ignoreUAString {
-    return [self generateShortUrl:tags andAlias:alias andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:channel andFeature:feature andStage:stage andParams:params ignoreUAString:ignoreUAString forceLinkCreation:NO];
+    return [self generateShortUrl:tags andAlias:alias andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:channel andFeature:feature andStage:stage andCampaign:nil andParams:params ignoreUAString:ignoreUAString forceLinkCreation:NO];
 }
 
-- (NSString *)getShortURLWithParams:(NSDictionary *)params andTags:(NSArray *)tags andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andAlias:(NSString *)alias ignoreUAString:(NSString *)ignoreUAString forceLinkCreation:(BOOL)forceLinkCreation {
-    return [self generateShortUrl:tags andAlias:alias andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:channel andFeature:feature andStage:stage andParams:params ignoreUAString:ignoreUAString forceLinkCreation:forceLinkCreation];
+- (NSString *)getShortURLWithParams:(NSDictionary *)params andTags:(NSArray *)tags andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andCampaign:(NSString *)campaign andAlias:(NSString *)alias ignoreUAString:(NSString *)ignoreUAString forceLinkCreation:(BOOL)forceLinkCreation {
+    return [self generateShortUrl:tags andAlias:alias andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:channel andFeature:feature andStage:stage andCampaign:campaign andParams:params ignoreUAString:ignoreUAString forceLinkCreation:forceLinkCreation];
 }
 
 - (NSString *)getShortURLWithParams:(NSDictionary *)params andTags:(NSArray *)tags andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andType:(BranchLinkType)type {
-    return [self generateShortUrl:tags andAlias:nil andType:type andMatchDuration:0 andChannel:channel andFeature:feature andStage:stage andParams:params ignoreUAString:nil forceLinkCreation:NO];
+    return [self generateShortUrl:tags andAlias:nil andType:type andMatchDuration:0 andChannel:channel andFeature:feature andStage:stage andCampaign:nil andParams:params ignoreUAString:nil forceLinkCreation:NO];
 }
 
 - (NSString *)getShortURLWithParams:(NSDictionary *)params andTags:(NSArray *)tags andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andMatchDuration:(NSUInteger)duration {
-    return [self generateShortUrl:tags andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:duration andChannel:channel andFeature:feature andStage:stage andParams:params ignoreUAString:nil forceLinkCreation:NO];
+    return [self generateShortUrl:tags andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:duration andChannel:channel andFeature:feature andStage:stage andCampaign:nil andParams:params ignoreUAString:nil forceLinkCreation:NO];
 }
 
 - (NSString *)getShortURLWithParams:(NSDictionary *)params andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage {
-    return [self generateShortUrl:nil andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:channel andFeature:feature andStage:stage andParams:params ignoreUAString:nil forceLinkCreation:NO];
+    return [self generateShortUrl:nil andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:channel andFeature:feature andStage:stage andCampaign:nil andParams:params ignoreUAString:nil forceLinkCreation:NO];
 }
 
 - (NSString *)getShortURLWithParams:(NSDictionary *)params andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andAlias:(NSString *)alias {
-    return [self generateShortUrl:nil andAlias:alias andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:channel andFeature:feature andStage:stage andParams:params ignoreUAString:nil forceLinkCreation:NO];
+    return [self generateShortUrl:nil andAlias:alias andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:channel andFeature:feature andStage:stage andCampaign:nil andParams:params ignoreUAString:nil forceLinkCreation:NO];
 }
 
 - (NSString *)getShortURLWithParams:(NSDictionary *)params andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andType:(BranchLinkType)type {
-    return [self generateShortUrl:nil andAlias:nil andType:type andMatchDuration:0 andChannel:channel andFeature:feature andStage:stage andParams:params ignoreUAString:nil forceLinkCreation:NO];
+    return [self generateShortUrl:nil andAlias:nil andType:type andMatchDuration:0 andChannel:channel andFeature:feature andStage:stage andCampaign:nil andParams:params ignoreUAString:nil forceLinkCreation:NO];
 }
 
 - (NSString *)getShortURLWithParams:(NSDictionary *)params andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andMatchDuration:(NSUInteger)duration {
-    return [self generateShortUrl:nil andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:duration andChannel:channel andFeature:feature andStage:stage andParams:params ignoreUAString:nil forceLinkCreation:NO];
+    return [self generateShortUrl:nil andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:duration andChannel:channel andFeature:feature andStage:stage andCampaign:nil andParams:params ignoreUAString:nil forceLinkCreation:NO];
 }
 
 - (NSString *)getShortURLWithParams:(NSDictionary *)params andChannel:(NSString *)channel andFeature:(NSString *)feature {
-    return [self generateShortUrl:nil andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:channel andFeature:feature andStage:nil andParams:params ignoreUAString:nil forceLinkCreation:NO];
+    return [self generateShortUrl:nil andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:channel andFeature:feature andStage:nil andCampaign:nil andParams:params ignoreUAString:nil forceLinkCreation:NO];
+}
+
+- (NSString *)getShortUrlWithParams:(NSDictionary *)params andTags:(NSArray *)tags andAlias:(NSString *)alias andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andCampaign:(NSString *)campaign andMatchDuration:(NSUInteger)duration {
+    return [self generateShortUrl:tags andAlias:alias andType:BranchLinkTypeUnlimitedUse andMatchDuration:duration andChannel:channel andFeature:feature andStage:stage andCampaign:campaign andParams:params ignoreUAString:nil forceLinkCreation:NO];
 }
 
 - (NSString *)getShortUrlWithParams:(NSDictionary *)params andTags:(NSArray *)tags andAlias:(NSString *)alias andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andMatchDuration:(NSUInteger)duration {
-    return [self generateShortUrl:tags andAlias:alias andType:BranchLinkTypeUnlimitedUse andMatchDuration:duration andChannel:channel andFeature:feature andStage:stage andParams:params ignoreUAString:nil forceLinkCreation:NO];
+    return [self generateShortUrl:tags andAlias:alias andType:BranchLinkTypeUnlimitedUse andMatchDuration:duration andChannel:channel andFeature:feature andStage:stage andCampaign:nil andParams:params ignoreUAString:nil forceLinkCreation:NO];
 }
 
 - (void)getShortURLWithCallback:(callbackWithUrl)callback {
-    [self generateShortUrl:nil andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:nil andFeature:nil andStage:nil andParams:nil andCallback:callback];
+    [self generateShortUrl:nil andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:nil andFeature:nil andStage:nil andCampaign:nil andParams:nil andCallback:callback];
 }
 
 - (void)getShortURLWithParams:(NSDictionary *)params andCallback:(callbackWithUrl)callback {
-    [self generateShortUrl:nil andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:nil andFeature:nil andStage:nil andParams:params andCallback:callback];
+    [self generateShortUrl:nil andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:nil andFeature:nil andStage:nil andCampaign:nil andParams:params andCallback:callback];
 }
 
 - (void)getShortURLWithParams:(NSDictionary *)params andTags:(NSArray *)tags andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andCallback:(callbackWithUrl)callback {
-    [self generateShortUrl:tags andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:channel andFeature:feature andStage:stage andParams:params andCallback:callback];
+    [self generateShortUrl:tags andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:channel andFeature:feature andStage:stage andCampaign:nil andParams:params andCallback:callback];
 }
 
 - (void)getShortURLWithParams:(NSDictionary *)params andTags:(NSArray *)tags andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andAlias:(NSString *)alias andCallback:(callbackWithUrl)callback {
-    [self generateShortUrl:tags andAlias:alias andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:channel andFeature:feature andStage:stage andParams:params andCallback:callback];
+    [self generateShortUrl:tags andAlias:alias andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:channel andFeature:feature andStage:stage andCampaign:nil andParams:params andCallback:callback];
 }
 
 - (void)getShortURLWithParams:(NSDictionary *)params andTags:(NSArray *)tags andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andType:(BranchLinkType)type andCallback:(callbackWithUrl)callback {
-    [self generateShortUrl:tags andAlias:nil andType:type andMatchDuration:0 andChannel:channel andFeature:feature andStage:stage andParams:params andCallback:callback];
+    [self generateShortUrl:tags andAlias:nil andType:type andMatchDuration:0 andChannel:channel andFeature:feature andStage:stage andCampaign:nil andParams:params andCallback:callback];
 }
 
 - (void)getShortURLWithParams:(NSDictionary *)params andTags:(NSArray *)tags andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andMatchDuration:(NSUInteger)duration andCallback:(callbackWithUrl)callback {
-    [self generateShortUrl:tags andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:duration andChannel:channel andFeature:feature andStage:stage andParams:params andCallback:callback];
+    [self generateShortUrl:tags andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:duration andChannel:channel andFeature:feature andStage:stage andCampaign:nil andParams:params andCallback:callback];
 }
 
 - (void)getShortURLWithParams:(NSDictionary *)params andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andCallback:(callbackWithUrl)callback {
-    [self generateShortUrl:nil andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:channel andFeature:feature andStage:stage andParams:params andCallback:callback];
+    [self generateShortUrl:nil andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:channel andFeature:feature andStage:stage andCampaign:nil andParams:params andCallback:callback];
 }
 
 - (void)getShortURLWithParams:(NSDictionary *)params andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andAlias:(NSString *)alias andCallback:(callbackWithUrl)callback {
-    [self generateShortUrl:nil andAlias:alias andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:channel andFeature:feature andStage:stage andParams:params andCallback:callback];
+    [self generateShortUrl:nil andAlias:alias andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:channel andFeature:feature andStage:stage andCampaign:nil andParams:params andCallback:callback];
 }
 
 - (void)getShortURLWithParams:(NSDictionary *)params andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andType:(BranchLinkType)type andCallback:(callbackWithUrl)callback {
-    [self generateShortUrl:nil andAlias:nil andType:type andMatchDuration:0 andChannel:channel andFeature:feature andStage:stage andParams:params andCallback:callback];
+    [self generateShortUrl:nil andAlias:nil andType:type andMatchDuration:0 andChannel:channel andFeature:feature andStage:stage andCampaign:nil andParams:params andCallback:callback];
 }
 
 - (void)getShortURLWithParams:(NSDictionary *)params andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andMatchDuration:(NSUInteger)duration andCallback:(callbackWithUrl)callback {
-    [self generateShortUrl:nil andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:duration andChannel:channel andFeature:feature andStage:stage andParams:params andCallback:callback];
+    [self generateShortUrl:nil andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:duration andChannel:channel andFeature:feature andStage:stage andCampaign:nil andParams:params andCallback:callback];
 }
 
 - (void)getShortURLWithParams:(NSDictionary *)params andChannel:(NSString *)channel andFeature:(NSString *)feature andCallback:(callbackWithUrl)callback {
-    [self generateShortUrl:nil andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:channel andFeature:feature andStage:nil andParams:params andCallback:callback];
+    [self generateShortUrl:nil andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:channel andFeature:feature andStage:nil andCampaign:nil andParams:params andCallback:callback];
+}
+
+- (void)getShortUrlWithParams:(NSDictionary *)params andTags:(NSArray *)tags andAlias:(NSString *)alias andMatchDuration:(NSUInteger)duration andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andCampaign:campaign andCallback:(callbackWithUrl)callback {
+    [self generateShortUrl:tags andAlias:alias andType:BranchLinkTypeUnlimitedUse andMatchDuration:duration andChannel:channel andFeature:feature andStage:stage andCampaign:campaign andParams:params andCallback:callback];
 }
 
 - (void)getShortUrlWithParams:(NSDictionary *)params andTags:(NSArray *)tags andAlias:(NSString *)alias andMatchDuration:(NSUInteger)duration andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andCallback:(callbackWithUrl)callback {
-    [self generateShortUrl:tags andAlias:alias andType:BranchLinkTypeUnlimitedUse andMatchDuration:duration andChannel:channel andFeature:feature andStage:stage andParams:params andCallback:callback];
+    [self generateShortUrl:tags andAlias:alias andType:BranchLinkTypeUnlimitedUse andMatchDuration:duration andChannel:channel andFeature:feature andStage:stage andCampaign:nil andParams:params andCallback:callback];
 }
 
 - (void)getSpotlightUrlWithParams:(NSDictionary *)params callback:(callbackWithParams)callback {
@@ -941,133 +883,9 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
     [self.contentDiscoveryManager indexContentWithTitle:title description:description publiclyIndexable:publiclyIndexable type:type thumbnailUrl:thumbnailUrl keywords:keywords userInfo:linkParams expirationDate:expirationDate callback:callback];
 }
 
-//Use this with iOS 9+ only
+// Use this with iOS 9+ only
 - (void)createDiscoverableContentWithTitle:(NSString *)title description:(NSString *)description thumbnailUrl:(NSURL *)thumbnailUrl linkParams:(NSDictionary *)linkParams type:(NSString *)type publiclyIndexable:(BOOL)publiclyIndexable keywords:(NSSet *)keywords expirationDate:(NSDate *)expirationDate spotlightCallback:(callbackWithUrlAndSpotlightIdentifier)spotlightCallback {
     [self.contentDiscoveryManager indexContentWithTitle:title description:description publiclyIndexable:publiclyIndexable type:type thumbnailUrl:thumbnailUrl keywords:keywords userInfo:linkParams expirationDate:expirationDate callback:nil spotlightCallback:spotlightCallback];
-}
-
-#pragma mark - Referral methods
-
-- (NSString *)getReferralUrlWithParams:(NSDictionary *)params andTags:(NSArray *)tags andChannel:(NSString *)channel {
-    return [self generateShortUrl:tags andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:channel andFeature:BRANCH_FEATURE_TAG_REFERRAL andStage:nil andParams:params ignoreUAString:nil forceLinkCreation:NO];
-}
-
-- (NSString *)getReferralUrlWithParams:(NSDictionary *)params andChannel:(NSString *)channel {
-    return [self generateShortUrl:nil andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:channel andFeature:BRANCH_FEATURE_TAG_REFERRAL andStage:nil andParams:params ignoreUAString:nil forceLinkCreation:NO];
-}
-
-- (void)getReferralUrlWithParams:(NSDictionary *)params andTags:(NSArray *)tags andChannel:(NSString *)channel andCallback:(callbackWithUrl)callback {
-    [self generateShortUrl:tags andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:channel andFeature:BRANCH_FEATURE_TAG_REFERRAL andStage:nil andParams:params andCallback:callback];
-}
-
-- (void)getReferralUrlWithParams:(NSDictionary *)params andChannel:(NSString *)channel andCallback:(callbackWithUrl)callback {
-    [self generateShortUrl:nil andAlias:nil andType:BranchLinkTypeUnlimitedUse andMatchDuration:0 andChannel:channel andFeature:BRANCH_FEATURE_TAG_REFERRAL andStage:nil andParams:params andCallback:callback];
-}
-
-- (void)getPromoCodeWithCallback:(callbackWithParams)callback {
-    [self getPromoCodeWithPrefix:nil amount:0 expiration:nil bucket:nil usageType:BranchPromoCodeUsageTypeUnlimitedUses rewardLocation:BranchPromoCodeRewardReferringUser callback:callback];
-}
-
-- (void)getReferralCodeWithCallback:(callbackWithParams)callback {
-    [self getPromoCodeWithPrefix:nil amount:0 expiration:nil bucket:nil usageType:BranchPromoCodeUsageTypeUnlimitedUses rewardLocation:BranchPromoCodeRewardReferringUser callback:callback];
-}
-
-- (void)getPromoCodeWithAmount:(NSInteger)amount callback:(callbackWithParams)callback {
-    [self getPromoCodeWithPrefix:nil amount:amount expiration:nil bucket:nil usageType:BranchPromoCodeUsageTypeUnlimitedUses rewardLocation:BranchPromoCodeRewardReferringUser callback:callback];
-}
-
-- (void)getReferralCodeWithAmount:(NSInteger)amount andCallback:(callbackWithParams)callback {
-    [self getPromoCodeWithPrefix:nil amount:amount expiration:nil bucket:nil usageType:BranchPromoCodeUsageTypeUnlimitedUses rewardLocation:BranchPromoCodeRewardReferringUser callback:callback];
-}
-
-- (void)getPromoCodeWithPrefix:(NSString *)prefix amount:(NSInteger)amount callback:(callbackWithParams)callback {
-    [self getPromoCodeWithPrefix:prefix amount:amount expiration:nil bucket:nil usageType:BranchPromoCodeUsageTypeUnlimitedUses rewardLocation:BranchPromoCodeRewardReferringUser callback:callback];
-}
-
-- (void)getReferralCodeWithPrefix:(NSString *)prefix amount:(NSInteger)amount andCallback:(callbackWithParams)callback {
-    [self getPromoCodeWithPrefix:prefix amount:amount expiration:nil bucket:nil usageType:BranchPromoCodeUsageTypeUnlimitedUses rewardLocation:BranchPromoCodeRewardReferringUser callback:callback];
-}
-
-- (void)getPromoCodeWithAmount:(NSInteger)amount expiration:(NSDate *)expiration callback:(callbackWithParams)callback {
-    [self getPromoCodeWithPrefix:nil amount:amount expiration:expiration bucket:nil usageType:BranchPromoCodeUsageTypeUnlimitedUses rewardLocation:BranchPromoCodeRewardReferringUser callback:callback];
-}
-
-- (void)getReferralCodeWithAmount:(NSInteger)amount expiration:(NSDate *)expiration andCallback:(callbackWithParams)callback {
-    [self getPromoCodeWithPrefix:nil amount:amount expiration:expiration bucket:nil usageType:BranchPromoCodeUsageTypeUnlimitedUses rewardLocation:BranchPromoCodeRewardReferringUser callback:callback];
-}
-
-- (void)getPromoCodeWithPrefix:(NSString *)prefix amount:(NSInteger)amount expiration:(NSDate *)expiration callback:(callbackWithParams)callback {
-    [self getPromoCodeWithPrefix:prefix amount:amount expiration:expiration bucket:nil usageType:BranchPromoCodeUsageTypeUnlimitedUses rewardLocation:BranchPromoCodeRewardReferringUser callback:callback];
-}
-
-- (void)getReferralCodeWithPrefix:(NSString *)prefix amount:(NSInteger)amount expiration:(NSDate *)expiration andCallback:(callbackWithParams)callback {
-    [self getPromoCodeWithPrefix:prefix amount:amount expiration:expiration bucket:nil usageType:BranchPromoCodeUsageTypeUnlimitedUses rewardLocation:BranchPromoCodeRewardReferringUser callback:callback];
-}
-
-- (void)getReferralCodeWithPrefix:(NSString *)prefix amount:(NSInteger)amount expiration:(NSDate *)expiration bucket:(NSString *)bucket calculationType:(BranchPromoCodeUsageType)calcType location:(BranchPromoCodeRewardLocation)location andCallback:(callbackWithParams)callback {
-    [self getPromoCodeWithPrefix:prefix amount:amount expiration:expiration bucket:bucket usageType:calcType rewardLocation:location useOld:YES callback:callback];
-}
-
-- (void)getPromoCodeWithPrefix:(NSString *)prefix amount:(NSInteger)amount expiration:(NSDate *)expiration bucket:(NSString *)bucket usageType:(BranchPromoCodeUsageType)usageType rewardLocation:(BranchPromoCodeRewardLocation)rewardLocation callback:(callbackWithParams)callback {
-    [self getPromoCodeWithPrefix:prefix amount:amount expiration:expiration bucket:bucket usageType:usageType rewardLocation:rewardLocation useOld:NO callback:callback];
-}
-
-- (void)getPromoCodeWithPrefix:(NSString *)prefix amount:(NSInteger)amount expiration:(NSDate *)expiration bucket:(NSString *)bucket usageType:(BranchPromoCodeUsageType)usageType rewardLocation:(BranchPromoCodeRewardLocation)rewardLocation useOld:(BOOL)useOld callback:(callbackWithParams)callback {
-    [self initSessionIfNeededAndNotInProgress];
-    
-    if (!bucket) {
-        bucket = @"default";
-    }
-    
-    BranchGetPromoCodeRequest *req = [[BranchGetPromoCodeRequest alloc] initWithUsageType:usageType rewardLocation:rewardLocation amount:amount bucket:bucket prefix:prefix expiration:expiration useOld:useOld callback:callback];
-    [self.requestQueue enqueue:req];
-    [self processNextQueueItem];
-}
-
-- (void)validateReferralCode:(NSString *)code andCallback:(callbackWithParams)callback {
-    [self validatePromoCode:code useOld:YES callback:callback];
-}
-
-- (void)validatePromoCode:(NSString *)code callback:(callbackWithParams)callback {
-    [self validatePromoCode:code useOld:NO callback:callback];
-}
-
-- (void)validatePromoCode:(NSString *)code useOld:(BOOL)useOld callback:(callbackWithParams)callback {
-    if (!code.length) {
-        if (callback) {
-            callback(nil, [NSError errorWithDomain:BNCErrorDomain code:BNCInvalidPromoCodeError userInfo:@{ NSLocalizedDescriptionKey: @"No code specified" }]);
-        }
-        return;
-    }
-    
-    [self initSessionIfNeededAndNotInProgress];
-    
-    BranchValidatePromoCodeRequest *req = [[BranchValidatePromoCodeRequest alloc] initWithCode:code useOld:useOld callback:callback];
-    [self.requestQueue enqueue:req];
-    [self processNextQueueItem];
-}
-
-- (void)applyReferralCode:(NSString *)code andCallback:(callbackWithParams)callback {
-    [self applyPromoCode:code useOld:YES callback:callback];
-}
-
-- (void)applyPromoCode:(NSString *)code callback:(callbackWithParams)callback {
-    [self applyPromoCode:code useOld:NO callback:callback];
-}
-
-- (void)applyPromoCode:(NSString *)code useOld:(BOOL)useOld callback:(callbackWithParams)callback {
-    if (!code.length) {
-        if (callback) {
-            callback(nil, [NSError errorWithDomain:BNCErrorDomain code:BNCInvalidPromoCodeError userInfo:@{ NSLocalizedDescriptionKey: @"No code specified" }]);
-        }
-        return;
-    }
-    
-    [self initSessionIfNeededAndNotInProgress];
-    
-    BranchApplyPromoCodeRequest *req = [[BranchApplyPromoCodeRequest alloc] initWithCode:code useOld:useOld callback:callback];
-    [self.requestQueue enqueue:req];
-    [self processNextQueueItem];
 }
 
 
@@ -1111,10 +929,10 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
 
 #pragma mark - URL Generation methods
 
-- (void)generateShortUrl:(NSArray *)tags andAlias:(NSString *)alias andType:(BranchLinkType)type andMatchDuration:(NSUInteger)duration andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andParams:(NSDictionary *)params andCallback:(callbackWithUrl)callback {
+- (void)generateShortUrl:(NSArray *)tags andAlias:(NSString *)alias andType:(BranchLinkType)type andMatchDuration:(NSUInteger)duration andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andCampaign:campaign andParams:(NSDictionary *)params andCallback:(callbackWithUrl)callback {
     [self initSessionIfNeededAndNotInProgress];
     
-    BNCLinkData *linkData = [self prepareLinkDataFor:tags andAlias:alias andType:type andMatchDuration:duration andChannel:channel andFeature:feature andStage:stage andParams:params ignoreUAString:nil];
+    BNCLinkData *linkData = [self prepareLinkDataFor:tags andAlias:alias andType:type andMatchDuration:duration andChannel:channel andFeature:feature andStage:stage andCampaign:campaign andParams:params ignoreUAString:nil];
     
     if ([self.linkCache objectForKey:linkData]) {
         if (callback) {
@@ -1123,22 +941,22 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
         return;
     }
     
-    BranchShortUrlRequest *req = [[BranchShortUrlRequest alloc] initWithTags:tags alias:alias type:type matchDuration:duration channel:channel feature:feature stage:stage params:params linkData:linkData linkCache:self.linkCache callback:callback];
+    BranchShortUrlRequest *req = [[BranchShortUrlRequest alloc] initWithTags:tags alias:alias type:type matchDuration:duration channel:channel feature:feature stage:stage campaign:campaign params:params linkData:linkData linkCache:self.linkCache callback:callback];
     [self.requestQueue enqueue:req];
     [self processNextQueueItem];
 }
 
-- (NSString *)generateShortUrl:(NSArray *)tags andAlias:(NSString *)alias andType:(BranchLinkType)type andMatchDuration:(NSUInteger)duration andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andParams:(NSDictionary *)params ignoreUAString:(NSString *)ignoreUAString forceLinkCreation:(BOOL)forceLinkCreation {
+- (NSString *)generateShortUrl:(NSArray *)tags andAlias:(NSString *)alias andType:(BranchLinkType)type andMatchDuration:(NSUInteger)duration andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andCampaign:(NSString *)campaign andParams:(NSDictionary *)params ignoreUAString:(NSString *)ignoreUAString forceLinkCreation:(BOOL)forceLinkCreation {
     NSString *shortURL = nil;
     
-    BNCLinkData *linkData = [self prepareLinkDataFor:tags andAlias:alias andType:type andMatchDuration:duration andChannel:channel andFeature:feature andStage:stage andParams:params ignoreUAString:ignoreUAString];
+    BNCLinkData *linkData = [self prepareLinkDataFor:tags andAlias:alias andType:type andMatchDuration:duration andChannel:channel andFeature:feature andStage:stage andCampaign:campaign andParams:params ignoreUAString:ignoreUAString];
     
     // If an ignore UA string is present, we always get a new url. Otherwise, if we've already seen this request, use the cached version
     if (!ignoreUAString && [self.linkCache objectForKey:linkData]) {
         shortURL = [self.linkCache objectForKey:linkData];
     }
     else {
-        BranchShortUrlSyncRequest *req = [[BranchShortUrlSyncRequest alloc] initWithTags:tags alias:alias type:type matchDuration:duration channel:channel feature:feature stage:stage params:params linkData:linkData linkCache:self.linkCache];
+        BranchShortUrlSyncRequest *req = [[BranchShortUrlSyncRequest alloc] initWithTags:tags alias:alias type:type matchDuration:duration channel:channel feature:feature stage:stage campaign:campaign params:params linkData:linkData linkCache:self.linkCache];
         
         if (self.isInitialized) {
             [self.preferenceHelper log:FILE_NAME line:LINE_NUM message:@"Created custom url synchronously"];
@@ -1202,7 +1020,7 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
     return longUrl;
 }
 
-- (BNCLinkData *)prepareLinkDataFor:(NSArray *)tags andAlias:(NSString *)alias andType:(BranchLinkType)type andMatchDuration:(NSUInteger)duration andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andParams:(NSDictionary *)params ignoreUAString:(NSString *)ignoreUAString {
+- (BNCLinkData *)prepareLinkDataFor:(NSArray *)tags andAlias:(NSString *)alias andType:(BranchLinkType)type andMatchDuration:(NSUInteger)duration andChannel:(NSString *)channel andFeature:(NSString *)feature andStage:(NSString *)stage andCampaign:(NSString *)campaign andParams:(NSDictionary *)params ignoreUAString:(NSString *)ignoreUAString {
     BNCLinkData *post = [[BNCLinkData alloc] init];
     
     [post setupType:type];
@@ -1210,6 +1028,7 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
     [post setupChannel:channel];
     [post setupFeature:feature];
     [post setupStage:stage];
+    [post setupCampaign:campaign];
     [post setupAlias:alias];
     [post setupMatchDuration:duration];
     [post setupIgnoreUAString:ignoreUAString];
@@ -1242,10 +1061,6 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
     [self clearTimer];
     self.sessionTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(callClose) userInfo:nil repeats:NO];
     [self.requestQueue persistImmediately];
-    
-    if (self.debugGestureRecognizer) {
-        [[UIApplication sharedApplication].keyWindow removeGestureRecognizer:self.debugGestureRecognizer];
-    }
 }
 
 - (void)clearTimer {
@@ -1470,10 +1285,10 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
     
     if (self.shouldCallSessionInitCallback) {
         if (self.sessionInitWithParamsCallback) {
-            self.sessionInitWithParamsCallback(nil, error);
+            self.sessionInitWithParamsCallback([[NSDictionary alloc] init], error);
         }
         else if (self.sessionInitWithBranchUniversalObjectCallback) {
-            self.sessionInitWithBranchUniversalObjectCallback(nil, nil, error);
+            self.sessionInitWithBranchUniversalObjectCallback([[BranchUniversalObject alloc] init], [[BranchLinkProperties alloc] init], error);
         }
     }
 }
@@ -1496,7 +1311,7 @@ NSString * const BRANCH_PUSH_NOTIFICATION_PAYLOAD_KEY = @"branch";
 }
 
 + (NSString *)kitDisplayVersion {
-    return @"0.12.0";
+	return @"0.12.6";
 }
 
 @end
