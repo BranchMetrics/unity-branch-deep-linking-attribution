@@ -214,13 +214,14 @@ public class BranchAndroidWrapper {
 		if (_branchClass == null) {
 			_branchClass = new AndroidJavaClass("io/branch/unity/BranchUnityWrapper");
 		}
-		
+
 		return _branchClass;
 	}
 	
 	private static void _runBlockOnThread(Action runBlock) {
 		var unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
 		var activity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+
 		activity.Call("runOnUiThread", new AndroidJavaRunnable(runBlock));
 	}
     

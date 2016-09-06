@@ -50,7 +50,6 @@
      <Compile Include="Assets\Branch\BranchData.cs" />
      <Compile Include="Assets\Branch\BranchLinkProperties.cs" />
      <Compile Include="Assets\Branch\BranchUniversalObject.cs" />
-     <Compile Include="Assets\Branch\Demo\Scripts\BranchDefferedProcessing.cs" />
      <Compile Include="Assets\Branch\Demo\Scripts\BranchDemo.cs" />
      <Compile Include="Assets\Branch\Demo\Scripts\RewardTransactionItem.cs" />
      <Compile Include="Assets\Branch\Demo\Scripts\RewardsHistoryPanel.cs" />

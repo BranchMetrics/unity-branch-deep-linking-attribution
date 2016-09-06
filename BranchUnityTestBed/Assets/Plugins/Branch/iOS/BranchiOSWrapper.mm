@@ -5,7 +5,7 @@
 #import "UnityAppController.h"
 
 
-static NSString *_branchKey = @"";
+static NSString *_branchKey = @"key_live_ldiGkEEvtTY7EUAc3vmochkmFvpL178f";
 static BranchUnityWrapper *_wrapper = [BranchUnityWrapper sharedInstance];
 
 
@@ -218,6 +218,8 @@ static BranchLinkProperties *branchLinkPropertiesFormDict(NSDictionary *linkProp
     return linkProperties;
 }
 
+#pragma mark - Callbacks
+
 static callbackWithParams callbackWithParamsForCallbackId(char *callbackId) {
     NSString *callbackString = CreateNSString(callbackId);
 
@@ -275,6 +277,20 @@ static callbackWithBranchUniversalObject callbackWithBranchUniversalObjectForCal
         UnitySendMessage("Branch", "_asyncCallbackWithBranchUniversalObject", jsonCStringFromDictionary(callbackDict));
     };
 }
+
+static callbackWithShareCompletion callbackWithShareCompletionForCallbackId(char *callbackId) {
+    NSString *callbackString = CreateNSString(callbackId);
+    
+    return ^(NSString *activityType, BOOL completed) {
+        id errorDictItem = [NSNull null];
+        NSDictionary *params = @{@"sharedLink": @"", @"sharedChannel": activityType};
+        
+        NSDictionary *callbackDict = @{ @"callbackId": callbackString, @"params": params, @"error": errorDictItem };
+        
+        UnitySendMessage("Branch", "_asyncCallbackWithParams", jsonCStringFromDictionary(callbackDict));
+    };
+}
+
 
 #pragma mark - Key methods
 
@@ -435,5 +451,5 @@ void _shareLinkWithLinkProperties(char *universalObjectJson, char *linkPropertie
     BranchUniversalObject *obj = branchuniversalObjectFormDict(universalObjectDict);
     BranchLinkProperties *prop = branchLinkPropertiesFormDict(linkPropertiesDict);
     
-    [obj showShareSheetWithLinkProperties:prop andShareText:CreateNSString(message) fromViewController:nil completion:nil];
+    [obj showShareSheetWithLinkProperties:prop andShareText:CreateNSString(message) fromViewController:nil completion:callbackWithShareCompletionForCallbackId(callbackId)];
 }

@@ -19,7 +19,16 @@
   <component name="ExternalProjectsManager">
     <system id="GRADLE">
       <state>
-        <projects_view />
+        <projects_view>
+          <tree_state>
+            <PATH>
+              <PATH_ELEMENT>
+                <option name="myItemId" value="" />
+                <option name="myItemType" value="com.intellij.openapi.externalSystem.view.ExternalProjectsStructure$RootNode" />
+              </PATH_ELEMENT>
+            </PATH>
+          </tree_state>
+        </projects_view>
       </state>
     </system>
   </component>
@@ -31,11 +40,10 @@
       <file leaf-file-name="BranchUnityWrapper.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/io/branch/unity/BranchUnityWrapper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.14324693">
-              <caret line="37" column="0" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.7748977">
+              <caret line="591" column="9" selection-start-line="591" selection-start-column="9" selection-end-line="591" selection-end-column="9" />
               <folding>
                 <element signature="docComment;class#BranchUnityWrapper#0" expanded="false" />
-                <element signature="method#initSession#0;class#BranchUnityWrapper#0" expanded="false" />
                 <element signature="method#initSessionWithUniversalObjectCallback#0;class#BranchUnityWrapper#0" expanded="false" />
                 <element signature="method#getFirstReferringBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
                 <element signature="method#getFirstReferringBranchLinkProperties#0;class#BranchUnityWrapper#0" expanded="false" />
@@ -63,15 +71,12 @@
                 <element signature="method#getCreditHistory#1;class#BranchUnityWrapper#0" expanded="false" />
                 <element signature="method#getCreditHistory#2;class#BranchUnityWrapper#0" expanded="false" />
                 <element signature="method#getCreditHistory#3;class#BranchUnityWrapper#0" expanded="false" />
-                <element signature="method#getShortURLWithBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
-                <element signature="method#shareLinkWithLinkProperties#0;class#BranchUnityWrapper#0" expanded="false" />
+                <element signature="docComment;method#getShortURLWithBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
                 <element signature="method#_dateFromString#0;class#BranchUnityWrapper#0" expanded="false" />
                 <element signature="method#_jsonObjectFromBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
                 <element signature="method#_jsonObjectFromLinkProperties#0;class#BranchUnityWrapper#0" expanded="false" />
                 <element signature="method#_branchUniversalObjectFromJSONObject#0;class#BranchUnityWrapper#0" expanded="false" />
                 <element signature="method#_linkPropertiesFromJSONObject#0;class#BranchUnityWrapper#0" expanded="false" />
-                <element signature="class#BranchReferralInitListenerUnityCallback#0;class#BranchUnityWrapper#0" expanded="false" />
-                <element signature="class#BranchUniversalReferralInitListenerUnityCallback#0;class#BranchUnityWrapper#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -101,7 +106,7 @@
         <entry file="file://$PROJECT_DIR$/app/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="10" column="24" selection-start-line="10" selection-start-column="24" selection-end-line="10" selection-end-column="24" />
+              <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -640,9 +645,9 @@
                 <option name="name" value="prepareDebugUnitTestDependencies" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare io.branch.sdk.android:library:2.1.0" />
+                <option name="description" value="Prepare io.branch.sdk.android:library:2.2.0" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="prepareIoBranchSdkAndroidLibrary210Library" />
+                <option name="name" value="prepareIoBranchSdkAndroidLibrary220Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
@@ -1269,9 +1274,9 @@
                 <option name="name" value="prepareDebugUnitTestDependencies" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare io.branch.sdk.android:library:2.1.0" />
+                <option name="description" value="Prepare io.branch.sdk.android:library:2.2.0" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
-                <option name="name" value="prepareIoBranchSdkAndroidLibrary210Library" />
+                <option name="name" value="prepareIoBranchSdkAndroidLibrary220Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
@@ -1438,7 +1443,7 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="4416671192000" />
+        <entry key="$PROJECT_DIR$" value="4417559578000" />
       </map>
     </option>
     <option name="projectBuildClasspath">
@@ -1620,7 +1625,7 @@
                             <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/external/lombok/lombok-ast/0.2.3/lombok-ast-0.2.3-sources.jar" />
                             <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/external/lombok/lombok-ast/0.2.3/lombok-ast-0.2.3.jar" />
                             <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/org/abego/treelayout/org.abego.treelayout.core/1.0.1/org.abego.treelayout.core-1.0.1.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.branch.sdk.android/library/2.1.0/25e707298cde7e0898821d6693b02d72b2857ec0/library-2.1.0.aar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.branch.sdk.android/library/2.2.0/134cd019b143cafc4dbfb76657a5144a79ead8ea/library-2.2.0.aar" />
                             <option value="$USER_HOME$/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.0/support-annotations-22.2.0.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.crashlytics.sdk.android/answers-shim/0.0.6/9ab1f55cd55f0841649d517cda74a3fc31487836/answers-shim-0.0.6.aar" />
                             <option value="$MODULE_DIR$/libs/Unity.jar" />
@@ -1746,9 +1751,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="Scratches" />
-      <pane id="Scope" />
       <pane id="AndroidView">
         <subPane>
           <PATH>
@@ -1770,6 +1772,9 @@
         </subPane>
       </pane>
       <pane id="ProjectPane" />
+      <pane id="PackagesPane" />
+      <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1785,6 +1790,7 @@
     <property name="options.searchVisible" value="true" />
     <property name="settings.editor.selected.configurable" value="android.sdk-updates" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../android-branch-deep-linking/Branch-SDK" />
   </component>
   <component name="RunManager">
     <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android Application">
@@ -1893,8 +1899,45 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="JUnitTestDiscovery" factoryName="JUnit Test Discovery" changeList="All">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
     <configuration default="true" type="JarApplication" factoryName="JAR Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="Java Scratch" factoryName="Java Scratch">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="SCRATCH_FILE_ID" value="0" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="" />
       <envs />
       <method />
     </configuration>
@@ -1926,6 +1969,34 @@
       <option name="PASS_PARENT_ENVS" value="true" />
       <option name="TEST_SEARCH_SCOPE">
         <value defaultName="moduleWithDependencies" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
+      <envs />
+      <properties />
+      <listeners />
+      <method />
+    </configuration>
+    <configuration default="true" type="TestNGTestDiscovery" factoryName="TestNG Test Discovery" changeList="All">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
       </option>
       <option name="USE_DEFAULT_REPORTERS" value="false" />
       <option name="PROPERTIES_FILE" />
@@ -1983,7 +2054,8 @@
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24944812" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298292" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24208978" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24944812" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
@@ -1996,7 +2068,6 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -2026,7 +2097,6 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="docComment;class#BranchUnityWrapper#0" expanded="false" />
-            <element signature="method#initSession#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#initSessionWithUniversalObjectCallback#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#getFirstReferringBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#getFirstReferringBranchLinkProperties#0;class#BranchUnityWrapper#0" expanded="false" />
@@ -2054,15 +2124,438 @@
             <element signature="method#getCreditHistory#1;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#getCreditHistory#2;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#getCreditHistory#3;class#BranchUnityWrapper#0" expanded="false" />
-            <element signature="method#getShortURLWithBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
-            <element signature="method#shareLinkWithLinkProperties#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="docComment;method#getShortURLWithBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#_dateFromString#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#_jsonObjectFromBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#_jsonObjectFromLinkProperties#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#_branchUniversalObjectFromJSONObject#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#_linkPropertiesFromJSONObject#0;class#BranchUnityWrapper#0" expanded="false" />
-            <element signature="class#BranchReferralInitListenerUnityCallback#0;class#BranchUnityWrapper#0" expanded="false" />
-            <element signature="class#BranchUniversalReferralInitListenerUnityCallback#0;class#BranchUnityWrapper#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="10" column="24" selection-start-line="10" selection-start-column="24" selection-end-line="10" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/io/branch/unity/BranchUnityWrapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="docComment;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#initSessionWithUniversalObjectCallback#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getFirstReferringBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getFirstReferringBranchLinkProperties#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getLatestReferringBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getLatestReferringBranchLinkProperties#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#resetUserSession#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setIdentity#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setIdentity#1;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#logout#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setDebug#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setRetryInterval#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setMaxRetries#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setNetworkTimeout#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#registerView#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#listOnSpotlight#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#accountForFacebookSDKPreventingAppLaunch#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#userCompletedAction#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#userCompletedAction#1;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#loadRewards#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCredits#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#redeemRewards#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditsForBucket#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#redeemRewards#1;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditHistory#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditHistory#1;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditHistory#2;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditHistory#3;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="docComment;method#getShortURLWithBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_dateFromString#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_jsonObjectFromBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_jsonObjectFromLinkProperties#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_branchUniversalObjectFromJSONObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_linkPropertiesFromJSONObject#0;class#BranchUnityWrapper#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.branch.sdk.android/library/2.1.0/a148606cd81223d87370d0035974226ba8b32a89/library-2.1.0-sources.jar!/io/branch/indexing/BranchUniversalObject.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="433" column="158" selection-start-line="433" selection-start-column="158" selection-end-line="433" selection-end-column="158" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="10" column="24" selection-start-line="10" selection-start-column="24" selection-end-line="10" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/io/branch/unity/BranchUnityWrapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="docComment;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#initSessionWithUniversalObjectCallback#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getFirstReferringBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getFirstReferringBranchLinkProperties#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getLatestReferringBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getLatestReferringBranchLinkProperties#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#resetUserSession#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setIdentity#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setIdentity#1;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#logout#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setDebug#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setRetryInterval#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setMaxRetries#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setNetworkTimeout#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#registerView#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#listOnSpotlight#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#accountForFacebookSDKPreventingAppLaunch#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#userCompletedAction#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#userCompletedAction#1;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#loadRewards#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCredits#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#redeemRewards#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditsForBucket#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#redeemRewards#1;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditHistory#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditHistory#1;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditHistory#2;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditHistory#3;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="docComment;method#getShortURLWithBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_dateFromString#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_jsonObjectFromBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_jsonObjectFromLinkProperties#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_branchUniversalObjectFromJSONObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_linkPropertiesFromJSONObject#0;class#BranchUnityWrapper#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.branch.sdk.android/library/2.1.0/a148606cd81223d87370d0035974226ba8b32a89/library-2.1.0-sources.jar!/io/branch/indexing/BranchUniversalObject.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="462" column="0" selection-start-line="462" selection-start-column="0" selection-end-line="462" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.branch.sdk.android/library/2.1.0/a148606cd81223d87370d0035974226ba8b32a89/library-2.1.0-sources.jar!/io/branch/referral/Branch.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="2680" column="0" selection-start-line="2680" selection-start-column="0" selection-end-line="2680" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="10" column="24" selection-start-line="10" selection-start-column="24" selection-end-line="10" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/io/branch/unity/BranchUnityWrapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="docComment;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#initSessionWithUniversalObjectCallback#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getFirstReferringBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getFirstReferringBranchLinkProperties#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getLatestReferringBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getLatestReferringBranchLinkProperties#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#resetUserSession#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setIdentity#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setIdentity#1;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#logout#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setDebug#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setRetryInterval#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setMaxRetries#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setNetworkTimeout#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#registerView#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#listOnSpotlight#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#accountForFacebookSDKPreventingAppLaunch#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#userCompletedAction#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#userCompletedAction#1;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#loadRewards#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCredits#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#redeemRewards#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditsForBucket#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#redeemRewards#1;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditHistory#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditHistory#1;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditHistory#2;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditHistory#3;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="docComment;method#getShortURLWithBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_dateFromString#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_jsonObjectFromBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_jsonObjectFromLinkProperties#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_branchUniversalObjectFromJSONObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_linkPropertiesFromJSONObject#0;class#BranchUnityWrapper#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="10" column="24" selection-start-line="10" selection-start-column="24" selection-end-line="10" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/io/branch/unity/BranchUnityWrapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="docComment;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#initSessionWithUniversalObjectCallback#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getFirstReferringBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getFirstReferringBranchLinkProperties#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getLatestReferringBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getLatestReferringBranchLinkProperties#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#resetUserSession#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setIdentity#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setIdentity#1;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#logout#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setDebug#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setRetryInterval#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setMaxRetries#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setNetworkTimeout#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#registerView#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#listOnSpotlight#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#accountForFacebookSDKPreventingAppLaunch#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#userCompletedAction#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#userCompletedAction#1;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#loadRewards#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCredits#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#redeemRewards#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditsForBucket#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#redeemRewards#1;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditHistory#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditHistory#1;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditHistory#2;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditHistory#3;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="docComment;method#getShortURLWithBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_dateFromString#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_jsonObjectFromBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_jsonObjectFromLinkProperties#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_branchUniversalObjectFromJSONObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_linkPropertiesFromJSONObject#0;class#BranchUnityWrapper#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="10" column="24" selection-start-line="10" selection-start-column="24" selection-end-line="10" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/io/branch/unity/BranchUnityWrapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="docComment;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#initSessionWithUniversalObjectCallback#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getFirstReferringBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getFirstReferringBranchLinkProperties#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getLatestReferringBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getLatestReferringBranchLinkProperties#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#resetUserSession#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setIdentity#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setIdentity#1;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#logout#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setDebug#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setRetryInterval#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setMaxRetries#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setNetworkTimeout#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#registerView#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#listOnSpotlight#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#accountForFacebookSDKPreventingAppLaunch#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#userCompletedAction#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#userCompletedAction#1;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#loadRewards#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCredits#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#redeemRewards#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditsForBucket#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#redeemRewards#1;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditHistory#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditHistory#1;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditHistory#2;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditHistory#3;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="docComment;method#getShortURLWithBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_dateFromString#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_jsonObjectFromBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_jsonObjectFromLinkProperties#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_branchUniversalObjectFromJSONObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_linkPropertiesFromJSONObject#0;class#BranchUnityWrapper#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="10" column="24" selection-start-line="10" selection-start-column="24" selection-end-line="10" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/io/branch/unity/BranchUnityWrapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="docComment;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#initSessionWithUniversalObjectCallback#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getFirstReferringBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getFirstReferringBranchLinkProperties#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getLatestReferringBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getLatestReferringBranchLinkProperties#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#resetUserSession#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setIdentity#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setIdentity#1;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#logout#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setDebug#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setRetryInterval#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setMaxRetries#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#setNetworkTimeout#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#registerView#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#listOnSpotlight#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#accountForFacebookSDKPreventingAppLaunch#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#userCompletedAction#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#userCompletedAction#1;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#loadRewards#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCredits#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#redeemRewards#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditsForBucket#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#redeemRewards#1;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditHistory#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditHistory#1;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditHistory#2;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#getCreditHistory#3;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="docComment;method#getShortURLWithBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_dateFromString#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_jsonObjectFromBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_jsonObjectFromLinkProperties#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_branchUniversalObjectFromJSONObject#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="method#_linkPropertiesFromJSONObject#0;class#BranchUnityWrapper#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -2134,13 +2627,73 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Library/Android/sdk/sources/android-23/android/content/ContextWrapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3328786">
+          <caret line="105" column="19" selection-start-line="105" selection-start-column="19" selection-end-line="105" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/app/libs/Unity.jar!/com/unity3d/player/UnityPlayer.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3328424">
+          <caret line="135" column="27" selection-start-line="135" selection-start-column="12" selection-end-line="135" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.branch.sdk.android/library/2.1.0/a148606cd81223d87370d0035974226ba8b32a89/library-2.1.0-sources.jar!/io/branch/referral/ShareLinkManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3533424">
+          <caret line="65" column="27" selection-start-line="65" selection-start-column="27" selection-end-line="65" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.branch.sdk.android/library/2.1.0/a148606cd81223d87370d0035974226ba8b32a89/library-2.1.0-sources.jar!/io/branch/referral/Branch.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.45566165">
+          <caret line="1729" column="31" selection-start-line="1729" selection-start-column="31" selection-end-line="1729" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.branch.sdk.android/library/2.1.0/a148606cd81223d87370d0035974226ba8b32a89/library-2.1.0-sources.jar!/io/branch/indexing/BranchUniversalObject.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3533424">
+          <caret line="456" column="0" selection-start-line="456" selection-start-column="0" selection-end-line="456" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/io/branch/unity/BranchUnityWrapper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.14324693">
-          <caret line="37" column="0" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.7748977">
+          <caret line="591" column="9" selection-start-line="591" selection-start-column="9" selection-end-line="591" selection-end-column="9" />
           <folding>
             <element signature="docComment;class#BranchUnityWrapper#0" expanded="false" />
-            <element signature="method#initSession#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#initSessionWithUniversalObjectCallback#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#getFirstReferringBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#getFirstReferringBranchLinkProperties#0;class#BranchUnityWrapper#0" expanded="false" />
@@ -2168,40 +2721,13 @@
             <element signature="method#getCreditHistory#1;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#getCreditHistory#2;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#getCreditHistory#3;class#BranchUnityWrapper#0" expanded="false" />
-            <element signature="method#getShortURLWithBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
-            <element signature="method#shareLinkWithLinkProperties#0;class#BranchUnityWrapper#0" expanded="false" />
+            <element signature="docComment;method#getShortURLWithBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#_dateFromString#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#_jsonObjectFromBranchUniversalObject#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#_jsonObjectFromLinkProperties#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#_branchUniversalObjectFromJSONObject#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#_linkPropertiesFromJSONObject#0;class#BranchUnityWrapper#0" expanded="false" />
-            <element signature="class#BranchReferralInitListenerUnityCallback#0;class#BranchUnityWrapper#0" expanded="false" />
-            <element signature="class#BranchUniversalReferralInitListenerUnityCallback#0;class#BranchUnityWrapper#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="10" column="24" selection-start-line="10" selection-start-column="24" selection-end-line="10" selection-end-column="24" />
-          <folding />
         </state>
       </provider>
     </entry>

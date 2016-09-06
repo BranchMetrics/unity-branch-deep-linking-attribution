@@ -61,7 +61,7 @@
 - (void)registerViewWithCallback:(callbackWithParams)callback {
     if (!self.canonicalIdentifier && !self.title) {
         if (callback) {
-            callback(nil, [NSError errorWithDomain:BNCErrorDomain
+            callback([[NSDictionary alloc] init], [NSError errorWithDomain:BNCErrorDomain
                                               code:BNCInitError
                                           userInfo:@{ NSLocalizedDescriptionKey: @"A canonicalIdentifier or title are required to uniquely identify content, so could not register view." }]);
         }
@@ -88,13 +88,14 @@
                                             andChannel:linkProperties.channel
                                             andFeature:linkProperties.feature
                                               andStage:linkProperties.stage
+                                           andCampaign:linkProperties.campaign
                                       andMatchDuration:linkProperties.matchDuration];
 }
 
 - (void)getShortUrlWithLinkProperties:(BranchLinkProperties *)linkProperties andCallback:(callbackWithUrl)callback {
     if (!self.canonicalIdentifier && !self.title) {
         if (callback) {
-            callback(nil, [NSError errorWithDomain:BNCErrorDomain code:BNCInitError userInfo:@{ NSLocalizedDescriptionKey: @"A canonicalIdentifier or title are required to uniquely identify content, so could not generate a URL." }]);
+            callback([BNCPreferenceHelper preferenceHelper].userUrl, [NSError errorWithDomain:BNCErrorDomain code:BNCInitError userInfo:@{ NSLocalizedDescriptionKey: @"A canonicalIdentifier or title are required to uniquely identify content, so could not generate a URL." }]);
         }
         else {
             [_preferenceHelper logWarning:@"A canonicalIdentifier or title are required to uniquely identify content, so could not generate a URL."];
@@ -109,6 +110,7 @@
                                      andChannel:linkProperties.channel
                                      andFeature:linkProperties.feature
                                        andStage:linkProperties.stage
+                                    andCampaign:linkProperties.campaign
                                     andCallback:callback];
 }
 
@@ -125,6 +127,7 @@
                                      andChannel:linkProperties.channel
                                      andFeature:linkProperties.feature
                                        andStage:linkProperties.stage
+                                           andCampaign:linkProperties.campaign
                                        andAlias:linkProperties.alias
                                  ignoreUAString:UAString
                               forceLinkCreation:YES];
@@ -139,9 +142,11 @@
     if (linkProperties.matchDuration) {
         [params setObject:@(linkProperties.matchDuration) forKey:BRANCH_REQUEST_KEY_URL_DURATION];
     }
+
     return [Branch getBranchActivityItemWithParams:params
                                            feature:linkProperties.feature
                                              stage:linkProperties.stage
+                                          campaign:linkProperties.campaign
                                               tags:linkProperties.tags
                                              alias:linkProperties.alias];
 }
@@ -351,6 +356,7 @@
     [self safeSetValue:linkProperties.alias forKey:[NSString stringWithFormat:@"~%@", BRANCH_REQUEST_KEY_URL_ALIAS] onDict:temp];
     [self safeSetValue:linkProperties.channel forKey:[NSString stringWithFormat:@"~%@", BRANCH_REQUEST_KEY_URL_CHANNEL] onDict:temp];
     [self safeSetValue:linkProperties.stage forKey:[NSString stringWithFormat:@"~%@", BRANCH_REQUEST_KEY_URL_STAGE] onDict:temp];
+    [self safeSetValue:linkProperties.campaign forKey:[NSString stringWithFormat:@"~%@", BRANCH_REQUEST_KEY_URL_CAMPAIGN] onDict:temp];
     [self safeSetValue:@(linkProperties.matchDuration) forKey:[NSString stringWithFormat:@"~%@", BRANCH_REQUEST_KEY_URL_DURATION] onDict:temp];
 
     return [temp copy];

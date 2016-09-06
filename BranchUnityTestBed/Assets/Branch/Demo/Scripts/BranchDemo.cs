@@ -12,12 +12,7 @@ public class BranchDemo : MonoBehaviour {
 	public Text lblLog;
 	public GameObject mainPanel;
 	public GameObject rewardsHistoryPanel;
-	public GameObject referralCodePanel;
 	public GameObject logPanel;
-
-	public event Action<BranchUniversalObject, BranchLinkProperties> onBranchCallback;
-	private List<BranchUniversalObject> buoQueue = new List<BranchUniversalObject>();
-	private List<BranchLinkProperties> blpQueue = new List<BranchLinkProperties>();
 
 	private BranchUniversalObject universalObject = null;
 	private BranchLinkProperties linkProperties = null;
@@ -34,9 +29,6 @@ public class BranchDemo : MonoBehaviour {
 
 		//init Branch
 		Branch.initSession(CallbackWithBranchUniversalObject);
-
-		// start callback listener to allow defferd processing
-		StartCoroutine(CallbackListener());
 	}
 
 	public void CallbackWithBranchUniversalObject(BranchUniversalObject universalObject, BranchLinkProperties linkProperties, string error) {
@@ -47,9 +39,6 @@ public class BranchDemo : MonoBehaviour {
 
 			Debug.Log("Universal Object: " + universalObject.ToJsonString());
 			Debug.Log("Link Properties: " + linkProperties.ToJsonString());
-
-			buoQueue.Add(universalObject);
-			blpQueue.Add(linkProperties);
 		}
 	}
 
@@ -61,18 +50,6 @@ public class BranchDemo : MonoBehaviour {
 	{
 		var typePrefix = type != LogType.Log ? type + ": " : "";
 		logString += DateTime.Now.ToLongTimeString() + "> " + typePrefix + condition + "\n";
-	}
-
-	private IEnumerator CallbackListener() {
-		while(true) {
-			if (onBranchCallback != null && buoQueue.Count > 0 && blpQueue.Count > 0) {
-				onBranchCallback(buoQueue[0], blpQueue[0]);
-				buoQueue.RemoveAt(0);
-				blpQueue.RemoveAt(0);
-			}
-
-			yield return new WaitForSeconds(0.5f);
-		}
 	}
 
 	#endregion
@@ -132,7 +109,6 @@ public class BranchDemo : MonoBehaviour {
 		OnBtn_RefreshRewards();
 	}
 
-
 	public void OnBtn_ShowRewardsHistory() {
 		rewardsHistoryPanel.SetActive(true);
 		mainPanel.SetActive(false);
@@ -154,7 +130,7 @@ public class BranchDemo : MonoBehaviour {
 	public void OnBtn_SimualteLogout() {
 		Branch.logout();
 		lblSetUserID.text = "Set User ID";
-		OnBtn_RefreshRewards();
+		lblRewardPoints.text = "";
 	}
 
 	public void OnBtn_SendComplexEvent() {
@@ -177,7 +153,9 @@ public class BranchDemo : MonoBehaviour {
 				universalObject.contentDescription = "My awesome piece of content!";
 				universalObject.imageUrl = "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png";
 				universalObject.metadata.Add("foo", "bar");
+			}
 
+			if (linkProperties == null) {
 				linkProperties = new BranchLinkProperties();
 				linkProperties.tags.Add("tag1");
 				linkProperties.tags.Add("tag2");
@@ -187,11 +165,12 @@ public class BranchDemo : MonoBehaviour {
 				linkProperties.controlParams.Add("$desktop_url", "http://example.com");
 			}
 
-			Branch.shareLink(universalObject, linkProperties, "hello there with short url", (url, error) => {
+			Branch.shareLink(universalObject, linkProperties, "hello there with short url", (parameters, error) => {
+
 				if (error != null) {
 					Debug.LogError("Branch.shareLink failed: " + error);
-				} else {
-					Debug.Log("Branch.shareLink shared params: " + url);
+				} else if (parameters != null) {
+					Debug.Log("Branch.shareLink: " + parameters["sharedLink"].ToString() + " " + parameters["sharedChannel"].ToString());
 				}
 			});
 		} catch(Exception e) {

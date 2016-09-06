@@ -1,16 +1,12 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Branch/Editor/BranchEditor.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Branch/Demo/Scripts/BranchDemo.cs">
     <Files>
-      <File FileName="Assets/Branch/Branch.cs" Line="346" Column="3" />
-      <File FileName="Assets/Branch/Demo/Scripts/BranchDemo.cs" Line="41" Column="2" />
+      <File FileName="Assets/Branch/Branch.cs" Line="1" Column="1" />
       <File FileName="Assets/Branch/BranchAndroidWrapper.cs" Line="1" Column="1" />
-      <File FileName="Assets/Branch/Demo/Scripts/BranchDefferedProcessing.cs" Line="1" Column="1" />
-      <File FileName="Assets/Branch/Demo/Scripts/RewardsHistoryPanel.cs" Line="1" Column="1" />
-      <File FileName="Assets/Branch/Demo/Scripts/RewardTransactionItem.cs" Line="1" Column="1" />
-      <File FileName="Assets/Branch/BranchData.cs" Line="22" Column="38" />
-      <File FileName="Assets/Branch/Editor/BranchEditor.cs" Line="315" Column="3" />
-      <File FileName="Assets/Branch/Editor/BranchPostProcessBuild.cs" Line="15" Column="42" />
+      <File FileName="Assets/Branch/Demo/Scripts/BranchDemo.cs" Line="33" Column="2" />
+      <File FileName="Assets/Branch/Editor/BranchEditor.cs" Line="1" Column="1" />
+      <File FileName="Assets/Plugins/Branch/Android/AndroidManifest.xml" Line="26" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

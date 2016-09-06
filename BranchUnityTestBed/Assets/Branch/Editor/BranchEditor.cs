@@ -167,6 +167,11 @@ public class BranchEditor : Editor {
 		foreach(XmlNode node in rootElem.ChildNodes) {
 			if (node.Name == "application") {
 				appNode = node;
+
+				XmlElement appElem = appNode as XmlElement;
+				if (!appElem.HasAttribute("android:name")) {
+					appElem.SetAttribute("android____name", "io.branch.referral.BranchApp");
+				}
 				break;
 			}
 		}

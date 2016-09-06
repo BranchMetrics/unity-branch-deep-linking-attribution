@@ -296,7 +296,7 @@ public class Branch : MonoBehaviour {
 
 	#region Share Link methods
 
-	public static void shareLink(BranchUniversalObject universalObject, BranchLinkProperties linkProperties, string message, BranchCallbackWithUrl callback) {
+	public static void shareLink(BranchUniversalObject universalObject, BranchLinkProperties linkProperties, string message, BranchCallbackWithParams callback) {
 		var callbackId = _getNextCallbackId();
 		
 		_branchCallbacks[callbackId] = callback;
@@ -709,9 +709,11 @@ public class Branch : MonoBehaviour {
         var callbackId = callbackDict["callbackId"] as string;
         Dictionary<string, object> parameters = callbackDict.ContainsKey("params") ? callbackDict["params"] as Dictionary<string, object> : null;
         string error = callbackDict.ContainsKey("error") ? callbackDict["error"] as string : null;
-
-        var callback = _branchCallbacks[callbackId] as BranchCallbackWithParams;
-        callback(parameters, error);
+        
+		var callback = _branchCallbacks[callbackId] as BranchCallbackWithParams;
+		if (callback != null) {
+			callback(parameters, error);
+		}
     }
 
     public void _asyncCallbackWithStatus(string callbackDictString) {
@@ -721,7 +723,9 @@ public class Branch : MonoBehaviour {
         string error = callbackDict.ContainsKey("error") ? callbackDict["error"] as string : null;
 
         var callback = _branchCallbacks[callbackId] as BranchCallbackWithStatus;
-        callback(status, error);
+		if (callback != null) {
+        	callback(status, error);
+		}
     }
 
     public void _asyncCallbackWithList(string callbackDictString) {
@@ -731,7 +735,9 @@ public class Branch : MonoBehaviour {
         string error = callbackDict.ContainsKey("error") ? callbackDict["error"] as string : null;
 
         var callback = _branchCallbacks[callbackId] as BranchCallbackWithList;
-        callback(list, error);
+		if (callback != null) {
+        	callback(list, error);
+		}
     }
 
     public void _asyncCallbackWithUrl(string callbackDictString) {
@@ -741,7 +747,9 @@ public class Branch : MonoBehaviour {
         string error = callbackDict.ContainsKey("error") ? callbackDict["error"] as string : null;
 
         var callback = _branchCallbacks[callbackId] as BranchCallbackWithUrl;
-        callback(url, error);
+		if (callback != null) {
+        	callback(url, error);
+		}
     }
 
 	public void _asyncCallbackWithBranchUniversalObject(string callbackDictString) {
@@ -753,7 +761,13 @@ public class Branch : MonoBehaviour {
 		string error = callbackDict.ContainsKey("error") ? callbackDict["error"] as string : null;
 
 		var callback = _branchCallbacks[callbackId] as BranchCallbackWithBranchUniversalObject;
-		callback(new BranchUniversalObject(universalObject), new BranchLinkProperties(linkProperties), error);
+		if (callback != null) {
+			callback(new BranchUniversalObject(universalObject), new BranchLinkProperties(linkProperties), error);
+		}
+	}
+
+	public void _DebugLog(string val) {
+		Debug.Log(val);
 	}
 
     private static string _getNextCallbackId() {
