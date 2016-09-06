@@ -117,7 +117,6 @@ Typically, you would register some sort of splash activitiy that handles routing
       <category android:name="android.intent.category.DEFAULT" />
       <category android:name="android.intent.category.BROWSABLE" />
     </intent-filter>
-
 </activity>
 ```
 
@@ -134,11 +133,12 @@ Don't worry about several instances of Branch SDK even if your first scene is sc
 
 #### Initialize Session And Register Deep Linking Routing Function
 
-When you created a custom link with your own custom dictionary data, you probably want to know which data is sent to your app and then check that data. For example, if your app opens with some data, you want to route the user depending on the data you passed in.
+When you created a custom link with your own custom dictionary data, you probably want to know which data is sent to your app and then check that data. For example, if your app opens with some data, you want to route the user depending on the data you passed in. To catch sent data, you need to register a callback. Think of this callback as your "deep link router". Important note: your callback must be visible from all your scenes, if you plan to process data in each scene.
 
-To catch sent data, you need to register a callback. Think of this callback as your "deep link router". Important note: your callback must be visible from all your scenes, if you plan to process data in each scene.
+**Very important note**: You must call Branch.InitSession(...) at the start of your app (in Start of your first scene) else Branch has not time to registry callback and you will receive nothing. If you need to process deep linking parameters later (for example after loading all asset bundles or from specific scene of after showing start video etc.) then you can use two ways:
 
-Initialization of session and registration of callback called when app first initializes a session, ideally in a class that is initiated with the start of your scene. When your app will be hidden and then will be opened, initialization of new session will be called automatically and your registered callback will be called.
+- you can use methods for retrieving install/open parameters (see below),
+- you can use callback listener (simple realization of callback listener you can see in our demo app).
 
 This deep link routing callback is called 100% of the time on init, with your link params or an empty dictionary if none present.
 
@@ -194,17 +194,7 @@ Branch returns explicit parameters every time. Here is a list, and a description
 | +phone_number | The phone number of the user, if the user texted himself/herself the app
 | +is_first_session | Denotes whether this is the first session (install) or any other session (open)
 | +clicked_branch_link | Denotes whether or not the user clicked a Branch link that triggered this session
-| +click_timestamp | Epoch timestamp of when the click occurred
-
-##### Initialization tips and tricks
-
-Very important thing is to call Branch.InitSession(...) at the start of your app else Branch has not time to registry callback and you will receive nothing.
-
-If you need to process deep linking parameters not at the start (for example after loading all asset bundles or from specific scene of after showing start video etc.) then you can use two ways:
-
-- you can use methods for retrieving install/open parameters (see below),
-- you can use callback listener (simple realization of callback listener you can see in our demo app).
- 
+| +click_timestamp | Epoch timestamp of when the click occurred 
 
 #### Retrieve session (install or open) parameters
 
@@ -396,7 +386,7 @@ UIActivityView and the Branch developed share sheet is the standard way of allow
 
 **Sample UIActivityView Share Sheet**
 
-![UIActivityView Share Sheet](https://dev.branch.io/img/ingredients/sdk_links/ios_share_sheet.jpg)
+![UIActivityView Share Sheet](https://dev.branch.io/img/pages/getting-started/branch-universal-object/combined_share_sheet.png)
 
 The Branch iOS and Android SDKs includes a wrapper on the share sheets, that will generate a Branch short URL and automatically tag it with the channel the user selects (Facebook, Twitter, etc.).
 
