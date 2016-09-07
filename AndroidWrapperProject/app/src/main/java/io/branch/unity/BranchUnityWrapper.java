@@ -262,7 +262,7 @@ public class BranchUnityWrapper {
      */
 
     public static void setDebug() {
-//        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).setDebug();
+        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).setDebug();
     }
 
     public static void setRetryInterval(int retryInterval) {
