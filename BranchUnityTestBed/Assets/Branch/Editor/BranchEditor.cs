@@ -211,8 +211,8 @@ public class BranchEditor : Editor {
 		// Adding permissions
 		UpdatePermissions(xmlDoc);
 
-		// Adding debug mode meta
-		UpdateDebugModeMeta(xmlDoc, unityActivityNode);
+//		// Adding debug mode meta
+//		UpdateDebugModeMeta(xmlDoc, unityActivityNode);
 		
 		// Saving android manifest
 		xmlDoc.Save(manifestPath);

@@ -25,7 +25,10 @@ public class BranchDemo : MonoBehaviour {
 	}
 
 	void Start() {
-		//NOTE: enable toggle "simulation of fresh links" in Branch prefab to enable debug mode
+		// set debug if need
+		if (BranchData.Instance.simulateFreshInstalls) {
+			Branch.setDebug();
+		}
 
 		//init Branch
 		Branch.initSession(CallbackWithBranchUniversalObject);

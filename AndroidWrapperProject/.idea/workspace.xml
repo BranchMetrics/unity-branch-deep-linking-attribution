@@ -40,8 +40,8 @@
       <file leaf-file-name="BranchUnityWrapper.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/io/branch/unity/BranchUnityWrapper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7748977">
-              <caret line="591" column="9" selection-start-line="591" selection-start-column="9" selection-end-line="591" selection-end-column="9" />
+            <state vertical-scroll-proportion="0.40927693">
+              <caret line="266" column="0" selection-start-line="266" selection-start-column="0" selection-end-line="266" selection-end-column="0" />
               <folding>
                 <element signature="docComment;class#BranchUnityWrapper#0" expanded="false" />
                 <element signature="method#initSessionWithUniversalObjectCallback#0;class#BranchUnityWrapper#0" expanded="false" />
@@ -53,7 +53,6 @@
                 <element signature="method#setIdentity#0;class#BranchUnityWrapper#0" expanded="false" />
                 <element signature="method#setIdentity#1;class#BranchUnityWrapper#0" expanded="false" />
                 <element signature="method#logout#0;class#BranchUnityWrapper#0" expanded="false" />
-                <element signature="method#setDebug#0;class#BranchUnityWrapper#0" expanded="false" />
                 <element signature="method#setRetryInterval#0;class#BranchUnityWrapper#0" expanded="false" />
                 <element signature="method#setMaxRetries#0;class#BranchUnityWrapper#0" expanded="false" />
                 <element signature="method#setNetworkTimeout#0;class#BranchUnityWrapper#0" expanded="false" />
@@ -85,7 +84,7 @@
       <file leaf-file-name="AndroidManifest.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
+            <state vertical-scroll-proportion="-1.25">
               <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
               <folding />
             </state>
@@ -106,7 +105,7 @@
         <entry file="file://$PROJECT_DIR$/app/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+              <caret line="24" column="46" selection-start-line="24" selection-start-column="46" selection-end-line="24" selection-end-column="46" />
               <folding />
             </state>
           </provider>
@@ -645,9 +644,9 @@
                 <option name="name" value="prepareDebugUnitTestDependencies" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare io.branch.sdk.android:library:2.2.0" />
+                <option name="description" value="Prepare io.branch.sdk.android:library:2.3.0" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="prepareIoBranchSdkAndroidLibrary220Library" />
+                <option name="name" value="prepareIoBranchSdkAndroidLibrary230Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
@@ -1274,9 +1273,9 @@
                 <option name="name" value="prepareDebugUnitTestDependencies" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare io.branch.sdk.android:library:2.2.0" />
+                <option name="description" value="Prepare io.branch.sdk.android:library:2.3.0" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
-                <option name="name" value="prepareIoBranchSdkAndroidLibrary220Library" />
+                <option name="name" value="prepareIoBranchSdkAndroidLibrary230Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
@@ -1443,7 +1442,7 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="4417559578000" />
+        <entry key="$PROJECT_DIR$" value="4417733677000" />
       </map>
     </option>
     <option name="projectBuildClasspath">
@@ -1625,7 +1624,7 @@
                             <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/external/lombok/lombok-ast/0.2.3/lombok-ast-0.2.3-sources.jar" />
                             <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/com/android/tools/external/lombok/lombok-ast/0.2.3/lombok-ast-0.2.3.jar" />
                             <option value="$APPLICATION_HOME_DIR$/gradle/m2repository/org/abego/treelayout/org.abego.treelayout.core/1.0.1/org.abego.treelayout.core-1.0.1.jar" />
-                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.branch.sdk.android/library/2.2.0/134cd019b143cafc4dbfb76657a5144a79ead8ea/library-2.2.0.aar" />
+                            <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.branch.sdk.android/library/2.3.0/595ed083e6c434579ea83d92814ce23d31c97461/library-2.3.0.aar" />
                             <option value="$USER_HOME$/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.0/support-annotations-22.2.0.jar" />
                             <option value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.crashlytics.sdk.android/answers-shim/0.0.6/9ab1f55cd55f0841649d517cda74a3fc31487836/answers-shim-0.0.6.aar" />
                             <option value="$MODULE_DIR$/libs/Unity.jar" />
@@ -1716,8 +1715,8 @@
       <list>
         <option value="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" />
         <option value="$PROJECT_DIR$/build.gradle" />
-        <option value="$PROJECT_DIR$/app/build.gradle" />
         <option value="$PROJECT_DIR$/app/src/main/java/io/branch/unity/BranchUnityWrapper.java" />
+        <option value="$PROJECT_DIR$/app/build.gradle" />
       </list>
     </option>
   </component>
@@ -1751,6 +1750,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="PackagesPane" />
       <pane id="AndroidView">
         <subPane>
           <PATH>
@@ -1772,8 +1773,6 @@
         </subPane>
       </pane>
       <pane id="ProjectPane" />
-      <pane id="PackagesPane" />
-      <pane id="Scratches" />
       <pane id="Scope" />
     </panes>
   </component>
@@ -2036,7 +2035,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1401" height="877" extended-state="6" />
+    <frame x="0" y="23" width="1401" height="877" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -2054,7 +2053,6 @@
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24944812" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298292" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24208978" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24944812" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
@@ -2068,6 +2066,7 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298292" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -2091,6 +2090,30 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/io/branch/unity/BranchUnityWrapper.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -2106,7 +2129,6 @@
             <element signature="method#setIdentity#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#setIdentity#1;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#logout#0;class#BranchUnityWrapper#0" expanded="false" />
-            <element signature="method#setDebug#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#setRetryInterval#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#setMaxRetries#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#setNetworkTimeout#0;class#BranchUnityWrapper#0" expanded="false" />
@@ -2173,7 +2195,6 @@
             <element signature="method#setIdentity#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#setIdentity#1;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#logout#0;class#BranchUnityWrapper#0" expanded="false" />
-            <element signature="method#setDebug#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#setRetryInterval#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#setMaxRetries#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#setNetworkTimeout#0;class#BranchUnityWrapper#0" expanded="false" />
@@ -2205,7 +2226,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="433" column="158" selection-start-line="433" selection-start-column="158" selection-end-line="433" selection-end-column="158" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2248,7 +2268,6 @@
             <element signature="method#setIdentity#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#setIdentity#1;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#logout#0;class#BranchUnityWrapper#0" expanded="false" />
-            <element signature="method#setDebug#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#setRetryInterval#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#setMaxRetries#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#setNetworkTimeout#0;class#BranchUnityWrapper#0" expanded="false" />
@@ -2280,7 +2299,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="462" column="0" selection-start-line="462" selection-start-column="0" selection-end-line="462" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2288,7 +2306,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="2680" column="0" selection-start-line="2680" selection-start-column="0" selection-end-line="2680" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2331,7 +2348,6 @@
             <element signature="method#setIdentity#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#setIdentity#1;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#logout#0;class#BranchUnityWrapper#0" expanded="false" />
-            <element signature="method#setDebug#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#setRetryInterval#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#setMaxRetries#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#setNetworkTimeout#0;class#BranchUnityWrapper#0" expanded="false" />
@@ -2398,7 +2414,6 @@
             <element signature="method#setIdentity#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#setIdentity#1;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#logout#0;class#BranchUnityWrapper#0" expanded="false" />
-            <element signature="method#setDebug#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#setRetryInterval#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#setMaxRetries#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#setNetworkTimeout#0;class#BranchUnityWrapper#0" expanded="false" />
@@ -2465,7 +2480,6 @@
             <element signature="method#setIdentity#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#setIdentity#1;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#logout#0;class#BranchUnityWrapper#0" expanded="false" />
-            <element signature="method#setDebug#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#setRetryInterval#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#setMaxRetries#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#setNetworkTimeout#0;class#BranchUnityWrapper#0" expanded="false" />
@@ -2532,7 +2546,6 @@
             <element signature="method#setIdentity#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#setIdentity#1;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#logout#0;class#BranchUnityWrapper#0" expanded="false" />
-            <element signature="method#setDebug#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#setRetryInterval#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#setMaxRetries#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#setNetworkTimeout#0;class#BranchUnityWrapper#0" expanded="false" />
@@ -2627,14 +2640,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Library/Android/sdk/sources/android-23/android/content/ContextWrapper.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3328786">
@@ -2660,7 +2665,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.45566165">
           <caret line="1729" column="31" selection-start-line="1729" selection-start-column="31" selection-end-line="1729" selection-end-column="31" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2668,6 +2672,29 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3533424">
           <caret line="456" column="0" selection-start-line="456" selection-start-column="0" selection-end-line="456" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.branch.sdk.android/library/2.2.0/9937d633e6083576537d2ed4680cb5501f17db91/library-2.2.0-sources.jar!/io/branch/referral/Branch.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="6.9918146">
+          <caret line="711" column="0" selection-start-line="711" selection-start-column="0" selection-end-line="711" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.25">
+          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="24" column="46" selection-start-line="24" selection-start-column="46" selection-end-line="24" selection-end-column="46" />
           <folding />
         </state>
       </provider>
@@ -2680,18 +2707,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.branch.sdk.android/library/2.3.0/83fab1a9b370c858c07a84720001e474bd2863b6/library-2.3.0-sources.jar!/io/branch/referral/Branch.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
-          <folding />
+        <state vertical-scroll-proportion="0.3328786">
+          <caret line="420" column="16" selection-start-line="420" selection-start-column="16" selection-end-line="420" selection-end-column="16" />
+          <folding>
+            <element signature="e#16329#16330#0" expanded="true" />
+            <element signature="e#16384#16385#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/io/branch/unity/BranchUnityWrapper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7748977">
-          <caret line="591" column="9" selection-start-line="591" selection-start-column="9" selection-end-line="591" selection-end-column="9" />
+        <state vertical-scroll-proportion="0.40927693">
+          <caret line="266" column="0" selection-start-line="266" selection-start-column="0" selection-end-line="266" selection-end-column="0" />
           <folding>
             <element signature="docComment;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#initSessionWithUniversalObjectCallback#0;class#BranchUnityWrapper#0" expanded="false" />
@@ -2703,7 +2733,6 @@
             <element signature="method#setIdentity#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#setIdentity#1;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#logout#0;class#BranchUnityWrapper#0" expanded="false" />
-            <element signature="method#setDebug#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#setRetryInterval#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#setMaxRetries#0;class#BranchUnityWrapper#0" expanded="false" />
             <element signature="method#setNetworkTimeout#0;class#BranchUnityWrapper#0" expanded="false" />
