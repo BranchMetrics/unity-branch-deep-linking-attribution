@@ -20,6 +20,24 @@ public class BranchAndroidWrapper {
 		});
     }
 
+	public static void initSessionAsReferrable(bool isReferrable) {
+		_runBlockOnThread(() => {
+			_getBranchClass().CallStatic("initSession", isReferrable);
+		});
+	}
+
+	public static void initSessionWithCallback(string callbackId) {
+		_runBlockOnThread(() => {
+			_getBranchClass().CallStatic("initSession", callbackId);
+		});
+	}
+
+	public static void initSessionAsReferrableWithCallback(bool isReferrable, string callbackId) {
+		_runBlockOnThread(() => {
+			_getBranchClass().CallStatic("initSession", callbackId, isReferrable);
+		});
+	}
+
 	public static void initSessionWithUniversalObjectCallback(string callbackId) {
 		_runBlockOnThread(() => {
 			_getBranchClass().CallStatic("initSessionWithUniversalObjectCallback", callbackId);
