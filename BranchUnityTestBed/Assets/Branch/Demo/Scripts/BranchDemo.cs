@@ -30,10 +30,25 @@ public class BranchDemo : MonoBehaviour {
 			Branch.setDebug();
 		}
 
-		//init Branch
-		Branch.initSession(CallbackWithBranchUniversalObject);
+		//init Branch with Dictionary
+		Branch.initSession(CallbackWithParams);
+
+		//init Branch with BUO
+//		Branch.initSession(CallbackWithBranchUniversalObject);
 	}
 
+	public void CallbackWithParams(Dictionary<string, object> parameters, string error) {
+		if (error != null) {
+			Debug.Log("Branch Error: " + error);
+		}
+		else {
+			Debug.Log("Branch initialization completed: ");
+			foreach(string str in parameters.Keys) {
+				Debug.Log(str + " : " + parameters[str].ToString());
+			}
+		}
+	}
+	
 	public void CallbackWithBranchUniversalObject(BranchUniversalObject universalObject, BranchLinkProperties linkProperties, string error) {
 		if (error != null) {
 			Debug.LogError("Branch Error: " + error);

@@ -27,6 +27,31 @@ public class Branch : MonoBehaviour {
     }
 
 	/**
+     * Just initialize session, specifying whether is should be referrable.
+     */
+	public static void  initSession(bool isReferrable) {
+		_initSessionAsReferrable(isReferrable);
+	}
+
+	/**
+	 * Initialize session and receive information about how it opened.
+	 */
+    public static void initSession(BranchCallbackWithParams callback) {
+		var callbackId = _getNextCallbackId();
+		_branchCallbacks[callbackId] = callback;
+		_initSessionWithCallback(callbackId);
+    }
+
+    /**
+	 * Initialize session and receive information about how it opened, specifying whether is should be referrable.
+	 */
+	public static void initSession(bool isReferrable, BranchCallbackWithParams callback) {
+		var callbackId = _getNextCallbackId();
+		_branchCallbacks[callbackId] = callback;
+		_initSessionAsReferrableWithCallback(isReferrable, callbackId);
+	}
+
+	/**
      * Initialize session and receive information about how it opened.
      */
 	public static void initSession(BranchCallbackWithBranchUniversalObject callback) {
@@ -362,7 +387,16 @@ public class Branch : MonoBehaviour {
     
     [DllImport ("__Internal")]
     private static extern void _initSession();
-    
+
+	[DllImport ("__Internal")]
+	private static extern void _initSessionAsReferrable(bool isReferrable);
+
+	[DllImport ("__Internal")]
+	private static extern void _initSessionWithCallback(string callbackId);
+
+	[DllImport ("__Internal")]
+	private static extern void _initSessionAsReferrableWithCallback(bool isReferrable, string callbackId);
+
 	[DllImport ("__Internal")]
 	private static extern void _initSessionWithUniversalObjectCallback(string callbackId);
         
@@ -459,6 +493,18 @@ public class Branch : MonoBehaviour {
     private static void _initSession() {
         BranchAndroidWrapper.initSession();
     }
+
+	private static void _initSessionAsReferrable(bool isReferrable) {
+		BranchAndroidWrapper.initSessionAsReferrable(isReferrable);
+	}
+
+	private static void _initSessionWithCallback(string callbackId) {
+		BranchAndroidWrapper.initSessionWithCallback(callbackId);
+	}
+
+	private static void _initSessionAsReferrableWithCallback(bool isReferrable, string callbackId) {
+		BranchAndroidWrapper.initSessionAsReferrableWithCallback(isReferrable, callbackId);
+	}
 
 	private static void _initSessionWithUniversalObjectCallback(string callbackId) {
 		BranchAndroidWrapper.initSessionWithUniversalObjectCallback(callbackId);
@@ -584,6 +630,18 @@ public class Branch : MonoBehaviour {
         Debug.Log("Branch is not implemented on this platform");
     }
     
+	private static void _initSessionAsReferrable(bool isReferrable) {
+		Debug.Log("Branch is not implemented on this platform");
+	}
+
+	private static void _initSessionWithCallback(string callbackId) {
+		callNotImplementedCallbackForParamCallback(callbackId);
+	}
+
+	private static void _initSessionAsReferrableWithCallback(bool isReferrable, string callbackId) {
+		callNotImplementedCallbackForParamCallback(callbackId);
+	}
+
 	private static void _initSessionWithUniversalObjectCallback(string callbackId) {
 		callNotImplementedCallbackForBUOCallback(callbackId);
 	}
