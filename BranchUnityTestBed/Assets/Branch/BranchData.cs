@@ -13,14 +13,12 @@ public class BranchData : ScriptableObject {
 	public string liveBranchKey;
 	public string liveBranchUri;
 	public string liveAndroidPathPrefix;
-	public string liveCustomDomain;
 	public string[] liveAppLinks;
 
 	// test data
 	public string testBranchKey;
 	public string testBranchUri;
 	public string testAndroidPathPrefix;
-	public string testCustomDomain;
 	public string[] testAppLinks;
 
 	// is simulation of fresh links enabled?
