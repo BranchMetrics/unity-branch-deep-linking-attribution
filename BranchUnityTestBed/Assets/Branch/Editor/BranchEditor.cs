@@ -25,13 +25,11 @@ public class BranchEditor : Editor {
 		SerializedProperty serializedTestBranchKey = serializedBranchData.FindProperty("testBranchKey");
 		SerializedProperty serializedTestBranchUri = serializedBranchData.FindProperty("testBranchUri");
 		SerializedProperty serializedTestAndroidPathPrefix = serializedBranchData.FindProperty("testAndroidPathPrefix");
-		SerializedProperty serializedTestCustomDomain = serializedBranchData.FindProperty("testCustomDomain");
 		SerializedProperty serializedTestAppLinks = serializedBranchData.FindProperty("testAppLinks");
 
 		SerializedProperty serializedBranchKey = serializedBranchData.FindProperty("liveBranchKey");
 		SerializedProperty serializedBranchUri = serializedBranchData.FindProperty("liveBranchUri");
 		SerializedProperty serializedAndroidPathPrefix = serializedBranchData.FindProperty("liveAndroidPathPrefix");
-		SerializedProperty serializedCustomDomain = serializedBranchData.FindProperty("liveCustomDomain");
 		SerializedProperty serializedAppLinks = serializedBranchData.FindProperty("liveAppLinks");
 
 
@@ -44,7 +42,6 @@ public class BranchEditor : Editor {
 		EditorGUILayout.PropertyField(serializedTestBranchKey, new GUILayoutOption[]{});
 		EditorGUILayout.PropertyField(serializedTestBranchUri, new GUILayoutOption[]{});
 		EditorGUILayout.PropertyField(serializedTestAndroidPathPrefix, new GUILayoutOption[]{});
-		EditorGUILayout.PropertyField(serializedTestCustomDomain, new GUILayoutOption[]{});
 		EditorGUILayout.PropertyField(serializedTestAppLinks, true, new GUILayoutOption[]{});
 
 		GUI.enabled = !BranchData.Instance.testMode;
@@ -53,7 +50,6 @@ public class BranchEditor : Editor {
 		EditorGUILayout.PropertyField(serializedBranchKey, new GUILayoutOption[]{});
 		EditorGUILayout.PropertyField(serializedBranchUri, new GUILayoutOption[]{});
 		EditorGUILayout.PropertyField(serializedAndroidPathPrefix, new GUILayoutOption[]{});
-		EditorGUILayout.PropertyField(serializedCustomDomain, new GUILayoutOption[]{});
 		EditorGUILayout.PropertyField(serializedAppLinks, true, new GUILayoutOption[]{});
 
 		GUI.enabled = true;
@@ -359,13 +355,6 @@ public class BranchEditor : Editor {
 					ifElem.AppendChild(ifData);
 				}
 			}
-			else if (!string.IsNullOrEmpty(BranchData.Instance.testCustomDomain)) {
-				XmlElement ifData = doc.CreateElement("data");
-				ifData.SetAttribute("android____scheme", "https");
-				ifData.SetAttribute("android____host", BranchData.Instance.testCustomDomain);
-				ifData.SetAttribute("android____pathPrefix", BranchData.Instance.testAndroidPathPrefix);
-				ifElem.AppendChild(ifData);
-			}
 			else {
 				XmlElement ifData = doc.CreateElement("data");
 				ifData.SetAttribute("android____scheme", "https");
@@ -382,13 +371,6 @@ public class BranchEditor : Editor {
 					ifData.SetAttribute("android____host", link);
 					ifElem.AppendChild(ifData);
 				}
-			}
-			else if (!string.IsNullOrEmpty(BranchData.Instance.liveCustomDomain)) {
-				XmlElement ifData = doc.CreateElement("data");
-				ifData.SetAttribute("android____scheme", "https");
-				ifData.SetAttribute("android____host", BranchData.Instance.liveCustomDomain);
-				ifData.SetAttribute("android____pathPrefix", BranchData.Instance.liveAndroidPathPrefix);
-				ifElem.AppendChild(ifData);
 			}
 			else {
 				XmlElement ifData = doc.CreateElement("data");
