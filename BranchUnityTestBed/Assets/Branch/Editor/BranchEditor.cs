@@ -350,7 +350,14 @@ public class BranchEditor : Editor {
 			if (BranchData.Instance.testAppLinks.Length > 0) {
 				foreach(string link in BranchData.Instance.testAppLinks) {
 					XmlElement ifData = doc.CreateElement("data");
-					ifData.SetAttribute("android____scheme", "https");
+
+					if (link.Contains("bnc.lt") || link.Contains("app.link")) {
+						ifData.SetAttribute("android____scheme", "https");
+					}
+					else {
+						ifData.SetAttribute("android____scheme", "http");
+					}
+
 					ifData.SetAttribute("android____host", link);
 					ifElem.AppendChild(ifData);
 				}
@@ -367,7 +374,14 @@ public class BranchEditor : Editor {
 			if (BranchData.Instance.liveAppLinks.Length > 0) {
 				foreach(string link in BranchData.Instance.liveAppLinks) {
 					XmlElement ifData = doc.CreateElement("data");
-					ifData.SetAttribute("android____scheme", "https");
+
+					if (link.Contains("bnc.lt") || link.Contains("app.link")) {
+						ifData.SetAttribute("android____scheme", "https");
+					}
+					else {
+						ifData.SetAttribute("android____scheme", "http");
+					}
+
 					ifData.SetAttribute("android____host", link);
 					ifElem.AppendChild(ifData);
 				}
