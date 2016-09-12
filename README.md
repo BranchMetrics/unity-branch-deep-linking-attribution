@@ -2,19 +2,14 @@
 
 This is a repository of our open source Unity SDK, which is a wrapper on top of our iOS and Android SDKs. See the table of contents below for a complete list of the content featured in this document.
 
-## Migration warning for 12/12/15 and after
-
-We released a completely revamped version of the Unity package today which automates a lot of the complexity of integrating Please rip out the old SDK and replace it with the new one at your earliest convenience.
-
 ## Migration warning for 06/09/16 and after
 
 We released a completely revamped version of the Unity package today which automates a lot of the complexity of integrating Please rip out the old SDK and replace it with the new one at your earliest convenience.
 
 - <b>Important changes:</b>
-* Auto management of Branch sessions for Android activities, you should not to use InitSession/CloseSession
-* We keeped only methods that works with UniversalBranchObjects, you should check and change used Branch API methods
-* You should use flag "Simaulte Fresh Install" in Branch prefab instead of using method SetDebug
-
+* Auto management of Branch sessions for Android activities, you should not need to use CloseSession
+* We keept only the methods that works with UniversalBranchObjects, you should check and change used Branch API methods
+* You should use flag "Simulate Fresh Install" in Branch prefab instead of using method `SetDebug`
 
 ## Get the Demo App
 
@@ -44,18 +39,17 @@ You can sign up for your own app id at [https://dashboard.branch.io](https://das
 
 #### Unity Scene and Branch Parameters
 
-To allow Branch to configure itself, you must add a BranchPrefab asset to your first scene. Simply drag into your first scene, and then specify your `APP_KEY`, `APP_PREFIX` and `PATH_PREFIX`, `CUSTOM_DOMAIN`, `APP_LINKS` in the properties.
+To allow Branch to configure itself, you must add a BranchPrefab asset to your first scene. Simply drag into your first scene, and then specify your `APP_KEY`, `APP_PREFIX` and `PATH_PREFIX`, `APP_LINKS` in the properties.
 
-* `Simulate Fresh Installs`: This is flag that enable or desable debud mode (in debug mode e your app will simulate fresh install each time, just for testing)
-* `Test Mode` : Switch set of parameters, if "Test mode" is enabled then app will use "test" set of parameters, else app will use "live" set of parameters
-* `APP_KEY`: This is your Branch key from the dashboard
-* `APP_URI`: <b>Keeped for supporting old realisation of link scheme.</b> This is the URI scheme you would like to use to open the app. This must be the same value as you entered in [the Branch link settings](https://dashboard.branch.io/#/settings/link) as well. Please do *not* include the `://` characters.
-* `PATH_PREFIX`: <b>Keeped for supporting old realisation of link scheme.</b> This is your Branch android path prefux [Read more](https://github.com/BranchMetrics/Android-Deferred-Deep-Linking-SDK/blob/master/README.md#leverage-android-app-links-for-deep-linking)
-* `CUSTOM_DOMAIN` : <b>Keeped for supporting old realisation of link scheme.</b> This is your custom domain.
-* `APP_LINKS` : This is your app links.
+* `Simulate Fresh Installs`: This is a flag that enables or disables debug mode. In debug mode, your app will simulate fresh install each time and log to the console. This is just for testing so please remove this prior to launch.
+* `Test Mode` : Switch set of parameters, if "Test mode" is enabled then app will use "test" Branch key if specified. Otherwise, the app will use the "live" Branch key.
+* `APP_KEY`: This is your Branch key from the dashboard.
+* `APP_URI`: This is the URI scheme you would like to use to open the app. This must be the same value as you entered in [the Branch link settings](https://dashboard.branch.io/#/settings/link) as well. Please do *not* include the `://` characters.
+* `PATH_PREFIX`: This is your Branch android path prefix. This only applies to you if you are on the `bnc.lt` domain. If you use `app.link`, please ignore this field. [Read more](https://github.com/BranchMetrics/Android-Deferred-Deep-Linking-SDK/blob/master/README.md#leverage-android-app-links-for-deep-linking)
+* `APP_LINKS` : This is where you specify the domains you would like to use for Android App Links (similar to Universal Links on iOS). Universal Links must be manually configured later as we couldn't figure out how to automate this.
 
-* `Update iOS Wrapper` : you should tap this button each time when you will change `APP_KEY`.
-* `Update Android Manifest` : you should tap this button if you want to update your manifest, if you update your manifest manyally just don't tap.
+* `Update iOS Wrapper` : You should tap this button each time when you will change `APP_KEY`.
+* `Update Android Manifest` : You should tap this button if you want to update your manifest. If you update your manifest manually just don't push this button.
 
 ![Branch Unity Config](https://raw.githubusercontent.com/BranchMetrics/Unity-Deferred-Deep-Linking-SDK/master/Docs/Screenshots/branch-key.png)
 
@@ -102,7 +96,7 @@ Typically, you would register some sort of splash activitiy that handles routing
 		<category android:name="android.intent.category.BROWSABLE" />
 	</intent-filter>
 	
-	<!-- App Link your activity to Branch links (before 26/07/2016)-->
+	<!-- App Link your activity to Branch links if you use bnc.lt (before 26/07/2016)-->
 	<intent-filter android:autoVerify="true">
         <data android:scheme="https" android:host="bnc.lt" android:pathPrefix="/prefix" />
         <action android:name="android.intent.action.VIEW" />
@@ -110,7 +104,7 @@ Typically, you would register some sort of splash activitiy that handles routing
         <category android:name="android.intent.category.BROWSABLE" />
     </intent-filter>
     
-    <!-- App Link your activity to Branch links (from 26/07/2016)-->  
+    <!-- App Link your activity to Branch links if you use app.link (from 26/07/2016)-->  
     <intent-filter android:autoVerify="true">
       <data android:scheme="https" android:host="xxxx.app.link" />
       <action android:name="android.intent.action.VIEW" />
@@ -124,12 +118,9 @@ Typically, you would register some sort of splash activitiy that handles routing
 
 #### Initialize SDK
 
-Branch SDK will be initilized automatically, just add BranchPrefab to your scene and set parameters.
-
-We recommend to add BranchPrefab to your first scene, before any calling of Branch SDK API.
+Branch SDK will be initilized automatically, just add BranchPrefab to your scene and set parameters. We recommend to add BranchPrefab to your first scene, before any calling of Branch SDK API.
 
 Don't worry about several instances of Branch SDK even if your first scene is scene that will be launched several times (for example: content loading scene).
-
 
 #### Initialize Session And Register Deep Linking Routing Function
 
