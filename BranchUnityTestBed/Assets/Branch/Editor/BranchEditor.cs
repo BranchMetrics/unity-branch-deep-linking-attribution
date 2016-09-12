@@ -11,27 +11,94 @@ using System.IO;
 [CustomEditor(typeof(Branch))]
 public class BranchEditor : Editor {
 
+	private bool isNeedToUpdateIOS = false;
+	private bool isNeedToUpdateAndroid = false;
+
 	public override void OnInspectorGUI() {
 		GUI.changed = false;
-		BranchData.Instance.branchUri = EditorGUILayout.TextField("branchUri", BranchData.Instance.branchUri, new GUILayoutOption[]{});
-		BranchData.Instance.androidPathPrefix = EditorGUILayout.TextField("androidPathPrefix", BranchData.Instance.androidPathPrefix, new GUILayoutOption[]{});
-		BranchData.Instance.branchKey = EditorGUILayout.TextField("branchKey", BranchData.Instance.branchKey, new GUILayoutOption[]{});
+
+		SerializedObject serializedBranchData = new UnityEditor.SerializedObject(BranchData.Instance);
+
+		SerializedProperty serializedIsDebug = serializedBranchData.FindProperty("simulateFreshInstalls");
+		SerializedProperty serializedIsTestMode = serializedBranchData.FindProperty("testMode");
+
+		SerializedProperty serializedTestBranchKey = serializedBranchData.FindProperty("testBranchKey");
+		SerializedProperty serializedTestBranchUri = serializedBranchData.FindProperty("testBranchUri");
+		SerializedProperty serializedTestAndroidPathPrefix = serializedBranchData.FindProperty("testAndroidPathPrefix");
+		SerializedProperty serializedTestAppLinks = serializedBranchData.FindProperty("testAppLinks");
+
+		SerializedProperty serializedBranchKey = serializedBranchData.FindProperty("liveBranchKey");
+		SerializedProperty serializedBranchUri = serializedBranchData.FindProperty("liveBranchUri");
+		SerializedProperty serializedAndroidPathPrefix = serializedBranchData.FindProperty("liveAndroidPathPrefix");
+		SerializedProperty serializedAppLinks = serializedBranchData.FindProperty("liveAppLinks");
+
+
+		EditorGUILayout.PropertyField(serializedIsDebug, new GUILayoutOption[]{});
+		EditorGUILayout.PropertyField(serializedIsTestMode, new GUILayoutOption[]{});
+
+		GUI.enabled = BranchData.Instance.testMode;
+
+		EditorGUILayout.Separator();
+		EditorGUILayout.PropertyField(serializedTestBranchKey, new GUILayoutOption[]{});
+		EditorGUILayout.PropertyField(serializedTestBranchUri, new GUILayoutOption[]{});
+		EditorGUILayout.PropertyField(serializedTestAndroidPathPrefix, new GUILayoutOption[]{});
+		EditorGUILayout.PropertyField(serializedTestAppLinks, true, new GUILayoutOption[]{});
+
+		GUI.enabled = !BranchData.Instance.testMode;
+
+		EditorGUILayout.Separator();
+		EditorGUILayout.PropertyField(serializedBranchKey, new GUILayoutOption[]{});
+		EditorGUILayout.PropertyField(serializedBranchUri, new GUILayoutOption[]{});
+		EditorGUILayout.PropertyField(serializedAndroidPathPrefix, new GUILayoutOption[]{});
+		EditorGUILayout.PropertyField(serializedAppLinks, true, new GUILayoutOption[]{});
+
+		GUI.enabled = true;
 
 		EditorGUILayout.BeginHorizontal(new GUILayoutOption[]{});
-		if (GUILayout.Button("Update Android Manifest", new GUILayoutOption[]{})) {
-			UpdateManifest();
-			AssetDatabase.Refresh();
+		if (isNeedToUpdateIOS) {
+			if (GUILayout.Button("Update iOS Wrapper", new GUILayoutOption[]{})) {
+				UpdateIOSKey();
+				isNeedToUpdateIOS = false;
+				GUI.changed = false;
+				AssetDatabase.Refresh();
+			}
+		}
+
+		if (isNeedToUpdateAndroid) {
+			if (GUILayout.Button("Update Android Manifest", new GUILayoutOption[]{})) {
+				UpdateManifest();
+				isNeedToUpdateAndroid = false;
+				GUI.changed = false;
+				AssetDatabase.Refresh();
+			}
+		}
+		EditorGUILayout.EndHorizontal();
+
+		EditorGUILayout.BeginHorizontal(new GUILayoutOption[]{});
+		EditorGUILayout.HelpBox("Read more about adding your Branch link domains for iOS.\nButton \"Update iOS Wrapper\" updates only Branch Key. You have to add link domains into xcode project manually.", MessageType.Info);
+		if (GUILayout.Button("?", new GUILayoutOption[]{GUILayout.Width(20)})) {
+			Application.OpenURL("https://dev.branch.io/getting-started/universal-app-links/guide/unity/#add-your-branch-link-domains");
+		}
+		EditorGUILayout.EndHorizontal();
+
+		EditorGUILayout.BeginHorizontal(new GUILayoutOption[]{});
+		EditorGUILayout.HelpBox("Read more about adding your Branch link domains for Android.\nButton \"Update Android Manifest\" updates manifest in accordance with your settings.", MessageType.Info);
+		if (GUILayout.Button("?", new GUILayoutOption[]{GUILayout.Width(20)})) {
+			Application.OpenURL("https://dev.branch.io/getting-started/universal-app-links/guide/unity/#add-intent-filter-to-manifest");
 		}
 		EditorGUILayout.EndHorizontal();
 
 		if (GUI.changed) {
-			AssetDatabase.SaveAssets();
+			isNeedToUpdateIOS = true;
+			isNeedToUpdateAndroid = true;
+			serializedBranchData.ApplyModifiedProperties();
 			EditorUtility.SetDirty(BranchData.Instance);
-			UpdateIOSKey();
+			AssetDatabase.SaveAssets();
+			AssetDatabase.Refresh();
 		}
 	}
 
-	#region IOS Key update
+	#region UpdateIOSKey
 
 	private void UpdateIOSKey() {
 		string iosWrapperPath = Path.Combine(Application.dataPath, "Plugins/Branch/iOS/BranchiOSWrapper.mm");
@@ -45,15 +112,23 @@ public class BranchEditor : Editor {
 		sr.Close();
 
 		StreamWriter sw = new StreamWriter(iosWrapperPath, false, Encoding.Default);
-		foreach (string line in lines)
+		for (int i = 0; i < lines.Length; ++i)
 		{
-			if (line.Contains("static NSString *_branchKey")) {
-				sw.WriteLine("static NSString *_branchKey = @\"" + BranchData.Instance.branchKey + "\";");
+			if (lines[i].Contains("static NSString *_branchKey")) {
+				if (BranchData.Instance.testMode) {
+					sw.WriteLine("static NSString *_branchKey = @\"" + BranchData.Instance.testBranchKey + "\";");
+				}
+				else {
+					sw.WriteLine("static NSString *_branchKey = @\"" + BranchData.Instance.liveBranchKey + "\";");
+				}
 			}
 			else {
-				sw.WriteLine(line);
+				if ( ! (i == lines.Length - 1 && string.IsNullOrEmpty(lines[i])) ) {
+					sw.WriteLine(lines[i]);
+				}
 			}
 		}
+
 		sw.Close();
 	}
 
@@ -79,44 +154,20 @@ public class BranchEditor : Editor {
 		// Opening android manifest
 		XmlDocument xmlDoc = new XmlDocument();
 		xmlDoc.Load(manifestPath);
-		
-		// Adding intent-filter into UnityPlayerActivity activity
-		UpdateIntentFilter(xmlDoc);
 
-		// Adding intent-filter for PathPrefix into UnityPlayerActivity activity
-		if (!string.IsNullOrEmpty(BranchData.Instance.androidPathPrefix)) {
-			UpdatePathPrefixIntentFilter(xmlDoc);
-		}
-		
-		// Adding permissions
-		UpdatePermissions(xmlDoc);
-		
-		// Saving android manifest
-		xmlDoc.Save(manifestPath);
-
-		//Changing "android___" to "android:" after changings
-		TextReader manifestReader = new StreamReader(manifestPath);
-		string content = manifestReader.ReadToEnd();
-		manifestReader.Close();
-
-		Regex regex = new Regex("android____");
-		content = regex.Replace (content, "android:");
-
-		TextWriter manifestWriter = new StreamWriter(manifestPath);
-		manifestWriter.Write(content);
-		manifestWriter.Close();
-	}
-	
-	private void UpdateIntentFilter(XmlDocument doc) {
-		XmlElement rootElem = doc.DocumentElement;
+		XmlElement rootElem = xmlDoc.DocumentElement;
 		XmlNode appNode = null;
 		XmlNode unityActivityNode = null;
-		XmlNode intentFilterNode = null;
 
 		// finding node named "application"
 		foreach(XmlNode node in rootElem.ChildNodes) {
 			if (node.Name == "application") {
 				appNode = node;
+
+				XmlElement appElem = appNode as XmlElement;
+				if (!appElem.HasAttribute("android:name")) {
+					appElem.SetAttribute("android____name", "io.branch.referral.BranchApp");
+				}
 				break;
 			}
 		}
@@ -146,6 +197,37 @@ public class BranchEditor : Editor {
 			Debug.LogError("Current Android Manifest was broken, it does not contain \"<activity android:name=\"com.unity3d.player.UnityPlayerActivity\">\"");
 			return;
 		}
+
+		// Adding intent-filter for Branch URI into UnityPlayerActivity activity
+		UpdateURIFilter(xmlDoc, unityActivityNode);
+
+		// Adding intent-filter for link domains into UnityPlayerActivity activity
+		UpdateLinkDomainsFilter(xmlDoc, unityActivityNode);
+
+		// Adding permissions
+		UpdatePermissions(xmlDoc);
+
+//		// Adding debug mode meta
+//		UpdateDebugModeMeta(xmlDoc, unityActivityNode);
+		
+		// Saving android manifest
+		xmlDoc.Save(manifestPath);
+
+		//Changing "android___" to "android:" after changings
+		TextReader manifestReader = new StreamReader(manifestPath);
+		string content = manifestReader.ReadToEnd();
+		manifestReader.Close();
+
+		Regex regex = new Regex("android____");
+		content = regex.Replace (content, "android:");
+
+		TextWriter manifestWriter = new StreamWriter(manifestPath);
+		manifestWriter.Write(content);
+		manifestWriter.Close();
+	}
+	
+	private void UpdateURIFilter(XmlDocument doc, XmlNode unityActivityNode) {
+		XmlNode intentFilterNode = null;
 
 		// update or adding intent-filter
 		foreach(XmlNode node in unityActivityNode.ChildNodes) {
@@ -165,6 +247,18 @@ public class BranchEditor : Editor {
 			}
 		}
 
+		// delete old intent-filter
+		if (intentFilterNode != null) {
+			unityActivityNode.RemoveChild(intentFilterNode);
+		}
+
+		// is URI present?
+		if (BranchData.Instance.testMode && string.IsNullOrEmpty(BranchData.Instance.testBranchUri)) {
+			return;
+		}
+		else if (!BranchData.Instance.testMode && string.IsNullOrEmpty(BranchData.Instance.liveBranchUri)) {
+			return;
+		}
 
 		// <intent-filter>
 		//	  <data android:scheme="APP_URI" android:host="open" />
@@ -173,83 +267,37 @@ public class BranchEditor : Editor {
 		//	  <category android:name="android.intent.category.BROWSABLE" />
 		// </intent-filter>
 
-		if (intentFilterNode == null) {
-			// adding intent-filter
-			XmlElement ifElem = doc.CreateElement("intent-filter");
+		// adding new intent-filter
+		XmlElement ifElem = doc.CreateElement("intent-filter");
 
-			XmlElement ifData = doc.CreateElement("data");
-			ifData.SetAttribute("android____scheme", BranchData.Instance.branchUri);
-			ifData.SetAttribute("android____host", "open");
+		XmlElement ifData = doc.CreateElement("data");
+		ifData.SetAttribute("android____host", "open");
 
-			XmlElement ifAction = doc.CreateElement("action");
-			ifAction.SetAttribute("android____name", "android.intent.action.VIEW");
-
-			XmlElement ifCategory01 = doc.CreateElement("category");
-			ifCategory01.SetAttribute("android____name", "android.intent.category.DEFAULT");
-
-			XmlElement ifCategory02 = doc.CreateElement("category");
-			ifCategory02.SetAttribute("android____name", "android.intent.category.BROWSABLE");
-
-			ifElem.AppendChild(ifData);
-			ifElem.AppendChild(ifAction);
-			ifElem.AppendChild(ifCategory01);
-			ifElem.AppendChild(ifCategory02);
-			unityActivityNode.AppendChild(ifElem);
+		if (BranchData.Instance.testMode) {
+			ifData.SetAttribute("android____scheme", BranchData.Instance.testBranchUri);
 		}
 		else {
-			// changing intent-filter
-			XmlElement ifData = doc.CreateElement("data");
-			ifData.SetAttribute("android____scheme", BranchData.Instance.branchUri);
-			ifData.SetAttribute("android____host", "open");
-
-			foreach(XmlNode node in intentFilterNode.ChildNodes) {
-				if (node.Name == "data") {
-					intentFilterNode.ReplaceChild(ifData, node);
-					break;
-				}
-			}
+			ifData.SetAttribute("android____scheme", BranchData.Instance.liveBranchUri);
 		}
+
+		XmlElement ifAction = doc.CreateElement("action");
+		ifAction.SetAttribute("android____name", "android.intent.action.VIEW");
+
+		XmlElement ifCategory01 = doc.CreateElement("category");
+		ifCategory01.SetAttribute("android____name", "android.intent.category.DEFAULT");
+
+		XmlElement ifCategory02 = doc.CreateElement("category");
+		ifCategory02.SetAttribute("android____name", "android.intent.category.BROWSABLE");
+
+		ifElem.AppendChild(ifData);
+		ifElem.AppendChild(ifAction);
+		ifElem.AppendChild(ifCategory01);
+		ifElem.AppendChild(ifCategory02);
+		unityActivityNode.AppendChild(ifElem);
 	}
 
-	private void UpdatePathPrefixIntentFilter(XmlDocument doc) {
-		XmlElement rootElem = doc.DocumentElement;
-		XmlNode appNode = null;
-		XmlNode unityActivityNode = null;
+	private void UpdateLinkDomainsFilter(XmlDocument doc, XmlNode unityActivityNode) {
 		XmlNode intentFilterNode = null;
-
-		// finding node named "application"
-		foreach(XmlNode node in rootElem.ChildNodes) {
-			if (node.Name == "application") {
-				appNode = node;
-				break;
-			}
-		}
-
-		if (appNode == null) {
-			Debug.LogError("Current Android Manifest was broken, it does not contain \"<application>\" node");
-			return;
-		}
-
-		// finding UnityPlayerActivity node
-		foreach(XmlNode node in appNode.ChildNodes) {
-			if (unityActivityNode != null) {
-				break;
-			}
-
-			if (node.Name == "activity") {
-				foreach(XmlAttribute attr in node.Attributes) {
-					if (attr.Value.Contains("UnityPlayerActivity")) {
-						unityActivityNode = node;
-						break;
-					}
-				}
-			}
-		}
-
-		if (unityActivityNode == null) {
-			Debug.LogError("Current Android Manifest was broken, it does not contain \"<activity android:name=\"com.unity3d.player.UnityPlayerActivity\">\"");
-			return;
-		}
 
 		// update or adding intent-filter
 		foreach(XmlNode node in unityActivityNode.ChildNodes) {
@@ -260,60 +308,80 @@ public class BranchEditor : Editor {
 			if (node.Name == "intent-filter") {
 				foreach(XmlNode childNode in node.ChildNodes) {
 					foreach(XmlAttribute attr in childNode.Attributes) {
-						if (attr.Name.Contains("host") && attr.Value == "bnc.lt") {
+						if (attr.Name.Contains("scheme") && attr.Value == "https") {
 							intentFilterNode = node;
 						}
 					}
 				}
 			}
 		}
-			
+
+		if (intentFilterNode != null) {
+			unityActivityNode.RemoveChild(intentFilterNode);
+		}
+
 //		<intent-filter android:autoVerify="true">
 //			<action android:name="android.intent.action.VIEW" />
 //			<category android:name="android.intent.category.DEFAULT" />
 //			<category android:name="android.intent.category.BROWSABLE" />
-//			<data android:scheme="https" android:host="bnc.lt" android:pathPrefix="/live_app_alpha_encoded_id" />
+//			<data android:scheme="https" android:host="xxxx.app.link" />
+//			<data android:scheme="https" android:host="bnc.lt" android:pathPrefix="/pref" />
+//			<data android:scheme="https" android:host="custom.dom" android:pathPrefix="/pref" />
 //		</intent-filter>
 
-		if (intentFilterNode == null) {
-			// adding intent-filter
-			XmlElement ifElem = doc.CreateElement("intent-filter");
-			ifElem.SetAttribute("android____autoVerify", "true");
+		// adding intent-filter
+		XmlElement ifElem = doc.CreateElement("intent-filter");
+		ifElem.SetAttribute("android____autoVerify", "true");
 
-			XmlElement ifData = doc.CreateElement("data");
-			ifData.SetAttribute("android____scheme", "https");
-			ifData.SetAttribute("android____host", "bnc.lt");
-			ifData.SetAttribute("android____pathPrefix", BranchData.Instance.androidPathPrefix);
+		XmlElement ifAction = doc.CreateElement("action");
+		ifAction.SetAttribute("android____name", "android.intent.action.VIEW");
 
-			XmlElement ifAction = doc.CreateElement("action");
-			ifAction.SetAttribute("android____name", "android.intent.action.VIEW");
+		XmlElement ifCategory01 = doc.CreateElement("category");
+		ifCategory01.SetAttribute("android____name", "android.intent.category.DEFAULT");
 
-			XmlElement ifCategory01 = doc.CreateElement("category");
-			ifCategory01.SetAttribute("android____name", "android.intent.category.DEFAULT");
+		XmlElement ifCategory02 = doc.CreateElement("category");
+		ifCategory02.SetAttribute("android____name", "android.intent.category.BROWSABLE");
 
-			XmlElement ifCategory02 = doc.CreateElement("category");
-			ifCategory02.SetAttribute("android____name", "android.intent.category.BROWSABLE");
+		ifElem.AppendChild(ifAction);
+		ifElem.AppendChild(ifCategory01);
+		ifElem.AppendChild(ifCategory02);
 
-			ifElem.AppendChild(ifData);
-			ifElem.AppendChild(ifAction);
-			ifElem.AppendChild(ifCategory01);
-			ifElem.AppendChild(ifCategory02);
-			unityActivityNode.AppendChild(ifElem);
-		}
-		else {
-			// changing intent-filter
-			XmlElement ifData = doc.CreateElement("data");
-			ifData.SetAttribute("android____scheme", "https");
-			ifData.SetAttribute("android____host", "bnc.lt");
-			ifData.SetAttribute("android____pathPrefix", BranchData.Instance.androidPathPrefix);
-
-			foreach(XmlNode node in intentFilterNode.ChildNodes) {
-				if (node.Name == "data") {
-					intentFilterNode.ReplaceChild(ifData, node);
-					break;
+		if (BranchData.Instance.testMode) {
+			if (BranchData.Instance.testAppLinks.Length > 0) {
+				foreach(string link in BranchData.Instance.testAppLinks) {
+					XmlElement ifData = doc.CreateElement("data");
+					ifData.SetAttribute("android____scheme", "https");
+					ifData.SetAttribute("android____host", link);
+					ifElem.AppendChild(ifData);
 				}
 			}
+			else {
+				XmlElement ifData = doc.CreateElement("data");
+				ifData.SetAttribute("android____scheme", "https");
+				ifData.SetAttribute("android____host", "bnc.lt");
+				ifData.SetAttribute("android____pathPrefix", BranchData.Instance.testAndroidPathPrefix);
+				ifElem.AppendChild(ifData);
+			}
 		}
+		else {
+			if (BranchData.Instance.liveAppLinks.Length > 0) {
+				foreach(string link in BranchData.Instance.liveAppLinks) {
+					XmlElement ifData = doc.CreateElement("data");
+					ifData.SetAttribute("android____scheme", "https");
+					ifData.SetAttribute("android____host", link);
+					ifElem.AppendChild(ifData);
+				}
+			}
+			else {
+				XmlElement ifData = doc.CreateElement("data");
+				ifData.SetAttribute("android____scheme", "https");
+				ifData.SetAttribute("android____host", "bnc.lt");
+				ifData.SetAttribute("android____pathPrefix", BranchData.Instance.liveAndroidPathPrefix);
+				ifElem.AppendChild(ifData);
+			}
+		}
+
+		unityActivityNode.AppendChild(ifElem);
 	}
 
 	private void UpdatePermissions(XmlDocument doc) {
@@ -363,6 +431,40 @@ public class BranchEditor : Editor {
 			XmlElement elem = doc.CreateElement("uses-permission");
 			elem.SetAttribute("android____name", "android.permission.ACCESS_NETWORK_STATE");
 			rootElem.AppendChild(elem);
+		}
+	}
+
+
+	private void UpdateDebugModeMeta(XmlDocument doc, XmlNode unityActivityNode) {
+		//<meta-data android:name="io.branch.sdk.TestMode" android:value="true" />
+
+		XmlNode metaDataNode = null;
+
+		// update or adding intent-filter
+		foreach(XmlNode node in unityActivityNode.ChildNodes) {
+			if (metaDataNode != null) {
+				break;
+			}
+
+			if (node.Name == "meta-data") {
+				foreach(XmlAttribute attr in node.Attributes) {
+					if (attr.Value.Contains("io.branch.sdk.TestMode")) {
+						metaDataNode = node;
+						break;
+					}
+				}
+			}
+		}
+
+		XmlElement debugMetaData = doc.CreateElement("meta-data");
+		debugMetaData.SetAttribute("android____name", "io.branch.sdk.TestMode");
+		debugMetaData.SetAttribute("android____value", BranchData.Instance.simulateFreshInstalls ? "true" : "false");
+
+		if (metaDataNode == null) {
+			unityActivityNode.AppendChild(debugMetaData);
+		}
+		else {
+			unityActivityNode.ReplaceChild(debugMetaData, metaDataNode);
 		}
 	}
 

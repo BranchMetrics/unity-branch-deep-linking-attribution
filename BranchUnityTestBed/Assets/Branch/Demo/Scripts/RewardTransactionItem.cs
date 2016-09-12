@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class CreditTransactionItem : MonoBehaviour {
+public class RewardTransactionItem : MonoBehaviour {
 
 	public Text label;
 }

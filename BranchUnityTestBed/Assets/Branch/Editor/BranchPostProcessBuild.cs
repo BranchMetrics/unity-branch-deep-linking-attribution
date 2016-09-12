@@ -3,6 +3,9 @@ using UnityEditor;
 using UnityEditor.Callbacks;
 using System.Collections;
 using UnityEditor.iOS.Xcode;
+using System.Linq;
+using System.Text;
+using System.Xml;
 using System.IO;
 
 public class BranchPostProcessBuild {
@@ -60,16 +63,27 @@ public class BranchPostProcessBuild {
 			}
 		}
 
-		bool isExist = false;
+		// delete old URIs
 		foreach(PlistElement elem in urlSchemesArray.values) {
-			if (elem.AsString() != null && elem.AsString().Equals(BranchData.Instance.branchUri)) {
-				isExist = true;
+			if (elem.AsString() != null && elem.AsString().Equals(BranchData.Instance.liveBranchUri)) {
+				urlSchemesArray.values.Remove(elem);
 				break;
 			}
 		}
 
-		if (!isExist) {
-			urlSchemesArray.AddString(BranchData.Instance.branchUri);
+		foreach(PlistElement elem in urlSchemesArray.values) {
+			if (elem.AsString() != null && elem.AsString().Equals(BranchData.Instance.testBranchUri)) {
+				urlSchemesArray.values.Remove(elem);
+				break;
+			}
+		}
+
+		// add new URI
+		if (BranchData.Instance.testMode) {
+			urlSchemesArray.AddString(BranchData.Instance.testBranchUri);
+		}
+		else {
+			urlSchemesArray.AddString(BranchData.Instance.liveBranchUri);
 		}
 
 		// Write to file

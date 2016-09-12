@@ -67,17 +67,9 @@ public class BranchUnityWrapper {
         Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).initSession(new BranchUniversalReferralInitListenerUnityCallback(callbackId), unityActivity.getIntent().getData(), unityActivity);
     }
 
-    public static void closeSession() {
-        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).closeSession();
-    }
-
     /**
      * Session Item methods
      */
-
-    public static String getFirstReferringParams() {
-        return Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getFirstReferringParams().toString();
-    }
 
     public static String getFirstReferringBranchUniversalObject() {
         BranchUniversalObject branchUniversalObject = null;
@@ -170,10 +162,6 @@ public class BranchUnityWrapper {
             }
         }
         return _jsonObjectFromLinkProperties(linkProperties).toString();
-    }
-
-    public static String getLatestReferringParams() {
-        return Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getLatestReferringParams().toString();
     }
 
     public static String getLatestReferringBranchUniversalObject() {
@@ -315,18 +303,23 @@ public class BranchUnityWrapper {
         }
     }
 
+    public static void listOnSpotlight(String universalObjectDict) {
+        try {
+            BranchUniversalObject universalObject = _branchUniversalObjectFromJSONObject(new JSONObject(universalObjectDict));
+            universalObject.listOnGoogleSearch(UnityPlayer.currentActivity.getApplicationContext());
+        }
+        catch (JSONException jsone) {
+            jsone.printStackTrace();
+        }
+    }
+
     public static void accountForFacebookSDKPreventingAppLaunch() {
 
     }
 
-
     /**
      * User Action methods
      */
-
-    public static void loadActionCounts(String callbackId) {
-        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).loadActionCounts(new BranchReferralInitListenerUnityCallback(callbackId));
-    }
 
     public static void userCompletedAction(String action) {
         Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).userCompletedAction(action);
@@ -340,14 +333,6 @@ public class BranchUnityWrapper {
         catch (JSONException jsone) {
             jsone.printStackTrace();
         }
-    }
-
-    public static int getTotalCountsForAction(String action) {
-        return Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getTotalCountsForAction(action);
-    }
-
-    public static int getUniqueCountsForAction(String action) {
-        return Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getUniqueCountsForAction(action);
     }
 
     /**
@@ -395,54 +380,8 @@ public class BranchUnityWrapper {
     }
 
     /**
-     * Content URL methods
-     */
-
-    public static void getContentUrl(String parameterDict, String channel, String callbackId) {
-        try {
-            JSONObject parameters = new JSONObject(parameterDict);
-
-            Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getContentUrl(channel, parameters, new BranchReferralInitListenerUnityCallback(callbackId));
-        }
-        catch (JSONException jsone) {
-            jsone.printStackTrace();
-        }
-    }
-
-    public static void getContentUrl(String parameterDict, String tagList, String channel, String callbackId) {
-        try {
-            JSONObject parameters = new JSONObject(parameterDict);
-            JSONArray tagsJArray = new JSONArray(tagList);
-            List<String> tags = new ArrayList<String>(); // Sad Panda for inconsistent typing :(
-            for (int i = 0; i < tagsJArray.length(); i++) {
-                tags.add(tagsJArray.getString(i));
-            }
-
-            Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getContentUrl(tags, channel, parameters, new BranchReferralInitListenerUnityCallback(callbackId));
-        }
-        catch (JSONException jsone) {
-            jsone.printStackTrace();
-        }
-    }
-
-    /**
      * Short URL Generation methods
      */
-
-    public static void getShortURL(String callbackId) {
-        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getShortUrl(new BranchReferralInitListenerUnityCallback(callbackId));
-    }
-
-    public static void getShortURL(String parameterDict, String callbackId) {
-        try {
-            JSONObject parameters = new JSONObject(parameterDict);
-
-            Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getShortUrl(parameters, new BranchReferralInitListenerUnityCallback(callbackId));
-        }
-        catch (JSONException jsone) {
-            jsone.printStackTrace();
-        }
-    }
 
     public static void getShortURLWithBranchUniversalObject(String universalObjectDict, String linkPropertiesDict, String callbackId) {
 
@@ -457,164 +396,9 @@ public class BranchUnityWrapper {
         }
     }
 
-    public static void getShortURLWithTags(String parameterDict, String tagList, String channel, String feature, String stage, String callbackId) {
-        try {
-            JSONObject parameters = new JSONObject(parameterDict);
-            JSONArray tagsJArray = new JSONArray(tagList);
-            List<String> tags = new ArrayList<String>(); // Sad Panda for inconsistent typing :(
-            for (int i = 0; i < tagsJArray.length(); i++) {
-                tags.add(tagsJArray.getString(i));
-            }
-
-            Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getShortUrl(tags, channel, feature, stage, parameters, new BranchReferralInitListenerUnityCallback(callbackId));
-        }
-        catch (JSONException jsone) {
-            jsone.printStackTrace();
-        }
-    }
-
-    public static void getShortURLWithTags(String parameterDict, String tagList, String channel, String feature, String stage, String alias, String callbackId) {
-        try {
-            JSONObject parameters = new JSONObject(parameterDict);
-            JSONArray tagsJArray = new JSONArray(tagList);
-            List<String> tags = new ArrayList<String>(); // Sad Panda for inconsistent typing :(
-            for (int i = 0; i < tagsJArray.length(); i++) {
-                tags.add(tagsJArray.getString(i));
-            }
-
-            Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getShortUrl(alias, tags, channel, feature, stage, parameters, new BranchReferralInitListenerUnityCallback(callbackId));
-        }
-        catch (JSONException jsone) {
-            jsone.printStackTrace();
-        }
-    }
-
-    public static void getShortURLWithTags(int type, String parameterDict, String tagList, String channel, String feature, String stage, String callbackId) {
-        try {
-            JSONObject parameters = new JSONObject(parameterDict);
-            JSONArray tagsJArray = new JSONArray(tagList);
-            List<String> tags = new ArrayList<String>(); // Sad Panda for inconsistent typing :(
-            for (int i = 0; i < tagsJArray.length(); i++) {
-                tags.add(tagsJArray.getString(i));
-            }
-
-            Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getShortUrl(type, tags, channel, feature, stage, parameters, new BranchReferralInitListenerUnityCallback(callbackId));
-        }
-        catch (JSONException jsone) {
-            jsone.printStackTrace();
-        }
-    }
-
-    public static void getShortURLWithTags(String parameterDict, String tagList, String channel, String feature, String stage, int matchDuration, String callbackId) {
-        try {
-            JSONObject parameters = new JSONObject(parameterDict);
-            JSONArray tagsJArray = new JSONArray(tagList);
-            List<String> tags = new ArrayList<String>(); // Sad Panda for inconsistent typing :(
-            for (int i = 0; i < tagsJArray.length(); i++) {
-                tags.add(tagsJArray.getString(i));
-            }
-
-            Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getShortUrl(tags, channel, feature, stage, parameters, matchDuration, new BranchReferralInitListenerUnityCallback(callbackId));
-        }
-        catch (JSONException jsone) {
-            jsone.printStackTrace();
-        }
-    }
-
-    public static void getShortURL(String parameterDict, String channel, String feature, String callbackId) {
-        try {
-            JSONObject parameters = new JSONObject(parameterDict);
-
-            // null stage. this method seems to be non-corresponding to iOS
-            Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getShortUrl(channel, feature, null, parameters, new BranchReferralInitListenerUnityCallback(callbackId));
-        }
-        catch (JSONException jsone) {
-            jsone.printStackTrace();
-        }
-    }
-
-    public static void getShortURL(String parameterDict, String channel, String feature, String stage, String callbackId) {
-        try {
-            JSONObject parameters = new JSONObject(parameterDict);
-
-            Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getShortUrl(channel, feature, stage, parameters, new BranchReferralInitListenerUnityCallback(callbackId));
-        }
-        catch (JSONException jsone) {
-            jsone.printStackTrace();
-        }
-    }
-
-    public static void getShortURL(String parameterDict, String channel, String feature, String stage, String alias, String callbackId) {
-        try {
-            JSONObject parameters = new JSONObject(parameterDict);
-
-            Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getShortUrl(alias, channel, feature, stage, parameters, new BranchReferralInitListenerUnityCallback(callbackId));
-        }
-        catch (JSONException jsone) {
-            jsone.printStackTrace();
-        }
-    }
-
-    public static void getShortURL(int type, String parameterDict, String channel, String feature, String stage, String callbackId) {
-        try {
-            JSONObject parameters = new JSONObject(parameterDict);
-
-            Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getShortUrl(type, channel, feature, stage, parameters, new BranchReferralInitListenerUnityCallback(callbackId));
-        }
-        catch (JSONException jsone) {
-            jsone.printStackTrace();
-        }
-    }
-
-    public static void getShortURL(String parameterDict, String channel, String feature, String stage, int matchDuration, String callbackId) {
-        try {
-            JSONObject parameters = new JSONObject(parameterDict);
-
-            Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getShortUrl(channel, feature, stage, parameters, matchDuration, new BranchReferralInitListenerUnityCallback(callbackId));
-        }
-        catch (JSONException jsone) {
-            jsone.printStackTrace();
-        }
-    }
-
     /**
      * Share methods
      */
-
-    public static void shareLink(String parameterDict, String tagList, String message, String feature, String stage, String defaultUrl, String callbackId) {
-        try {
-            JSONObject parameters = new JSONObject(parameterDict);
-            JSONArray tagsJArray = new JSONArray(tagList);
-
-            linkBuilder = new Branch.ShareLinkBuilder(UnityPlayer.currentActivity, parameters);
-            linkBuilder.addPreferredSharingOption(SharingHelper.SHARE_WITH.FACEBOOK);
-            linkBuilder.addPreferredSharingOption(SharingHelper.SHARE_WITH.TWITTER);
-            linkBuilder.addPreferredSharingOption(SharingHelper.SHARE_WITH.MESSAGE);
-            linkBuilder.addPreferredSharingOption(SharingHelper.SHARE_WITH.EMAIL);
-            linkBuilder.addPreferredSharingOption(SharingHelper.SHARE_WITH.FLICKR);
-            linkBuilder.addPreferredSharingOption(SharingHelper.SHARE_WITH.GOOGLE_DOC);
-            linkBuilder.addPreferredSharingOption(SharingHelper.SHARE_WITH.WHATS_APP);
-            linkBuilder.setMessage(message);
-            linkBuilder.setStage(stage);
-            linkBuilder.setFeature(feature);
-            linkBuilder.setDefaultURL(defaultUrl);
-            linkBuilder.setCallback(new BranchReferralInitListenerUnityCallback(callbackId));
-
-            for (int i = 0; i < tagsJArray.length(); i++) {
-                linkBuilder.addTag(tagsJArray.getString(i));
-            }
-
-            UnityPlayer.currentActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    linkBuilder.shareLink();
-                }
-            });
-        }
-        catch (JSONException jsone) {
-            jsone.printStackTrace();
-        }
-    }
 
     public static void shareLinkWithLinkProperties(String universalObjectDict, String linkPropertiesDict, String message, String callbackId) {
         try {
@@ -635,69 +419,6 @@ public class BranchUnityWrapper {
         catch (JSONException jsone) {
             jsone.printStackTrace();
         }
-    }
-
-    /**
-     * Referral methods
-     */
-
-    public static void getReferralUrl(String parameterDict, String tagList, String channel, String callbackId) {
-        try {
-            JSONObject parameters = new JSONObject(parameterDict);
-            JSONArray tagsJArray = new JSONArray(tagList);
-            List<String> tags = new ArrayList<String>(); // Sad Panda for inconsistent typing :(
-            for (int i = 0; i < tagsJArray.length(); i++) {
-                tags.add(tagsJArray.getString(i));
-            }
-
-            Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getReferralUrl(tags, channel, parameters, new BranchReferralInitListenerUnityCallback(callbackId));
-        }
-        catch (JSONException jsone) {
-            jsone.printStackTrace();
-        }
-    }
-
-    public static void getReferralUrl(String parameterDict, String channel, String callbackId) {
-        try {
-            JSONObject parameters = new JSONObject(parameterDict);
-
-            Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getReferralUrl(channel, parameters, new BranchReferralInitListenerUnityCallback(callbackId));
-        }
-        catch (JSONException jsone) {
-            jsone.printStackTrace();
-        }
-    }
-
-    public static void getReferralCode(String callbackId) {
-        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getReferralCode(new BranchReferralInitListenerUnityCallback(callbackId));
-    }
-
-    public static void getReferralCode(int amount, String callbackId) {
-        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getReferralCode(amount, new BranchReferralInitListenerUnityCallback(callbackId));
-    }
-
-    public static void getReferralCode(String prefix, int amount, String callbackId) {
-        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getReferralCode(prefix, amount, new BranchReferralInitListenerUnityCallback(callbackId));
-    }
-
-    public static void getReferralCode(int amount, String expiration, String callbackId) {
-        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getReferralCode(amount, _dateFromString(expiration), new BranchReferralInitListenerUnityCallback(callbackId));
-    }
-
-    public static void getReferralCode(String prefix, int amount, String expiration, String callbackId) {
-        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getReferralCode(prefix, amount, _dateFromString(expiration), new BranchReferralInitListenerUnityCallback(callbackId));
-    }
-
-    public static void getReferralCode(String prefix, int amount, String expiration, String bucket, int calcType, int location, String callbackId) {
-        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getReferralCode(prefix, amount, _dateFromString(expiration), bucket, calcType, location, new BranchReferralInitListenerUnityCallback(callbackId));
-    }
-
-    public static void validateReferralCode(String code, String callbackId) {
-        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).validateReferralCode(code, new BranchReferralInitListenerUnityCallback(callbackId));
-    }
-
-    public static void applyReferralCode(String code, String callbackId) {
-        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).applyReferralCode(code, new BranchReferralInitListenerUnityCallback(callbackId));
     }
 
     /**
@@ -790,7 +511,7 @@ public class BranchUnityWrapper {
                 branchUniversalObject.setContentType(params.getString(Defines.Jsonkey.ContentType.getKey()));
             }
             if (params.has(Defines.Jsonkey.ContentExpiryTime.getKey())) {
-                if (params.getString(Defines.Jsonkey.ContentExpiryTime.getKey()) != "") {
+                if (!params.getString(Defines.Jsonkey.ContentExpiryTime.getKey()).isEmpty()) {
                     branchUniversalObject.setContentExpiration(new Date(Long.decode(params.getString(Defines.Jsonkey.ContentExpiryTime.getKey()))));
                 }
             }

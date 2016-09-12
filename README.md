@@ -2,9 +2,14 @@
 
 This is a repository of our open source Unity SDK, which is a wrapper on top of our iOS and Android SDKs. See the table of contents below for a complete list of the content featured in this document.
 
-## Migration warning for 12/12/15 and after
+## Migration warning for 06/09/16 and after
 
 We released a completely revamped version of the Unity package today which automates a lot of the complexity of integrating Please rip out the old SDK and replace it with the new one at your earliest convenience.
+
+- <b>Important changes:</b>
+* Auto management of Branch sessions for Android activities, you should not need to use CloseSession
+* We keept only the methods that works with UniversalBranchObjects, you should check and change used Branch API methods
+* You should use flag "Simulate Fresh Install" in Branch prefab instead of using method `SetDebug`
 
 ## Get the Demo App
 
@@ -34,11 +39,17 @@ You can sign up for your own app id at [https://dashboard.branch.io](https://das
 
 #### Unity Scene and Branch Parameters
 
-To allow Branch to configure itself, you must add a BranchPrefab asset to your first scene. Simply drag into your first scene, and then specify your `APP_KEY`, `PATH_PREFIX` and `APP_URI` in the properties.
+To allow Branch to configure itself, you must add a BranchPrefab asset to your first scene. Simply drag into your first scene, and then specify your `APP_KEY`, `APP_PREFIX` and `PATH_PREFIX`, `APP_LINKS` in the properties.
 
-* `branchKey`: This is your Branch key from the dashboard
-* `androidPathPrefix`: This is your Branch android path prefux [Read more](https://github.com/BranchMetrics/Android-Deferred-Deep-Linking-SDK/blob/master/README.md#leverage-android-app-links-for-deep-linking)
-* `branchUri`: This is the URI scheme you would like to use to open the app. This must be the same value as you entered in [the Branch link settings](https://dashboard.branch.io/#/settings/link) as well. Please do *not* include the `://` characters.
+* `Simulate Fresh Installs`: This is a flag that enables or disables debug mode. In debug mode, your app will simulate fresh install each time and log to the console. This is just for testing so please remove this prior to launch.
+* `Test Mode` : Switch set of parameters, if "Test mode" is enabled then app will use "test" Branch key if specified. Otherwise, the app will use the "live" Branch key.
+* `Branch Key`: This is your Branch key from the dashboard.
+* `Branch Uri`: This is the URI scheme you would like to use to open the app. This must be the same value as you entered in [the Branch link settings](https://dashboard.branch.io/#/settings/link) as well. Please do *not* include the `://` characters.
+* `Android Path Prefix`: This is your Branch android path prefix. This only applies to you if you are on the `bnc.lt` domain. If you use `app.link`, please ignore this field. [Read more](https://github.com/BranchMetrics/Android-Deferred-Deep-Linking-SDK/blob/master/README.md#leverage-android-app-links-for-deep-linking)
+* `App Links` : This is where you specify the domains you would like to use for Android App Links (similar to Universal Links on iOS). Universal Links must be manually configured later as we couldn't figure out how to automate this.
+
+* `Update iOS Wrapper` : You should tap this button each time when you will change `Branch Key` and `Branch Uri`.
+* `Update Android Manifest` : You should tap this button if you want to update your manifest. If you update your manifest manually just don't push this button.
 
 ![Branch Unity Config](https://raw.githubusercontent.com/BranchMetrics/Unity-Deferred-Deep-Linking-SDK/master/Docs/Screenshots/branch-key.png)
 
@@ -85,13 +96,21 @@ Typically, you would register some sort of splash activitiy that handles routing
 		<category android:name="android.intent.category.BROWSABLE" />
 	</intent-filter>
 	
-	<!-- App Link your activity to Branch links-->
+	<!-- App Link your activity to Branch links if you use bnc.lt (before 26/07/2016)-->
 	<intent-filter android:autoVerify="true">
-	        <data android:scheme="https" android:host="bnc.lt" android:pathPrefix="/prefix" />
-	        <action android:name="android.intent.action.VIEW" />
-	        <category android:name="android.intent.category.DEFAULT" />
-	        <category android:name="android.intent.category.BROWSABLE" />
-	</intent-filter>
+        <data android:scheme="https" android:host="bnc.lt" android:pathPrefix="/prefix" />
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+    </intent-filter>
+    
+    <!-- App Link your activity to Branch links if you use app.link (from 26/07/2016)-->  
+    <intent-filter android:autoVerify="true">
+      <data android:scheme="https" android:host="xxxx.app.link" />
+      <action android:name="android.intent.action.VIEW" />
+      <category android:name="android.intent.category.DEFAULT" />
+      <category android:name="android.intent.category.BROWSABLE" />
+    </intent-filter>
 </activity>
 ```
 
@@ -99,12 +118,9 @@ Typically, you would register some sort of splash activitiy that handles routing
 
 #### Initialize SDK
 
-Branch SDK will be initilized automatically, just add BranchPrefab to your scene and set parameters.
-
-We recommend to add BranchPrefab to your first scene, before any calling of Branch SDK API.
+Branch SDK will be initilized automatically, just add BranchPrefab to your scene and set parameters. We recommend to add BranchPrefab to your first scene, before any calling of Branch SDK API.
 
 Don't worry about several instances of Branch SDK even if your first scene is scene that will be launched several times (for example: content loading scene).
-
 
 #### Initialize Session And Register Deep Linking Routing Function
 
@@ -123,33 +139,11 @@ using System.Collections.Generic;
 
 public class MyCoolBehaviorScript : MonoBehaviour {
     void Start () {
-        Branch.initSession(CallbackWithParams);
-    }
-     
-    void CallbackWithParams(Dictionary<string, object> parameters, string error) {
-        if (error != null) {
-            System.Console.WriteLine("Oh no, something went wrong: " + error);
-        }
-        else if (parameters.Count > 0) {
-            System.Console.WriteLine("Branch initialization completed with the following params: " + parameters.Keys);
-        }
-    }
-}
-```
-
-**Initalization with BranchUniversalObject and LinkProperties**
-
-```csharp
-using UnityEngine;
-using System.Collections.Generic;
-
-public class MyCoolBehaviorScript : MonoBehaviour {
-    void Start () {
         Branch.initSession(CallbackWithBranchUniversalObject);
     }
-    
-    void CallbackWithBranchUniversalObject(BranchUniversalObject universalObject, BranchLinkProperties linkProperties, string error) {
-        if (error != null) {
+     
+    public void CallbackWithBranchUniversalObject(BranchUniversalObject universalObject, BranchLinkProperties linkProperties, string error) {
+		if (error != null) {
 			Debug.LogError("Branch Error: " + error);
 		} else {
 			Debug.Log("Branch initialization completed: ");
@@ -157,15 +151,17 @@ public class MyCoolBehaviorScript : MonoBehaviour {
 			Debug.Log("Universal Object: " + universalObject.ToJsonString());
 			Debug.Log("Link Properties: " + linkProperties.ToJsonString());
 		}
-    }
+	}
 }
 ```
 
 ##### Return Parameters
 
-- _Dictionary<string, object> params_ : These params will contain any data associated with the Branch link that was clicked before the app session began. There are a few keys which are always present:
+- _BranchUniversalObject universalObject_ : This object will contain any data associated with the Branch link that was clicked before the app session began. There are a few keys which are always present:
   - '+is_first_session' Denotes whether this is the first session (install) or any other session (open)
   - '+clicked_branch_link' Denotes whether or not the user clicked a Branch link that triggered this session
+- _BranchLinkProperties linkProperties_ : This object will contain any data associated with the Branch link.
+
 - _string error_ : This error will be nil unless there is an error such as connectivity or otherwise. Check !error to confirm it was a valid link.
     - BNCServerProblemError There was an issue connecting to the Branch service
     - BNCBadRequestError The request was improperly formatted
@@ -196,12 +192,6 @@ Branch returns explicit parameters every time. Here is a list, and a description
 These session parameters will be available at any point later on with this command. If no params, the dictionary will be empty. This refreshes with every new session (app installs AND app opens)
 
 ```csharp
-Dictionary<string, object> sessionParams = Branch.getLatestReferringParams();
-```
-
-**Retrive parameters with BranchUniversalObject and LinkProperties**
-
-```csharp
 BranchUniversalObject obj = Branch.getLatestReferringBranchUniversalObject();
 BranchLinkProperties link = Branch.getLatestReferringBranchLinkProperties();
 ```
@@ -209,12 +199,6 @@ BranchLinkProperties link = Branch.getLatestReferringBranchLinkProperties();
 #### Retrieve install (install only) parameters
 
 If you ever want to access the original session params (the parameters passed in for the first install event only), you can use this line. This is useful if you only want to reward users who newly installed the app from a referral link or something.
-
-```csharp
-Dictionary<string, object> installParams = Branch.getFirstReferringParams();
-```
-
-**Retrive parameters with BranchUniversalObject and LinkProperties**
 
 ```csharp
 BranchUniversalObject obj = Branch.getFirstReferringBranchUniversalObject();
@@ -335,10 +319,10 @@ linkProperties.controlParams.Add("$desktop_url", "http://example.com");
 ```
 
 ```csharp
-Branch.getShortURL(universalObject, linkProperties, (url, error) => {
+Branch.getShortURL(universalObject, linkProperties, (params, error) => {
     if (error != null) {
         Debug.LogError("Branch.getShortURL failed: " + error);
-    } else {
+    } else if (params != null) {
         Debug.Log("Branch.getShortURL shared params: " + url);
     }
 });
