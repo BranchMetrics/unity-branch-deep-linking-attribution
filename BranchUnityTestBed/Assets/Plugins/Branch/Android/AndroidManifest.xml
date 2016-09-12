@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
   <uses-sdk android:minSdkVersion="16" />
-  <application>
+  <application android:name="io.branch.referral.BranchApp">
     <activity android:name="com.unity3d.player.UnityPlayerActivity">
       
       <intent-filter>
@@ -17,7 +17,7 @@
       </intent-filter>
       
       <intent-filter android:autoVerify="true">
-        <data android:scheme="https" android:host="bnc.lt" android:pathPrefix="/prefix" />
+        <data android:scheme="https" android:host="xxxx.app.link" />
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
