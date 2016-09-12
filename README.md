@@ -43,12 +43,12 @@ To allow Branch to configure itself, you must add a BranchPrefab asset to your f
 
 * `Simulate Fresh Installs`: This is a flag that enables or disables debug mode. In debug mode, your app will simulate fresh install each time and log to the console. This is just for testing so please remove this prior to launch.
 * `Test Mode` : Switch set of parameters, if "Test mode" is enabled then app will use "test" Branch key if specified. Otherwise, the app will use the "live" Branch key.
-* `APP_KEY`: This is your Branch key from the dashboard.
-* `APP_URI`: This is the URI scheme you would like to use to open the app. This must be the same value as you entered in [the Branch link settings](https://dashboard.branch.io/#/settings/link) as well. Please do *not* include the `://` characters.
-* `PATH_PREFIX`: This is your Branch android path prefix. This only applies to you if you are on the `bnc.lt` domain. If you use `app.link`, please ignore this field. [Read more](https://github.com/BranchMetrics/Android-Deferred-Deep-Linking-SDK/blob/master/README.md#leverage-android-app-links-for-deep-linking)
-* `APP_LINKS` : This is where you specify the domains you would like to use for Android App Links (similar to Universal Links on iOS). Universal Links must be manually configured later as we couldn't figure out how to automate this.
+* `Branch Key`: This is your Branch key from the dashboard.
+* `Branch Uri`: This is the URI scheme you would like to use to open the app. This must be the same value as you entered in [the Branch link settings](https://dashboard.branch.io/#/settings/link) as well. Please do *not* include the `://` characters.
+* `Android Path Prefix`: This is your Branch android path prefix. This only applies to you if you are on the `bnc.lt` domain. If you use `app.link`, please ignore this field. [Read more](https://github.com/BranchMetrics/Android-Deferred-Deep-Linking-SDK/blob/master/README.md#leverage-android-app-links-for-deep-linking)
+* `App Links` : This is where you specify the domains you would like to use for Android App Links (similar to Universal Links on iOS). Universal Links must be manually configured later as we couldn't figure out how to automate this.
 
-* `Update iOS Wrapper` : You should tap this button each time when you will change `APP_KEY`.
+* `Update iOS Wrapper` : You should tap this button each time when you will change `Branch Key` and `Branch Uri`.
 * `Update Android Manifest` : You should tap this button if you want to update your manifest. If you update your manifest manually just don't push this button.
 
 ![Branch Unity Config](https://raw.githubusercontent.com/BranchMetrics/Unity-Deferred-Deep-Linking-SDK/master/Docs/Screenshots/branch-key.png)
