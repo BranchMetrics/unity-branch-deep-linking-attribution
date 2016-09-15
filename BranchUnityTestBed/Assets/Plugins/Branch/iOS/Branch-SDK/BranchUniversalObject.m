@@ -49,13 +49,7 @@
 }
 
 - (void)registerView {
-    if (!self.canonicalIdentifier && !self.title) {
-        [_preferenceHelper logWarning:@"A canonicalIdentifier or title are required to uniquely identify content, so could not register view."];
-        return;
-    }
-    
-    [[Branch getInstance] registerViewWithParams:[self getParamsForServerRequest]
-                                     andCallback:nil];
+    [self registerViewWithCallback:nil];
 }
 
 - (void)registerViewWithCallback:(callbackWithParams)callback {
@@ -71,7 +65,22 @@
         return;
     }
     
+    if (self.automaticallyListOnSpotlight) {
+        [self listOnSpotlight];
+    }
     [[Branch getInstance] registerViewWithParams:[self getParamsForServerRequest] andCallback:callback];
+}
+
+- (void)userCompletedAction:(NSString *)action {
+    NSMutableDictionary *actionPayload = [[NSMutableDictionary alloc] init];
+    NSDictionary *linkParams = [self getParamsForServerRequest];
+    actionPayload[BNCCanonicalIdList] = @[self.canonicalIdentifier];
+    actionPayload[self.canonicalIdentifier] = linkParams;
+    
+    [[Branch getInstance] userCompletedAction:action withState:actionPayload];
+    if (self.automaticallyListOnSpotlight && [action isEqualToString:BNCRegisterViewEvent]) {
+        [self listOnSpotlight];
+    }
 }
 
 #pragma mark - Link Creation Methods
@@ -156,9 +165,22 @@
 }
 
 - (void)showShareSheetWithLinkProperties:(BranchLinkProperties *)linkProperties andShareText:(NSString *)shareText fromViewController:(UIViewController *)viewController completion:(shareCompletion)completion {
-    [self showShareSheetWithLinkProperties:linkProperties andShareText:shareText fromViewController:viewController anchor:nil completion:completion];
+    [self showShareSheetWithLinkProperties:linkProperties andShareText:shareText fromViewController:viewController anchor:nil completion:completion orCompletionWithError:nil];
 }
-- (void)showShareSheetWithLinkProperties:(BranchLinkProperties *)linkProperties andShareText:(NSString *)shareText fromViewController:(UIViewController *)viewController anchor:(UIBarButtonItem *)anchor completion:(shareCompletion)completion {
+- (void)showShareSheetWithLinkProperties:(BranchLinkProperties *)linkProperties andShareText:(NSString *)shareText fromViewController:(UIViewController *)viewController completionWithError:(shareCompletionWithError)completion {
+    [self showShareSheetWithLinkProperties:linkProperties andShareText:shareText fromViewController:viewController anchor:nil completion:nil orCompletionWithError:completion];
+}
+- (void)showShareSheetWithLinkProperties:(nullable BranchLinkProperties *)linkProperties andShareText:(nullable NSString *)shareText fromViewController:(nullable UIViewController *)viewController anchor:(nullable UIBarButtonItem *)anchor completion:(nullable shareCompletion)completion {
+    [self showShareSheetWithLinkProperties:linkProperties andShareText:shareText fromViewController:viewController anchor:anchor completion:completion orCompletionWithError:nil];
+}
+
+- (void)showShareSheetWithLinkProperties:(nullable BranchLinkProperties *)linkProperties andShareText:(nullable NSString *)shareText fromViewController:(nullable UIViewController *)viewController anchor:(nullable UIBarButtonItem *)anchor completionWithError:(nullable shareCompletionWithError)completion {
+    [self showShareSheetWithLinkProperties:linkProperties andShareText:shareText fromViewController:viewController anchor:anchor completion:nil orCompletionWithError:completion];
+}
+
+- (void)showShareSheetWithLinkProperties:(BranchLinkProperties *)linkProperties andShareText:(NSString *)shareText fromViewController:(UIViewController *)viewController anchor:(UIBarButtonItem *)anchor completion:(shareCompletion)completion orCompletionWithError:(shareCompletionWithError)completionError {
+    // Log share initiated event
+    [self userCompletedAction:BNCShareInitiatedEvent];
     UIActivityItemProvider *itemProvider = [self getBranchActivityItemWithLinkProperties:linkProperties];
     NSMutableArray *items = [NSMutableArray arrayWithObject:itemProvider];
     if (shareText) {
@@ -168,8 +190,11 @@
     
     if ([shareViewController respondsToSelector:@selector(completionWithItemsHandler)]) {
         shareViewController.completionWithItemsHandler = ^(NSString *activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
-            if (completion) {
-                completion(activityType, completed);
+            // Log share completed event
+            [self userCompletedAction:BNCShareCompletedEvent];
+            if (completion || completionError) {
+                if (completion) { completion(activityType, completed); }
+                else if (completionError) { completionError(activityType, completed, activityError); }
                 [BNCFabricAnswers sendEventWithName:@"Branch Share" andAttributes:[self getDictionaryWithCompleteLinkProperties:linkProperties]];
             }
         };
@@ -185,8 +210,11 @@
     if (viewController && [viewController respondsToSelector:@selector(presentViewController:animated:completion:)]) {
         presentingViewController = viewController;
     }
-    else if ([[[[UIApplication sharedApplication].delegate window] rootViewController] respondsToSelector:@selector(presentViewController:animated:completion:)]) {
-        presentingViewController = [[[UIApplication sharedApplication].delegate window] rootViewController];
+    else {
+        Class UIApplicationClass = NSClassFromString(@"UIApplication");
+        if ([[[[UIApplicationClass sharedApplication].delegate window] rootViewController] respondsToSelector:@selector(presentViewController:animated:completion:)]) {
+            presentingViewController = [[[UIApplicationClass sharedApplication].delegate window] rootViewController];
+        }
     }
     
     if (linkProperties.controlParams[BRANCH_LINK_DATA_KEY_EMAIL_SUBJECT]) {
@@ -311,7 +339,16 @@
     if (dictionary[BRANCH_LINK_DATA_KEY_KEYWORDS]) {
         universalObject.keywords = dictionary[BRANCH_LINK_DATA_KEY_KEYWORDS];
     }
+    if (dictionary[BNCPurchaseAmount]) {
+        universalObject.price = [dictionary[BNCPurchaseAmount] floatValue];
+    }
+    if (dictionary[BNCPurchaseCurrency]) {
+        universalObject.currency = dictionary[BNCPurchaseCurrency];
+    }
     
+    if (dictionary[BRANCH_LINK_DATA_KEY_CONTENT_TYPE]) {
+        universalObject.type = dictionary[BRANCH_LINK_DATA_KEY_CONTENT_TYPE];
+    }
     return universalObject;
 }
 
@@ -337,6 +374,12 @@
     [self safeSetValue:self.keywords forKey:BRANCH_LINK_DATA_KEY_KEYWORDS onDict:temp];
     [self safeSetValue:@(1000 * [self.expirationDate timeIntervalSince1970]) forKey:BRANCH_LINK_DATA_KEY_CONTENT_EXPIRATION_DATE onDict:temp];
     [self safeSetValue:self.type forKey:BRANCH_LINK_DATA_KEY_CONTENT_TYPE onDict:temp];
+    [self safeSetValue:self.currency forKey:BNCPurchaseCurrency onDict:temp];
+    if (self.price) {
+        // have to add if statement because safeSetValue only accepts objects so even if self.price is not set
+        // a valid NSNumber object will be created and the request will have amount:0 in all cases.
+        [self safeSetValue:[NSNumber numberWithFloat:self.price] forKey:BNCPurchaseAmount onDict:temp];
+    }
     
     [temp addEntriesFromDictionary:[self.metadata copy]];
     return [temp copy];
