@@ -1,5 +1,8 @@
 Branch Unity SDK change log
 
+- v0.3.1
+  * Updating Branch to Android version 2.4.0 and iOS version 0.12.9
+  * Returning InitSession methods for iOS
 
 - v0.3.0
   * Updating Branch to Android version 2.2.0 and iOS version 0.12.6
