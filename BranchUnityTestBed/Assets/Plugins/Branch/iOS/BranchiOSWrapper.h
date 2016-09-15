@@ -22,6 +22,9 @@ extern "C" {
     #pragma mark - InitSession methods
 
     void _initSession();
+    void _initSessionAsReferrable(BOOL isReferrable);
+    void _initSessionWithCallback(char *callbackId);
+    void _initSessionAsReferrableWithCallback(BOOL isReferrable, char *callbackId);
     void _initSessionWithUniversalObjectCallback(char *callbackId);
 
     #pragma mark - Session Item methods
