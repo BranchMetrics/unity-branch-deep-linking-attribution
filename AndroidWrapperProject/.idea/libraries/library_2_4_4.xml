@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="library-2.4.4">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/io.branch.sdk.android/library/2.4.4/res" />
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/io.branch.sdk.android/library/2.4.4/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.branch.sdk.android/library/2.4.4/e7849584f671186eccaf7fc351f5c53c0993bc90/library-2.4.4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
