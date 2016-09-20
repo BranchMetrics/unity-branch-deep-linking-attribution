@@ -207,8 +207,8 @@ public class BranchEditor : Editor {
 		// Adding permissions
 		UpdatePermissions(xmlDoc);
 
-//		// Adding debug mode meta
-//		UpdateDebugModeMeta(xmlDoc, unityActivityNode);
+//		// Adding debug mode meta and branch key
+		UpdateDebugModeMeta(xmlDoc, appNode);
 		
 		// Saving android manifest
 		xmlDoc.Save(manifestPath);
@@ -449,22 +449,24 @@ public class BranchEditor : Editor {
 	}
 
 
-	private void UpdateDebugModeMeta(XmlDocument doc, XmlNode unityActivityNode) {
-		//<meta-data android:name="io.branch.sdk.TestMode" android:value="true" />
+	private void UpdateDebugModeMeta(XmlDocument doc, XmlNode appNode) {
+//		<meta-data android:name="io.branch.sdk.TestMode" android:value="true" /> 
+//		<meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_.." />
+//		<meta-data android:name="io.branch.sdk.BranchKey.test" android:value="key_test_.." />
 
 		XmlNode metaDataNode = null;
+		XmlNode metaDataKeyNode = null;
 
 		// update or adding intent-filter
-		foreach(XmlNode node in unityActivityNode.ChildNodes) {
-			if (metaDataNode != null) {
-				break;
-			}
-
+		foreach(XmlNode node in appNode.ChildNodes) {
 			if (node.Name == "meta-data") {
 				foreach(XmlAttribute attr in node.Attributes) {
-					if (attr.Value.Contains("io.branch.sdk.TestMode")) {
+					if (metaDataNode == null && attr.Value.Contains("io.branch.sdk.TestMode")) {
 						metaDataNode = node;
-						break;
+					}
+
+					if (metaDataKeyNode == null && attr.Value.Contains("io.branch.sdk.BranchKey")) {
+						metaDataKeyNode = node;
 					}
 				}
 			}
@@ -475,11 +477,36 @@ public class BranchEditor : Editor {
 		debugMetaData.SetAttribute("android____value", BranchData.Instance.simulateFreshInstalls ? "true" : "false");
 
 		if (metaDataNode == null) {
-			unityActivityNode.AppendChild(debugMetaData);
+			appNode.AppendChild(debugMetaData);
 		}
 		else {
-			unityActivityNode.ReplaceChild(debugMetaData, metaDataNode);
+			appNode.ReplaceChild(debugMetaData, metaDataNode);
 		}
+
+
+		XmlElement keyMetaData = doc.CreateElement("meta-data");
+
+		if (BranchData.Instance.simulateFreshInstalls) {
+			keyMetaData.SetAttribute("android____name", "io.branch.sdk.BranchKey.test");
+		}
+		else {
+			keyMetaData.SetAttribute("android____name", "io.branch.sdk.BranchKey");
+		}
+
+		if (BranchData.Instance.testMode) {
+			keyMetaData.SetAttribute("android____value", BranchData.Instance.testBranchKey);
+		}
+		else {
+			keyMetaData.SetAttribute("android____value", BranchData.Instance.liveBranchKey);
+		}
+
+		if (metaDataKeyNode == null) {
+			appNode.AppendChild(keyMetaData);
+		}
+		else {
+			appNode.ReplaceChild(keyMetaData, metaDataKeyNode);
+		}
+
 	}
 
 	#endregion

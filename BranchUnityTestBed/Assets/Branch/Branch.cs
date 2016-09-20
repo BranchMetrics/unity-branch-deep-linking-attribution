@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 public class Branch : MonoBehaviour {
 
-	public static string sdkVersion = "0.3.1";
+	public static string sdkVersion = "0.3.2";
 
     public delegate void BranchCallbackWithParams(Dictionary<string, object> parameters, string error);
     public delegate void BranchCallbackWithUrl(string url, string error);
@@ -367,10 +367,6 @@ public class Branch : MonoBehaviour {
 		}
 		else {
 			_setBranchKey(BranchData.Instance.liveBranchKey);
-		}
-
-		if (BranchData.Instance.simulateFreshInstalls) {
-			setDebug();
 		}
     }
 
