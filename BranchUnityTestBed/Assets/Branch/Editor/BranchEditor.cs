@@ -100,7 +100,7 @@ public class BranchEditor : Editor {
 
 	#region UpdateIOSKey
 
-	private void UpdateIOSKey() {
+	public static void UpdateIOSKey() {
 		string iosWrapperPath = Path.Combine(Application.dataPath, "Plugins/Branch/iOS/BranchiOSWrapper.mm");
 
 		if (!File.Exists(iosWrapperPath)) {
@@ -136,7 +136,7 @@ public class BranchEditor : Editor {
 
 	#region Manifest update
 
-	private void UpdateManifest() {
+	public static void UpdateManifest() {
 		
 		string manifestFolder = Path.Combine(Application.dataPath, "Plugins/Android");
 		string defaultManifestPath = Path.Combine(Application.dataPath, "Plugins/Branch/Android/AndroidManifest.xml");
@@ -226,7 +226,7 @@ public class BranchEditor : Editor {
 		manifestWriter.Close();
 	}
 	
-	private void UpdateURIFilter(XmlDocument doc, XmlNode unityActivityNode) {
+	public static void UpdateURIFilter(XmlDocument doc, XmlNode unityActivityNode) {
 		XmlNode intentFilterNode = null;
 
 		// update or adding intent-filter
@@ -296,7 +296,7 @@ public class BranchEditor : Editor {
 		unityActivityNode.AppendChild(ifElem);
 	}
 
-	private void UpdateLinkDomainsFilter(XmlDocument doc, XmlNode unityActivityNode) {
+	public static void UpdateLinkDomainsFilter(XmlDocument doc, XmlNode unityActivityNode) {
 		XmlNode intentFilterNode = null;
 
 		// update or adding intent-filter
@@ -398,7 +398,7 @@ public class BranchEditor : Editor {
 		unityActivityNode.AppendChild(ifElem);
 	}
 
-	private void UpdatePermissions(XmlDocument doc) {
+	public static void UpdatePermissions(XmlDocument doc) {
 		// we have to add the next permissions:
 		// <uses-permission android:name="android.permission.INTERNET" />
 		// <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -449,7 +449,7 @@ public class BranchEditor : Editor {
 	}
 
 
-	private void UpdateDebugModeMeta(XmlDocument doc, XmlNode appNode) {
+	public static void UpdateDebugModeMeta(XmlDocument doc, XmlNode appNode) {
 //		<meta-data android:name="io.branch.sdk.TestMode" android:value="true" /> 
 //		<meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_.." />
 //		<meta-data android:name="io.branch.sdk.BranchKey.test" android:value="key_test_.." />
