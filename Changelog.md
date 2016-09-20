@@ -1,5 +1,10 @@
 Branch Unity SDK change log
 
+- v0.3.2
+  * Updating Branch to Android version 2.4.2 and iOS version 0.12.10
+  * Fixing android manifest
+  * Fixing "simulate fresh installs" for android
+  
 - v0.3.1
   * Updating Branch to Android version 2.4.0 and iOS version 0.12.9
   * Returning InitSession methods for iOS
