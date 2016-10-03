@@ -126,7 +126,7 @@ Don't worry about several instances of Branch SDK even if your first scene is sc
 
 When you created a custom link with your own custom dictionary data, you probably want to know which data is sent to your app and then check that data. For example, if your app opens with some data, you want to route the user depending on the data you passed in. To catch sent data, you need to register a callback. Think of this callback as your "deep link router". Important note: your callback must be visible from all your scenes, if you plan to process data in each scene.
 
-**Very important note**: You must call Branch.InitSession(...) at the start of your app (in Start of your first scene) else Branch has not time to registry callback and you will receive nothing. If you need to process deep linking parameters later (for example after loading all asset bundles or from specific scene of after showing start video etc.) then you can use two ways:
+**Very important note**: You must call Branch.InitSession(...) at the start of your app (in Start of your first scene or onCreate of your main Activity). Branch needs time to register for all of the lifecycle calls before the application makes them, in order to intercept the deep link data. If you call it after, you'll potentially miss data. If you need to process deep linking parameters later (for example after loading all asset bundles or from specific scene of after showing start video etc.) then you can use two ways:
 
 - you can use methods for retrieving install/open parameters (see below),
 - you can use callback listener (simple realization of callback listener you can see in our demo app).
