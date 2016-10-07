@@ -12,6 +12,12 @@ public class BranchAndroidWrapper {
 		});
     }
     
+	public static void getAutoInstance() {
+		_runBlockOnThread(() => {
+			_getBranchClass().CallStatic("getAutoInstance");
+		});
+	}
+
     #region InitSession methods
     
     public static void initSession() {

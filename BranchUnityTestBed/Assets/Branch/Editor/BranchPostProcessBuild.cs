@@ -8,14 +8,17 @@ using System.Text;
 using System.Xml;
 using System.IO;
 
+#if UNITY_IOS
 public class BranchPostProcessBuild {
 
 	[PostProcessBuild(900)]
 	public static void ChangeBranchBuiltProject(BuildTarget buildTarget, string pathToBuiltProject) {
+		
 		if ( buildTarget == BuildTarget.iOS ) {
 			ChangeXcodePlist(pathToBuiltProject);
 			ChangeXcodeProject(pathToBuiltProject);
 		}
+
 	}
 
 	public static void ChangeXcodePlist(string pathToBuiltProject) {
@@ -143,3 +146,4 @@ public class BranchPostProcessBuild {
 		File.WriteAllText(pathToProject, proj.WriteToString());
 	}
 }
+#endif

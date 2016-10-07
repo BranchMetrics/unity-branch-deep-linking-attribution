@@ -1,5 +1,11 @@
 Branch Unity SDK change log
 
+- v0.3.4
+  * Updating Branch to Android version 2.4.5 and iOS version 0.12.11
+  * Adding getAutoInstance() for Android platfrom (see README)
+  * Fixing of getting deep linking data when app is in background
+  * PostProcessBuild is enabled for iOS platfrom only
+
 - v0.3.3
   * Updating Branch to Android version 2.4.4
   

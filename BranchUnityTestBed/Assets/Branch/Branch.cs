@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 public class Branch : MonoBehaviour {
 
-	public static string sdkVersion = "0.3.3";
+	public static string sdkVersion = "0.3.4";
 
     public delegate void BranchCallbackWithParams(Dictionary<string, object> parameters, string error);
     public delegate void BranchCallbackWithUrl(string url, string error);
@@ -19,45 +19,91 @@ public class Branch : MonoBehaviour {
 
     #region InitSession methods
 
+	/**
+	 * 
+	 */
+	public static void getAutoInstance() {
+		_getAutoInstance();
+	}
+
     /**
      * Just initialize session.
      */
     public static void initSession() {
-    	_initSession();
+		if (_sessionCounter == 0) {
+			++_sessionCounter;
+			_isFirstSessionInited = true;
+
+			_initSession ();
+		}
     }
 
 	/**
      * Just initialize session, specifying whether is should be referrable.
      */
 	public static void  initSession(bool isReferrable) {
-		_initSessionAsReferrable(isReferrable);
+		if (_sessionCounter == 0) {
+			++_sessionCounter;
+			_isFirstSessionInited = true;
+
+			_initSessionAsReferrable (isReferrable);
+		}
 	}
 
 	/**
 	 * Initialize session and receive information about how it opened.
 	 */
     public static void initSession(BranchCallbackWithParams callback) {
-		var callbackId = _getNextCallbackId();
-		_branchCallbacks[callbackId] = callback;
-		_initSessionWithCallback(callbackId);
+		if (_sessionCounter == 0) {
+			++_sessionCounter;
+			_isFirstSessionInited = true;
+			autoInitCallbackWithParams = callback;
+
+			var callbackId = _getNextCallbackId ();
+			_branchCallbacks [callbackId] = callback;
+			_initSessionWithCallback (callbackId);
+		}
     }
 
     /**
 	 * Initialize session and receive information about how it opened, specifying whether is should be referrable.
 	 */
 	public static void initSession(bool isReferrable, BranchCallbackWithParams callback) {
-		var callbackId = _getNextCallbackId();
-		_branchCallbacks[callbackId] = callback;
-		_initSessionAsReferrableWithCallback(isReferrable, callbackId);
+		if (_sessionCounter == 0) {
+			++_sessionCounter;
+			_isFirstSessionInited = true;
+			autoInitCallbackWithParams = callback;
+
+			var callbackId = _getNextCallbackId ();
+			_branchCallbacks [callbackId] = callback;
+			_initSessionAsReferrableWithCallback (isReferrable, callbackId);
+		}
 	}
 
 	/**
      * Initialize session and receive information about how it opened.
      */
 	public static void initSession(BranchCallbackWithBranchUniversalObject callback) {
-		var callbackId = _getNextCallbackId();
-		_branchCallbacks[callbackId] = callback;
-		_initSessionWithUniversalObjectCallback(callbackId);
+		if (_sessionCounter == 0) {
+			++_sessionCounter;
+			_isFirstSessionInited = true;
+			autoInitCallbackWithBUO = callback;
+
+			var callbackId = _getNextCallbackId ();
+			_branchCallbacks [callbackId] = callback;
+			_initSessionWithUniversalObjectCallback (callbackId);
+		}
+	}
+
+	/**
+     * Close session, necessary for some platforms to track when to cut off a Branch session.
+     */
+	private static void closeSession() {
+		#if UNITY_ANDROID || UNITY_EDITOR
+		if (_sessionCounter > 0) {
+			_sessionCounter--;
+		}
+		#endif
 	}
 
     #endregion
@@ -370,6 +416,26 @@ public class Branch : MonoBehaviour {
 		}
     }
 
+	void OnApplicationPause(bool pauseStatus) {
+		if (!_isFirstSessionInited)
+			return;
+
+		if (!pauseStatus) {
+			if (autoInitCallbackWithParams != null) {
+				initSession(autoInitCallbackWithParams);
+			}
+			else if (autoInitCallbackWithBUO != null) {
+				initSession(autoInitCallbackWithBUO);
+			}
+			else {
+				initSession();
+			}
+		}
+		else {
+			closeSession();
+		}
+	}
+
 	#endregion
 
 	#region Private methods
@@ -381,6 +447,8 @@ public class Branch : MonoBehaviour {
     [DllImport ("__Internal")]
     private static extern void _setBranchKey(string branchKey);
     
+	private static void _getAutoInstance() {}
+
     [DllImport ("__Internal")]
     private static extern void _initSession();
 
@@ -485,6 +553,10 @@ public class Branch : MonoBehaviour {
     private static void _setBranchKey(string branchKey) {
         BranchAndroidWrapper.setBranchKey(branchKey);
     }
+
+	private static void _getAutoInstance() {
+		BranchAndroidWrapper.getAutoInstance();
+	}
 
     private static void _initSession() {
         BranchAndroidWrapper.initSession();
@@ -622,6 +694,8 @@ public class Branch : MonoBehaviour {
 
     private static void _setBranchKey(string branchKey) { }
     
+	private static void _getAutoInstance() { }
+
     private static void _initSession() {
         Debug.Log("Branch is not implemented on this platform");
     }
@@ -834,4 +908,9 @@ public class Branch : MonoBehaviour {
 
     private static int _nextCallbackId = 0;
     private static Dictionary<string, object> _branchCallbacks = new Dictionary<string, object>();
+
+	private static int _sessionCounter = 0;
+	private static bool _isFirstSessionInited = false;
+	private static BranchCallbackWithParams autoInitCallbackWithParams = null;
+	private static BranchCallbackWithBranchUniversalObject autoInitCallbackWithBUO = null;
 }
