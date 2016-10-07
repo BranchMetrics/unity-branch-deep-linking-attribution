@@ -71,20 +71,24 @@ Simple add **-fobjc-arc** to all Branch files.
 
 #### Android Note
 
-Click button "Update Android Manifest" to change or add a android manifest for support deep linking, or you can change android manifest by your hands.
+Click button "Update Android Manifest" to change or add an Android manifest for support deep linking, or you can change android manifest by your hands.
 
-From version 0.3.x, Branch SDK must to do early initialization.
-To do that, you need to add into android mafest into tag "application" name of BranchApp class:
+From version 0.3.x, Branch SDK must to do early initialization to ensure deep link data is passed through. To do that, you have two choices:
+
+##### Option 1: Edit manifest to subclass BranchApp
+
+need to add into android mafest into tag "application" name of BranchApp class:
 
 ```xml
 <application
 	android:name="io.branch.referral.BranchApp"
 >
 ```
-Android library contains BranchApp class with realization of method OnCreate().
-Method OnCreate() will call method Branch.getAutoInstance() internally to init Branch SDK.
+The Branch Android library contains BranchApp class with the correct implementation to initialize the Branch session. For your info, OnCreate() will call method Branch.getAutoInstance() internally to init Branch SDK.
 
-If you will use your own android plugin with your own custom android application class, you need to call in method OnCreate()
+##### Option 2: Use your own custom Android application class
+
+If you will use your own Android plugin with your own custom Android application class, you need to call the following in method `OnCreate()`:
 
 ```csharp
 UnityPlayer.UnitySendMessage("Branch", "getAutoInstance", "");
