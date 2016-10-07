@@ -71,7 +71,7 @@ Simple add **-fobjc-arc** to all Branch files.
 
 #### Android Note
 
-Click button "Update Android Manifest" to change or add an Android manifest for support deep linking, or you can change android manifest by your hands. From version 0.3.x, Branch SDK must to do early initialization to ensure deep link data is passed through. To do that, you have two choices:
+Click button "Update Android Manifest" to automatically configure your manifest with the right intent filters. Additionally, from Branch Unity version 0.3.x, Branch SDK must to do early initialization to ensure deep link data is passed through. To do that you need to manually update your project to handle initialization and you have two choices:
 
 ##### Option 1: Edit manifest to subclass BranchApp
 
