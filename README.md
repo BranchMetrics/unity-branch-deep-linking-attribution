@@ -71,7 +71,25 @@ Simple add **-fobjc-arc** to all Branch files.
 
 #### Android Note
 
-Click button "Update Android Manifest" to change or add a android manifest for support deep linking, or you can change android manifest by your hands. 
+Click button "Update Android Manifest" to change or add a android manifest for support deep linking, or you can change android manifest by your hands.
+
+From version 0.3.x, Branch SDK must to do early initialization.
+To do that, you need to add into android mafest into tag "application" name of BranchApp class:
+
+```xml
+<application
+	android:name="io.branch.referral.BranchApp"
+>
+```
+Android library contains BranchApp class with realization of method OnCreate().
+Method OnCreate() will call method Branch.getAutoInstance() internally to init Branch SDK.
+
+If you will use your own android plugin with your own custom android application class, you need to call in method OnCreate()
+
+```csharp
+UnityPlayer.UnitySendMessage("Branch", "getAutoInstance", "");
+```
+
 
 #### Changing android manifest manually
 
@@ -80,38 +98,43 @@ In your project's manifest file, you can register your app to respond to direct 
 Typically, you would register some sort of splash activitiy that handles routing for your app.
 
 ```xml
-<activity
-	android:name="com.yourapp.SplashActivity"
-	android:label="@string/app_name" >
-	<intent-filter>
-		<action android:name="android.intent.action.MAIN" />
-		<category android:name="android.intent.category.LAUNCHER" />
-	</intent-filter>
+<application
+	android:theme="@style/UnityThemeSelector"
+	android:icon="@drawable/app_icon" android:label="@string/app_name"
+	android:name="io.branch.referral.BranchApp">
 
-	<!-- Add this intent filter below, and change yourapp to your app name -->
-	<intent-filter>
-		<data android:scheme="yourapp" android:host="open" />
-		<action android:name="android.intent.action.VIEW" />
-		<category android:name="android.intent.category.DEFAULT" />
-		<category android:name="android.intent.category.BROWSABLE" />
-	</intent-filter>
+	<activity
+		android:name="com.yourapp.SplashActivity"
+		android:label="@string/app_name">
+		<intent-filter>
+			<action android:name="android.intent.action.MAIN" />
+			<category android:name="android.intent.category.LAUNCHER" />
+		</intent-filter>
 	
-	<!-- App Link your activity to Branch links if you use bnc.lt (before 26/07/2016)-->
-	<intent-filter android:autoVerify="true">
-        <data android:scheme="https" android:host="bnc.lt" android:pathPrefix="/prefix" />
-        <action android:name="android.intent.action.VIEW" />
-        <category android:name="android.intent.category.DEFAULT" />
-        <category android:name="android.intent.category.BROWSABLE" />
-    </intent-filter>
-    
-    <!-- App Link your activity to Branch links if you use app.link (from 26/07/2016)-->  
-    <intent-filter android:autoVerify="true">
-      <data android:scheme="https" android:host="xxxx.app.link" />
-      <action android:name="android.intent.action.VIEW" />
-      <category android:name="android.intent.category.DEFAULT" />
-      <category android:name="android.intent.category.BROWSABLE" />
-    </intent-filter>
-</activity>
+		<!-- Add this intent filter below, and change yourapp to your app name -->
+		<intent-filter>
+			<data android:scheme="yourapp" android:host="open" />
+			<action android:name="android.intent.action.VIEW" />
+			<category android:name="android.intent.category.DEFAULT" />
+			<category android:name="android.intent.category.BROWSABLE" />
+		</intent-filter>
+		
+		<!-- App Link your activity to Branch links if you use bnc.lt (before 26/07/2016)-->
+		<intent-filter android:autoVerify="true">
+	        <data android:scheme="https" android:host="bnc.lt" android:pathPrefix="/prefix" />
+	        <action android:name="android.intent.action.VIEW" />
+	        <category android:name="android.intent.category.DEFAULT" />
+	        <category android:name="android.intent.category.BROWSABLE" />
+	    </intent-filter>
+	    
+	    <!-- App Link your activity to Branch links if you use app.link (from 26/07/2016)-->  
+	    <intent-filter android:autoVerify="true">
+	      <data android:scheme="https" android:host="xxxx.app.link" />
+	      <action android:name="android.intent.action.VIEW" />
+	      <category android:name="android.intent.category.DEFAULT" />
+	      <category android:name="android.intent.category.BROWSABLE" />
+	    </intent-filter>
+	</activity>
 ```
 
 ### Initialize SDK, Session And Register Deep Link Routing Function

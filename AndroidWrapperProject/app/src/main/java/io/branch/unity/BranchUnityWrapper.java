@@ -41,6 +41,11 @@ public class BranchUnityWrapper {
      * InitSession methods
      */
 
+    public static  void getAutoInstance() {
+        Activity unityActivity = UnityPlayer.currentActivity;
+        Branch.getAutoInstance(unityActivity.getApplicationContext());
+    }
+
     public static void initSession() {
         Activity unityActivity = UnityPlayer.currentActivity;
         Branch.getInstance(unityActivity.getApplicationContext(), _branchKey).initSessionWithData(unityActivity.getIntent().getData(), unityActivity);
