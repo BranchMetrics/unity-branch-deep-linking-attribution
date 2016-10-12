@@ -69,11 +69,13 @@ Simple add **-fobjc-arc** to all Branch files.
 
 *Note:* *we already have added this flag, but check it before building.*
 
-#### Android Note
+#### Android Note for manual Manifest changing
 
-Click button "Update Android Manifest" to automatically configure your manifest with the right intent filters. Additionally, from Branch Unity version 0.3.x, Branch SDK must to do early initialization to ensure deep link data is passed through. To do that you need to manually update your project to handle initialization and you have two choices:
+Click button "Update Android Manifest" to automatically configure your manifest with the right intent filters. If you need to update your manifest manually, you'll need to do a couple things.
 
-##### Option 1: Edit manifest to subclass BranchApp
+##### Manually add session tracking to app
+
+###### Option 1: Edit manifest to subclass BranchApp
 
 need to add into android mafest into tag "application" name of BranchApp class:
 
@@ -84,7 +86,7 @@ need to add into android mafest into tag "application" name of BranchApp class:
 ```
 The Branch Android library contains BranchApp class with the correct implementation to initialize the Branch session. For your info, OnCreate() will call method Branch.getAutoInstance() internally to init Branch SDK.
 
-##### Option 2: Use your own custom Android application class
+###### Option 2: Use your own custom Android application class
 
 If you will use your own Android plugin with your own custom Android application class, you need to call the following in method `OnCreate()`:
 
@@ -92,8 +94,7 @@ If you will use your own Android plugin with your own custom Android application
 UnityPlayer.UnitySendMessage("Branch", "getAutoInstance", "");
 ```
 
-
-#### Changing android manifest manually
+##### Manually add deep link intents
 
 In your project's manifest file, you can register your app to respond to direct deep links (yourapp:// in a mobile browser) by adding the second intent filter block. Also, make sure to change **yourapp** to a unique string that represents your app name.
 
