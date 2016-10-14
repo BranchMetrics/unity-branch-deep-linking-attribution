@@ -53,6 +53,24 @@ To allow Branch to configure itself, you must add a BranchPrefab asset to your f
 
 ![Branch Unity Config](https://raw.githubusercontent.com/BranchMetrics/Unity-Deferred-Deep-Linking-SDK/master/Docs/Screenshots/branch-key.png)
 
+#### Overriding OnNewIntent for Android
+
+The Branch SDK contains an custom activity that is extended from UnityPlayerActivity. This is required in order to fix Android's OnNewIntent() to allow the app retrieves right link when app is in background.
+
+You should replace
+
+```xml
+<activity android:name="com.unity3d.player.UnityPlayerActivity">
+```
+
+with
+
+```xml
+<activity android:name="io.branch.unity.BranchUnityActivity" android:launchMode="singleTask">
+```
+
+If you will have your own custom activity, you just should override method OnNewIntent and add flag "singleTask".
+
 #### iOS Note
 
 After building iOS project:
@@ -93,26 +111,6 @@ If you will use your own Android plugin with your own custom Android application
 ```csharp
 UnityPlayer.UnitySendMessage("Branch", "getAutoInstance", "");
 ```
-
-###### Option 3: Overrading OnNewIntent
-Branch SDK contains an custom activity that is extended from UnityPlayerActivity.
-
-Our custom activity overrides method OnNewIntent() to allow our SDK retrieves right data when app is in background.
-
-You should replace
-
-```xml
-<activity android:name="com.unity3d.player.UnityPlayerActivity">
-```
-
-with
-
-```xml
-<activity android:name="io.branch.unity.BranchUnityActivity" android:launchMode="singleTask">
-```
-
-If you will have your own custom activity, you just should override method OnNewIntent and add flag "singleTask".
-
 
 ##### Manually add deep link intents
 
