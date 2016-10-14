@@ -69,31 +69,32 @@ Simple add **-fobjc-arc** to all Branch files.
 
 *Note:* *we already have added this flag, but check it before building.*
 
-#### Android Note
+#### Android Note for manual Manifest changing
 
-Click button "Update Android Manifest" to change or add a android manifest for support deep linking, or you can change android manifest by your hands.
+Click button "Update Android Manifest" to automatically configure your manifest with the right intent filters. If you need to update your manifest manually, you'll need to do a couple things.
 
-*Note: All notes below for developers who migrate from old versions and already have android manifest.*
+##### Manually add session tracking to app
 
-##### Note 1: Early initialization
-From version 0.3.x, Branch SDK must to do early initialization.
-To do that, you need to add into android mafest into tag "application" name of BranchApp class ():
+###### Option 1: Edit manifest to subclass BranchApp
+
+need to add into android mafest into tag "application" name of BranchApp class:
 
 ```xml
 <application
 	android:name="io.branch.referral.BranchApp"
 >
 ```
-Android library contains BranchApp class with realization of method OnCreate().
-Method OnCreate() will call method Branch.getAutoInstance() internally to init Branch SDK.
+The Branch Android library contains BranchApp class with the correct implementation to initialize the Branch session. For your info, OnCreate() will call method Branch.getAutoInstance() internally to init Branch SDK.
 
-If you will use your own android plugin with your own custom android application class, you need to call in method OnCreate()
+###### Option 2: Use your own custom Android application class
+
+If you will use your own Android plugin with your own custom Android application class, you need to call the following in method `OnCreate()`:
 
 ```csharp
 UnityPlayer.UnitySendMessage("Branch", "getAutoInstance", "");
 ```
 
-##### Note 2: Overrading OnNewIntent
+###### Option 3: Overrading OnNewIntent
 Branch SDK contains an custom activity that is extended from UnityPlayerActivity.
 
 Our custom activity overrides method OnNewIntent() to allow our SDK retrieves right data when app is in background.
@@ -113,7 +114,7 @@ with
 If you will have your own custom activity, you just should override method OnNewIntent and add flag "singleTask".
 
 
-#### Changing android manifest manually
+##### Manually add deep link intents
 
 In your project's manifest file, you can register your app to respond to direct deep links (yourapp:// in a mobile browser) by adding the second intent filter block. Also, make sure to change **yourapp** to a unique string that represents your app name.
 
@@ -171,7 +172,7 @@ Don't worry about several instances of Branch SDK even if your first scene is sc
 
 When you created a custom link with your own custom dictionary data, you probably want to know which data is sent to your app and then check that data. For example, if your app opens with some data, you want to route the user depending on the data you passed in. To catch sent data, you need to register a callback. Think of this callback as your "deep link router". Important note: your callback must be visible from all your scenes, if you plan to process data in each scene.
 
-**Very important note**: You must call Branch.InitSession(...) at the start of your app (in Start of your first scene) else Branch has not time to registry callback and you will receive nothing. If you need to process deep linking parameters later (for example after loading all asset bundles or from specific scene of after showing start video etc.) then you can use two ways:
+**Very important note**: You must call Branch.InitSession(...) at the start of your app (in Start of your first scene or onCreate of your main Activity). Branch needs time to register for all of the lifecycle calls before the application makes them, in order to intercept the deep link data. If you call it after, you'll potentially miss data. If you need to process deep linking parameters later (for example after loading all asset bundles or from specific scene of after showing start video etc.) then you can use two ways:
 
 - you can use methods for retrieving install/open parameters (see below),
 - you can use callback listener (simple realization of callback listener you can see in our demo app).
