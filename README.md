@@ -73,8 +73,11 @@ Simple add **-fobjc-arc** to all Branch files.
 
 Click button "Update Android Manifest" to change or add a android manifest for support deep linking, or you can change android manifest by your hands.
 
+*Note: All notes below for developers who migrate from old versions and already have android manifest.*
+
+##### Note 1: Early initialization
 From version 0.3.x, Branch SDK must to do early initialization.
-To do that, you need to add into android mafest into tag "application" name of BranchApp class:
+To do that, you need to add into android mafest into tag "application" name of BranchApp class ():
 
 ```xml
 <application
@@ -89,6 +92,25 @@ If you will use your own android plugin with your own custom android application
 ```csharp
 UnityPlayer.UnitySendMessage("Branch", "getAutoInstance", "");
 ```
+
+##### Note 2: Overrading OnNewIntent
+Branch SDK contains an custom activity that is extended from UnityPlayerActivity.
+
+Our custom activity overrides method OnNewIntent() to allow our SDK retrieves right data when app is in background.
+
+You should replace
+
+```xml
+<activity android:name="com.unity3d.player.UnityPlayerActivity">
+```
+
+with
+
+```xml
+<activity android:name="io.branch.unity.BranchUnityActivity" android:launchMode="singleTask">
+```
+
+If you will have your own custom activity, you just should override method OnNewIntent and add flag "singleTask".
 
 
 #### Changing android manifest manually

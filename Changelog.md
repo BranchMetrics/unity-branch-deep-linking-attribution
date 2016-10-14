@@ -1,5 +1,8 @@
 Branch Unity SDK change log
 
+- v0.3.5
+  * Fixing data retrieving when app is in background (Android)
+
 - v0.3.4
   * Updating Branch to Android version 2.4.5 and iOS version 0.12.11
   * Adding getAutoInstance() for Android platfrom (see README)
