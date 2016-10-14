@@ -94,6 +94,26 @@ If you will use your own Android plugin with your own custom Android application
 UnityPlayer.UnitySendMessage("Branch", "getAutoInstance", "");
 ```
 
+###### Option 3: Overrading OnNewIntent
+Branch SDK contains an custom activity that is extended from UnityPlayerActivity.
+
+Our custom activity overrides method OnNewIntent() to allow our SDK retrieves right data when app is in background.
+
+You should replace
+
+```xml
+<activity android:name="com.unity3d.player.UnityPlayerActivity">
+```
+
+with
+
+```xml
+<activity android:name="io.branch.unity.BranchUnityActivity" android:launchMode="singleTask">
+```
+
+If you will have your own custom activity, you just should override method OnNewIntent and add flag "singleTask".
+
+
 ##### Manually add deep link intents
 
 In your project's manifest file, you can register your app to respond to direct deep links (yourapp:// in a mobile browser) by adding the second intent filter block. Also, make sure to change **yourapp** to a unique string that represents your app name.
