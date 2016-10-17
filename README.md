@@ -57,18 +57,6 @@ To allow Branch to configure itself, you must add a BranchPrefab asset to your f
 
 The Branch SDK contains an custom activity that is extended from UnityPlayerActivity. This is required in order to fix Android's OnNewIntent() to allow the app retrieves right link when app is in background.
 
-You should replace
-
-```xml
-<activity android:name="com.unity3d.player.UnityPlayerActivity">
-```
-
-with
-
-```xml
-<activity android:name="io.branch.unity.BranchUnityActivity" android:launchMode="singleTask">
-```
-
 If you will have your own custom activity, you just should override method OnNewIntent and add flag "singleTask".
 
 #### iOS Note
