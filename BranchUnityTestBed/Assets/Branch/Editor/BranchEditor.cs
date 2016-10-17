@@ -185,7 +185,7 @@ public class BranchEditor : Editor {
 
 			if (node.Name == "activity") {
 				foreach(XmlAttribute attr in node.Attributes) {
-					if (attr.Value.Contains("UnityPlayerActivity")) {
+					if (attr.Value.Contains("BranchUnityActivity")) {
 						unityActivityNode = node;
 						break;
 					}
@@ -194,7 +194,7 @@ public class BranchEditor : Editor {
 		}
 
 		if (unityActivityNode == null) {
-			Debug.LogError("Current Android Manifest was broken, it does not contain \"<activity android:name=\"com.unity3d.player.UnityPlayerActivity\">\"");
+			Debug.LogError("Current Android Manifest was broken, it does not contain \"<activity android:name=\"io.branch.unity.BranchUnityActivity\">\"");
 			return;
 		}
 

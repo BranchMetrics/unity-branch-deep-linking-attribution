@@ -1,5 +1,9 @@
 Branch Unity SDK change log
 
+- v0.3.6
+  * Fix for crash on sharesheet when user taps cancel(iOS)
+  * Fix to update Android Manifest when changes made to the prefab
+
 - v0.3.5
   * Fixing data retrieving when app is in background (Android)
 
