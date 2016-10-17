@@ -283,7 +283,13 @@ static callbackWithShareCompletion callbackWithShareCompletionForCallbackId(char
     
     return ^(NSString *activityType, BOOL completed) {
         id errorDictItem = [NSNull null];
-        NSDictionary *params = @{@"sharedLink": @"", @"sharedChannel": activityType};
+        
+        NSDictionary *params;
+        if( activityType != nil) {
+            params = @{@"sharedLink": @"", @"sharedChannel": activityType};
+        } else {
+            params = @{@"sharedLink": @"", @"sharedChannel": @""};
+        }
         
         NSDictionary *callbackDict = @{ @"callbackId": callbackString, @"params": params, @"error": errorDictItem };
         
