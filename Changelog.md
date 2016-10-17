@@ -1,5 +1,8 @@
 Branch Unity SDK change log
 
+- v0.3.6
+  * Fixing editor script for creating/updating android manifest
+
 - v0.3.5
   * Fixing data retrieving when app is in background (Android)
 
