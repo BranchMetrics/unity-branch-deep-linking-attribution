@@ -22,7 +22,7 @@ android {
 }
 
 dependencies {
-    compile 'io.branch.sdk.android:library:2.4.5'
+    compile 'io.branch.sdk.android:library:2.4.7'
 //    Comment out the line above, uncomment the line below to use local Branch and update the settings.gradle file as well.
 //    compile project(':Branch-SDK')
 
