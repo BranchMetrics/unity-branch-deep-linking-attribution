@@ -1,5 +1,8 @@
 Branch Unity SDK change log
 
+- v0.3.7
+  * Updating Branch to Android version 2.4.7 and iOS version 0.12.16
+
 - v0.3.6
   * Fixing editor script for creating/updating android manifest
   * Fix for crash on sharesheet when user taps cancel(iOS)
