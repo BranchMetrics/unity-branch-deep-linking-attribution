@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 public class Branch : MonoBehaviour {
 
-	public static string sdkVersion = "0.3.7";
+	public static string sdkVersion = "0.3.8";
 
     public delegate void BranchCallbackWithParams(Dictionary<string, object> parameters, string error);
     public delegate void BranchCallbackWithUrl(string url, string error);
@@ -881,6 +881,9 @@ public class Branch : MonoBehaviour {
     }
 
 	public void _asyncCallbackWithBranchUniversalObject(string callbackDictString) {
+
+		Debug.Log ("callbackDictString: \n\n" + callbackDictString + "\n\n");
+
 		var callbackDict = MiniJSON.Json.Deserialize(callbackDictString) as Dictionary<string, object>;
 		var callbackId = callbackDict["callbackId"] as string;
 		var paramsDict = callbackDict.ContainsKey("params") ? callbackDict["params"] as Dictionary<string, object> : null;
