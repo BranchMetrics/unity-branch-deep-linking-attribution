@@ -1,5 +1,9 @@
 Branch Unity SDK change log
 
+- v0.3.9
+  * Updating Branch to Android version 2.5.2 and iOS version 0.12.19
+  * Fix for Android/iOS link-click compatibility when used with BUO.
+
 - v0.3.8
   * Updating Branch to Android version 2.5.1
 
