@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 public class Branch : MonoBehaviour {
 
-	public static string sdkVersion = "0.3.9";
+	public static string sdkVersion = "0.3.10";
 
     public delegate void BranchCallbackWithParams(Dictionary<string, object> parameters, string error);
     public delegate void BranchCallbackWithUrl(string url, string error);
@@ -272,7 +272,7 @@ public class Branch : MonoBehaviour {
      * Mark a custom action completed with additional custom fields
      */
     public static void userCompletedAction(string action, Dictionary<string, object> state) {
-        _userCompletedActionWithState(action, MiniJSON.Json.Serialize(state));
+		_userCompletedActionWithState(action, BranchThirdParty_MiniJSON.Json.Serialize(state));
     }
 
     #endregion
@@ -833,7 +833,7 @@ public class Branch : MonoBehaviour {
     #region Callback management
 
     public void _asyncCallbackWithParams(string callbackDictString) {
-        var callbackDict = MiniJSON.Json.Deserialize(callbackDictString) as Dictionary<string, object>;
+		var callbackDict = BranchThirdParty_MiniJSON.Json.Deserialize(callbackDictString) as Dictionary<string, object>;
         var callbackId = callbackDict["callbackId"] as string;
         Dictionary<string, object> parameters = callbackDict.ContainsKey("params") ? callbackDict["params"] as Dictionary<string, object> : null;
         string error = callbackDict.ContainsKey("error") ? callbackDict["error"] as string : null;
@@ -845,7 +845,7 @@ public class Branch : MonoBehaviour {
     }
 
     public void _asyncCallbackWithStatus(string callbackDictString) {
-        var callbackDict = MiniJSON.Json.Deserialize(callbackDictString) as Dictionary<string, object>;
+		var callbackDict = BranchThirdParty_MiniJSON.Json.Deserialize(callbackDictString) as Dictionary<string, object>;
         var callbackId = callbackDict["callbackId"] as string;
         bool status = callbackDict.ContainsKey("status") ? (callbackDict["status"] as bool?).Value : false;
         string error = callbackDict.ContainsKey("error") ? callbackDict["error"] as string : null;
@@ -857,7 +857,7 @@ public class Branch : MonoBehaviour {
     }
 
     public void _asyncCallbackWithList(string callbackDictString) {
-        var callbackDict = MiniJSON.Json.Deserialize(callbackDictString) as Dictionary<string, object>;
+		var callbackDict = BranchThirdParty_MiniJSON.Json.Deserialize(callbackDictString) as Dictionary<string, object>;
         var callbackId = callbackDict["callbackId"] as string;
 		List<object> list = callbackDict.ContainsKey("list") ? callbackDict["list"] as List<object> : null;
         string error = callbackDict.ContainsKey("error") ? callbackDict["error"] as string : null;
@@ -869,7 +869,7 @@ public class Branch : MonoBehaviour {
     }
 
     public void _asyncCallbackWithUrl(string callbackDictString) {
-        var callbackDict = MiniJSON.Json.Deserialize(callbackDictString) as Dictionary<string, object>;
+		var callbackDict = BranchThirdParty_MiniJSON.Json.Deserialize(callbackDictString) as Dictionary<string, object>;
         var callbackId = callbackDict["callbackId"] as string;
         string url = callbackDict.ContainsKey("url") ? callbackDict["url"] as string : null;
         string error = callbackDict.ContainsKey("error") ? callbackDict["error"] as string : null;
@@ -884,7 +884,7 @@ public class Branch : MonoBehaviour {
 
 		Debug.Log ("callbackDictString: \n\n" + callbackDictString + "\n\n");
 
-		var callbackDict = MiniJSON.Json.Deserialize(callbackDictString) as Dictionary<string, object>;
+		var callbackDict = BranchThirdParty_MiniJSON.Json.Deserialize(callbackDictString) as Dictionary<string, object>;
 		var callbackId = callbackDict["callbackId"] as string;
 		var paramsDict = callbackDict.ContainsKey("params") ? callbackDict["params"] as Dictionary<string, object> : null;
 		var universalObject = paramsDict != null && paramsDict.ContainsKey("universalObject") ? paramsDict["universalObject"] as Dictionary<string, object> : null;

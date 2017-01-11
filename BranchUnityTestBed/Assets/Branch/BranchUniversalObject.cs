@@ -77,7 +77,7 @@ public class BranchUniversalObject {
 		if (string.IsNullOrEmpty(json))
 			return;
 
-		var data = MiniJSON.Json.Deserialize(json) as Dictionary<string, object>;
+		var data = BranchThirdParty_MiniJSON.Json.Deserialize(json) as Dictionary<string, object>;
 		loadFromDictionary(data);
 	}
 
@@ -147,6 +147,6 @@ public class BranchUniversalObject {
 		data.Add("$keywords", keywords);
 		data.Add("metadata", metadata);
 
-		return MiniJSON.Json.Serialize(data);
+		return BranchThirdParty_MiniJSON.Json.Serialize(data);
 	}
 }

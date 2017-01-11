@@ -52,7 +52,7 @@ public class BranchLinkProperties {
 		if (string.IsNullOrEmpty(json))
 			return;
 
-		var data = MiniJSON.Json.Deserialize(json) as Dictionary<string, object>;
+		var data = BranchThirdParty_MiniJSON.Json.Deserialize(json) as Dictionary<string, object>;
 		loadFromDictionary(data);
 	}
 
@@ -110,6 +110,6 @@ public class BranchLinkProperties {
 		data.Add("~duration", matchDuration.ToString());
 		data.Add("control_params", controlParams);
 		
-		return MiniJSON.Json.Serialize(data);
+		return BranchThirdParty_MiniJSON.Json.Serialize(data);
 	}
 }
