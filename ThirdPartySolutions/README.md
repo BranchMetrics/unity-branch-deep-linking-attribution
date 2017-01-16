@@ -1,5 +1,5 @@
 # Branch Metrics Unity
-## Third Party Solututions
+## Third Party Solutions
 
 That folder contain solutions for "conflicts" between Branch SDK and other plugins.
 
