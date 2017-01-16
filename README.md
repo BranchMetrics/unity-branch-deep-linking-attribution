@@ -104,13 +104,47 @@ need to add into android mafest into tag "application" name of BranchApp class:
 ```
 The Branch Android library contains BranchApp class with the correct implementation to initialize the Branch session. For your info, OnCreate() will call method Branch.getAutoInstance() internally to init Branch SDK.
 
-###### Option 2: Use your own custom Android application class
+###### Option 2: Use your own custom Android application class or custom Activity
 
-If you will use your own Android plugin with your own custom Android application class, you need to call the following in method `OnCreate()`:
+If you will use your own Android plugin with your own custom Android application class, you need to add Branch android library into your project and call the following in method `OnCreate()`:
 
 ```csharp
-UnityPlayer.UnitySendMessage("Branch", "getAutoInstance", "");
+Branch.getAutoInstance(this.getApplicationContext());
 ```
+
+If you will use your own custom Activity class, you need to override several methods:
+
+```csharp
+@Override
+public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+}
+
+@Override
+public void onNewIntent(Intent intent) {
+    this.setIntent(intent);
+}
+
+```
+
+
+###### Option 3: Solving issues between Branch SDK and other plugins
+
+Branch SDK has its own custom activity and application classes.
+Other plugins can use thier own custom activity and application classes.
+And sometimes plugins can have "conflicts" between that classes.
+
+To solve all that issues you should:
+
+1. Create a empty android library
+2. Add Branch library and other libraries from plugins into your project
+3. Create custom Activity and Application classes that will realize custom logic of all plugins
+4. Build your library
+5. Add your library into Unity project
+6. Change android:name to name of your custom Application class in tag application
+7. Change android:name to name of your custom Activity class in tag activity
+
+*Note: We have library project named "AndroidThirdParty", you can use that project to build your own libraries. You can donwload that project from our github repository.*
 
 ##### Manually add deep link intents
 
