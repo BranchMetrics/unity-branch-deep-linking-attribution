@@ -141,8 +141,8 @@ To solve all that issues you should:
 3. Create custom Activity and Application classes that will realize custom logic of all plugins
 4. Build your library
 5. Add your library into Unity project
-6. Change anroid:name to name of your custom Application class in tag application
-7. Change anroid:name to name of your custom Activity class in tag activity
+6. Change android:name to name of your custom Application class in tag application
+7. Change android:name to name of your custom Activity class in tag activity
 
 *Note: We have library project named "AndroidThirdParty", you can use that project to build your own libraries. You can donwload that project from our github repository.*
 
