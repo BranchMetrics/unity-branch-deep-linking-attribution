@@ -1,9 +1,9 @@
+﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2008
-
-Project("{6A26E165-DBAB-D6F0-2C0E-3025D5DA75B9}") = "BranchUnityTestBed", "Assembly-CSharp.csproj", "{67E3F5FC-88EF-55B2-4156-39D21A59D4E6}"
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BranchUnityTestBed", "Assembly-CSharp.csproj", "{67E3F5FC-88EF-55B2-4156-39D21A59D4E6}"
 EndProject
-Project("{6A26E165-DBAB-D6F0-2C0E-3025D5DA75B9}") = "BranchUnityTestBed", "Assembly-CSharp-Editor.csproj", "{820AEC7C-7F93-71C7-A37D-1CC603106BE6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BranchUnityTestBed", "Assembly-CSharp-Editor.csproj", "{820AEC7C-7F93-71C7-A37D-1CC603106BE6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
