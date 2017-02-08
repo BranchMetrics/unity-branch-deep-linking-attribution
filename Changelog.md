@@ -1,5 +1,8 @@
 Branch Unity SDK change log
 
+- v0.3.11
+  * Updating Branch to Android version 2.5.7 and iOS version 0.12.27
+
 - v0.3.10
   * Updating Branch to Android version 2.5.5 and iOS version 0.12.24
   * Changing namespace name from MiniJSON to BranchThirdParty_MiniJSON
