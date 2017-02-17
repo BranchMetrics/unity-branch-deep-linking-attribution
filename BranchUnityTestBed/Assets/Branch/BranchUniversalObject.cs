@@ -84,20 +84,19 @@ public class BranchUniversalObject {
 	public void loadFromDictionary(Dictionary<string, object> data) {
 		if (data == null)
 			return;
-		
-		if (data.ContainsKey("$canonical_identifier")) {
+		if (data.ContainsKey("$canonical_identifier") && data["$canonical_identifier"] != null) {
 			canonicalIdentifier = data["$canonical_identifier"].ToString();
 		}
-		if (data.ContainsKey("$og_title")) {
+		if (data.ContainsKey("$og_title") && data["$og_title"] != null) {
 			title = data["$og_title"].ToString();
 		}
-		if (data.ContainsKey("$og_description")) {
+		if (data.ContainsKey("$og_description") && data["$og_description"] != null) {
 			contentDescription = data["$og_description"].ToString();
 		}
-		if (data.ContainsKey("$og_image_url")) {
+		if (data.ContainsKey("$og_image_url") && data["$og_image_url"] != null) {
 			imageUrl = data["$og_image_url"].ToString();
 		}
-		if (data.ContainsKey("$content_type")) {
+		if (data.ContainsKey("$content_type") && data["$content_type"] != null) {
 			type = data["$content_type"].ToString();
 		}
 		if (data.ContainsKey("$publicly_indexable")) {
@@ -127,7 +126,9 @@ public class BranchUniversalObject {
 
 				if (metaTemp != null) {
 					foreach(string key in metaTemp.Keys) {
-						metadata.Add(key, metaTemp[key].ToString());
+						if (metaTemp [key] != null) {
+							metadata.Add (key, metaTemp [key].ToString ());
+						}
 					}
 				}
 			}
