@@ -60,25 +60,27 @@ public class BranchLinkProperties {
 		if (data == null)
 			return;
 
-		if (data.ContainsKey("~tags")) {
+		if (data.ContainsKey("~tags") && data["~tags"] != null) {
 			List<object> tempList = data["~tags"] as List<object>;
 
 			if (tempList != null) {
 				foreach(object obj in tempList) {
-					tags.Add(obj.ToString());
+					if (obj != null) {
+						tags.Add (obj.ToString ());
+					}
 				}
 			}
 		}
-		if (data.ContainsKey("~feature")) {
+		if (data.ContainsKey("~feature") && data["~feature"] != null) {
 			feature = data["~feature"].ToString();
 		}
-		if (data.ContainsKey("~alias")) {
+		if (data.ContainsKey("~alias") && data["~alias"] != null) {
 			alias = data["~alias"].ToString();
 		}
-		if (data.ContainsKey("~channel")) {
+		if (data.ContainsKey("~channel") && data["~channel"] != null) {
 			channel = data["~channel"].ToString();
 		}
-		if (data.ContainsKey("~stage")) {
+		if (data.ContainsKey("~stage") && data["~stage"] != null) {
 			stage = data["~stage"].ToString();
 		}
 		if (data.ContainsKey("~duration")) {
@@ -92,7 +94,9 @@ public class BranchLinkProperties {
 
 				if (paramsTemp != null) {
 					foreach(string key in paramsTemp.Keys) {
-						controlParams.Add(key, paramsTemp[key].ToString());
+						if (paramsTemp [key] != null) {
+							controlParams.Add (key, paramsTemp [key].ToString ());
+						}
 					}
 				}
 			}
