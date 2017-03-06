@@ -1,5 +1,9 @@
 Branch Unity SDK change log
 
+- v0.3.12
+  * Updating Branch to Android version 2.5.9 and iOS version 0.13.5
+  * Adding strings.xml to AndroidWrapperProject and AndroidThirdParty for avoiding of building error
+
 - v0.3.11
   * Updating Branch to Android version 2.5.7 and iOS version 0.12.27
 
