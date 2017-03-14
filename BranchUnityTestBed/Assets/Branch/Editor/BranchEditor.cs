@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEditor;
 using System.Collections;
 using System.Text.RegularExpressions;
@@ -108,7 +108,7 @@ public class BranchEditor : Editor {
 		}
 
 		StreamReader sr = new StreamReader(iosWrapperPath, Encoding.Default);
-		string [] lines = sr.ReadToEnd().Split('\n').ToArray();
+        string[] lines = sr.ReadToEnd().Split(new string[] { System.Environment.NewLine }, System.StringSplitOptions.None).ToArray();
 		sr.Close();
 
 		StreamWriter sw = new StreamWriter(iosWrapperPath, false, Encoding.Default);
