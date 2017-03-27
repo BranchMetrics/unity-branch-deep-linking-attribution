@@ -1,5 +1,10 @@
 Branch Unity SDK change log
 
+- v0.3.13
+  * Updating Branch to Android version 2.6.0
+  * Fixing AndroidThirdParty
+  * Updating BranchThirdParty.jar for Fabric solution
+
 - v0.3.12
   * Updating Branch to Android version 2.5.9 and iOS version 0.13.5
   * Adding strings.xml to AndroidWrapperProject and AndroidThirdParty for avoiding of building error

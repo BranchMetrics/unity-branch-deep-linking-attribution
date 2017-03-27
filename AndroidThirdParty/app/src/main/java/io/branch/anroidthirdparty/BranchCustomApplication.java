@@ -1,11 +1,9 @@
-package io.branch.unity;
-
-import android.app.Application;
+package io.branch.anroidthirdparty;
 import io.branch.referral.Branch;
 import io.fabric.unity.android.FabricApplication;
 
 /**
- * Created by antonarhunou on 1/16/17.
+ * Created by antonarhunou on 3/27/17.
  */
 
 public class BranchCustomApplication extends FabricApplication {

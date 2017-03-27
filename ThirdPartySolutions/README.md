@@ -11,6 +11,6 @@ That folder contain solutions for "conflicts" between Branch SDK and other plugi
 
 ### Android
 1. Add library to your project (select what library you need)
-2. Change android:name to "io.branch.unity.BranchCustomApplication" in tag application
-3. Change android:name to "io.branch.unity.BranchCustomActivity" in tag activity
+2. Change android:name to "io.branch.anroidthirdparty.BranchCustomApplication" in tag application
+3. Change android:name to "io.branch.anroidthirdparty.BranchCustomActivity" in tag activity
 
