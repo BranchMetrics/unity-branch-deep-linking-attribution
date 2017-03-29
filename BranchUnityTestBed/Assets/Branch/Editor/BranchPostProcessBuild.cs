@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+#if UNITY_IOS
+
+using UnityEngine;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using System.Collections;
@@ -8,7 +10,6 @@ using System.Text;
 using System.Xml;
 using System.IO;
 
-#if UNITY_IOS
 public class BranchPostProcessBuild {
 
 	[PostProcessBuild(900)]
