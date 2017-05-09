@@ -1,5 +1,9 @@
 Branch Unity SDK change log
 
+- v0.3.14
+  * Updating Branch to Android version 2.6.1 and iOS version 0.14.12
+  * Fixing RewardsHistoryPanel
+
 - v0.3.13
   * Updating Branch to Android version 2.6.0
   * Fixing AndroidThirdParty
