@@ -111,16 +111,16 @@ public class RewardsHistoryPanel : MonoBehaviour {
 				if (transactionDict.ContainsKey("id") && transactionDict["id"] != null) {
 					strRes += "  id = " + transactionDict["id"].ToString();
 				}
-				
-				if (transactionDict.ContainsKey("type") && transactionDict["type"] != null) {
+
+				if (transactionDict.ContainsKey("bucket") && transactionDict["bucket"] != null) {
 					strRes += "  bucket = " + transactionDict["bucket"].ToString();
 				}
-				
-				if (transactionDict.ContainsKey("type") && transactionDict["type"] != null) {
+
+				if (transactionDict.ContainsKey("amount") && transactionDict["amount"] != null) {
 					strRes += "  amount = " + transactionDict["amount"].ToString();
 				}
-				
-				if (transactionDict.ContainsKey("type") && transactionDict["type"] != null) {
+
+				if (transactionDict.ContainsKey("date") && transactionDict["date"] != null) {
 					strRes += "  date = " + transactionDict["date"].ToString();
 				}
 			}
