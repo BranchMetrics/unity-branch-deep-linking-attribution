@@ -91,6 +91,9 @@ public class BranchUnityWrapper {
                     if (firstParam.has(Defines.Jsonkey.CanonicalIdentifier.getKey())) {
                         branchUniversalObject.setCanonicalIdentifier(firstParam.getString(Defines.Jsonkey.CanonicalIdentifier.getKey()));
                     }
+                    if (firstParam.has(Defines.Jsonkey.CanonicalUrl.getKey())) {
+                        branchUniversalObject.setCanonicalUrl(firstParam.getString(Defines.Jsonkey.CanonicalUrl.getKey()));
+                    }
                     if (firstParam.has(Defines.Jsonkey.ContentKeyWords.getKey())) {
                         JSONArray keywordJsonArray = firstParam.getJSONArray(Defines.Jsonkey.ContentKeyWords.getKey());
                         for (int i = 0; i < keywordJsonArray.length(); i++) {
@@ -184,6 +187,9 @@ public class BranchUnityWrapper {
                     }
                     if (latestParam.has(Defines.Jsonkey.CanonicalIdentifier.getKey())) {
                         branchUniversalObject.setCanonicalIdentifier(latestParam.getString(Defines.Jsonkey.CanonicalIdentifier.getKey()));
+                    }
+                    if (latestParam.has(Defines.Jsonkey.CanonicalUrl.getKey())) {
+                        branchUniversalObject.setCanonicalUrl(latestParam.getString(Defines.Jsonkey.CanonicalUrl.getKey()));
                     }
                     if (latestParam.has(Defines.Jsonkey.ContentKeyWords.getKey())) {
                         JSONArray keywordJsonArray = latestParam.getJSONArray(Defines.Jsonkey.ContentKeyWords.getKey());
@@ -452,6 +458,7 @@ public class BranchUnityWrapper {
         if (obj != null) {
             try {
                 jsonObject.put(Defines.Jsonkey.CanonicalIdentifier.getKey(), obj.getCanonicalIdentifier());
+                jsonObject.put(Defines.Jsonkey.CanonicalUrl.getKey(), obj.getCanonicalUrl());
                 jsonObject.put(Defines.Jsonkey.ContentTitle.getKey(), obj.getTitle());
                 jsonObject.put(Defines.Jsonkey.ContentDesc.getKey(), obj.getDescription());
                 jsonObject.put(Defines.Jsonkey.ContentImgUrl.getKey(), obj.getImageUrl());
@@ -499,6 +506,9 @@ public class BranchUnityWrapper {
             }
             if (params.has(Defines.Jsonkey.CanonicalIdentifier.getKey())) {
                 branchUniversalObject.setCanonicalIdentifier(params.getString(Defines.Jsonkey.CanonicalIdentifier.getKey()));
+            }
+            if (params.has(Defines.Jsonkey.CanonicalUrl.getKey())) {
+                branchUniversalObject.setCanonicalUrl(params.getString(Defines.Jsonkey.CanonicalUrl.getKey()));
             }
             if (params.has(Defines.Jsonkey.ContentKeyWords.getKey())) {
                 JSONArray keywordJsonArray = params.getJSONArray(Defines.Jsonkey.ContentKeyWords.getKey());

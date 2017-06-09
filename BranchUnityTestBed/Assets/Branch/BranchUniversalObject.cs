@@ -7,7 +7,10 @@ public class BranchUniversalObject {
 
 	// Canonical identifier for the content referred. Normally the canonical path for your content in the app or web
 	public string canonicalIdentifier;
-	
+
+	// Canonical url for the content referred. This would be the corresponding website URL
+	public string canonicalUrl;
+
 	// Title for the content referred by BranchUniversalObject
 	public string title;
 	
@@ -35,6 +38,7 @@ public class BranchUniversalObject {
 
 	public BranchUniversalObject() {
 		canonicalIdentifier = "";
+		canonicalUrl = "";
 		title = "";
 		contentDescription = "";
 		imageUrl = "";
@@ -47,6 +51,7 @@ public class BranchUniversalObject {
 
 	public BranchUniversalObject(string json) {
 		canonicalIdentifier = "";
+		canonicalUrl = "";
 		title = "";
 		contentDescription = "";
 		imageUrl = "";
@@ -61,6 +66,7 @@ public class BranchUniversalObject {
 
 	public BranchUniversalObject(Dictionary<string, object> data) {
 		canonicalIdentifier = "";
+		canonicalUrl = "";
 		title = "";
 		contentDescription = "";
 		imageUrl = "";
@@ -86,6 +92,9 @@ public class BranchUniversalObject {
 			return;
 		if (data.ContainsKey("$canonical_identifier") && data["$canonical_identifier"] != null) {
 			canonicalIdentifier = data["$canonical_identifier"].ToString();
+		}
+		if (data.ContainsKey("$canonical_url") && data["$canonical_url"] != null) {
+			canonicalUrl = data["$canonical_url"].ToString();
 		}
 		if (data.ContainsKey("$og_title") && data["$og_title"] != null) {
 			title = data["$og_title"].ToString();
@@ -139,6 +148,7 @@ public class BranchUniversalObject {
 		var data = new Dictionary<string, object>();
 
 		data.Add("$canonical_identifier", canonicalIdentifier);
+		data.Add("$canonical_url", canonicalUrl);
 		data.Add("$og_title", title);
 		data.Add("$og_description", contentDescription);
 		data.Add("$og_image_url", imageUrl);
