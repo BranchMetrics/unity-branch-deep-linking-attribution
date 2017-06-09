@@ -115,6 +115,7 @@ static NSDictionary *dictFromBranchUniversalObject(BranchUniversalObject *univer
     if (universalObject) {
         universalObjectDict = @{
             BRANCH_LINK_DATA_KEY_CANONICAL_IDENTIFIER: universalObject.canonicalIdentifier ? universalObject.canonicalIdentifier : @"",
+            BRANCH_LINK_DATA_KEY_CANONICAL_URL: universalObject.canonicalUrl ? universalObject.canonicalUrl : @"",
             BRANCH_LINK_DATA_KEY_OG_TITLE: universalObject.title ? universalObject.title : @"",
             BRANCH_LINK_DATA_KEY_OG_DESCRIPTION: universalObject.contentDescription ? universalObject.contentDescription : @"",
             BRANCH_LINK_DATA_KEY_OG_IMAGE_URL: universalObject.imageUrl ? universalObject.imageUrl : @"",
@@ -152,6 +153,9 @@ static BranchUniversalObject* branchuniversalObjectFormDict(NSDictionary *univer
     
     if (universalObjectDict[BRANCH_LINK_DATA_KEY_CANONICAL_IDENTIFIER]) {
         universalObject.canonicalIdentifier = universalObjectDict[BRANCH_LINK_DATA_KEY_CANONICAL_IDENTIFIER];
+    }
+    if (universalObjectDict[BRANCH_LINK_DATA_KEY_CANONICAL_URL]) {
+        universalObject.canonicalUrl = universalObjectDict[BRANCH_LINK_DATA_KEY_CANONICAL_URL];
     }
     if (universalObjectDict[BRANCH_LINK_DATA_KEY_OG_TITLE]) {
         universalObject.title = universalObjectDict[BRANCH_LINK_DATA_KEY_OG_TITLE];

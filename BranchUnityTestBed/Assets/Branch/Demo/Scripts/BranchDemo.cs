@@ -78,10 +78,14 @@ public class BranchDemo : MonoBehaviour {
 		try {
 			universalObject = new BranchUniversalObject();
 			universalObject.canonicalIdentifier = "id12345";
+			universalObject.canonicalUrl = "https://branch.io";
 			universalObject.title = "id12345 title";
 			universalObject.contentDescription = "My awesome piece of content!";
 			universalObject.imageUrl = "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png";
 			universalObject.metadata.Add("foo", "bar");
+
+			// register a view to add to the index
+			Branch.registerView(universalObject);
 
 			linkProperties = new BranchLinkProperties();
 			linkProperties.tags.Add("tag1");
@@ -167,10 +171,14 @@ public class BranchDemo : MonoBehaviour {
 			if (universalObject == null) {
 				universalObject = new BranchUniversalObject();
 				universalObject.canonicalIdentifier = "id12345";
+				universalObject.canonicalUrl = "https://branch.io";
 				universalObject.title = "id12345 title";
 				universalObject.contentDescription = "My awesome piece of content!";
 				universalObject.imageUrl = "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png";
 				universalObject.metadata.Add("foo", "bar");
+
+				// register a view to add to the index
+				Branch.registerView(universalObject);
 			}
 
 			if (linkProperties == null) {
