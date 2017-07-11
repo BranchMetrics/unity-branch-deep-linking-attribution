@@ -1,5 +1,8 @@
 Branch Unity SDK change log
 
+- v0.3.16
+  * Updating Branch to Android version 2.10.2
+
 - v0.3.15
   * Updating Branch to Android version 2.8.0 and iOS version 0.15.3
   * Adding cononicalUrl for BranchUniversalObject
