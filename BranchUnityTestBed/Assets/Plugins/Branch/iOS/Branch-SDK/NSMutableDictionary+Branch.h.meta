@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: dee0600b7c87d4521b37ac54ba7c9f92
-timeCreated: 1486507306
+guid: f840615b5c5b849f483c897207b64e2f
+timeCreated: 1502366982
 licenseType: Pro
 PluginImporter:
   serializedVersion: 1
@@ -45,10 +45,6 @@ PluginImporter:
       enabled: 0
       settings:
         CPU: x86_64
-    LinuxUniversal:
-      enabled: 0
-      settings:
-        CPU: None
     OSXIntel:
       enabled: 0
       settings:
@@ -57,10 +53,6 @@ PluginImporter:
       enabled: 0
       settings:
         CPU: AnyCPU
-    OSXUniversal:
-      enabled: 0
-      settings:
-        CPU: None
     SamsungTV:
       enabled: 0
       settings:
