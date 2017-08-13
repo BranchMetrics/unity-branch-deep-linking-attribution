@@ -185,7 +185,7 @@ public class BranchEditor : Editor {
 
 			if (node.Name == "activity") {
 				foreach(XmlAttribute attr in node.Attributes) {
-					if (attr.Value.Contains("BranchUnityActivity")) {
+					if (attr.Name.Contains("launchMode") && attr.Value == "singleTask") {
 						unityActivityNode = node;
 						break;
 					}
@@ -194,7 +194,7 @@ public class BranchEditor : Editor {
 		}
 
 		if (unityActivityNode == null) {
-			Debug.LogError("Current Android Manifest was broken, it does not contain \"<activity android:name=\"io.branch.unity.BranchUnityActivity\">\"");
+			Debug.LogError("Current Android Manifest was broken, it does not contain an activity with launchMode=\"singleTask\"");
 			return;
 		}
 

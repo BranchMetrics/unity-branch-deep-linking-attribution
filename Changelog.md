@@ -1,5 +1,9 @@
 Branch Unity SDK change log
 
+- v0.3.18
+  * Updating Branch to iOS version 0.17.6
+  * Updated algorithm for android manifest updating
+
 - v0.3.17
   * Updating Branch to Android version 2.10.3 and iOS version 0.17.5
 
