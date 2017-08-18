@@ -128,6 +128,26 @@ public class BranchPostProcessBuild {
 
 		string target = proj.TargetGuidByName("Unity-iPhone");
 
+		#if UNITY_2017
+
+		if (!proj.ContainsFramework(target, "AdSupport.framework")) {
+			proj.AddFrameworkToProject(target, "AdSupport.framework", false);
+		}
+
+		if (!proj.ContainsFramework(target, "CoreTelephony.framework")) {
+			proj.AddFrameworkToProject(target, "CoreTelephony.framework", false);
+		}
+
+		if (!proj.ContainsFramework(target, "CoreSpotlight.framework")) {
+			proj.AddFrameworkToProject(target, "CoreSpotlight.framework", false);
+		}
+
+		if (!proj.ContainsFramework(target, "Security.framework")) {
+			proj.AddFrameworkToProject(target, "Security.framework", false);
+		}
+
+		#else
+
 		if (!proj.HasFramework("AdSupport.framework")) {
 			proj.AddFrameworkToProject(target, "AdSupport.framework", false);
 		}
@@ -143,6 +163,8 @@ public class BranchPostProcessBuild {
 		if (!proj.HasFramework("Security.framework")) {
 			proj.AddFrameworkToProject(target, "Security.framework", false);
 		}
+
+		#endif
 
 		File.WriteAllText(pathToProject, proj.WriteToString());
 	}
