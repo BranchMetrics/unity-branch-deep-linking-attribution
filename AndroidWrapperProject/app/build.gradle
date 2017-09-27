@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion "25.0.3"
 
     sourceCompatibility = "1.6"
     targetCompatibility = "1.6"
@@ -22,7 +22,7 @@ android {
 }
 
 dependencies {
-    compile 'io.branch.sdk.android:library:2.12.0'
+    compile 'io.branch.sdk.android:library:2.12.1'
 //    Comment out the line above, uncomment the line below to use local Branch and update the settings.gradle file as well.
 //    compile project(':Branch-SDK')
 
