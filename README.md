@@ -79,6 +79,21 @@ After building iOS project:
 2. Objective C exceptions will be enabled automatically
 3. URL Scheme will be added into .plist automatically
 
+#### iOS Known issues
+Unity3d doesn't add several properties into .xcodeproj for PBXNativeTarget "Unity-iPhone" and for PBXProject "Unity-iPhone" and xcode use default values for that properties.
+
+Properties:
+
+ * GCC\_ENABLE\_OBJC\_EXCEPTIONS
+ * CLANG\_ENABLE\_MODULE
+
+You should set that properties with "YES" in xcode in tab "Build Settings":
+
+ * Apple LLVM 9.0 - Language - Objective C (Enable Objective-C Exceptions)
+ * Apple LLVM 9.0 - Language - Modules (Enable Modules C and Objective C)
+
+
+
 #### iOS + Unity 4.6 Note
 
 Branch requires ARC, and we don’t intend to add if checks thoughout the SDK to try to support pre-ARC. However, you can add flags to the project to compile the Branch files with ARC, which should work fine for you.
