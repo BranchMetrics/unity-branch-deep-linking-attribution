@@ -111,8 +111,11 @@ public class BranchPostProcessBuild {
 		// Write all lines to new file and enable objective C exceptions
 		foreach (string line in lines) {
 			
-			if (line.StartsWith("\t\t\t\tGCC_ENABLE_OBJC_EXCEPTIONS") ) {
+			if (line.Contains("GCC_ENABLE_OBJC_EXCEPTIONS") ) {
 				fCurrentXcodeProjFile.Write("\t\t\t\tGCC_ENABLE_OBJC_EXCEPTIONS = YES;\n");
+			}
+			else if (line.Contains("CLANG_ENABLE_MODULES") ) {
+				fCurrentXcodeProjFile.Write("\t\t\t\tCLANG_ENABLE_MODULES = YES;\n");
 			}
 			else {                          
 				fCurrentXcodeProjFile.WriteLine(line);
