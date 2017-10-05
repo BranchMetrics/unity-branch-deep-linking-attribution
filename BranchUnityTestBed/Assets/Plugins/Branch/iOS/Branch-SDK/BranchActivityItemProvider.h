@@ -6,7 +6,8 @@
 //  Copyright (c) 2015 Branch Metrics. All rights reserved.
 //
 
-@import UIKit;
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 /**
  The `BranchActivityItemProviderDelegate` allows you  to customize the link parameters based on the channel chosen by the user.

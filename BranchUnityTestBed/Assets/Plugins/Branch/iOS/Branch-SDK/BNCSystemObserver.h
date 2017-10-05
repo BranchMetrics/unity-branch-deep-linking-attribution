@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Branch Metrics. All rights reserved.
 //
 
-@import Foundation;
+#import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSInteger, BNCUpdateState) {
     BNCUpdateStateInstall      = 0,    //  App was recently installed.

@@ -6,7 +6,8 @@
 //  Copyright © 2016 Branch Metrics. All rights reserved.
 //
 #import "BranchContentPathProperties.h"
-@import UIKit;
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #ifndef ContentDiscoverManifest_h
 #define ContentDiscoverManifest_h
 

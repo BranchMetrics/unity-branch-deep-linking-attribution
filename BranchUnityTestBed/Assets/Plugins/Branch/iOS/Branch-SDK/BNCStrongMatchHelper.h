@@ -6,8 +6,8 @@
 //  Copyright © 2015 Branch Metrics. All rights reserved.
 //
 
-@import Foundation;
-@import UIKit;
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface BNCStrongMatchHelper : NSObject
 

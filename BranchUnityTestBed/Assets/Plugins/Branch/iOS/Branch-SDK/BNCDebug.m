@@ -14,8 +14,8 @@
 
 
 #import "BNCDebug.h"
-@import Darwin.sys.sysctl;
-@import ObjectiveC.runtime;
+#import <sys/sysctl.h>
+#import <objc/runtime.h>
 
 
 BOOL BNCDebuggerIsAttached() {

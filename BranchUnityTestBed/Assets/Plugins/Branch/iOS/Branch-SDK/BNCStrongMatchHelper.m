@@ -8,7 +8,7 @@
 
 
 #import "BNCStrongMatchHelper.h"
-@import ObjectiveC.runtime;
+#import <objc/runtime.h>
 #import "BNCConfig.h"
 #import "BNCPreferenceHelper.h"
 #import "BNCSystemObserver.h"
@@ -44,7 +44,7 @@
 
 
 #else   // ------------------------------------------------------------------------------ iOS >= 9.0
-@import SafariServices;
+#import <SafariServices/SafariServices.h>
 
 
 #pragma mark - BNCMatchView
