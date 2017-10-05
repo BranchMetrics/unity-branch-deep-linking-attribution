@@ -6,9 +6,11 @@
 //  Copyright (c) 2014 Branch Metrics. All rights reserved.
 //
 
-@import UIKit;
-@import SystemConfiguration;
-@import Darwin.POSIX.sys.utsname;
+#import <UIKit/UIKit.h>
+#include <sys/utsname.h>
+#import <UIKit/UIDevice.h>
+#import <UIKit/UIScreen.h>
+#import <SystemConfiguration/SystemConfiguration.h>
 #import "BNCPreferenceHelper.h"
 #import "BNCSystemObserver.h"
 #import "BNCLog.h"

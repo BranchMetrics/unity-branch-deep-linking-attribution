@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Branch Metrics. All rights reserved.
 //
 
-@import Foundation;
+#import <Foundation/Foundation.h>
 #import "BNCLinkData.h"
 
 @interface BNCLinkCache : NSObject

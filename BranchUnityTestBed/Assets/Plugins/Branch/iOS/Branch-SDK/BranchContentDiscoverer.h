@@ -7,7 +7,7 @@
 //
 
 
-@import UIKit;
+#import <UIKit/UIKit.h>
 #import "BranchContentDiscoveryManifest.h"
 
 

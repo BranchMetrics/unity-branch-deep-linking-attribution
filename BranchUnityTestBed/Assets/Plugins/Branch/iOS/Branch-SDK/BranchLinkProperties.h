@@ -6,7 +6,7 @@
 //  Copyright © 2015 Branch Metrics. All rights reserved.
 //
 
-@import Foundation;
+#import <Foundation/Foundation.h>
 
 @interface BranchLinkProperties : NSObject
 

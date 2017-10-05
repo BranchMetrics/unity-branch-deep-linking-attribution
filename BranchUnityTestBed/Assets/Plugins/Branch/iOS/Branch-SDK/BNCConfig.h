@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Branch Metrics. All rights reserved.
 //
 
-@import Foundation;
+#import <Foundation/Foundation.h>
 
 extern NSString * const BNC_SDK_VERSION;
 extern NSString * const BNC_API_BASE_URL;

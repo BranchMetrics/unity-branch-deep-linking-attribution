@@ -1,5 +1,8 @@
 Branch Unity SDK change log
 
+- v0.3.24
+  * @import changed to #import to fix issues "@import when modules are disabled" for Objectvie C and C++
+
 - v0.3.23
   * Updating Branch to iOS version 0.19.5
 

@@ -12,7 +12,7 @@
 #import "BNCXcode7Support.h"
 #import "BNCLog.h"
 
-@import UIKit;
+#import <UIKit/UIKit.h>
 #import <sys/sysctl.h> // @import not available in Xcode 7
 #import <net/if.h>
 #import <ifaddrs.h>

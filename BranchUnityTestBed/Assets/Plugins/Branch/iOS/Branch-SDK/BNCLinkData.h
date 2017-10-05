@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Branch Metrics. All rights reserved.
 //
 
-@import Foundation;
+#import <Foundation/Foundation.h>
 
 typedef NS_ENUM(NSUInteger, BranchLinkType) {
     BranchLinkTypeUnlimitedUse = 0,
