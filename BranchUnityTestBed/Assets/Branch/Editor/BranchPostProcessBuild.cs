@@ -34,6 +34,8 @@ public class BranchPostProcessBuild {
 		PlistElementDict  urlTypesItems = null;
 		PlistElementArray urlSchemesArray = null;
 
+		//----------------------------------------------------------------------------------
+		// set branch uri
 		if (!rootDict.values.ContainsKey("CFBundleURLTypes")) {
 			urlTypesArray = rootDict.CreateArray("CFBundleURLTypes");
 		}
@@ -113,9 +115,6 @@ public class BranchPostProcessBuild {
 			
 			if (line.Contains("GCC_ENABLE_OBJC_EXCEPTIONS") ) {
 				fCurrentXcodeProjFile.Write("\t\t\t\tGCC_ENABLE_OBJC_EXCEPTIONS = YES;\n");
-			}
-			else if (line.Contains("CLANG_ENABLE_MODULES") ) {
-				fCurrentXcodeProjFile.Write("\t\t\t\tCLANG_ENABLE_MODULES = YES;\n");
 			}
 			else {                          
 				fCurrentXcodeProjFile.WriteLine(line);
