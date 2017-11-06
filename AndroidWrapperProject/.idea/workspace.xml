@@ -5,36 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6397db50-337f-4297-ad99-8be72064134a" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Branch/Resources/BranchData.asset" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Branch/Resources/BranchData.asset" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/library_2_12_1.xml" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/ProjectSettings/GraphicsSettings.asset" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/ProjectSettings/GraphicsSettings.asset" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/ProjectSettings/ProjectSettings.asset" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/ProjectSettings/ProjectSettings.asset" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityWrapper.unitypackage" afterPath="$PROJECT_DIR$/../BranchUnityWrapper.unitypackage" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../AndroidThirdParty/.idea/misc.xml" afterPath="$PROJECT_DIR$/../AndroidThirdParty/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../AndroidThirdParty/app/build.gradle" afterPath="$PROJECT_DIR$/../AndroidThirdParty/app/build.gradle" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build.gradle" afterPath="$PROJECT_DIR$/app/build.gradle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assembly-CSharp-Editor.csproj" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assembly-CSharp-Editor.csproj" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assembly-CSharp.csproj" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assembly-CSharp.csproj" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Branch/Branch.cs" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Branch/Branch.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Branch/Editor/BranchPostProcessBuild.cs" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Branch/Editor/BranchPostProcessBuild.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCConfig.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCConfig.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCConfig.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCConfig.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCContentDiscoveryManager.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCContentDiscoveryManager.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCDeviceInfo.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCDeviceInfo.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCStrongMatchHelper.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCStrongMatchHelper.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchActivityItemProvider.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchActivityItemProvider.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchContentDiscoveryManifest.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchContentDiscoveryManifest.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchShareLink.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchShareLink.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchShareLink.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchShareLink.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchUniversalObject.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchUniversalObject.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchUniversalObject.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchUniversalObject.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Networking/BNCNetworkService.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Networking/BNCNetworkService.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Networking/BNCServerInterface.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Networking/BNCServerInterface.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Networking/BNCServerRequestQueue.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Networking/BNCServerRequestQueue.m" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/BranchiOSWrapper.mm" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/BranchiOSWrapper.mm" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/BranchUnityTestBed.userprefs" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/BranchUnityTestBed.userprefs" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/ProjectSettings/ProjectVersion.txt" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/ProjectSettings/ProjectVersion.txt" />
     </list>
@@ -83,11 +61,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="10695">
               <caret line="741" column="35" selection-start-line="741" selection-start-column="35" selection-end-line="741" selection-end-column="35" />
-              <folding>
-                <element signature="imports" expanded="false" />
-                <element signature="e#926#927#0" expanded="false" />
-                <element signature="e#964#965#0" expanded="false" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -97,13 +71,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="225">
               <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="false" />
-                <element signature="e#309#310#0" expanded="false" />
-                <element signature="e#359#360#0" expanded="false" />
-                <element signature="e#419#420#0" expanded="false" />
-                <element signature="e#457#458#0" expanded="false" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -452,6 +420,11 @@
                 <option name="name" value="mergeDebugAndroidTestAssets" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
+                <option name="description" value="Prepare io.branch.sdk.android:library:2.13.1" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="prepareIoBranchSdkAndroidLibrary2131Library" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="processReleaseManifest" />
               </ExternalTaskPojo>
@@ -775,11 +748,6 @@
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="prepareDebugUnitTestDependencies" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
-                <option name="description" value="Prepare io.branch.sdk.android:library:2.12.2" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="prepareIoBranchSdkAndroidLibrary2122Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
@@ -1139,6 +1107,11 @@
                 <option name="name" value="mergeDebugAndroidTestAssets" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
+                <option name="description" value="Prepare io.branch.sdk.android:library:2.13.1" />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
+                <option name="name" value="prepareIoBranchSdkAndroidLibrary2131Library" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
                 <option name="name" value="processReleaseManifest" />
               </ExternalTaskPojo>
@@ -1459,11 +1432,6 @@
                 <option name="name" value="prepareDebugUnitTestDependencies" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare io.branch.sdk.android:library:2.12.2" />
-                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
-                <option name="name" value="prepareIoBranchSdkAndroidLibrary2122Library" />
-              </ExternalTaskPojo>
-              <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
                 <option name="name" value="generateReleaseResources" />
               </ExternalTaskPojo>
@@ -1535,7 +1503,7 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="4518552788000" />
+        <entry key="$PROJECT_DIR$" value="4519738872000" />
       </map>
     </option>
     <option name="projectBuildClasspath">
@@ -1923,7 +1891,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="AndroidView">
         <subPane>
           <PATH>
@@ -1989,8 +1957,8 @@
         </subPane>
       </pane>
       <pane id="ProjectPane" />
-      <pane id="PackagesPane" />
       <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -2285,7 +2253,7 @@
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2496318" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2496318" sideWeight="0.565046" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2496318" sideWeight="0.565046" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
@@ -2688,13 +2656,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
           <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#309#310#0" expanded="false" />
-            <element signature="e#359#360#0" expanded="false" />
-            <element signature="e#419#420#0" expanded="false" />
-            <element signature="e#457#458#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2702,11 +2664,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="10695">
           <caret line="741" column="35" selection-start-line="741" selection-start-column="35" selection-end-line="741" selection-end-column="35" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#926#927#0" expanded="false" />
-            <element signature="e#964#965#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
