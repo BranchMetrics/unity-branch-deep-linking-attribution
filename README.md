@@ -416,7 +416,7 @@ Branch.getShortURL(universalObject, linkProperties, (params, error) => {
     if (error != null) {
         Debug.LogError("Branch.getShortURL failed: " + error);
     } else if (params != null) {
-        Debug.Log("Branch.getShortURL shared params: " + url);
+        Debug.Log("Branch.getShortURL shared params: " + params);
     }
 });
 ```
