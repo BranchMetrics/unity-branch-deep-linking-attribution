@@ -1,5 +1,9 @@
 Branch Unity SDK change log
 
+- v0.3.27
+  * Updating Branch to iOS version 0.20.3
+  * Adding method `setRequestMetadata(string key, string val)`
+
 - v0.3.26
   * Updating Branch to Android version 2.13.1
 

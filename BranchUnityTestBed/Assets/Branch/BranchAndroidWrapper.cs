@@ -140,6 +140,12 @@ public class BranchAndroidWrapper {
 		});
 	}
 
+	public static void setRequestMetadata(string key, string val) {
+		_runBlockOnThread(() => {
+		_getBranchClass().CallStatic("setRequestMetadata", key, val);
+		});
+	}
+
 	#endregion
     
     #region User Action methods

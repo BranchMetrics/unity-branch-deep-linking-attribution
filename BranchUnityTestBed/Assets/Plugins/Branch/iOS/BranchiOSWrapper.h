@@ -47,6 +47,7 @@ extern "C" {
     void _registerView(char *universalObjectJson);
     void _listOnSpotlight(char *universalObjectJson);
     void _accountForFacebookSDKPreventingAppLaunch();
+    void _setRequestMetadata(char *key, char *value);
     
     #pragma mark - User Action methods
 
