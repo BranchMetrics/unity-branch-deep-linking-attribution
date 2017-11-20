@@ -404,6 +404,10 @@ void _accountForFacebookSDKPreventingAppLaunch() {
     [[Branch getInstance:_branchKey] accountForFacebookSDKPreventingAppLaunch];
 }
 
+void _setRequestMetadata(char *key, char *value) {
+    [[Branch getInstance:_branchKey] setRequestMetadataKey:CreateNSString(key) value:CreateNSString(value)];
+}
+
 #pragma mark - User Action methods
 
 void _userCompletedAction(char *action) {

@@ -5,14 +5,66 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6397db50-337f-4297-ad99-8be72064134a" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/library_2_12_1.xml" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Branch/Resources/BranchData.asset" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Branch/Resources/BranchData.asset" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/Android/libs/BranchAndroidWrapper.jar" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/Android/libs/BranchAndroidWrapper.jar" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/ProjectSettings/GraphicsSettings.asset" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/ProjectSettings/GraphicsSettings.asset" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/ProjectSettings/ProjectSettings.asset" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/ProjectSettings/ProjectSettings.asset" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../AndroidThirdParty/app/build.gradle" afterPath="$PROJECT_DIR$/../AndroidThirdParty/app/build.gradle" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../AndroidThirdParty/.idea/misc.xml" afterPath="$PROJECT_DIR$/../AndroidThirdParty/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/build.gradle" afterPath="$PROJECT_DIR$/app/build.gradle" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/io/branch/unity/BranchUnityWrapper.java" afterPath="$PROJECT_DIR$/app/src/main/java/io/branch/unity/BranchUnityWrapper.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assembly-CSharp-Editor.csproj" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assembly-CSharp-Editor.csproj" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assembly-CSharp.csproj" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assembly-CSharp.csproj" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCCommerceEvent.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCCommerceEvent.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCConfig.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCConfig.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCConfig.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCConfig.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCContentDiscoveryManager.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCContentDiscoveryManager.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCCrashlyticsWrapper.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCCrashlyticsWrapper.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCDebug.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCDebug.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCDebug.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCDebug.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCDeepLinkViewControllerInstance.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCDeepLinkViewControllerInstance.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCDeviceInfo.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCDeviceInfo.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCDeviceInfo.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCDeviceInfo.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCEncodingUtils.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCEncodingUtils.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCError.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCError.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCFabricAnswers.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCFabricAnswers.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCLinkCache.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCLinkCache.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCLinkData.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCLinkData.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCLocalization.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCLocalization.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCLog.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCLog.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCPreferenceHelper.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCPreferenceHelper.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCStrongMatchHelper.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCStrongMatchHelper.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCStrongMatchHelper.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCStrongMatchHelper.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCSystemObserver.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCSystemObserver.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCSystemObserver.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BNCSystemObserver.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchActivityItemProvider.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchActivityItemProvider.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchCSSearchableItemAttributeSet.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchCSSearchableItemAttributeSet.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchCSSearchableItemAttributeSet.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchCSSearchableItemAttributeSet.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchConstants.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchConstants.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchContentDiscoverer.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchContentDiscoverer.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchContentDiscoverer.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchContentDiscoverer.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchContentDiscoveryManifest.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchContentDiscoveryManifest.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchContentDiscoveryManifest.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchContentDiscoveryManifest.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchContentPathProperties.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchContentPathProperties.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchDeepLinkingController.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchDeepLinkingController.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchLinkProperties.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchLinkProperties.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchShareLink.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchShareLink.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchUniversalObject.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchUniversalObject.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchView.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchView.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchView.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchView.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchViewHandler.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/BranchViewHandler.m" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/NSMutableDictionary+Branch.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/NSMutableDictionary+Branch.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/NSString+Branch.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/NSString+Branch.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Networking/BNCNetworkService.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Networking/BNCNetworkService.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Networking/BNCNetworkServiceProtocol.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Networking/BNCNetworkServiceProtocol.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Networking/BNCServerInterface.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Networking/BNCServerInterface.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Networking/BNCServerRequest.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Networking/BNCServerRequest.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Networking/BNCServerResponse.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Networking/BNCServerResponse.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Networking/Requests/BranchShortUrlSyncRequest.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Networking/Requests/BranchShortUrlSyncRequest.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/BranchiOSWrapper.mm" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/BranchiOSWrapper.mm" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/BranchUnityTestBed.userprefs" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/BranchUnityTestBed.userprefs" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../BranchUnityTestBed/ProjectSettings/ProjectVersion.txt" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/ProjectSettings/ProjectVersion.txt" />
     </list>
@@ -46,7 +98,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="true">
+      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="450">
@@ -56,21 +108,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BranchUnityWrapper.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="BranchUnityWrapper.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/io/branch/unity/BranchUnityWrapper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="10695">
-              <caret line="741" column="35" selection-start-line="741" selection-start-column="35" selection-end-line="741" selection-end-column="35" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BranchUnityActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/io/branch/unity/BranchUnityActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+            <state relative-caret-position="15">
+              <caret line="329" column="0" selection-start-line="329" selection-start-column="0" selection-end-line="329" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -1854,10 +1896,10 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/io/branch/unity/BranchUnityWrapper.java" />
         <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/settings.gradle" />
         <option value="$PROJECT_DIR$/app/build.gradle" />
+        <option value="$PROJECT_DIR$/app/src/main/java/io/branch/unity/BranchUnityWrapper.java" />
       </list>
     </option>
   </component>
@@ -1891,7 +1933,10 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="ProjectPane" />
       <pane id="PackagesPane" />
+      <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="AndroidView">
         <subPane>
           <PATH>
@@ -1956,9 +2001,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="ProjectPane" />
-      <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -2237,7 +2279,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1400" height="877" extended-state="6" />
+    <frame x="0" y="23" width="1400" height="877" extended-state="0" />
     <editor active="false" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -2247,8 +2289,8 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298292" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298292" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2496318" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -2258,8 +2300,8 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -2654,16 +2696,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/io/branch/unity/BranchUnityActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/io/branch/unity/BranchUnityWrapper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="10695">
-          <caret line="741" column="35" selection-start-line="741" selection-start-column="35" selection-end-line="741" selection-end-column="35" />
+        <state relative-caret-position="120">
+          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
           <folding />
         </state>
       </provider>
@@ -2672,6 +2706,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="450">
           <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/io/branch/unity/BranchUnityWrapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="329" column="0" selection-start-line="329" selection-start-column="0" selection-end-line="329" selection-end-column="0" />
           <folding />
         </state>
       </provider>

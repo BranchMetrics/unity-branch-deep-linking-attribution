@@ -324,6 +324,10 @@ public class BranchUnityWrapper {
         }
     }
 
+    public static void setRequestMetadata(String key, String value) {
+        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).setRequestMetadata(key, value);
+    }
+
     public static void accountForFacebookSDKPreventingAppLaunch() {
 
     }

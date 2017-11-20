@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 public class Branch : MonoBehaviour {
 
-	public static string sdkVersion = "0.3.26";
+	public static string sdkVersion = "0.3.27";
 
     public delegate void BranchCallbackWithParams(Dictionary<string, object> parameters, string error);
     public delegate void BranchCallbackWithUrl(string url, string error);
@@ -255,6 +255,13 @@ public class Branch : MonoBehaviour {
 
 	public static void accountForFacebookSDKPreventingAppLaunch() {
 		_accountForFacebookSDKPreventingAppLaunch();
+	}
+
+	public static void setRequestMetadata(string key, string val) {
+
+		if (!string.IsNullOrEmpty (key) && !string.IsNullOrEmpty (val)) {
+			_setRequestMetadata (key, val);
+		}
 	}
 
     #endregion
@@ -509,6 +516,9 @@ public class Branch : MonoBehaviour {
 	[DllImport ("__Internal")]
 	private static extern void _accountForFacebookSDKPreventingAppLaunch();
 
+	[DllImport ("__Internal")]
+	private static extern void _setRequestMetadata(string key, string val);
+
     [DllImport ("__Internal")]
     private static extern void _userCompletedAction(string action);
     
@@ -638,6 +648,10 @@ public class Branch : MonoBehaviour {
 		BranchAndroidWrapper.accountForFacebookSDKPreventingAppLaunch();
 	}
 
+	private static void _setRequestMetadata(string key, string val) {
+		BranchAndroidWrapper.setRequestMetadata(key, val);
+	}
+
     private static void _userCompletedAction(string action) {
         BranchAndroidWrapper.userCompletedAction(action);
     }
@@ -755,6 +769,8 @@ public class Branch : MonoBehaviour {
 	private static void _listOnSpotlight(string universalObject) { }
 
 	private static void _accountForFacebookSDKPreventingAppLaunch() { }
+
+	private static void _setRequestMetadata(string key, string val) { }
     
     private static void _userCompletedAction(string action) { }
     
