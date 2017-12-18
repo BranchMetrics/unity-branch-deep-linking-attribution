@@ -16,9 +16,9 @@ We released a completely revamped version of the Unity package today which autom
 There's a full demo app embedded in this repository, which you can find in the *BranchUnityTestBed* folder. Please use that as a reference.
 
 ## Additional Resources
-- [Integration guide](https://dev.branch.io/recipes/add_the_sdk/unity/) *Start Here*
+- [Integration guide](https://docs.branch.io/pages/apps/unity/) *Start Here*
 - [Changelog](https://github.com/BranchMetrics/Unity-Deferred-Deep-Linking-SDK/blob/master/ChangeLog.md)
-- [Testing](https://dev.branch.io/recipes/testing_your_integration/unity/)
+- [Testing](https://docs.branch.io/pages/apps/unity/#test-deep-link)
 - [Support portal, FAQ](http://support.branch.io)
 
 ## Installation
