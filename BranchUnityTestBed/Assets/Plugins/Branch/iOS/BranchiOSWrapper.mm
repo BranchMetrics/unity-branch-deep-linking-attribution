@@ -172,10 +172,10 @@ static BranchUniversalObject* branchuniversalObjectFormDict(NSDictionary *univer
     
     if (universalObjectDict[BRANCH_LINK_DATA_KEY_PUBLICLY_INDEXABLE]) {
         if (universalObjectDict[BRANCH_LINK_DATA_KEY_PUBLICLY_INDEXABLE] == 0) {
-            universalObject.contentIndexMode = ContentIndexModePublic;
+            universalObject.contentIndexMode = BranchContentIndexModePublic;
         }
         else {
-            universalObject.contentIndexMode = ContentIndexModePrivate;
+            universalObject.contentIndexMode = BranchContentIndexModePrivate;
         }
     }
     
