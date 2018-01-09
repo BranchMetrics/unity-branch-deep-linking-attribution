@@ -1,5 +1,12 @@
 Branch Unity SDK change log
 
+- 0.4.1
+  * Updating Branch to Android version 2.14.4 and iOS version 0.22.4
+  * Updating BranchUniversalObject
+  * Adding new class for metadata (BranchContentMetadata)
+  * Adding API for sending branch events
+  * Updating Readme
+
 - v0.3.27
   * Updating Branch to iOS version 0.20.3
   * Adding method `setRequestMetadata(string key, string val)`

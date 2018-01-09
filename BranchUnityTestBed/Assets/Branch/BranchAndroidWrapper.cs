@@ -162,6 +162,12 @@ public class BranchAndroidWrapper {
 		});
     }
     
+	public static void sendEvent(string eventName) {
+		_runBlockOnThread(() => {
+			_getBranchClass().CallStatic("sendEvent", eventName);
+		});
+	}
+
     #endregion
     
     #region Credit methods

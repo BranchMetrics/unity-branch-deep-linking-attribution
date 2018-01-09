@@ -88,14 +88,14 @@ static NSString *CreateNSStringFromNSDate(NSDate *date) {
     return [formatter stringFromDate:date];
 }
 
-static NSDictionary *dictionaryFromJsonString(char *jsonString) {
+static NSDictionary *dictionaryFromJsonString(const char *jsonString) {
     NSData *jsonData = [[NSData alloc] initWithBytes:jsonString length:strlen(jsonString)];
     NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:jsonData options:kNilOptions error:nil];
     
     return dictionary;
 }
 
-static NSArray *arrayFromJsonString(char *jsonString) {
+static NSArray *arrayFromJsonString(const char *jsonString) {
     NSData *jsonData = [[NSData alloc] initWithBytes:jsonString length:strlen(jsonString)];
     NSArray *array = [NSJSONSerialization JSONObjectWithData:jsonData options:kNilOptions error:nil];
     
@@ -119,11 +119,11 @@ static NSDictionary *dictFromBranchUniversalObject(BranchUniversalObject *univer
             BRANCH_LINK_DATA_KEY_OG_TITLE: universalObject.title ? universalObject.title : @"",
             BRANCH_LINK_DATA_KEY_OG_DESCRIPTION: universalObject.contentDescription ? universalObject.contentDescription : @"",
             BRANCH_LINK_DATA_KEY_OG_IMAGE_URL: universalObject.imageUrl ? universalObject.imageUrl : @"",
-            BRANCH_LINK_DATA_KEY_CONTENT_TYPE: universalObject.type ? universalObject.type: @"",
-            BRANCH_LINK_DATA_KEY_PUBLICLY_INDEXABLE: universalObject.contentIndexMode ? [[NSNumber numberWithInteger:universalObject.contentIndexMode] stringValue]: @"",
+            BRANCH_LINK_DATA_KEY_PUBLICLY_INDEXABLE: universalObject.publiclyIndex ? [[NSNumber numberWithInteger:universalObject.publiclyIndex] stringValue]: @"",
+            BRANCH_LINK_DATA_KEY_LOCALLY_INDEXABLE: universalObject.locallyIndex ? [[NSNumber numberWithInteger:universalObject.locallyIndex] stringValue]: @"",
             BRANCH_LINK_DATA_KEY_KEYWORDS: universalObject.keywords ? universalObject.keywords : @"",
             BRANCH_LINK_DATA_KEY_CONTENT_EXPIRATION_DATE: universalObject.expirationDate ? @(1000 * [universalObject.expirationDate timeIntervalSince1970]) : @"",
-            @"metadata": universalObject.metadata ? universalObject.metadata : @"",
+            @"metadata": universalObject.contentMetadata ? universalObject.contentMetadata.dictionary : @"",
         };
     }
 
@@ -166,16 +166,22 @@ static BranchUniversalObject* branchuniversalObjectFormDict(NSDictionary *univer
     if (universalObjectDict[BRANCH_LINK_DATA_KEY_OG_IMAGE_URL]) {
         universalObject.imageUrl = universalObjectDict[BRANCH_LINK_DATA_KEY_OG_IMAGE_URL];
     }
-    if (universalObjectDict[BRANCH_LINK_DATA_KEY_CONTENT_TYPE]) {
-        universalObject.type = universalObjectDict[BRANCH_LINK_DATA_KEY_CONTENT_TYPE];
-    }
     
     if (universalObjectDict[BRANCH_LINK_DATA_KEY_PUBLICLY_INDEXABLE]) {
         if (universalObjectDict[BRANCH_LINK_DATA_KEY_PUBLICLY_INDEXABLE] == 0) {
-            universalObject.contentIndexMode = BranchContentIndexModePublic;
+            universalObject.publiclyIndex = BranchContentIndexModePublic;
         }
         else {
-            universalObject.contentIndexMode = BranchContentIndexModePrivate;
+            universalObject.publiclyIndex = BranchContentIndexModePrivate;
+        }
+    }
+    
+    if (universalObjectDict[BRANCH_LINK_DATA_KEY_LOCALLY_INDEXABLE]) {
+        if (universalObjectDict[BRANCH_LINK_DATA_KEY_LOCALLY_INDEXABLE] == 0) {
+            universalObject.locallyIndex = BranchContentIndexModePublic;
+        }
+        else {
+            universalObject.locallyIndex = BranchContentIndexModePrivate;
         }
     }
     
@@ -188,7 +194,37 @@ static BranchUniversalObject* branchuniversalObjectFormDict(NSDictionary *univer
     }
     
     if (universalObjectDict[@"metadata"]) {
-        universalObject.metadata = [universalObjectDict[@"metadata"] copy];
+        
+        NSDictionary *dict = dictionaryFromJsonString([universalObjectDict[@"metadata"] cStringUsingEncoding:NSUTF8StringEncoding]);
+        universalObject.contentMetadata = [BranchContentMetadata contentMetadataWithDictionary:dict];
+        
+        NSMutableDictionary *mutableDict = [dict mutableCopy];
+        [mutableDict removeObjectForKey:@"$content_schema"];
+        [mutableDict removeObjectForKey:@"$quantity"];
+        [mutableDict removeObjectForKey:@"$price"];
+        [mutableDict removeObjectForKey:@"$currency"];
+        [mutableDict removeObjectForKey:@"$sku"];
+        [mutableDict removeObjectForKey:@"$product_name"];
+        [mutableDict removeObjectForKey:@"$product_brand"];
+        [mutableDict removeObjectForKey:@"$product_category"];
+        [mutableDict removeObjectForKey:@"$product_variant"];
+        [mutableDict removeObjectForKey:@"$condition"];
+        [mutableDict removeObjectForKey:@"$rating_average"];
+        [mutableDict removeObjectForKey:@"$rating_count"];
+        [mutableDict removeObjectForKey:@"$rating_max"];
+        [mutableDict removeObjectForKey:@"$address_street"];
+        [mutableDict removeObjectForKey:@"$address_city"];
+        [mutableDict removeObjectForKey:@"$address_region"];
+        [mutableDict removeObjectForKey:@"$address_country"];
+        [mutableDict removeObjectForKey:@"$address_postal_code"];
+        [mutableDict removeObjectForKey:@"$latitude"];
+        [mutableDict removeObjectForKey:@"$longitude"];
+        [mutableDict removeObjectForKey:@"$image_captions"];
+
+        for (NSString *key in mutableDict.keyEnumerator) {
+            NSString *value = mutableDict[key];
+            universalObject.contentMetadata.customMetadata[key] = value;
+        }
     }
     
     return universalObject;
@@ -390,7 +426,9 @@ void _registerView(char *universalObjectJson) {
     NSDictionary *universalObjectDict = dictionaryFromJsonString(universalObjectJson);
     BranchUniversalObject *obj = branchuniversalObjectFormDict(universalObjectDict);
     
-    [obj registerView];
+    BranchEvent* event = [[BranchEvent alloc] initWithName:BranchStandardEventViewItem];
+    [event.contentItems addObject:obj];
+    [event logEvent];
 }
 
 void _listOnSpotlight(char *universalObjectJson) {
@@ -416,6 +454,67 @@ void _userCompletedAction(char *action) {
 
 void _userCompletedActionWithState(char *action, char *stateDict) {
     [[Branch getInstance:_branchKey] userCompletedAction:CreateNSString(action) withState:dictionaryFromJsonString(stateDict)];
+}
+
+#pragma mark - Send event methods
+
+void _sendEvent(char *eventJson) {
+    NSDictionary *eventDict = dictionaryFromJsonString(eventJson);
+    if (eventDict == nil) {
+        return;
+    }
+    
+    BranchEvent *event = nil;
+    
+    if (eventDict[@"event_name"]) {
+        event = [[BranchEvent alloc] initWithName:eventDict[@"event_name"]];
+    }
+    else {
+        return;
+    }
+    
+    if (eventDict[@"transaction_id"]) {
+        event.transactionID = eventDict[@"transaction_id"];
+    }
+    if (eventDict[@"affiliation"]) {
+        event.affiliation = eventDict[@"affiliation"];
+    }
+    if (eventDict[@"coupon"]) {
+        event.coupon = eventDict[@"coupon"];
+    }
+    if (eventDict[@"currency"]) {
+        event.currency = eventDict[@"currency"];
+    }
+    if (eventDict[@"tax"]) {
+        event.tax = eventDict[@"tax"];
+    }
+    if (eventDict[@"revenue"]) {
+        event.revenue = eventDict[@"revenue"];
+    }
+    if (eventDict[@"description"]) {
+        event.revenue = eventDict[@"description"];
+    }
+    if (eventDict[@"shipping"]) {
+        event.shipping = eventDict[@"shipping"];
+    }
+    if (eventDict[@"search_query"]) {
+        event.searchQuery = eventDict[@"search_query"];
+    }
+    if (eventDict[@"custom_data"]) {
+        event.customData = [eventDict[@"custom_data"] copy];
+    }
+    if (eventDict[@"content_items"]) {
+        NSArray *array = [eventDict[@"content_items"] copy];
+        NSMutableArray *buoArray = [[NSMutableArray alloc] init];
+        
+        for (NSString* buoJson in array) {
+            [buoArray addObject:branchuniversalObjectFormDict(dictionaryFromJsonString([buoJson cStringUsingEncoding:NSUTF8StringEncoding]))];
+        }
+        
+        [event setContentItems:buoArray];
+    }
+    
+    [event logEvent];
 }
 
 #pragma mark - Credit methods

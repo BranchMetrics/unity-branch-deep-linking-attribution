@@ -166,7 +166,7 @@ public class BranchEditor : Editor {
 
 				XmlElement appElem = appNode as XmlElement;
 				if (!appElem.HasAttribute("android:name")) {
-					appElem.SetAttribute("android____name", "io.branch.referral.BranchApp");
+					appElem.SetAttribute("android____name", "io.branch.unity.BranchUnityApp");
 				}
 				break;
 			}
