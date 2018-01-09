@@ -54,6 +54,10 @@ extern "C" {
     void _userCompletedAction(char *action);
     void _userCompletedActionWithState(char *action, char *stateDict);
 
+    #pragma mark - Send event methods
+    
+    void _sendEvent(char *eventJson);
+    
     #pragma mark - Credit methods
 
     void _loadRewardsWithCallback(char *callbackId);

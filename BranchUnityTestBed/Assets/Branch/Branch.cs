@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 public class Branch : MonoBehaviour {
 
-	public static string sdkVersion = "0.3.28";
+	public static string sdkVersion = "0.4.1";
 
     public delegate void BranchCallbackWithParams(Dictionary<string, object> parameters, string error);
     public delegate void BranchCallbackWithUrl(string url, string error);
@@ -282,6 +282,18 @@ public class Branch : MonoBehaviour {
 		_userCompletedActionWithState(action, BranchThirdParty_MiniJSON.Json.Serialize(state));
     }
 
+	#endregion
+
+	#region Send Evene methods
+
+	/**
+	 * Send event
+	 **/
+	public static void sendEvent(BranchEvent branchEvent) {
+		_sendEvent(branchEvent.ToJsonString());
+
+	}
+
     #endregion
 
     #region Credit methods
@@ -525,6 +537,9 @@ public class Branch : MonoBehaviour {
     [DllImport ("__Internal")]
     private static extern void _userCompletedActionWithState(string action, string stateDict);
     
+	[DllImport ("__Internal")]
+	private static extern void _sendEvent(string eventName);
+
     [DllImport ("__Internal")]
     private static extern void _loadRewardsWithCallback(string callbackId);
     
@@ -660,6 +675,10 @@ public class Branch : MonoBehaviour {
         BranchAndroidWrapper.userCompletedActionWithState(action, stateDict);
     }
     
+	private static void _sendEvent(string eventName) {
+		BranchAndroidWrapper.sendEvent(eventName);
+	}
+
     private static void _loadRewardsWithCallback(string callbackId) {
         BranchAndroidWrapper.loadRewardsWithCallback(callbackId);
     }
@@ -775,6 +794,8 @@ public class Branch : MonoBehaviour {
     private static void _userCompletedAction(string action) { }
     
     private static void _userCompletedActionWithState(string action, string stateDict) { }
+
+	private static void _sendEvent(string eventName) { }
     
     private static void _loadRewardsWithCallback(string callbackId) {
         callNotImplementedCallbackForStatusCallback(callbackId);

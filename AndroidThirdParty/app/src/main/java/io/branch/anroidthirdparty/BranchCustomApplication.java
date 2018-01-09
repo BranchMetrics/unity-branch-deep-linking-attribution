@@ -12,5 +12,6 @@ public class BranchCustomApplication extends FabricApplication {
         super.onCreate();
 
         Branch.getAutoInstance(this.getApplicationContext());
+        Branch.disableInstantDeepLinking(true);
     }
 }

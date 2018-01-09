@@ -11,14 +11,27 @@ We released a completely revamped version of the Unity package today which autom
 * We keept only the methods that works with UniversalBranchObjects, you should check and change used Branch API methods
 * You should use flag "Simulate Fresh Install" in Branch prefab instead of using method `SetDebug`
 
+## Migration warning for v.0.4.1
+
+- <b>Changes in Android Manifest:</b>
+* You should to use in application tag ```android:name="io.branch.unity.BranchUnityApp"``` instead of ```android:name="io.branch.referral.BranchApp"```
+* If you have your own custom plugin, add into ```onCreate()``` method calling of method ```Branch.disableInstantDeepLinking(true);```
+
+
+- <b>Changes in BranchUniversalObject:</b>
+* We added BranchUniversalObject.localIndexMode parameter
+* We deleted BranchUniversalObject.type parameter
+* We changed type of BranchUniversalObject.metadata from Dictionary<string, string> to BranchContentMetadata
+
+
 ## Get the Demo App
 
 There's a full demo app embedded in this repository, which you can find in the *BranchUnityTestBed* folder. Please use that as a reference.
 
 ## Additional Resources
-- [Integration guide](https://docs.branch.io/pages/apps/unity/) *Start Here*
+- [Integration guide](https://dev.branch.io/recipes/add_the_sdk/unity/) *Start Here*
 - [Changelog](https://github.com/BranchMetrics/Unity-Deferred-Deep-Linking-SDK/blob/master/ChangeLog.md)
-- [Testing](https://docs.branch.io/pages/apps/unity/#test-deep-link)
+- [Testing](https://dev.branch.io/recipes/testing_your_integration/unity/)
 - [Support portal, FAQ](http://support.branch.io)
 
 ## Installation
@@ -320,6 +333,8 @@ Branch.logout();
 
 ### Register custom events
 
+**Warning** This functionality is deprecated. Please consider using BranchEvent for tracking user action and events.
+
 ```csharp
 Branch.userCompletedAction("your_custom_event"); // your custom event name should not exceed 63 characters
 ```
@@ -335,6 +350,43 @@ Dictionary<string, object> stateItems = new Dictionary<string, object>
 Branch.userCompletedAction("your_custom_event", stateItems); // same 63 characters max limit
 ```
 
+### Tracking User Actions and Events
+
+Use BranchEvent class to track special user actions or application specific events beyond app installs, opens, and sharing. You can track events such as when a user adds an item to an on-line shopping cart, or searches for a keyword etc. BranchEvent provides an interface to add content(s) represented by a BranchUniversalObject in order to associate content(s) with events. You can view analytics for the BranchEvents you fire on the Branch dashboard.  *BranchEventType* enumerate the most commonly tracked events and event parameters that can be used with BranchEvent for the best results. You can always use custom event names and event parameters.
+
+```csharp
+BranchEvent e01 = new BranchEvent (BranchEventType.COMPLETE_REGISTRATION);
+
+e01.SetAffiliation("my_affilation");
+e01.SetCoupon("my_coupon");
+e01.SetCurrency(BranchCurrencyType.USD);
+e01.SetTax(10.0f);
+e01.SetRevenue(100.0f);
+e01.SetShipping(1000.0f);
+e01.SetDescription("my_description");
+e01.SetSearchQuery("my_search_query");
+e01.AddCustomData("custom_data_key01", "custom_data_value01");
+e01.AddContentItem(universalObject);
+
+Branch.sendEvent (e01);
+
+
+BranchEvent e02 = new BranchEvent ("MY_CUSTOM_EVENT");
+
+e02.SetAffiliation("my_affilation");
+e02.SetCoupon("my_coupon");
+e02.SetCurrency(BranchCurrencyType.USD);
+e02.SetTax(10.0f);
+e02.SetRevenue(100.0f);
+e02.SetShipping(1000.0f);
+e02.SetDescription("my_description");
+e02.SetSearchQuery("my_search_query");
+e02.AddCustomData("custom_data_key01", "custom_data_value01");
+e02.AddContentItem(universalObject);
+
+Branch.sendEvent (e02);```
+
+
 ## Branch Universal Object (for deep links, content analytics and indexing)
 
 As more methods have evolved in iOS, we've found that it was increasingly hard to manage them all. We abstracted as many as we could into the concept of a Branch Universal Object. This is the object that is associated with the thing you want to share (content or user). You can set all the metadata associated with the object and then call action methods on it to get a link or index in Spotlight.
@@ -349,7 +401,7 @@ universalObject.canonicalIdentifier = "id12345";
 universalObject.title = "id12345 title";
 universalObject.contentDescription = "My awesome piece of content!";
 universalObject.imageUrl = "https://s3-us-west-1.amazonaws.com/branchhost/mosaic_og.png";
-universalObject.metadata.Add("foo", "bar");
+universalObject.metadata.AddCustomMetadata("foo", "bar");
 ```
 
 #### Parameters
@@ -363,8 +415,6 @@ universalObject.metadata.Add("foo", "bar");
 **imageUrl**: This is the image URL for the content and will automatically be used for the OG tags. It will insert $og_image_url into the data dictionary of any link created.
 
 **metadata**: These are any extra parameters you'd like to associate with the Branch Universal Object. These will be made available to you after the user clicks the link and opens up the app. To add more keys/values, just use the method `addMetadataKey`.
-
-**type**: This is a label for the type of content present. Apple recommends that you use uniform type identifier as [described here](https://developer.apple.com/library/prerelease/ios/documentation/MobileCoreServices/Reference/UTTypeRef/index.html). Currently, this is only used for Spotlight indexing but will be used by Branch in the future.
 
 **contentIndexMode**: Can be set to the ENUM of either `ContentIndexModePublic` or `ContentIndexModePrivate`. Public indicates that you'd like this content to be discovered by other apps. Currently, this is only used for Spotlight indexing but will be used by Branch in the future.
 

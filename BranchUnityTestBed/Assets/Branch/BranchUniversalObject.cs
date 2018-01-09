@@ -21,14 +21,14 @@ public class BranchUniversalObject {
 	public string imageUrl;
 	
 	// Meta data provided for the content. This meta data is used as the link parameters for links created from this object
-	public Dictionary<String, String> metadata;
-	
-	// Mime type for the content referred
-	public string type;
+	public BranchContentMetadata metadata;
 	
 	// Content index mode: 0 - private mode, 1 - public mode
 	public int contentIndexMode;
-	
+
+	// Content index mode: 0 - private mode, 1 - public mode
+	public int localIndexMode;
+
 	// Any keyword associated with the content. Used for indexing
 	public List<String> keywords;
 	
@@ -37,46 +37,30 @@ public class BranchUniversalObject {
 
 
 	public BranchUniversalObject() {
-		canonicalIdentifier = "";
-		canonicalUrl = "";
-		title = "";
-		contentDescription = "";
-		imageUrl = "";
-		metadata = new Dictionary<string, string>();
-		type = "";
-		contentIndexMode = 0;
-		keywords = new List<string>();
-		expirationDate = null;
+		Init ();
 	}
 
 	public BranchUniversalObject(string json) {
-		canonicalIdentifier = "";
-		canonicalUrl = "";
-		title = "";
-		contentDescription = "";
-		imageUrl = "";
-		metadata = new Dictionary<string, string>();
-		type = "";
-		contentIndexMode = 0;
-		keywords = new List<string>();
-		expirationDate = null;
-
+		Init ();
 		loadFromJson(json);
 	}
 
 	public BranchUniversalObject(Dictionary<string, object> data) {
+		Init ();
+		loadFromDictionary(data);
+	}
+
+	private void Init() {
 		canonicalIdentifier = "";
 		canonicalUrl = "";
 		title = "";
 		contentDescription = "";
 		imageUrl = "";
-		metadata = new Dictionary<string, string>();
-		type = "";
+		metadata = new BranchContentMetadata ();
 		contentIndexMode = 0;
+		localIndexMode = 0;
 		keywords = new List<string>();
 		expirationDate = null;
-		
-		loadFromDictionary(data);
 	}
 
 	public void loadFromJson(string json) {
@@ -105,12 +89,14 @@ public class BranchUniversalObject {
 		if (data.ContainsKey("$og_image_url") && data["$og_image_url"] != null) {
 			imageUrl = data["$og_image_url"].ToString();
 		}
-		if (data.ContainsKey("$content_type") && data["$content_type"] != null) {
-			type = data["$content_type"].ToString();
-		}
 		if (data.ContainsKey("$publicly_indexable")) {
 			if (!string.IsNullOrEmpty(data["$publicly_indexable"].ToString())) {
 				contentIndexMode = Convert.ToInt32(data["$publicly_indexable"].ToString());
+			}
+		}
+		if (data.ContainsKey("$locally_indexable")) {
+			if (!string.IsNullOrEmpty(data["$locally_indexable"].ToString())) {
+				localIndexMode = Convert.ToInt32(data["$locally_indexable"].ToString());
 			}
 		}
 		if (data.ContainsKey("$exp_date")) {
@@ -134,11 +120,7 @@ public class BranchUniversalObject {
 				Dictionary<string, object> metaTemp = data["metadata"] as Dictionary<string, object>;
 
 				if (metaTemp != null) {
-					foreach(string key in metaTemp.Keys) {
-						if (metaTemp [key] != null) {
-							metadata.Add (key, metaTemp [key].ToString ());
-						}
-					}
+					metadata.loadFromDictionary (metaTemp);
 				}
 			}
 		}
@@ -152,11 +134,11 @@ public class BranchUniversalObject {
 		data.Add("$og_title", title);
 		data.Add("$og_description", contentDescription);
 		data.Add("$og_image_url", imageUrl);
-		data.Add("$content_type", type);
 		data.Add("$publicly_indexable", contentIndexMode.ToString());
+		data.Add("$locally_indexable", localIndexMode.ToString());
 		data.Add("$exp_date", expirationDate.HasValue ? (expirationDate.Value.Ticks / 10000).ToString() : "0"); // ticks to milliseconds
 		data.Add("$keywords", keywords);
-		data.Add("metadata", metadata);
+		data.Add("metadata", metadata.ToJsonString());
 
 		return BranchThirdParty_MiniJSON.Json.Serialize(data);
 	}
