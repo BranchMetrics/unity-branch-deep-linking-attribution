@@ -492,7 +492,7 @@ void _sendEvent(char *eventJson) {
         event.revenue = eventDict[@"revenue"];
     }
     if (eventDict[@"description"]) {
-        event.revenue = eventDict[@"description"];
+        event.eventDescription = eventDict[@"description"];
     }
     if (eventDict[@"shipping"]) {
         event.shipping = eventDict[@"shipping"];
