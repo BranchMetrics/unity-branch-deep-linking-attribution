@@ -1,5 +1,8 @@
 Branch Unity SDK change log
 
+- 0.4.2
+  * Fixing BranchiOSWrapper.mm
+
 - 0.4.1
   * Updating Branch to Android version 2.14.4 and iOS version 0.22.4
   * Updating BranchUniversalObject
