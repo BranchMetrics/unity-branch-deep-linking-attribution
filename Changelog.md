@@ -1,5 +1,8 @@
 Branch Unity SDK change log
 
+- 0.4.4
+  * deleting wrong comments
+  
 - 0.4.3
   * deleting unused permissions in android manifest
   

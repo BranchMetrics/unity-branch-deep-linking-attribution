@@ -401,8 +401,6 @@ public class BranchEditor : Editor {
 	public static void UpdatePermissions(XmlDocument doc) {
 		// we have to add the next permissions:
 		// <uses-permission android:name="android.permission.INTERNET" />
-		// <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-		// <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 		bool isInternetPermission = false;
 
