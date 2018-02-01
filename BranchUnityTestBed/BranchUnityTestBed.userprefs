@@ -1,12 +1,16 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Branch/BranchContentMetadata.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Branch/BranchAndroidWrapper.cs">
     <Files>
-      <File FileName="Assets/Branch/Branch.cs" Line="17" Column="2" />
+      <File FileName="Assets/Branch/BranchAndroidWrapper.cs" Line="251" Column="78" />
+      <File FileName="Assets/Branch/Branch.cs" Line="1" Column="1" />
+      <File FileName="Assets/Branch/BranchEvent.cs" Line="1" Column="1" />
+      <File FileName="Assets/Branch/BranchContentMetadata.cs" Line="1" Column="1" />
+      <File FileName="Assets/Branch/BranchData.cs" Line="1" Column="1" />
       <File FileName="Assets/Branch/Demo/Scripts/BranchDemo.cs" Line="1" Column="1" />
-      <File FileName="Assets/Branch/Editor/BranchPostProcessBuild.cs" Line="1" Column="1" />
-      <File FileName="Assets/Plugins/Android/AndroidManifest.xml" Line="24" Column="16" />
-      <File FileName="Assets/Branch/BranchContentMetadata.cs" Line="438" Column="38" />
+      <File FileName="Assets/Branch/BranchUniversalObject.cs" Line="1" Column="1" />
+      <File FileName="Assets/Branch/Editor/BranchEditor.cs" Line="1" Column="1" />
+      <File FileName="Assets/Plugins/Android/AndroidManifest.xml" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
