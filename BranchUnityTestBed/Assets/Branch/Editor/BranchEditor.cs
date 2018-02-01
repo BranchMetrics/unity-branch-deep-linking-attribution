@@ -405,8 +405,6 @@ public class BranchEditor : Editor {
 		// <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 		bool isInternetPermission = false;
-		bool isReadPhoneState = false;
-		bool isAccessNetworkState = false;
 
 		// finding permissions nodes
 		XmlElement rootElem = doc.DocumentElement;
@@ -417,12 +415,6 @@ public class BranchEditor : Editor {
 					if (attr.Value.Contains("android.permission.INTERNET")) {
 						isInternetPermission = true;
 					}
-					else if (attr.Value.Contains("android.permission.READ_PHONE_STATE")) {
-						isReadPhoneState = true;
-					}
-					else if (attr.Value.Contains("android.permission.ACCESS_NETWORK_STATE")) {
-						isAccessNetworkState = true;
-					}
 				}
 			}
 		}
@@ -432,18 +424,6 @@ public class BranchEditor : Editor {
 		if (!isInternetPermission) {
 			XmlElement elem = doc.CreateElement("uses-permission");
 			elem.SetAttribute("android____name", "android.permission.INTERNET");
-			rootElem.AppendChild(elem);
-		}
-
-		if (!isReadPhoneState) {
-			XmlElement elem = doc.CreateElement("uses-permission");
-			elem.SetAttribute("android____name", "android.permission.READ_PHONE_STATE");
-			rootElem.AppendChild(elem);
-		}
-
-		if (!isAccessNetworkState) {
-			XmlElement elem = doc.CreateElement("uses-permission");
-			elem.SetAttribute("android____name", "android.permission.ACCESS_NETWORK_STATE");
 			rootElem.AppendChild(elem);
 		}
 	}

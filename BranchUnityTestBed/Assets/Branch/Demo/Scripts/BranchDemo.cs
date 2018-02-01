@@ -31,10 +31,10 @@ public class BranchDemo : MonoBehaviour {
 		}
 
 		//init Branch with Dictionary
-//		Branch.initSession(CallbackWithParams);
+		Branch.initSession(CallbackWithParams);
 
 		//init Branch with BUO
-		Branch.initSession(CallbackWithBranchUniversalObject);
+//		Branch.initSession(CallbackWithBranchUniversalObject);
 	}
 
 	public void CallbackWithParams(Dictionary<string, object> parameters, string error) {
