@@ -1,5 +1,8 @@
 Branch Unity SDK change log
 
+- 0.4.5
+  * Updating Branch to Android version 2.15.0 and iOS version 0.22.5
+  
 - 0.4.4
   * deleting wrong comments
   
