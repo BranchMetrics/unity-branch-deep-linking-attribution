@@ -13,6 +13,7 @@ public class BranchDemo : MonoBehaviour {
 	public GameObject mainPanel;
 	public GameObject rewardsHistoryPanel;
 	public GameObject logPanel;
+    public GameObject quitButton;
 
 	private BranchUniversalObject universalObject = null;
 	private BranchLinkProperties linkProperties = null;
@@ -25,8 +26,13 @@ public class BranchDemo : MonoBehaviour {
 	}
 
 	void Start() {
-		// set debug if need
-		if (BranchData.Instance.simulateFreshInstalls) {
+
+        #if UNITY_IOS
+        quitButton.SetActive(false);
+        #endif
+
+        // set debug if need
+        if (BranchData.Instance.simulateFreshInstalls) {
 			Branch.setDebug();
 		}
 
@@ -319,4 +325,8 @@ public class BranchDemo : MonoBehaviour {
 	}
 
 	#endregion
+
+	public void OnBtn_Quit() {
+		Application.Quit ();
+	}
 }
