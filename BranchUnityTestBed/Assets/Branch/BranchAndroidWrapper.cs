@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using System;
 
 public class BranchAndroidWrapper {
-    #if UNITY_ANDROID
+#if UNITY_ANDROID
     
     public static void setBranchKey(String branchKey) {
 		_runBlockOnThread(() => {
@@ -18,7 +18,7 @@ public class BranchAndroidWrapper {
 		});
 	}
 
-    #region InitSession methods
+	#region InitSession methods
     
     public static void initSession() {
 		_runBlockOnThread(() => {
@@ -50,9 +50,9 @@ public class BranchAndroidWrapper {
 		});
 	}
     
-    #endregion
+	#endregion
     
-    #region Session Item methods
+	#region Session Item methods
     
 	public static string getFirstReferringBranchUniversalObject() {
 		return _getBranchClass().CallStatic<string>("getFirstReferringBranchUniversalObject");
@@ -94,9 +94,9 @@ public class BranchAndroidWrapper {
 		});
     }
     
-    #endregion
+	#endregion
     
-    #region Configuration methods
+	#region Configuration methods
 
     public static void setDebug() {
 		_runBlockOnThread(() => {
@@ -146,9 +146,15 @@ public class BranchAndroidWrapper {
 		});
 	}
 
+	public static void setTrackingDisabled(bool value) {
+	    _runBlockOnThread(() => {
+	    _getBranchClass().CallStatic("setTrackingDisabled", value);
+        });
+	}
+
 	#endregion
     
-    #region User Action methods
+	#region User Action methods
     
     public static void userCompletedAction(string action) {
 		_runBlockOnThread(() => {
@@ -168,9 +174,9 @@ public class BranchAndroidWrapper {
 		});
 	}
 
-    #endregion
+	#endregion
     
-    #region Credit methods
+	#region Credit methods
     
     public static void loadRewardsWithCallback(string callbackId) {
 		_runBlockOnThread(() => {
@@ -222,7 +228,7 @@ public class BranchAndroidWrapper {
 		});
     }
     
-    #endregion
+	#endregion
 
 	#region Share Link methods
 
@@ -232,9 +238,9 @@ public class BranchAndroidWrapper {
 		});
 	}
 
-    #endregion
+	#endregion
     
-    #region Short URL Generation methods
+	#region Short URL Generation methods
     
 	public static void getShortURLWithBranchUniversalObjectAndCallback(string universalObject, string linkProperties, string callbackId) {
 		_runBlockOnThread(() => {
@@ -242,9 +248,9 @@ public class BranchAndroidWrapper {
 		});
 	}
 
-    #endregion
+	#endregion
     
-    #region Utility methods
+	#region Utility methods
     
 	private static AndroidJavaClass _getBranchClass() {
 		if (_branchClass == null) {
@@ -261,9 +267,9 @@ public class BranchAndroidWrapper {
 		activity.Call("runOnUiThread", new AndroidJavaRunnable(runBlock));
 	}
     
-    #endregion
+	#endregion
     
     private static AndroidJavaClass _branchClass;
     
-    #endif
+#endif
 }

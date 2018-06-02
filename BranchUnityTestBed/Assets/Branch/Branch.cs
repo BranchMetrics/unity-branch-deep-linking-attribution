@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 public class Branch : MonoBehaviour {
 
-	public static string sdkVersion = "0.4.8";
+	public static string sdkVersion = "0.4.9";
 
     public delegate void BranchCallbackWithParams(Dictionary<string, object> parameters, string error);
     public delegate void BranchCallbackWithUrl(string url, string error);
@@ -264,6 +264,10 @@ public class Branch : MonoBehaviour {
 		}
 	}
 
+	public static void setTrackingDisabled(bool value) {
+		_setTrackingDisabled(value);
+	}
+
     #endregion
 
     #region User Action methods
@@ -459,9 +463,9 @@ public class Branch : MonoBehaviour {
 
 	#region Private methods
 
-    #region Platform Loading Methods
-    
-	#if (UNITY_IOS || UNITY_IPHONE) && !UNITY_EDITOR
+	#region Platform Loading Methods
+
+#if (UNITY_IOS || UNITY_IPHONE) && !UNITY_EDITOR
     
     [DllImport ("__Internal")]
     private static extern void _setBranchKey(string branchKey);
@@ -531,6 +535,9 @@ public class Branch : MonoBehaviour {
 	[DllImport ("__Internal")]
 	private static extern void _setRequestMetadata(string key, string val);
 
+	[DllImport ("__Internal")]
+	private static extern void _setTrackingDisabled(bool value);
+
     [DllImport ("__Internal")]
     private static extern void _userCompletedAction(string action);
     
@@ -573,7 +580,7 @@ public class Branch : MonoBehaviour {
 	[DllImport ("__Internal")]
 	private static extern void _shareLinkWithLinkProperties(string universalObject, string linkProperties, string message, string callbackId);
 	    
-	#elif UNITY_ANDROID && !UNITY_EDITOR
+#elif UNITY_ANDROID && !UNITY_EDITOR
 
     private static void _setBranchKey(string branchKey) {
         BranchAndroidWrapper.setBranchKey(branchKey);
@@ -667,6 +674,10 @@ public class Branch : MonoBehaviour {
 		BranchAndroidWrapper.setRequestMetadata(key, val);
 	}
 
+	private static void _setTrackingDisabled(bool value) {
+	    BranchAndroidWrapper.setTrackingDisabled(value);
+    }
+
     private static void _userCompletedAction(string action) {
         BranchAndroidWrapper.userCompletedAction(action);
     }
@@ -723,9 +734,9 @@ public class Branch : MonoBehaviour {
 		BranchAndroidWrapper.getShortURLWithBranchUniversalObjectAndCallback(universalObject, linkProperties, callbackId);
 	}
 
-    #else
+#else
 
-    private static void _setBranchKey(string branchKey) { }
+	private static void _setBranchKey(string branchKey) { }
     
 	private static void _getAutoInstance() { }
 
@@ -790,6 +801,8 @@ public class Branch : MonoBehaviour {
 	private static void _accountForFacebookSDKPreventingAppLaunch() { }
 
 	private static void _setRequestMetadata(string key, string val) { }
+
+	private static void _setTrackingDisabled(bool value) { }
     
     private static void _userCompletedAction(string action) { }
     

@@ -269,6 +269,10 @@ public class BranchUnityWrapper {
 
     }
 
+    public static void setTrackingDisabled(boolean value) {
+        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).disableTracking(value);
+    }
+
     /**
      * User Action methods
      */

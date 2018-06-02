@@ -48,6 +48,7 @@ extern "C" {
     void _listOnSpotlight(char *universalObjectJson);
     void _accountForFacebookSDKPreventingAppLaunch();
     void _setRequestMetadata(char *key, char *value);
+    void _setTrackingDisabled(BOOL value);
     
     #pragma mark - User Action methods
 

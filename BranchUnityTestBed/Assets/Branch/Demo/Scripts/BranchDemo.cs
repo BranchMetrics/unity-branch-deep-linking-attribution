@@ -36,6 +36,9 @@ public class BranchDemo : MonoBehaviour {
 			Branch.setDebug();
 		}
 
+		// disable tracking of analytics for the user
+		Branch.setTrackingDisabled(false);
+
 		//init Branch with Dictionary
 //		Branch.initSession(CallbackWithParams);
 
