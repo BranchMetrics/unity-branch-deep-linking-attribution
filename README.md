@@ -354,7 +354,8 @@ Branch.userCompletedAction("your_custom_event", stateItems); // same 63 characte
 
 Use BranchEvent class to track special user actions or application specific events beyond app installs, opens, and sharing. You can track events such as when a user adds an item to an on-line shopping cart, or searches for a keyword etc. BranchEvent provides an interface to add content(s) represented by a BranchUniversalObject in order to associate content(s) with events. You can view analytics for the BranchEvents you fire on the Branch dashboard.  *BranchEventType* enumerate the most commonly tracked events and event parameters that can be used with BranchEvent for the best results. You can always use custom event names and event parameters.
 
-```csharp
+
+```
 BranchEvent e01 = new BranchEvent (BranchEventType.COMPLETE_REGISTRATION);
 
 e01.SetAffiliation("my_affilation");
@@ -384,7 +385,19 @@ e02.SetSearchQuery("my_search_query");
 e02.AddCustomData("custom_data_key01", "custom_data_value01");
 e02.AddContentItem(universalObject);
 
-Branch.sendEvent (e02);```
+Branch.sendEvent (e02);
+```
+
+
+### DisableEnable of tracking of analytics for the user
+
+If you need to comply with a user's request to not be tracked, utilize this field to prevent Branch from sending network requests. By calling the below function, this will persist at the SDK level.
+
+You can choose to call this throughout the lifecycle of the app. Once called, network requests will not be sent from the SDKs. Link generation will continue to work, but will not contain identifying information about the user. In addition, deep linking will continue to work, but will not track analytics for the user.
+
+```
+Branch.setTrackingDisabled(false);
+```
 
 
 ## Branch Universal Object (for deep links, content analytics and indexing)
@@ -682,15 +695,13 @@ We need to have our own AppController to catch Universal Links.
 IMPL_APP_CONTROLLER_SUBCLASS(BranchAppController)
 ```
 
-But some plugins use the same way to expand default AppController, for example:
+But some plugins use the same way to expand default AppController.
 
-- Cardboard SDK plugin
-
-##### Solving
+##### Cardboard SDK
 In case when several plugins have custom AppController and expand default AppController through IMPL_APP_CONTROLLER_SUBCLASS you need to do the next:
 
 1. Merge all custom AppControllers in one.
 2. Comment code in other AppControllers (or delete other AppControllers).
 
-
-
+##### GoogleVR SDK
+Do the same described above with GvrAudioAppController.

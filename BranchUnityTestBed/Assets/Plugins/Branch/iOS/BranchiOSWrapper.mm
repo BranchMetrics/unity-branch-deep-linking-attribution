@@ -446,6 +446,10 @@ void _setRequestMetadata(char *key, char *value) {
     [[Branch getInstance:_branchKey] setRequestMetadataKey:CreateNSString(key) value:CreateNSString(value)];
 }
 
+void _setTrackingDisabled(BOOL value) {
+    [Branch setTrackingDisabled:value];
+}
+
 #pragma mark - User Action methods
 
 void _userCompletedAction(char *action) {
