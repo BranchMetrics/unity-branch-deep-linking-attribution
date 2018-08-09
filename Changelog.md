@@ -1,5 +1,9 @@
 Branch Unity SDK change log
 
+- 0.4.10
+  * Updating Branch to Android version 2.19.0 and iOS version 0.25.2
+  * Fixes for Unity 2018
+
 - 0.4.9
   * Updating Branch to Android version 2.18.1
   * Adding method for disable/enable of tracking of analytics for the user

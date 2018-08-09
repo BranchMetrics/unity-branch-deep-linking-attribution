@@ -165,6 +165,9 @@ public class BranchEditor : Editor {
 		XmlNode appNode = null;
 		XmlNode unityActivityNode = null;
 
+        // change package name
+        rootElem.SetAttribute("package", Application.identifier);
+
 		// finding node named "application"
 		foreach(XmlNode node in rootElem.ChildNodes) {
 			if (node.Name == "application") {
