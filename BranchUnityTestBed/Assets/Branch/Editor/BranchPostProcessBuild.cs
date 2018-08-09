@@ -130,7 +130,7 @@ public class BranchPostProcessBuild {
 
 		string target = proj.TargetGuidByName("Unity-iPhone");
 
-		#if UNITY_2017
+		#if UNITY_2017_1_OR_NEWER
 
 		if (!proj.ContainsFramework(target, "AdSupport.framework")) {
 			proj.AddFrameworkToProject(target, "AdSupport.framework", false);
