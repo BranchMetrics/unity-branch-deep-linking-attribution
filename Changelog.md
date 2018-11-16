@@ -1,5 +1,10 @@
 Branch Unity SDK change log
 
+- 0.5.1
+  * Updating Branch to Android version 3.0.1 and iOS version 0.25.8
+  * Changing the api.branch.io endpoint to api2.branch.io
+  * Android Min SDK version is now 16.
+
 - 0.4.12
   * Updating Branch to Android version 2.19.5 and iOS version 0.25.6
 
