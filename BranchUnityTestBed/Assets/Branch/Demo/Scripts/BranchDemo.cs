@@ -39,8 +39,11 @@ public class BranchDemo : MonoBehaviour {
 		// disable tracking of analytics for the user
 		Branch.setTrackingDisabled(false);
 
-		//init Branch with Dictionary
-//		Branch.initSession(CallbackWithParams);
+        //init Branch with Dictionary
+        //Branch.initSession(CallbackWithParams);
+
+        //Branch.setAppleSearchAdsDebugMode();
+        //Branch.delayInitToCheckForSearchAds();
 
 		//init Branch with BUO
 		Branch.initSession(CallbackWithBranchUniversalObject);

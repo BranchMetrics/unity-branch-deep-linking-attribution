@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 public class Branch : MonoBehaviour {
 
-	public static string sdkVersion = "0.5.1";
+	public static string sdkVersion = "0.5.2";
 
     public delegate void BranchCallbackWithParams(Dictionary<string, object> parameters, string error);
     public delegate void BranchCallbackWithUrl(string url, string error);
@@ -268,6 +268,14 @@ public class Branch : MonoBehaviour {
 		_setTrackingDisabled(value);
 	}
 
+    public static void delayInitToCheckForSearchAds() {
+        _delayInitToCheckForSearchAds();
+    }
+
+    public static void setAppleSearchAdsDebugMode() {
+        _setAppleSearchAdsDebugMode();
+    }
+
     #endregion
 
     #region User Action methods
@@ -459,11 +467,11 @@ public class Branch : MonoBehaviour {
 		}
 	}
 
-	#endregion
+    #endregion
 
-	#region Private methods
+    #region Private methods
 
-	#region Platform Loading Methods
+    #region Platform Loading Methods
 
 #if (UNITY_IOS || UNITY_IPHONE) && !UNITY_EDITOR
     
@@ -537,6 +545,12 @@ public class Branch : MonoBehaviour {
 
 	[DllImport ("__Internal")]
 	private static extern void _setTrackingDisabled(bool value);
+
+    [DllImport ("__Internal")]
+    private static extern void _delayInitToCheckForSearchAds();
+
+    [DllImport ("__Internal")]
+    private static extern void _setAppleSearchAdsDebugMode();
 
     [DllImport ("__Internal")]
     private static extern void _userCompletedAction(string action);
@@ -678,6 +692,10 @@ public class Branch : MonoBehaviour {
 	    BranchAndroidWrapper.setTrackingDisabled(value);
     }
 
+    private static void _delayInitToCheckForSearchAds() {}
+
+    private static void _setAppleSearchAdsDebugMode() {}
+
     private static void _userCompletedAction(string action) {
         BranchAndroidWrapper.userCompletedAction(action);
     }
@@ -736,7 +754,7 @@ public class Branch : MonoBehaviour {
 
 #else
 
-	private static void _setBranchKey(string branchKey) { }
+    private static void _setBranchKey(string branchKey) { }
     
 	private static void _getAutoInstance() { }
 
@@ -803,7 +821,11 @@ public class Branch : MonoBehaviour {
 	private static void _setRequestMetadata(string key, string val) { }
 
 	private static void _setTrackingDisabled(bool value) { }
-    
+
+    private static void _delayInitToCheckForSearchAds() { }
+
+    private static void _setAppleSearchAdsDebugMode() { }
+
     private static void _userCompletedAction(string action) { }
     
     private static void _userCompletedActionWithState(string action, string stateDict) { }
