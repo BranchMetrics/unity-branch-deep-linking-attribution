@@ -1,4 +1,4 @@
-#include "BranchiOSWrapper.h"
+﻿#include "BranchiOSWrapper.h"
 #include "Branch.h"
 #include "BranchConstants.h"
 #include "BranchUniversalObject.h"
@@ -448,6 +448,14 @@ void _setRequestMetadata(char *key, char *value) {
 
 void _setTrackingDisabled(BOOL value) {
     [Branch setTrackingDisabled:value];
+}
+
+void _delayInitToCheckForSearchAds() {
+    [[Branch getInstance:_branchKey] delayInitToCheckForSearchAds];
+}
+
+void _setAppleSearchAdsDebugMode() {
+    [[Branch getInstance:_branchKey] setAppleSearchAdsDebugMode];
 }
 
 #pragma mark - User Action methods
