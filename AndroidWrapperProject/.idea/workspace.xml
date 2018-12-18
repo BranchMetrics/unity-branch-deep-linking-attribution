@@ -5,36 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6397db50-337f-4297-ad99-8be72064134a" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/../AndroidThirdParty/.idea/misc.xml" afterPath="$PROJECT_DIR$/../AndroidThirdParty/.idea/misc.xml" />
       <change beforePath="$PROJECT_DIR$/../AndroidThirdParty/app/build.gradle" afterPath="$PROJECT_DIR$/../AndroidThirdParty/app/build.gradle" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
       <change beforePath="$PROJECT_DIR$/app/build.gradle" afterPath="$PROJECT_DIR$/app/build.gradle" />
-      <change beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Branch/Branch.cs" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Branch/Branch.cs" />
-      <change beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Branch/Resources/BranchData.asset" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Branch/Resources/BranchData.asset" />
-      <change beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/BNCCommerceEvent.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/BNCCommerceEvent.h" />
-      <change beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/BNCCommerceEvent.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/BNCCommerceEvent.m" />
-      <change beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/BNCConfig.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/BNCConfig.m" />
-      <change beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/BNCLinkData.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/BNCLinkData.h" />
-      <change beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/BNCLinkData.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/BNCLinkData.m" />
-      <change beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/BNCStrongMatchHelper.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/BNCStrongMatchHelper.h" />
-      <change beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/BNCStrongMatchHelper.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/BNCStrongMatchHelper.m" />
-      <change beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/Branch+Validator.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/Branch+Validator.m" />
-      <change beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/Branch.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/Branch.h" />
-      <change beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/Branch.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/Branch.m" />
-      <change beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/BranchEvent.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/BranchEvent.h" />
-      <change beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/BranchEvent.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/BranchEvent.m" />
-      <change beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/Networking/BNCServerInterface.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/Networking/BNCServerInterface.m" />
-      <change beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/Networking/BNCServerRequest.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/Networking/BNCServerRequest.h" />
-      <change beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/Networking/BNCServerRequest.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/Networking/BNCServerRequest.m" />
-      <change beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/Networking/BNCServerRequestQueue.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/Networking/BNCServerRequestQueue.m" />
-      <change beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/Networking/Requests/BranchCreditHistoryRequest.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/Networking/Requests/BranchCreditHistoryRequest.m" />
-      <change beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/Networking/Requests/BranchRedeemRewardsRequest.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/Networking/Requests/BranchRedeemRewardsRequest.m" />
-      <change beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/Networking/Requests/BranchRegisterViewRequest.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/Networking/Requests/BranchRegisterViewRequest.m" />
-      <change beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/Networking/Requests/BranchSetIdentityRequest.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/Networking/Requests/BranchSetIdentityRequest.m" />
-      <change beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/Networking/Requests/BranchShortUrlRequest.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/Networking/Requests/BranchShortUrlRequest.m" />
-      <change beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/Networking/Requests/BranchUserCompletedActionRequest.h" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/Networking/Requests/BranchUserCompletedActionRequest.h" />
-      <change beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/Networking/Requests/BranchUserCompletedActionRequest.m" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/Branch-SDK/Branch-SDK/Networking/Requests/BranchUserCompletedActionRequest.m" />
-      <change beforePath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/BranchiOSWrapper.mm" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/Assets/Plugins/Branch/iOS/BranchiOSWrapper.mm" />
       <change beforePath="$PROJECT_DIR$/../BranchUnityTestBed/ProjectSettings/GraphicsSettings.asset" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/ProjectSettings/GraphicsSettings.asset" />
       <change beforePath="$PROJECT_DIR$/../BranchUnityTestBed/ProjectSettings/ProjectSettings.asset" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/ProjectSettings/ProjectSettings.asset" />
       <change beforePath="$PROJECT_DIR$/../BranchUnityTestBed/ProjectSettings/ProjectVersion.txt" afterPath="$PROJECT_DIR$/../BranchUnityTestBed/ProjectSettings/ProjectVersion.txt" />
@@ -70,7 +46,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="false">
+      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="450">
@@ -80,11 +56,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BranchUnityWrapper.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="BranchUnityWrapper.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/io/branch/unity/BranchUnityWrapper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="169">
-              <caret line="507" column="0" lean-forward="true" selection-start-line="507" selection-start-column="0" selection-end-line="507" selection-end-column="0" />
+            <state relative-caret-position="15">
+              <caret line="48" column="0" lean-forward="false" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -113,7 +89,7 @@
       <file leaf-file-name="Branch.java" pinned="false" current-in-tab="false">
         <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.branch.sdk.android/library/2.19.0/863f241a968b36a2467ec42b6afac0dc653a6871/library-2.19.0-sources.jar!/io/branch/referral/Branch.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6930">
+            <state relative-caret-position="15">
               <caret line="524" column="23" lean-forward="false" selection-start-line="524" selection-start-column="23" selection-end-line="524" selection-end-column="23" />
               <folding />
             </state>
@@ -564,9 +540,9 @@
                 <option name="name" value="processDebugAndroidTestResources" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare io.branch.sdk.android:library:3.0.1" />
+                <option name="description" value="Prepare io.branch.sdk.android:library:3.0.3" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
-                <option name="name" value="prepareIoBranchSdkAndroidLibrary301Library" />
+                <option name="name" value="prepareIoBranchSdkAndroidLibrary303Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Extracts Android annotations for the release variant into the archive file" />
@@ -1243,9 +1219,9 @@
                 <option name="name" value="processDebugAndroidTestResources" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
-                <option name="description" value="Prepare io.branch.sdk.android:library:3.0.1" />
+                <option name="description" value="Prepare io.branch.sdk.android:library:3.0.3" />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
-                <option name="name" value="prepareIoBranchSdkAndroidLibrary301Library" />
+                <option name="name" value="prepareIoBranchSdkAndroidLibrary303Library" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Extracts Android annotations for the release variant into the archive file" />
@@ -2005,10 +1981,10 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="ProjectPane" />
       <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="ProjectPane" />
       <pane id="AndroidView">
         <subPane>
           <expand>
@@ -2307,7 +2283,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1400" height="877" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="Android Profiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -2324,7 +2299,7 @@
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2496318" sideWeight="0.565046" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Build" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27799737" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Build" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27799737" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Device File Explorer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
@@ -2555,13 +2530,13 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider editor-type-id="android-manifest">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
           <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
         </state>
-      </provider>
-      <provider editor-type-id="android-manifest">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../../android-branch-deep-linking/build.gradle">
@@ -2690,18 +2665,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+    <entry file="file://$PROJECT_DIR$/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="30" column="0" lean-forward="false" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+        <state relative-caret-position="285">
+          <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/io/branch/unity/BranchUnityActivity.java">
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.branch.sdk.android/library/2.19.0/863f241a968b36a2467ec42b6afac0dc653a6871/library-2.19.0-sources.jar!/io/branch/referral/Branch.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+        <state relative-caret-position="15">
+          <caret line="524" column="23" lean-forward="false" selection-start-line="524" selection-start-column="23" selection-end-line="524" selection-end-column="23" />
           <folding />
         </state>
       </provider>
@@ -2714,26 +2689,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.branch.sdk.android/library/2.19.0/863f241a968b36a2467ec42b6afac0dc653a6871/library-2.19.0-sources.jar!/io/branch/referral/Branch.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/io/branch/unity/BranchUnityActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6930">
-          <caret line="524" column="23" lean-forward="false" selection-start-line="524" selection-start-column="23" selection-end-line="524" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+        <state relative-caret-position="225">
+          <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/io/branch/unity/BranchUnityWrapper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="169">
-          <caret line="507" column="0" lean-forward="true" selection-start-line="507" selection-start-column="0" selection-end-line="507" selection-end-column="0" />
+        <state relative-caret-position="15">
+          <caret line="48" column="0" lean-forward="false" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="30" column="0" lean-forward="false" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
           <folding />
         </state>
       </provider>
