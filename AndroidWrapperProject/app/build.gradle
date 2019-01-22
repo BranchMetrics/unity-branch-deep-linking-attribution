@@ -12,6 +12,7 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
+//        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -22,6 +23,7 @@ android {
 }
 
 dependencies {
+//    compile 'com.android.support:multidex:1.0.1'
     compile 'io.branch.sdk.android:library:3.0.3'
 //    Comment out the line above, uncomment the line below to use local Branch and update the settings.gradle file as well.
 //    compile project(':Branch-SDK')
