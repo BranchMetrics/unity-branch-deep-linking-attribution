@@ -215,7 +215,9 @@ public class BranchDemo : MonoBehaviour {
         e.SetSearchQuery("my_search_query");
         e.AddCustomData("custom_data_key01", "custom_data_value01");
         e.AddCustomData("custom_data_key02", "custom_data_value02");
-        e.AddContentItem(universalObject);
+
+        if (universalObject != null)
+            e.AddContentItem(universalObject);
 
         Branch.sendEvent(e);
 
@@ -273,8 +275,14 @@ public class BranchDemo : MonoBehaviour {
 
 				if (error != null) {
 					Debug.LogError("Branch.shareLink failed: " + error);
-				} else if (parameters != null) {
-					Debug.Log("Branch.shareLink: " + parameters["sharedLink"].ToString() + " " + parameters["sharedChannel"].ToString());
+				} else {
+                    Debug.Log("Branch.shareLink success: ");
+
+                    if (parameters != null) {
+                        foreach (string key in parameters.Keys) {
+                            Debug.Log(key + "=" + parameters[key].ToString());
+                        }
+                    }
 				}
 			});
 		} catch(Exception e) {

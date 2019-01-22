@@ -85,10 +85,10 @@ public class BranchPostProcessBuild {
 		}
 
 		// add new URI
-		if (BranchData.Instance.testMode) {
+		if (BranchData.Instance.testMode && !string.IsNullOrEmpty(BranchData.Instance.testBranchUri) ) {
 			urlSchemesArray.AddString(BranchData.Instance.testBranchUri);
 		}
-		else {
+		else if (!BranchData.Instance.testMode && !string.IsNullOrEmpty(BranchData.Instance.liveBranchUri)) {
 			urlSchemesArray.AddString(BranchData.Instance.liveBranchUri);
 		}
 
@@ -113,16 +113,22 @@ public class BranchPostProcessBuild {
 		// Write all lines to new file and enable objective C exceptions
 		foreach (string line in lines) {
 			
-			if (line.Contains("GCC_ENABLE_OBJC_EXCEPTIONS") ) {
-				fCurrentXcodeProjFile.Write("\t\t\t\tGCC_ENABLE_OBJC_EXCEPTIONS = YES;\n");
+			if (line.Contains("GCC_ENABLE_OBJC_EXCEPTIONS")) {
+                fCurrentXcodeProjFile.Write("\t\t\t\tGCC_ENABLE_OBJC_EXCEPTIONS = YES;\n");
+            }
+            else if (line.Contains("GCC_ENABLE_CPP_EXCEPTIONS")) {
+                fCurrentXcodeProjFile.Write("\t\t\t\tGCC_ENABLE_CPP_EXCEPTIONS = YES;\n");
+            }
+            else if (line.Contains("CLANG_ENABLE_MODULES")) {
+				fCurrentXcodeProjFile.Write("\t\t\t\tCLANG_ENABLE_MODULES = YES;\n");
 			}
 			else {                          
 				fCurrentXcodeProjFile.WriteLine(line);
 			}
 		}
 
-		// Close file
-		fCurrentXcodeProjFile.Close();
+        // Close file
+        fCurrentXcodeProjFile.Close();
 
 		// Add frameworks
 		PBXProject proj = new PBXProject();

@@ -66,6 +66,10 @@ To allow Branch to configure itself, you must add a BranchPrefab asset to your f
 
 ![Branch Unity Config](https://raw.githubusercontent.com/BranchMetrics/Unity-Deferred-Deep-Linking-SDK/master/Docs/Screenshots/branch-key.png)
 
+#### If you want just send events without tracking
+If you don't need tracking and you want just send events, you need to set only  `Branch Key` and then press buttons  `Update iOS Wrapper` and `Update Android Manifest`.
+
+
 #### Overriding OnNewIntent for Android
 
 The Branch SDK contains an custom activity that is extended from UnityPlayerActivity. This is required in order to fix Android's OnNewIntent() to allow the app retrieves right link when app is in background.
@@ -697,11 +701,21 @@ IMPL_APP_CONTROLLER_SUBCLASS(BranchAppController)
 
 But some plugins use the same way to expand default AppController.
 
-##### Cardboard SDK
+### Cardboard SDK
 In case when several plugins have custom AppController and expand default AppController through IMPL_APP_CONTROLLER_SUBCLASS you need to do the next:
 
 1. Merge all custom AppControllers in one.
 2. Comment code in other AppControllers (or delete other AppControllers).
 
-##### GoogleVR SDK
+### GoogleVR SDK
 Do the same described above with GvrAudioAppController.
+
+### Android MultiDex support
+In folder Plugins/Branch/Android you can find 'gradleMultiDexTemplate.gradle'.
+
+In folder Plugins/Branch/Android/libs you can find archive with library which support multidex 'BranchAndroidWrapper_mdex.jar.zip'.
+
+1. Delete 'BranchAndroidWrapper.jar'
+2. Unarchive 'BranchAndroidWrapper_mdex.jar.zip'
+3. In project settings select "custom gradle template"
+4. Change your gradle file in accordance with example from archive

@@ -1,5 +1,11 @@
 Branch Unity SDK change log
 
+- 0.5.4
+  * Updating Branch to iOS version 0.25.11
+  * Fixing several issues
+  * Adding possibility to omit URI Scheme, Android Prefix, App link domains
+  * Adding MultiDex support solution
+
 - 0.5.3
   * Updating Branch to Android version 3.0.3 and iOS version 0.25.10
 
