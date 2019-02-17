@@ -1,5 +1,9 @@
 Branch Unity SDK change log
 
+- 0.5.5
+  * Fixing #144 Branch.shareLink callback is not always called on Android
+  * Disabling proguard for BranchAndroidWrapper.jar
+
 - 0.5.4
   * Updating Branch to iOS version 0.25.11
   * Fixing several issues

@@ -667,7 +667,18 @@ public class BranchUnityWrapper {
 
         @Override
         public void onShareLinkDialogDismissed() {
+            try {
+                if (!_linkShared) {
+                    JSONObject params = new JSONObject();
+                    params.put("sharedLink", "");
+                    params.put("sharedChannel", "");
 
+                    _sendMessageWithWithBranchError("_asyncCallbackWithParams", null, "params", params);
+                }
+            }
+            catch (JSONException jsone) {
+                jsone.printStackTrace();
+            }
         }
 
         @Override
@@ -678,6 +689,7 @@ public class BranchUnityWrapper {
                 params.put("sharedChannel", sharedChannel);
 
                 _sendMessageWithWithBranchError("_asyncCallbackWithParams", branchError, "params", params);
+                _linkShared = true;
             }
             catch (JSONException jsone) {
                 jsone.printStackTrace();
@@ -687,6 +699,7 @@ public class BranchUnityWrapper {
         @Override
         public void onChannelSelected(java.lang.String selectedChannel) {
             _sendMessageWithWithBranchError("_asyncCallbackWithParams", null, "selectedChannel", selectedChannel);
+            _linkShared = true;
         }
 
         private void _sendMessageWithWithBranchError(String asyncCallbackMethod, BranchError branchError, String extraKey, Object extraValue) {
@@ -706,6 +719,7 @@ public class BranchUnityWrapper {
         }
 
         private String _callbackId;
+        private Boolean _linkShared = false;
     }
 
     private static class BranchUniversalReferralInitListenerUnityCallback implements Branch.BranchUniversalReferralInitListener, Branch.BranchReferralStateChangedListener, Branch.BranchListResponseListener, Branch.BranchLinkCreateListener, Branch.BranchLinkShareListener {
@@ -749,7 +763,18 @@ public class BranchUnityWrapper {
 
         @Override
         public void onShareLinkDialogDismissed() {
+            try {
+                if (!_linkShared) {
+                    JSONObject params = new JSONObject();
+                    params.put("sharedLink", "");
+                    params.put("sharedChannel", "");
 
+                    _sendMessageWithWithBranchError("_asyncCallbackWithParams", null, "params", params);
+                }
+            }
+            catch (JSONException jsone) {
+                jsone.printStackTrace();
+            }
         }
 
         @Override
@@ -760,6 +785,7 @@ public class BranchUnityWrapper {
                 params.put("sharedChannel", sharedChannel);
 
                 _sendMessageWithWithBranchError("_asyncCallbackWithParams", branchError, "params", params);
+                _linkShared = true;
             }
             catch (JSONException jsone) {
                 jsone.printStackTrace();
@@ -769,6 +795,7 @@ public class BranchUnityWrapper {
         @Override
         public void onChannelSelected(java.lang.String selectedChannel) {
             _sendMessageWithWithBranchError("_asyncCallbackWithParams", null, "selectedChannel", selectedChannel);
+            _linkShared = true;
         }
 
         private void _sendMessageWithWithBranchError(String asyncCallbackMethod, BranchError branchError, String extraKey, Object extraValue) {
@@ -788,5 +815,6 @@ public class BranchUnityWrapper {
         }
 
         private String _callbackId;
+        private Boolean _linkShared = false;
     }
 }
