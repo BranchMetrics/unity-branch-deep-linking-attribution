@@ -1,5 +1,8 @@
 Branch Unity SDK change log
 
+- 0.5.6
+  * Ading default expiration date to avoid issues with events on ios
+
 - 0.5.5
   * Fixing #144 Branch.shareLink callback is not always called on Android
   * Disabling proguard for BranchAndroidWrapper.jar
