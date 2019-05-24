@@ -1,5 +1,8 @@
 Branch Unity SDK change log
 
+- 0.5.7
+  * Updating Branch to Android version 3.2.0 and iOS version 0.27.0
+
 - 0.5.6
   * Ading default expiration date to avoid issues with events on ios
 
