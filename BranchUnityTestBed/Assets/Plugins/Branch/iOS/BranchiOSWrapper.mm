@@ -1,11 +1,11 @@
-﻿#include "BranchiOSWrapper.h"
+#include "BranchiOSWrapper.h"
 #include "Branch.h"
 #include "BranchConstants.h"
 #include "BranchUniversalObject.h"
 #import "UnityAppController.h"
 
 
-static NSString *_branchKey = @"";
+static NSString *_branchKey = @"key_live_mglVaBqjIsSpREdbUa6DLahhABarUg0a";
 static BranchUnityWrapper *_wrapper = [BranchUnityWrapper sharedInstance];
 
 
