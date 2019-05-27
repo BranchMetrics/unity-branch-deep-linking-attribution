@@ -20,7 +20,6 @@ public class BranchPostProcessBuild {
 			ChangeXcodeProject(pathToBuiltProject);
             		ChangeEntitlements(pathToBuiltProject);
         	}
-
 	}
 
 	public static void ChangeXcodePlist(string pathToBuiltProject) {
