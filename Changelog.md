@@ -1,5 +1,8 @@
 Branch Unity SDK change log
 
+- 0.5.8
+  * Add domain entitlements to XCode project
+
 - 0.5.7
   * Updating Branch to Android version 3.2.0 and iOS version 0.27.0
 
