@@ -18,8 +18,8 @@ public class BranchPostProcessBuild {
 		if ( buildTarget == BuildTarget.iOS ) {
 			ChangeXcodePlist(pathToBuiltProject);
 			ChangeXcodeProject(pathToBuiltProject);
-		}
-
+            		ChangeEntitlements(pathToBuiltProject);
+        	}
 	}
 
 	public static void ChangeXcodePlist(string pathToBuiltProject) {
@@ -96,7 +96,42 @@ public class BranchPostProcessBuild {
 		File.WriteAllText(plistPath, plist.WriteToString());
 	}
 
-	public static void ChangeXcodeProject(string pathToBuiltProject) {
+    public static void ChangeEntitlements(string pathToBuiltProject)
+    {
+        //This is the default path to the default pbxproj file. Yours might be different
+        string projectPath = pathToBuiltProject + "/Unity-iPhone.xcodeproj/project.pbxproj";
+        //Default target name. Yours might be different
+        string targetName = "Unity-iPhone";
+        //Set the entitlements file name to what you want but make sure it has this extension
+        string entitlementsFileName = "branch_domains.entitlements";
+
+        var entitlements = new ProjectCapabilityManager(projectPath, entitlementsFileName, targetName);
+
+        entitlements.AddAssociatedDomains(BuildEntitlements());
+        //Apply
+        entitlements.WriteToFile();
+    }
+
+    private static string[] BuildEntitlements()
+    {
+        var links = BranchData.Instance.liveAppLinks;
+        if(BranchData.Instance.testMode)
+            links = BranchData.Instance.testAppLinks;
+
+        if (links == null)
+            return null;
+
+        string[] domains = new string[links.Length];
+        for (int i = 0; i < links.Length; i++)
+        {
+            domains[i] = "applinks:" + links[i];
+        }
+
+        return domains;
+       
+    }
+
+    public static void ChangeXcodeProject(string pathToBuiltProject) {
 		// Get xcodeproj
 		string pathToProject = pathToBuiltProject + "/Unity-iPhone.xcodeproj/project.pbxproj";
 		string[] lines = File.ReadAllLines(pathToProject);
