@@ -25,7 +25,7 @@ android {
 
 dependencies {
 //    compile 'com.android.support:multidex:1.0.3'
-    compile 'io.branch.sdk.android:library:3.2.0'
+    compile 'io.branch.sdk.android:library:4.0.0'
 //    Comment out the line above, uncomment the line below to use local Branch and update the settings.gradle file as well.
 //    compile project(':Branch-SDK')
 
