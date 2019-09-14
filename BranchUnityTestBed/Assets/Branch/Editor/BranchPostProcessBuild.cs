@@ -189,7 +189,11 @@ public class BranchPostProcessBuild {
 			proj.AddFrameworkToProject(target, "Security.framework", false);
 		}
 
-		#else
+        if (!proj.ContainsFramework(target, "WebKit.framework")) {
+            proj.AddFrameworkToProject(target, "WebKit.framework", false);
+        }
+
+#else
 
 		if (!proj.HasFramework("AdSupport.framework")) {
 			proj.AddFrameworkToProject(target, "AdSupport.framework", false);
@@ -207,9 +211,9 @@ public class BranchPostProcessBuild {
 			proj.AddFrameworkToProject(target, "Security.framework", false);
 		}
 
-		#endif
+#endif
 
-		File.WriteAllText(pathToProject, proj.WriteToString());
+        File.WriteAllText(pathToProject, proj.WriteToString());
 	}
 }
 #endif

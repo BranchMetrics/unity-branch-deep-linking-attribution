@@ -164,6 +164,7 @@ public class BranchDemo : MonoBehaviour {
 	public void OnBtn_SendBuyEvent() {
         BranchEvent e = new BranchEvent (BranchEventType.PURCHASE);
 
+        e.SetAlias("my_alias");
         e.SetAffiliation("my_affilation");
         e.SetCoupon("my_coupon");
         e.SetCurrency(BranchCurrencyType.USD);
@@ -205,6 +206,7 @@ public class BranchDemo : MonoBehaviour {
 	public void OnBtn_SendComplexEvent() {
         BranchEvent e = new BranchEvent("MY_COMPLEX_EVENT");
 
+        e.SetAlias("my_alias");
         e.SetAffiliation("my_affilation");
         e.SetCoupon("my_coupon");
         e.SetCurrency(BranchCurrencyType.USD);

@@ -50,7 +50,6 @@ extern "C" {
     void _setRequestMetadata(char *key, char *value);
     void _setTrackingDisabled(BOOL value);
     void _delayInitToCheckForSearchAds();
-    void _setAppleSearchAdsDebugMode();
     
     #pragma mark - User Action methods
 
