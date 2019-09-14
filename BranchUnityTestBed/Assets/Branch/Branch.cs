@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 public class Branch : MonoBehaviour {
 
-	public static string sdkVersion = "0.5.9";
+	public static string sdkVersion = "0.5.10";
 
     public delegate void BranchCallbackWithParams(Dictionary<string, object> parameters, string error);
     public delegate void BranchCallbackWithUrl(string url, string error);
@@ -270,10 +270,6 @@ public class Branch : MonoBehaviour {
 
     public static void delayInitToCheckForSearchAds() {
         _delayInitToCheckForSearchAds();
-    }
-
-    public static void setAppleSearchAdsDebugMode() {
-        _setAppleSearchAdsDebugMode();
     }
 
     #endregion
@@ -550,9 +546,6 @@ public class Branch : MonoBehaviour {
     private static extern void _delayInitToCheckForSearchAds();
 
     [DllImport ("__Internal")]
-    private static extern void _setAppleSearchAdsDebugMode();
-
-    [DllImport ("__Internal")]
     private static extern void _userCompletedAction(string action);
     
     [DllImport ("__Internal")]
@@ -694,8 +687,6 @@ public class Branch : MonoBehaviour {
 
     private static void _delayInitToCheckForSearchAds() {}
 
-    private static void _setAppleSearchAdsDebugMode() {}
-
     private static void _userCompletedAction(string action) {
         BranchAndroidWrapper.userCompletedAction(action);
     }
@@ -823,8 +814,6 @@ public class Branch : MonoBehaviour {
 	private static void _setTrackingDisabled(bool value) { }
 
     private static void _delayInitToCheckForSearchAds() { }
-
-    private static void _setAppleSearchAdsDebugMode() { }
 
     private static void _userCompletedAction(string action) { }
     

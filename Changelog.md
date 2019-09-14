@@ -1,5 +1,10 @@
 Branch Unity SDK change log
 
+- 0.5.10
+  * Updating Branch to IOS version 0.28.1
+  * Adding method `SetAlias(string alias)` in `BranchEvent` class
+  * Deleting method `setAppleSearchAdsDebugMode()`
+
 - 0.5.9
   * Updating Branch to Android version 4.0.0
 

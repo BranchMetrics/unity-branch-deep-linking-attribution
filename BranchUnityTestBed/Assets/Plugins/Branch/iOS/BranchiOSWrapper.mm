@@ -454,9 +454,6 @@ void _delayInitToCheckForSearchAds() {
     [[Branch getInstance:_branchKey] delayInitToCheckForSearchAds];
 }
 
-void _setAppleSearchAdsDebugMode() {
-    [[Branch getInstance:_branchKey] setAppleSearchAdsDebugMode];
-}
 
 #pragma mark - User Action methods
 
