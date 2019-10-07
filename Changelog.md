@@ -1,5 +1,8 @@
 Branch Unity SDK change log
 
+- 0.5.11
+  * Updating Branch to Android version 4.1.0 and iOS version 0.29.1
+
 - 0.5.10
   * Updating Branch to IOS version 0.28.1
   * Adding method `SetAlias(string alias)` in `BranchEvent` class
