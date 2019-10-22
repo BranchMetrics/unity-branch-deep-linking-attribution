@@ -1,5 +1,8 @@
 Branch Unity SDK change log
 
+- 0.5.12
+  * Fixed #160 - Link property alias not being added to custom link generated
+
 - 0.5.11
   * Updating Branch to Android version 4.1.0 and iOS version 0.29.1
 

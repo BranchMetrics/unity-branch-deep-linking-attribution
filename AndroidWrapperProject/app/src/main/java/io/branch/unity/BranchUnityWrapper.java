@@ -107,23 +107,26 @@ public class BranchUnityWrapper {
             try {
                 if (firstParam.has("+clicked_branch_link") && firstParam.getBoolean("+clicked_branch_link")) {
                     linkProperties = new LinkProperties();
-                    if (firstParam.has("channel")) {
-                        linkProperties.setChannel(firstParam.getString("channel"));
+                    if (firstParam.has("~channel")) {
+                        linkProperties.setChannel(firstParam.getString("~channel"));
                     }
-                    if (firstParam.has("feature")) {
-                        linkProperties.setFeature(firstParam.getString("feature"));
+                    if (firstParam.has("~feature")) {
+                        linkProperties.setFeature(firstParam.getString("~feature"));
                     }
-                    if (firstParam.has("stage")) {
-                        linkProperties.setStage(firstParam.getString("stage"));
+                    if (firstParam.has("~alias")) {
+                        linkProperties.setAlias(firstParam.getString("~alias"));
                     }
-                    if (firstParam.has("duration")) {
-                        linkProperties.setDuration(firstParam.getInt("duration"));
+                    if (firstParam.has("~stage")) {
+                        linkProperties.setStage(firstParam.getString("~stage"));
+                    }
+                    if (firstParam.has("~duration")) {
+                        linkProperties.setDuration(firstParam.getInt("~duration"));
                     }
                     if (firstParam.has("$match_duration")) {
                         linkProperties.setDuration(firstParam.getInt("$match_duration"));
                     }
-                    if (firstParam.has("tags")) {
-                        JSONArray tagsArray = firstParam.getJSONArray("tags");
+                    if (firstParam.has("~tags")) {
+                        JSONArray tagsArray = firstParam.getJSONArray("~tags");
                         for (int i = 0; i < tagsArray.length(); i++) {
                             linkProperties.addTag(tagsArray.getString(i));
                         }
@@ -174,6 +177,9 @@ public class BranchUnityWrapper {
                     }
                     if (latestParam.has("~feature")) {
                         linkProperties.setFeature(latestParam.getString("~feature"));
+                    }
+                    if (latestParam.has("~alias")) {
+                        linkProperties.setAlias(latestParam.getString("~alias"));
                     }
                     if (latestParam.has("~stage")) {
                         linkProperties.setStage(latestParam.getString("~stage"));
@@ -601,6 +607,9 @@ public class BranchUnityWrapper {
             }
             if (params.has("~feature")) {
                 linkProperties.setFeature(params.getString("~feature"));
+            }
+            if (params.has("~alias")) {
+                linkProperties.setAlias(params.getString("~alias"));
             }
             if (params.has("~stage")) {
                 linkProperties.setStage(params.getString("~stage"));
