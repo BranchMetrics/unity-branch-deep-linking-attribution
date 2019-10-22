@@ -608,6 +608,9 @@ public class BranchUnityWrapper {
             if (params.has("~duration")) {
                 linkProperties.setDuration(Long.valueOf(params.getString("~duration")).intValue());
             }
+            if (params.has("~alias")) {
+                linkProperties.setAlias(params.getString("~alias"));
+            }
             if (params.has("~tags")) {
                 JSONArray tagsArray = params.getJSONArray("~tags");
                 for (int i = 0; i < tagsArray.length(); i++) {
