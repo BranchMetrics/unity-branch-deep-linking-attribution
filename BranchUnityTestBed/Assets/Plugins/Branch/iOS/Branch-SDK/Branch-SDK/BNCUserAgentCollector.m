@@ -15,7 +15,6 @@
 #import <WebKit/WebKit.h>
 #endif
 
-
 @interface BNCUserAgentCollector()
 // need to hold onto the webview until the async user agent fetch is done
 @property (nonatomic, strong, readwrite) WKWebView *webview;

@@ -17,5 +17,7 @@ public class BranchUnityActivity extends UnityPlayerActivity {
     @Override
     public void onNewIntent(Intent intent) {
         this.setIntent(intent);
+
+        BranchUnityWrapper.initSessionWithIntent();
     }
 }

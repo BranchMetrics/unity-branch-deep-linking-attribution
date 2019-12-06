@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 public class Branch : MonoBehaviour {
 
-	public static string sdkVersion = "0.5.12";
+	public static string sdkVersion = "0.5.13";
 
     public delegate void BranchCallbackWithParams(Dictionary<string, object> parameters, string error);
     public delegate void BranchCallbackWithUrl(string url, string error);
@@ -26,30 +26,6 @@ public class Branch : MonoBehaviour {
 		_getAutoInstance();
 	}
 
-    /**
-     * Just initialize session.
-     */
-    public static void initSession() {
-		if (_sessionCounter == 0) {
-			++_sessionCounter;
-			_isFirstSessionInited = true;
-
-			_initSession ();
-		}
-    }
-
-	/**
-     * Just initialize session, specifying whether is should be referrable.
-     */
-	public static void  initSession(bool isReferrable) {
-		if (_sessionCounter == 0) {
-			++_sessionCounter;
-			_isFirstSessionInited = true;
-
-			_initSessionAsReferrable (isReferrable);
-		}
-	}
-
 	/**
 	 * Initialize session and receive information about how it opened.
 	 */
@@ -64,21 +40,6 @@ public class Branch : MonoBehaviour {
 			_initSessionWithCallback (callbackId);
 		}
     }
-
-    /**
-	 * Initialize session and receive information about how it opened, specifying whether is should be referrable.
-	 */
-	public static void initSession(bool isReferrable, BranchCallbackWithParams callback) {
-		if (_sessionCounter == 0) {
-			++_sessionCounter;
-			_isFirstSessionInited = true;
-			autoInitCallbackWithParams = callback;
-
-			var callbackId = _getNextCallbackId ();
-			_branchCallbacks [callbackId] = callback;
-			_initSessionAsReferrableWithCallback (isReferrable, callbackId);
-		}
-	}
 
 	/**
      * Initialize session and receive information about how it opened.
@@ -453,9 +414,6 @@ public class Branch : MonoBehaviour {
 			}
 			else if (autoInitCallbackWithBUO != null) {
 				initSession(autoInitCallbackWithBUO);
-			}
-			else {
-				initSession();
 			}
 		}
 		else {
