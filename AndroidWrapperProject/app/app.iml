@@ -80,11 +80,10 @@
       <sourceFolder url="file://$MODULE_DIR$/src/test/shaders" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
     </content>
-    <orderEntry type="jdk" jdkName="Android API 28 Platform (2)" jdkType="Android SDK" />
+    <orderEntry type="jdk" jdkName="Android API 29 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="Gradle: androidx.annotation:annotation:1.1.0@jar" level="project" />
     <orderEntry type="library" exported="" name="Gradle: __local_jars__:/Users/antonarhunou/BranchMetrics/unity-branch-deep-linking/AndroidWrapperProject/app/libs/Unity.jar:unspecified@jar" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: io.branch.sdk.android:library:4.1.0@aar" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: com.crashlytics.sdk.android:answers-shim:0.0.6@aar" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: io.branch.sdk.android:library:4.2.0@aar" level="project" />
   </component>
 </module>

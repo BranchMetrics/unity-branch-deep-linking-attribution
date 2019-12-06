@@ -1,5 +1,11 @@
 Branch Unity SDK change log
 
+- 0.5.13
+  * Updating Branch to Android version 4.2.0 and iOS version 0.30.1
+  * Deleting method `initSession()` in `Branch` class
+  * Deleting method `initSession(bool isReferrable)` in `Branch` class
+  * Deleting method `initSession(bool isReferrable, BranchCallbackWithParams callback)` in `Branch` classcallback)` instead
+
 - 0.5.12
   * Fixed #160 - Link property alias not being added to custom link generated
 

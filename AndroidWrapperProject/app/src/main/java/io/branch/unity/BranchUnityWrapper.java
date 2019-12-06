@@ -43,6 +43,9 @@ public class BranchUnityWrapper {
     }
 
     private static Branch.ShareLinkBuilder linkBuilder = null;
+
+    private static String autoInitCallbackWithParams = "";
+    private static String autoInitCallbackWithBUO = "";
     /**
      * InitSession methods
      */
@@ -64,8 +67,11 @@ public class BranchUnityWrapper {
     }
 
     public static void initSession(String callbackId) {
+        autoInitCallbackWithParams = callbackId;
+
         Activity unityActivity = UnityPlayer.currentActivity;
-        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).initSession(new BranchReferralInitListenerUnityCallback(callbackId), unityActivity.getIntent().getData(), unityActivity);
+//        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).initSession(new BranchReferralInitListenerUnityCallback(callbackId), unityActivity.getIntent().getData(), unityActivity);
+        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).reInitSession(unityActivity, new BranchReferralInitListenerUnityCallback(callbackId));
     }
 
     public static void initSession(String callbackId, boolean isReferrable) {
@@ -74,8 +80,20 @@ public class BranchUnityWrapper {
     }
 
     public static void initSessionWithUniversalObjectCallback(String callbackId) {
+        autoInitCallbackWithBUO = callbackId;
+
         Activity unityActivity = UnityPlayer.currentActivity;
-        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).initSession(new BranchUniversalReferralInitListenerUnityCallback(callbackId), unityActivity.getIntent().getData(), unityActivity);
+//        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).initSession(new BranchUniversalReferralInitListenerUnityCallback(callbackId), unityActivity.getIntent().getData(), unityActivity);
+        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).reInitSession(unityActivity, new BranchUniversalReferralInitListenerUnityCallback(callbackId));
+    }
+
+    public static void initSessionWithIntent() {
+        if (!autoInitCallbackWithParams.isEmpty()) {
+            initSession(autoInitCallbackWithParams);
+        }
+        else if (!autoInitCallbackWithBUO.isEmpty()) {
+            initSessionWithUniversalObjectCallback(autoInitCallbackWithBUO);
+        }
     }
 
     /**
@@ -232,7 +250,7 @@ public class BranchUnityWrapper {
      */
 
     public static void setDebug() {
-        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).enableSimulateInstalls();
+        Branch.enableSimulateInstalls();
     }
 
     public static void setRetryInterval(int retryInterval) {
