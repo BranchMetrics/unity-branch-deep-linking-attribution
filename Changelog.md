@@ -1,5 +1,8 @@
 Branch Unity SDK change log
 
+- 0.5.14
+  * Updating Branch to iOS version 0.31.0
+
 - 0.5.13
   * Updating Branch to Android version 4.2.0 and iOS version 0.30.1
   * Deleting method `initSession()` in `Branch` class
