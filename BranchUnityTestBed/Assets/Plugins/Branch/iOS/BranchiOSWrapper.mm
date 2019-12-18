@@ -342,6 +342,7 @@ static callbackWithShareCompletion callbackWithShareCompletionForCallbackId(char
 
 void _setBranchKey(char *branchKey) {
     _branchKey = CreateNSString(branchKey);
+    [[Branch getInstance:_branchKey] registerPluginName:@"unity.ios" version:@"0.5.14"];
 }
 
 #pragma mark - InitSession methods
@@ -427,7 +428,7 @@ void _registerView(char *universalObjectJson) {
     BranchUniversalObject *obj = branchuniversalObjectFormDict(universalObjectDict);
     
     BranchEvent* event = [[BranchEvent alloc] initWithName:BranchStandardEventViewItem];
-    [event.contentItems addObject:obj];
+    [event.contentItems arrayByAddingObject:obj];
     [event logEvent];
 }
 
