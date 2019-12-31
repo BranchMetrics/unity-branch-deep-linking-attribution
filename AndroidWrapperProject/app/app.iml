@@ -84,6 +84,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="Gradle: androidx.annotation:annotation:1.1.0@jar" level="project" />
     <orderEntry type="library" exported="" name="Gradle: __local_jars__:/Users/antonarhunou/BranchMetrics/unity-branch-deep-linking/AndroidWrapperProject/app/libs/Unity.jar:unspecified@jar" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: io.branch.sdk.android:library:4.2.0@aar" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: io.branch.sdk.android:library:4.2.1@aar" level="project" />
   </component>
 </module>
