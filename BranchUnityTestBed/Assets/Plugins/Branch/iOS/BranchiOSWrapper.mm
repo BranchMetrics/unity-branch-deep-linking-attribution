@@ -342,7 +342,7 @@ static callbackWithShareCompletion callbackWithShareCompletionForCallbackId(char
 
 void _setBranchKey(char *branchKey) {
     _branchKey = CreateNSString(branchKey);
-    [[Branch getInstance:_branchKey] registerPluginName:@"unity.ios" version:@"0.5.14"];
+    [[Branch getInstance:_branchKey] registerPluginName:@"unity.ios" version:@"0.5.15"];
 }
 
 #pragma mark - InitSession methods
