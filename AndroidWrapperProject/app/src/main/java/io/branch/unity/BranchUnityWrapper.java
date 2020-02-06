@@ -73,7 +73,6 @@ public class BranchUnityWrapper {
 
         Activity unityActivity = UnityPlayer.currentActivity;
        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).initSession(new BranchReferralInitListenerUnityCallback(callbackId), unityActivity.getIntent().getData(), unityActivity);
-        // Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).reInitSession(unityActivity, new BranchReferralInitListenerUnityCallback(callbackId));
     }
 
     public static void initSession(String callbackId, boolean isReferrable) {
@@ -86,7 +85,6 @@ public class BranchUnityWrapper {
 
         Activity unityActivity = UnityPlayer.currentActivity;
        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).initSession(new BranchUniversalReferralInitListenerUnityCallback(callbackId), unityActivity.getIntent().getData(), unityActivity);
-        // Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).reInitSession(unityActivity, new BranchUniversalReferralInitListenerUnityCallback(callbackId));
     }
 
     public static void initSessionWithIntent() {
