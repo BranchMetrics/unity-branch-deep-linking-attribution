@@ -52,6 +52,8 @@ public class BranchUnityWrapper {
 
     public static  void getAutoInstance() {
         Activity unityActivity = UnityPlayer.currentActivity;
+        BranchUtil.setPluginType(BranchUtil.PluginType.Unity);
+        BranchUtil.setPluginVersion("0.6.0");
         Branch.getAutoInstance(unityActivity.getApplicationContext());
     }
 
@@ -70,8 +72,7 @@ public class BranchUnityWrapper {
         autoInitCallbackWithParams = callbackId;
 
         Activity unityActivity = UnityPlayer.currentActivity;
-//        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).initSession(new BranchReferralInitListenerUnityCallback(callbackId), unityActivity.getIntent().getData(), unityActivity);
-        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).reInitSession(unityActivity, new BranchReferralInitListenerUnityCallback(callbackId));
+       Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).initSession(new BranchReferralInitListenerUnityCallback(callbackId), unityActivity.getIntent().getData(), unityActivity);
     }
 
     public static void initSession(String callbackId, boolean isReferrable) {
@@ -83,8 +84,7 @@ public class BranchUnityWrapper {
         autoInitCallbackWithBUO = callbackId;
 
         Activity unityActivity = UnityPlayer.currentActivity;
-//        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).initSession(new BranchUniversalReferralInitListenerUnityCallback(callbackId), unityActivity.getIntent().getData(), unityActivity);
-        Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).reInitSession(unityActivity, new BranchUniversalReferralInitListenerUnityCallback(callbackId));
+       Branch.getInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).initSession(new BranchUniversalReferralInitListenerUnityCallback(callbackId), unityActivity.getIntent().getData(), unityActivity);
     }
 
     public static void initSessionWithIntent() {

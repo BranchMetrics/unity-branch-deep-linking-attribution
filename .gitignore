@@ -7,3 +7,12 @@ BranchUnityTestBed/Obj
 BranchUnityTestBed/Build?
 UnityConnectSettings.asset
 ClusterInputManager.asset
+Logs/
+
+# Android Studio
+.idea
+*.iml
+build/
+
+# Mac stuff
+*.DS_Store
