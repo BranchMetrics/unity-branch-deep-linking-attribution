@@ -53,7 +53,7 @@ public class BranchUnityWrapper {
     public static  void getAutoInstance() {
         Activity unityActivity = UnityPlayer.currentActivity;
         BranchUtil.setPluginType(BranchUtil.PluginType.Unity);
-        BranchUtil.setPluginVersion("0.6.0");
+        BranchUtil.setPluginVersion("0.6.1");
         Branch.getAutoInstance(unityActivity.getApplicationContext());
     }
 
