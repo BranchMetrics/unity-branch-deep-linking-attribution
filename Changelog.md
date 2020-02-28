@@ -1,5 +1,8 @@
 Branch Unity SDK change log
 
+- 0.6.3
+  * Fixing wrong Unity target for Unity 2019.x
+
 - 0.6.2
   * Supporting Unity3d 2019.x
   * Fixing Branch prefab

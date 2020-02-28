@@ -171,7 +171,7 @@ public class BranchPostProcessBuild {
 
 		string target = "";
 #if UNITY_2019_3_OR_NEWER
-		target = proj.GetUnityMainTargetGuid();
+		target = proj.GetUnityFrameworkTargetGuid();
 #else
 		target = proj.TargetGuidByName("Unity-iPhone");
 #endif
