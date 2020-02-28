@@ -15,7 +15,6 @@ public class BranchUnityApp extends Application {
     public void onCreate() {
         super.onCreate();
         BranchUtil.setPluginType(BranchUtil.PluginType.Unity);
-        BranchUtil.setPluginVersion("0.6.1");
         Branch.getAutoInstance(this.getApplicationContext());
         Branch.disableInstantDeepLinking(true);
     }
