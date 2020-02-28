@@ -1,5 +1,11 @@
 Branch Unity SDK change log
 
+- 0.6.2
+  * Supporting Unity3d 2019.x
+  * Fixing Branch prefab
+  * Fixing plugin type value
+  * Setting plugin version value from one place
+
 - 0.6.1
   * Updating Branch to iOS version 0.31.4
 

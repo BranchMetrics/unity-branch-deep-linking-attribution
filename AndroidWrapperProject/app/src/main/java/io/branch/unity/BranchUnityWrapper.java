@@ -38,24 +38,18 @@ import io.branch.referral.util.BranchEvent;
  * Created by grahammueller on 3/25/15.
  */
 public class BranchUnityWrapper {
-    public static void setBranchKey(String branchKey) {
+    public static void setBranchKey(String branchKey, String sdkVersion) {
         _branchKey = branchKey;
+        BranchUtil.setPluginType(BranchUtil.PluginType.Unity);
+        BranchUtil.setPluginVersion(sdkVersion);
     }
 
-    private static Branch.ShareLinkBuilder linkBuilder = null;
 
     private static String autoInitCallbackWithParams = "";
     private static String autoInitCallbackWithBUO = "";
     /**
      * InitSession methods
      */
-
-    public static  void getAutoInstance() {
-        Activity unityActivity = UnityPlayer.currentActivity;
-        BranchUtil.setPluginType(BranchUtil.PluginType.Unity);
-        BranchUtil.setPluginVersion("0.6.1");
-        Branch.getAutoInstance(unityActivity.getApplicationContext());
-    }
 
     public static void initSession() {
         Activity unityActivity = UnityPlayer.currentActivity;

@@ -2,6 +2,10 @@
 
 This is a repository of our open source Unity SDK, which is a wrapper on top of our iOS and Android SDKs. See the table of contents below for a complete list of the content featured in this document.
 
+## Migration warning for 7.x (Android only)
+For new version of SDK you should update OnNewIntent method in accordance with current documentation.
+
+
 ## Migration warning for 06/09/16 and after
 
 We released a completely revamped version of the Unity package today which automates a lot of the complexity of integrating Please rip out the old SDK and replace it with the new one at your earliest convenience.
@@ -141,7 +145,9 @@ The Branch Android library contains BranchApp class with the correct implementat
 If you will use your own Android plugin with your own custom Android application class, you need to add Branch android library into your project and call the following in method `OnCreate()`:
 
 ```csharp
+BranchUtil.setPluginType(BranchUtil.PluginType.Unity);
 Branch.getAutoInstance(this.getApplicationContext());
+Branch.disableInstantDeepLinking(true);
 ```
 
 If you will use your own custom Activity class, you need to override several methods:
@@ -153,8 +159,11 @@ public void onCreate(Bundle savedInstanceState) {
 }
 
 @Override
-public void onNewIntent(Intent intent) {
-    this.setIntent(intent);
+protected override void OnNewIntent(Intent intent)
+{
+    base.OnNewIntent(intent);
+    intent.PutExtra("branch_force_new_session", true);
+    this.Intent = intent;
 }
 
 ```
