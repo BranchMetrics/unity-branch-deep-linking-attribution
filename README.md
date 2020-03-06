@@ -48,7 +48,19 @@ Download code from here: [S3 Package](https://s3-us-west-1.amazonaws.com/branchh
 
 After acquiring the `BranchUnityWrapper.unityPackage` through one of these choices, you can import it into your project by clicking `Assets -> Import Package`.
 
-### Register you app
+#### Android dependencies
+We use google play services for tracking android device info.
+Use 'PlayServicesResolver' to add all needs libraries to your project.
+If you already have 'PlayServicesResolver', you can don't import this plugin from our package.
+
+After importing of our package:
+
+- go to "Assets->Play Services Resolver->Android Resolver"
+- tap "Resolve" or "Force Resolve"
+
+
+
+#### Register you app
 
 You can sign up for your own app id at [https://dashboard.branch.io](https://dashboard.branch.io)
 
