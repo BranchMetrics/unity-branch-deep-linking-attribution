@@ -1,4 +1,7 @@
 Branch Unity SDK change log
+- 0.6.4
+  * Adding 'play-services-ads:16.0.0' dependencies
+  * Adding PlayServicesResolver plugin
 
 - 0.6.3
   * Fixing wrong Unity target for Unity 2019.x
