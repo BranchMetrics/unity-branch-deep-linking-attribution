@@ -346,6 +346,10 @@ public class BranchUnityWrapper {
                 event.setTransactionID(params.getString("transaction_id"));
             }
 
+            if (params.has("customer_event_alias")) {
+                event.setCustomerEventAlias(params.getString("customer_event_alias"));
+            }
+
             if (params.has("affiliation")) {
                 event.setAffiliation(params.getString("affiliation"));
             }
