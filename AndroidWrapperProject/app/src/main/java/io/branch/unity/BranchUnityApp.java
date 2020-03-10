@@ -14,6 +14,7 @@ public class BranchUnityApp extends Application {
 //public class BranchUnityApp extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
+//        Branch.enableDebugMode();
         BranchUtil.setPluginType(BranchUtil.PluginType.Unity);
         Branch.getAutoInstance(this.getApplicationContext());
         Branch.disableInstantDeepLinking(true);

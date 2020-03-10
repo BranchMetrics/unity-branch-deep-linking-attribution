@@ -1,4 +1,8 @@
 Branch Unity SDK change log
+
+- 0.6.5
+  * Supporting field 'custom event alias'
+  
 - 0.6.4
   * Adding 'play-services-ads:16.0.0' dependencies
   * Adding PlayServicesResolver plugin

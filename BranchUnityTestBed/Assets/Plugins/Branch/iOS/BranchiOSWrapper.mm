@@ -486,6 +486,9 @@ void _sendEvent(char *eventJson) {
     if (eventDict[@"transaction_id"]) {
         event.transactionID = eventDict[@"transaction_id"];
     }
+    if (eventDict[@"customer_event_alias"]) {
+        event.alias = eventDict[@"customer_event_alias"];
+    }
     if (eventDict[@"affiliation"]) {
         event.affiliation = eventDict[@"affiliation"];
     }
