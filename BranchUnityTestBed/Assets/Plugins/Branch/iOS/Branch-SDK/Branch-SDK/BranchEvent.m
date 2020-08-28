@@ -8,6 +8,9 @@
 
 #import "BranchEvent.h"
 #import "BNCLog.h"
+#import "BNCCallbackMap.h"
+#import "BNCReachability.h"
+#import "BNCSKAdNetwork.h"
 
 #pragma mark BranchStandardEvents
 
@@ -67,15 +70,20 @@ BranchStandardEvent BranchStandardEventReserve                = @"RESERVE";
 						callback:callback];
 }
 
-- (void)processResponse:(BNCServerResponse*)response
-				  error:(NSError*)error {
-	NSDictionary *dictionary =
-		([response.data isKindOfClass:[NSDictionary class]])
-		? (NSDictionary*) response.data
-		: nil;
-		
-	if (self.completion)
+- (void)processResponse:(BNCServerResponse*)response error:(NSError*)error {
+	NSDictionary *dictionary = ([response.data isKindOfClass:[NSDictionary class]])
+		? (NSDictionary*) response.data : nil;
+	
+    if (dictionary) {
+        NSNumber *conversionValue = (NSNumber *)dictionary[BRANCH_RESPONSE_KEY_UPDATE_CONVERSION_VALUE];
+        if (conversionValue) {
+            [[BNCSKAdNetwork sharedInstance] updateConversionValue:conversionValue.integerValue];
+        }
+    }
+    
+    if (self.completion) {
 		self.completion(dictionary, error);
+    }
 }
 
 #pragma mark BranchEventRequest NSSecureCoding
@@ -179,7 +187,7 @@ BranchStandardEvent BranchStandardEventReserve                = @"RESERVE";
     addString(coupon,           coupon);
     addString(affiliation,      affiliation);
     addString(eventDescription, description);
-    addString(searchQuery,      search_query)
+    addString(searchQuery,      search_query);
     addDictionary(customData,   custom_data);
     
     #include "BNCFieldDefines.h"
@@ -220,16 +228,34 @@ BranchStandardEvent BranchStandardEventReserve                = @"RESERVE";
     ];
 }
 
-- (void) logEvent {
-
+- (void)logEventWithCompletion:(void (^_Nullable)(BOOL success, NSError * _Nullable error))completion {
     if (![_eventName isKindOfClass:[NSString class]] || _eventName.length == 0) {
         BNCLogError(@"Invalid event type '%@' or empty string.", NSStringFromClass(_eventName.class));
+        if (completion) {
+            NSError *error = [NSError branchErrorWithCode:BNCGeneralError localizedMessage: @"Invalid event type"];
+            completion(NO, error);
+        }
+        return;
+    }
+    
+    // logEvent requests without a completion are automatically retried later
+    if (completion != nil && [[BNCReachability shared] reachabilityStatus] == nil) {
+        if (completion) {
+            NSError *error = [NSError branchErrorWithCode:BNCGeneralError localizedMessage: @"No connectivity"];
+            completion(NO, error);
+        }
         return;
     }
 
     NSDictionary *eventDictionary = [self buildEventDictionary];
     BranchEventRequest *request = [self buildRequestWithEventDictionary:eventDictionary];
+    [[BNCCallbackMap shared] storeRequest:request withCompletion:completion];
+    
     [[Branch getInstance] sendServerRequest:request];
+}
+
+- (void) logEvent {
+    [self logEventWithCompletion:nil];
 }
 
 - (BranchEventRequest *)buildRequestWithEventDictionary:(NSDictionary *)eventDictionary {

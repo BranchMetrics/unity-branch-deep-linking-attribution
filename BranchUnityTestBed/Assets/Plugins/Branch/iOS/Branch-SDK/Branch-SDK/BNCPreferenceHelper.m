@@ -97,19 +97,19 @@ static NSString * const BRANCH_PREFS_KEY_ANALYTICS_MANIFEST = @"bnc_branch_analy
     return preferenceHelper;
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
-    if (!self) return self;
+    if (self) {
+        _timeout = DEFAULT_TIMEOUT;
+        _retryCount = DEFAULT_RETRY_COUNT;
+        _retryInterval = DEFAULT_RETRY_INTERVAL;
+        _isDebug = NO;
+        _persistPrefsQueue = [[NSOperationQueue alloc] init];
+        _persistPrefsQueue.maxConcurrentOperationCount = 1;
 
-    _timeout = DEFAULT_TIMEOUT;
-    _retryCount = DEFAULT_RETRY_COUNT;
-    _retryInterval = DEFAULT_RETRY_INTERVAL;
-    _isDebug = NO;
-    _persistPrefsQueue = [[NSOperationQueue alloc] init];
-    _persistPrefsQueue.maxConcurrentOperationCount = 1;
-
-    self.branchBlacklistURL = @"https://cdn.branch.io";
-    
+        self.branchBlacklistURL = @"https://cdn.branch.io";
+        self.disableAdNetworkCallouts = NO;
+    }
     return self;
 }
 
@@ -778,19 +778,20 @@ static NSString * const BRANCH_PREFS_KEY_ANALYTICS_MANIFEST = @"bnc_branch_analy
             NSDictionary *persistenceDict = nil;
             @try {
                 NSError *error = nil;
-                NSData *data = [NSData dataWithContentsOfURL:self.class.URLForPrefsFile
-                    options:0 error:&error];
-                if (!error && data)
+                NSData *data = [NSData dataWithContentsOfURL:self.class.URLForPrefsFile options:0 error:&error];
+                if (!error && data) {
                     persistenceDict = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+                }
             }
             @catch (NSException*) {
                 BNCLogWarning(@"Failed to load preferences from storage.");
             }
 
-            if ([persistenceDict isKindOfClass:[NSDictionary class]])
+            if ([persistenceDict isKindOfClass:[NSDictionary class]]) {
                 _persistenceDict = [persistenceDict mutableCopy];
-            else
+            } else {
                 _persistenceDict = [[NSMutableDictionary alloc] init];
+            }
         }
         return _persistenceDict;
     }
@@ -806,16 +807,30 @@ static NSString * const BRANCH_PREFS_KEY_ANALYTICS_MANIFEST = @"bnc_branch_analy
 - (NSString *)readStringFromDefaults:(NSString *)key {
     @synchronized(self) {
         id str = self.persistenceDict[key];
+        
+        // protect against NSNumber
         if ([str isKindOfClass:[NSNumber class]]) {
             str = [str stringValue];
         }
+        
+        // protect against anything else
+        if (![str isKindOfClass:[NSString class]]) {
+            str = nil;
+        }
+        
         return str;
     }
 }
 
 - (BOOL)readBoolFromDefaults:(NSString *)key {
     @synchronized(self) {
-        BOOL boo = [self.persistenceDict[key] boolValue];
+        BOOL boo = NO;
+
+        NSNumber *boolean = self.persistenceDict[key];
+        if ([boolean respondsToSelector:@selector(boolValue)]) {
+            boo = [boolean boolValue];
+        }
+        
         return boo;
     }
 }
@@ -823,7 +838,7 @@ static NSString * const BRANCH_PREFS_KEY_ANALYTICS_MANIFEST = @"bnc_branch_analy
 - (NSInteger)readIntegerFromDefaults:(NSString *)key {
     @synchronized(self) {
         NSNumber *number = self.persistenceDict[key];
-        if (number != nil) {
+        if (number != nil && [number respondsToSelector:@selector(integerValue)]) {
             return [number integerValue];
         }
         return NSNotFound;
@@ -896,27 +911,35 @@ NSURL* _Null_unspecified BNCCreateDirectoryForBranchURLWithSearchPath_Unthreaded
         if (success) {
             return branchURL;
         } else  {
-            NSLog(@"[branch.io] Info: CreateBranchURL failed: %@ URL: %@.", error, branchURL);
+            // BNCLog is dependent on BNCCreateDirectoryForBranchURLWithSearchPath_Unthreaded and cannot be used to log errors from it.
+            NSLog(@"CreateBranchURL failed: %@ URL: %@.", error, branchURL);
         }
     }
     return nil;
 }
 
 NSURL* _Nonnull BNCURLForBranchDirectory_Unthreaded() {
+    #if TARGET_OS_TV
+    // tvOS only allows the caches or temp directory
+    NSArray *kSearchDirectories = @[
+        @(NSCachesDirectory)
+    ];
+    #else
     NSArray *kSearchDirectories = @[
         @(NSApplicationSupportDirectory),
         @(NSLibraryDirectory),
         @(NSCachesDirectory),
         @(NSDocumentDirectory),
     ];
-
+    #endif
+    
     for (NSNumber *directory in kSearchDirectories) {
         NSSearchPathDirectory directoryValue = [directory unsignedLongValue];
         NSURL *URL = BNCCreateDirectoryForBranchURLWithSearchPath_Unthreaded(directoryValue);
         if (URL) return URL;
     }
 
-    //  Worst case backup plan:
+    //  Worst case backup plan.  This does NOT work on tvOS.
     NSString *path = [@"~/Library/io.branch" stringByExpandingTildeInPath];
     NSURL *branchURL = [NSURL fileURLWithPath:path isDirectory:YES];
     NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -928,7 +951,8 @@ NSURL* _Nonnull BNCURLForBranchDirectory_Unthreaded() {
             attributes:nil
             error:&error];
     if (!success) {
-        NSLog(@"[io.branch] Error: Worst case CreateBranchURL error was: %@ URL: %@.", error, branchURL);
+        // BNCLog is dependent on BNCURLForBranchDirectory_Unthreaded and cannot be used to log errors from it.
+        NSLog(@"Worst case CreateBranchURL error was: %@ URL: %@.", error, branchURL);
     }
     return branchURL;
 }
