@@ -1,5 +1,8 @@
 Branch Unity SDK change log
 
+- 0.6.6
+  * Updating Branch to iOS version 0.35.0
+
 - 0.6.5
   * Supporting field 'custom event alias'
   

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: d870b10a51edd4761af4b194a80fcb77
+guid: f71e9371d021d46579532fccf38d07cd
 PluginImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -12,25 +12,6 @@ PluginImporter:
   validateReferences: 1
   platformData:
   - first:
-      '': Any
-    second:
-      enabled: 0
-      settings:
-        Exclude Android: 1
-        Exclude Editor: 1
-        Exclude Linux64: 1
-        Exclude OSXUniversal: 1
-        Exclude WebGL: 1
-        Exclude Win: 1
-        Exclude Win64: 1
-        Exclude iOS: 0
-  - first:
-      Android: Android
-    second:
-      enabled: 0
-      settings:
-        CPU: ARMv7
-  - first:
       Any: 
     second:
       enabled: 0
@@ -40,54 +21,12 @@ PluginImporter:
     second:
       enabled: 0
       settings:
-        CPU: AnyCPU
         DefaultValueInitialized: true
-        OS: AnyOS
-  - first:
-      Facebook: Win
-    second:
-      enabled: 0
-      settings:
-        CPU: AnyCPU
-  - first:
-      Facebook: Win64
-    second:
-      enabled: 0
-      settings:
-        CPU: AnyCPU
-  - first:
-      Standalone: Linux64
-    second:
-      enabled: 0
-      settings:
-        CPU: AnyCPU
-  - first:
-      Standalone: OSXUniversal
-    second:
-      enabled: 0
-      settings:
-        CPU: AnyCPU
-  - first:
-      Standalone: Win
-    second:
-      enabled: 0
-      settings:
-        CPU: AnyCPU
-  - first:
-      Standalone: Win64
-    second:
-      enabled: 0
-      settings:
-        CPU: AnyCPU
   - first:
       iPhone: iOS
     second:
       enabled: 1
-      settings:
-        AddToEmbeddedBinaries: false
-        CPU: AnyCPU
-        CompileFlags: -fobjc-arc
-        FrameworkDependencies: 
+      settings: {}
   - first:
       tvOS: tvOS
     second:
