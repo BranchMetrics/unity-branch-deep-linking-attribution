@@ -1,9 +1,7 @@
 <dependencies>
   <androidPackages>
-    <androidPackage spec="com.google.android.gms:play-services-ads:16.0.0">
-      <repositories>
-        <repository>https://maven.google.com/</repository>
-      </repositories>
-    </androidPackage>
+    <androidPackage spec="io.branch.sdk.android:library:5.+" />
+    <androidPackage spec="com.google.firebase:firebase-appindexing:19.0.0" />
+    <androidPackage spec="com.google.android.gms:play-services-ads-identifier:16+" />
   </androidPackages>
 </dependencies>

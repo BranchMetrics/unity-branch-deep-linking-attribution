@@ -1,19 +1,20 @@
 ﻿<Properties StartupConfiguration="{67E3F5FC-88EF-55B2-4156-39D21A59D4E6}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Branch/Branch.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Branch/Editor/BranchDependencies.xml">
     <Files>
       <File FileName="Assets/Branch/Branch.cs" Line="10" Column="44" />
       <File FileName="Assets/Branch/Demo/Scripts/BranchDemo.cs" />
+      <File FileName="Assets/Branch/Editor/BranchDependencies.xml" Line="8" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="BranchUnityTestBed" expanded="True">
-            <Node name="Assets" expanded="True">
+            <Node name="Assets" expanded="True" selected="True">
               <Node name="Branch" expanded="True">
                 <Node name="Demo" expanded="True">
                   <Node name="Scripts" expanded="True" />
                 </Node>
-                <Node name="Branch.cs" selected="True" />
+                <Node name="Editor" expanded="True" />
               </Node>
             </Node>
           </Node>
@@ -23,7 +24,7 @@
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="64a10375-48a5-4b46-90b1-105c9e935102" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="7d11b1dc-7109-42c7-b14f-17440e04a86a" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
