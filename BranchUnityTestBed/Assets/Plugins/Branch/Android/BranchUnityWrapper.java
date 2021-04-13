@@ -39,10 +39,10 @@ public class BranchUnityWrapper {
 
     private static String autoInitCallbackWithParams = "";
     private static String autoInitCallbackWithBUO = "";
+
     /**
      * InitSession methods
      */
-
     public static void initSession() {
         Activity unityActivity = UnityPlayer.currentActivity;
         Branch.getAutoInstance(unityActivity.getApplicationContext(), _branchKey).initSessionWithData(unityActivity.getIntent().getData(), unityActivity);
@@ -88,7 +88,7 @@ public class BranchUnityWrapper {
 
     public static String getFirstReferringBranchUniversalObject() {
         BranchUniversalObject branchUniversalObject = null;
-        Branch branchInstance = Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey);
+        Branch branchInstance = Branch.getInstance();
         if (branchInstance != null && branchInstance.getFirstReferringParams() != null) {
             JSONObject firstParam = branchInstance.getFirstReferringParams();
             try {
@@ -104,7 +104,7 @@ public class BranchUnityWrapper {
 
     public static String getFirstReferringBranchLinkProperties() {
         LinkProperties linkProperties = null;
-        Branch branchInstance = Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey);
+        Branch branchInstance = Branch.getInstance();
         if (branchInstance != null && branchInstance.getFirstReferringParams() != null) {
             JSONObject firstParam = branchInstance.getFirstReferringParams();
 
@@ -152,7 +152,7 @@ public class BranchUnityWrapper {
 
     public static String getLatestReferringBranchUniversalObject() {
         BranchUniversalObject branchUniversalObject = null;
-        Branch branchInstance = Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey);
+        Branch branchInstance = Branch.getInstance();
 
         if (branchInstance != null && branchInstance.getLatestReferringParams() != null) {
             JSONObject latestParam = branchInstance.getLatestReferringParams();
@@ -170,7 +170,7 @@ public class BranchUnityWrapper {
 
     public static String getLatestReferringBranchLinkProperties() {
         LinkProperties linkProperties = null;
-        Branch branchInstance = Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey);
+        Branch branchInstance = Branch.getInstance();
         if (branchInstance != null && branchInstance.getLatestReferringParams() != null) {
             JSONObject latestParam = branchInstance.getLatestReferringParams();
             try {
@@ -216,43 +216,41 @@ public class BranchUnityWrapper {
     }
 
     public static void resetUserSession() {
-        Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).resetUserSession();
+        Branch.getInstance().resetUserSession();
     }
 
     public static void setIdentity(String userId) {
-        Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).setIdentity(userId);
+        Branch.getInstance().setIdentity(userId);
     }
 
     public static void setIdentity(String userId, String callbackId) {
-        Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).setIdentity(userId, new BranchReferralInitListenerUnityCallback(callbackId));
+        Branch.getInstance().setIdentity(userId, new BranchReferralInitListenerUnityCallback(callbackId));
     }
 
     public static void logout() {
-        Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).logout();
+        Branch.getInstance().logout();
     }
 
-    /**
-     * @deprecated Use test devices instead. https://help.branch.io/using-branch/docs/adding-test-devices
-     */
-    @Deprecated
-    public static void setDebug() { }
+    public static void setDebug() {
+        Branch.enableLogging();
+    }
 
     public static void setRetryInterval(int retryInterval) {
-        Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).setRetryInterval(retryInterval);
+        Branch.getInstance().setRetryInterval(retryInterval);
     }
 
     public static void setMaxRetries(int maxRetries) {
-        Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).setRetryCount(maxRetries);
+        Branch.getInstance().setRetryCount(maxRetries);
     }
 
     public static void setNetworkTimeout(int timeout) {
-        Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).setNetworkTimeout(timeout);
+        Branch.getInstance().setNetworkTimeout(timeout);
     }
 
     public static void registerView(String universalObjectDict) {
         try {
             BranchUniversalObject universalObject = _branchUniversalObjectFromJSONObject(new JSONObject(universalObjectDict));
-            Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).registerView(universalObject, null);
+            Branch.getInstance().registerView(universalObject, null);
         }
         catch (JSONException json) {
             json.printStackTrace();
@@ -270,7 +268,7 @@ public class BranchUnityWrapper {
     }
 
     public static void setRequestMetadata(String key, String value) {
-        Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).setRequestMetadata(key, value);
+        Branch.getInstance().setRequestMetadata(key, value);
     }
 
     public static void accountForFacebookSDKPreventingAppLaunch() {
@@ -278,7 +276,7 @@ public class BranchUnityWrapper {
     }
 
     public static void setTrackingDisabled(boolean value) {
-        Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).disableTracking(value);
+        Branch.getInstance().disableTracking(value);
     }
 
     /**
@@ -286,13 +284,13 @@ public class BranchUnityWrapper {
      */
 
     public static void userCompletedAction(String action) {
-        Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).userCompletedAction(action);
+        Branch.getInstance().userCompletedAction(action);
     }
 
     public static void userCompletedAction(String action, String stateDict) {
         try {
             JSONObject state = new JSONObject(stateDict);
-            Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).userCompletedAction(action, state);
+            Branch.getInstance().userCompletedAction(action, state);
         }
         catch (JSONException jsone) {
             jsone.printStackTrace();
@@ -401,43 +399,43 @@ public class BranchUnityWrapper {
      */
 
     public static void loadRewards(String callbackId) {
-        Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).loadRewards(new BranchReferralInitListenerUnityCallback(callbackId));
+        Branch.getInstance().loadRewards(new BranchReferralInitListenerUnityCallback(callbackId));
     }
 
     public static int getCredits() {
-        return Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getCredits();
+        return Branch.getInstance().getCredits();
     }
 
     public static void redeemRewards(int count) {
-        Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).redeemRewards(count);
+        Branch.getInstance().redeemRewards(count);
     }
 
     public static int getCreditsForBucket(String bucket) {
-        return Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getCreditsForBucket(bucket);
+        return Branch.getInstance().getCreditsForBucket(bucket);
     }
 
     public static void redeemRewards(String bucket, int count) {
-        Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).redeemRewards(bucket, count);
+        Branch.getInstance().redeemRewards(bucket, count);
     }
 
     public static void getCreditHistory(String callbackId) {
-        Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getCreditHistory(new BranchReferralInitListenerUnityCallback(callbackId));
+        Branch.getInstance().getCreditHistory(new BranchReferralInitListenerUnityCallback(callbackId));
     }
 
     public static void getCreditHistory(String bucket, String callbackId) {
-        Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getCreditHistory(bucket, new BranchReferralInitListenerUnityCallback(callbackId));
+        Branch.getInstance().getCreditHistory(bucket, new BranchReferralInitListenerUnityCallback(callbackId));
     }
 
     public static void getCreditHistory(String creditTransactionId, int length, int order, String callbackId) {
         Branch.CreditHistoryOrder creditHistoryOrder = order == 0 ? Branch.CreditHistoryOrder.kMostRecentFirst : Branch.CreditHistoryOrder.kLeastRecentFirst;
 
-        Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getCreditHistory(creditTransactionId, length, creditHistoryOrder, new BranchReferralInitListenerUnityCallback(callbackId));
+        Branch.getInstance().getCreditHistory(creditTransactionId, length, creditHistoryOrder, new BranchReferralInitListenerUnityCallback(callbackId));
     }
 
     public static void getCreditHistory(String bucket, String creditTransactionId, int length, int order, String callbackId) {
         Branch.CreditHistoryOrder creditHistoryOrder = order == 0 ? Branch.CreditHistoryOrder.kMostRecentFirst : Branch.CreditHistoryOrder.kLeastRecentFirst;
 
-        Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).getCreditHistory(bucket, creditTransactionId, length, creditHistoryOrder, new BranchReferralInitListenerUnityCallback(callbackId));
+        Branch.getInstance().getCreditHistory(bucket, creditTransactionId, length, creditHistoryOrder, new BranchReferralInitListenerUnityCallback(callbackId));
     }
 
     /**

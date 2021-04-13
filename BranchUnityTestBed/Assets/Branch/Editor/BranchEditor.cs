@@ -19,7 +19,7 @@ public class BranchEditor : Editor {
 
 		SerializedObject serializedBranchData = new UnityEditor.SerializedObject(BranchData.Instance);
 
-		SerializedProperty serializedIsDebug = serializedBranchData.FindProperty("simulateFreshInstalls");
+		SerializedProperty serializedIsDebug = serializedBranchData.FindProperty("enableLogging");
 		SerializedProperty serializedIsTestMode = serializedBranchData.FindProperty("testMode");
 
 		SerializedProperty serializedTestBranchKey = serializedBranchData.FindProperty("testBranchKey");
@@ -465,17 +465,17 @@ public class BranchEditor : Editor {
 			}
 		}
 
+		// TODO: enable logging control on Android via manifest
+		/*
 		XmlElement debugMetaData = doc.CreateElement("meta-data");
 		debugMetaData.SetAttribute("android____name", "io.branch.sdk.TestMode");
-		debugMetaData.SetAttribute("android____value", BranchData.Instance.simulateFreshInstalls ? "true" : "false");
-
+		debugMetaData.SetAttribute("android____value", BranchData.Instance.enableLogging ? "true" : "false");
 		if (metaDataNode == null) {
 			appNode.AppendChild(debugMetaData);
-		}
-		else {
+		} else {
 			appNode.ReplaceChild(debugMetaData, metaDataNode);
 		}
-
+		*/
 
 		XmlElement keyMetaData = doc.CreateElement("meta-data");
 

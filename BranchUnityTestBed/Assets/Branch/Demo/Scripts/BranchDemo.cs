@@ -32,7 +32,7 @@ public class BranchDemo : MonoBehaviour {
         #endif
 
         // set debug if need
-        if (BranchData.Instance.simulateFreshInstalls) {
+        if (BranchData.Instance.enableLogging) {
 			Branch.setDebug();
 		}
 

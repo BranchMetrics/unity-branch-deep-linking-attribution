@@ -21,8 +21,8 @@ public class BranchData : ScriptableObject {
 	public string testAndroidPathPrefix;
 	public string[] testAppLinks;
 
-	// is simulation of fresh links enabled?
-	public bool simulateFreshInstalls = false;
+	// enable logging?
+	public bool enableLogging = false;
 
 	// which set of data will we use, test or release?
 	public bool testMode = false;
