@@ -19,7 +19,8 @@ public class BranchEditor : Editor {
 
 		SerializedObject serializedBranchData = new UnityEditor.SerializedObject(BranchData.Instance);
 
-		SerializedProperty serializedIsDebug = serializedBranchData.FindProperty("enableLogging");
+		// This does not work on Android, disable it for now
+		//SerializedProperty serializedIsDebug = serializedBranchData.FindProperty("enableLogging");
 		SerializedProperty serializedIsTestMode = serializedBranchData.FindProperty("testMode");
 
 		SerializedProperty serializedTestBranchKey = serializedBranchData.FindProperty("testBranchKey");
@@ -33,7 +34,7 @@ public class BranchEditor : Editor {
 		SerializedProperty serializedAppLinks = serializedBranchData.FindProperty("liveAppLinks");
 
 
-		EditorGUILayout.PropertyField(serializedIsDebug, new GUILayoutOption[]{});
+		//EditorGUILayout.PropertyField(serializedIsDebug, new GUILayoutOption[]{});
 		EditorGUILayout.PropertyField(serializedIsTestMode, new GUILayoutOption[]{});
 
 		GUI.enabled = BranchData.Instance.testMode;
@@ -216,7 +217,7 @@ public class BranchEditor : Editor {
 		// Adding permissions
 		UpdatePermissions(xmlDoc);
 
-//		// Adding debug mode meta and branch key
+		// Adding debug mode meta and branch key
 		UpdateDebugModeMeta(xmlDoc, appNode);
 		
 		// Saving android manifest

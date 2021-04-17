@@ -97,6 +97,12 @@ public class BranchAndroidWrapper {
         	_getBranchClass().CallStatic("setDebug");
 		});
     }
+
+	public static void enableLogging() {
+		_runBlockOnThread(() => {
+        	_getBranchClass().CallStatic("enableLogging");
+		});
+    }
     
     public static void setRetryInterval(int retryInterval) {
 		_runBlockOnThread(() => {
@@ -130,19 +136,31 @@ public class BranchAndroidWrapper {
 
 	public static void accountForFacebookSDKPreventingAppLaunch() {
 		_runBlockOnThread(() => {
-		_getBranchClass().CallStatic("accountForFacebookSDKPreventingAppLaunch");
+			_getBranchClass().CallStatic("accountForFacebookSDKPreventingAppLaunch");
 		});
 	}
 
 	public static void setRequestMetadata(string key, string val) {
 		_runBlockOnThread(() => {
-		_getBranchClass().CallStatic("setRequestMetadata", key, val);
+			_getBranchClass().CallStatic("setRequestMetadata", key, val);
 		});
 	}
 
+	public static void addFacebookPartnerParameter(string name, string val) {
+		_runBlockOnThread(() => {
+			_getBranchClass().CallStatic("addFacebookPartnerParameterWithName", name, val);
+		});
+	}
+
+	 public static void clearPartnerParameters() {
+	 	_runBlockOnThread(() => {
+	 		_getBranchClass().CallStatic("clearPartnerParameters");
+	 	});
+	 }
+
 	public static void setTrackingDisabled(bool value) {
 	    _runBlockOnThread(() => {
-	    _getBranchClass().CallStatic("setTrackingDisabled", value);
+			_getBranchClass().CallStatic("setTrackingDisabled", value);
         });
 	}
 

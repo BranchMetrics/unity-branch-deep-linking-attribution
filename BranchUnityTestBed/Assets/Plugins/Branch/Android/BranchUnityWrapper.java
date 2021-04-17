@@ -230,8 +230,10 @@ public class BranchUnityWrapper {
     public static void logout() {
         Branch.getInstance().logout();
     }
+    
+    public static void setDebug() { }
 
-    public static void setDebug() {
+    public static void enableLogging() {
         Branch.enableLogging();
     }
 
@@ -269,6 +271,14 @@ public class BranchUnityWrapper {
 
     public static void setRequestMetadata(String key, String value) {
         Branch.getInstance().setRequestMetadata(key, value);
+    }
+
+    public static void addFacebookPartnerParameter(String name, String value) {
+        Branch.getInstance().addFacebookPartnerParameterWithName(name, value);
+    }
+
+    public static void clearPartnerParameters() {
+        Branch.getInstance().clearPartnerParameters();
     }
 
     public static void accountForFacebookSDKPreventingAppLaunch() {

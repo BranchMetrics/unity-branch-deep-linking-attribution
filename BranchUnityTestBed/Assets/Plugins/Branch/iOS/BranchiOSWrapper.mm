@@ -408,6 +408,10 @@ void _logout() {
 # pragma mark - Configuation methods
 
 void _setDebug() {
+    
+}
+ 
+void _enableLogging() {
     [[Branch getInstance:_branchKey] enableLogging];
 }
 
@@ -445,6 +449,14 @@ void _accountForFacebookSDKPreventingAppLaunch() {
 
 void _setRequestMetadata(char *key, char *value) {
     [[Branch getInstance:_branchKey] setRequestMetadataKey:CreateNSString(key) value:CreateNSString(value)];
+}
+
+void _addFacebookPartnerParameter(char *name, char *value) {
+    [[Branch getInstance:_branchKey] addFacebookPartnerParameterWithName:CreateNSString(name) value:CreateNSString(value)];
+}
+
+void _clearPartnerParameters() {
+    [[Branch getInstance:_branchKey] clearPartnerParameters];
 }
 
 void _setTrackingDisabled(BOOL value) {

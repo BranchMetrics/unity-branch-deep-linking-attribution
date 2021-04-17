@@ -170,13 +170,19 @@ public class Branch : MonoBehaviour {
     #region Configuration methods
 
     /**
-     * Puts Branch into debug mode, causing it to log all requests, and more importantly, not reference the hardware ID of the phone so you can register installs after just uninstalling/reinstalling the app.
-     *IMPORTANT! You need to change manifest or to enable Debug mode for Android. Methos setDebug works for iOS only.
-     *
-     * Make sure to remove setDebug before releasing.
+     * Deprecated
+     * Use test devices instead. https://help.branch.io/using-branch/docs/adding-test-devices
      */
     public static void setDebug() {
 		_setDebug();
+    }
+
+    /**
+     * Enable native SDK logging.
+     */
+    public static void enableLogging()
+    {
+        _enableLogging();
     }
 
     /**
@@ -219,7 +225,19 @@ public class Branch : MonoBehaviour {
 		}
 	}
 
-	public static void setTrackingDisabled(bool value) {
+    public static void addFacebookPartnerParameter(string name, string val) {
+
+		if (!string.IsNullOrEmpty (name) && !string.IsNullOrEmpty (val)) {
+			_addFacebookPartnerParameter (name, val);
+		}
+	}
+
+    public static void clearPartnerParameters()
+    {
+        _clearPartnerParameters();
+    }
+
+    public static void setTrackingDisabled(bool value) {
 		_setTrackingDisabled(value);
 	}
 
@@ -469,6 +487,9 @@ public class Branch : MonoBehaviour {
     private static extern void _setDebug();
 
     [DllImport ("__Internal")]
+    private static extern void _enableLogging();
+
+    [DllImport ("__Internal")]
     private static extern void _setRetryInterval(int retryInterval);
     
     [DllImport ("__Internal")]
@@ -488,6 +509,12 @@ public class Branch : MonoBehaviour {
 
 	[DllImport ("__Internal")]
 	private static extern void _setRequestMetadata(string key, string val);
+
+	[DllImport ("__Internal")]
+	private static extern void _addFacebookPartnerParameter(string name, string val);
+
+    [DllImport ("__Internal")]
+	private static extern void _clearPartnerParameters();
 
 	[DllImport ("__Internal")]
 	private static extern void _setTrackingDisabled(bool value);
@@ -598,6 +625,10 @@ public class Branch : MonoBehaviour {
     private static void _setDebug() {
         BranchAndroidWrapper.setDebug();
     }
+
+    private static void _enableLogging() {
+        BranchAndroidWrapper.enableLogging();
+    }
     
     private static void _setRetryInterval(int retryInterval) {
         BranchAndroidWrapper.setRetryInterval(retryInterval);
@@ -626,6 +657,14 @@ public class Branch : MonoBehaviour {
 	private static void _setRequestMetadata(string key, string val) {
 		BranchAndroidWrapper.setRequestMetadata(key, val);
 	}
+
+    private static void _addFacebookPartnerParameter(string name, string val) {
+		BranchAndroidWrapper.addFacebookPartnerParameter(name, val);
+	}
+
+    private static void _clearPartnerParameters() {
+        BranchAndroidWrapper.clearPartnerParameters();
+    }
 
 	private static void _setTrackingDisabled(bool value) {
 	    BranchAndroidWrapper.setTrackingDisabled(value);
@@ -740,7 +779,9 @@ public class Branch : MonoBehaviour {
     private static void _logout() { }
 
 	private static void _setDebug() { }
-    
+
+    private static void _enableLogging() { }
+
     private static void _setRetryInterval(int retryInterval) { }
     
     private static void _setMaxRetries(int maxRetries) { }
@@ -755,7 +796,11 @@ public class Branch : MonoBehaviour {
 
 	private static void _setRequestMetadata(string key, string val) { }
 
-	private static void _setTrackingDisabled(bool value) { }
+    private static void _addFacebookPartnerParameter(string name, string val) { }
+
+    private static void _clearPartnerParameters() { }
+
+    private static void _setTrackingDisabled(bool value) { }
 
     private static void _delayInitToCheckForSearchAds() { }
 
