@@ -1,5 +1,10 @@
 Branch Unity SDK change log
 
+- 0.6.7
+ * Updating to iOS SDK 1.39.2
+ * Updating to Android SDK 5.0.7
+ * Add FB partner parameters API. Known issue with Android not respecting this value on install and open. It does support events.
+
 - 0.6.6
   * Updating Branch to iOS version 0.35.0
 

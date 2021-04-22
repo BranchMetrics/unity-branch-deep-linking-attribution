@@ -347,20 +347,8 @@ void _setBranchKey(char *branchKey, char* branchSDKVersion) {
 
 #pragma mark - InitSession methods
 
-void _initSession() {
-    [[Branch getInstance:_branchKey] initSessionWithLaunchOptions:_wrapper.launchOptions];
-}
-
 void _initSessionWithCallback(char *callbackId) {
     [[Branch getInstance:_branchKey] initSessionWithLaunchOptions:_wrapper.launchOptions andRegisterDeepLinkHandler:callbackWithParamsForCallbackId(callbackId)];
-}
-
-void _initSessionAsReferrable(BOOL isReferrable) {
-    [[Branch getInstance:_branchKey] initSessionWithLaunchOptions:_wrapper.launchOptions isReferrable:isReferrable];
-}
-
-void _initSessionAsReferrableWithCallback(BOOL isReferrable, char *callbackId) {
-    [[Branch getInstance:_branchKey] initSessionWithLaunchOptions:_wrapper.launchOptions isReferrable:isReferrable andRegisterDeepLinkHandler:callbackWithParamsForCallbackId(callbackId)];
 }
 
 void _initSessionWithUniversalObjectCallback(char *callbackId) {
@@ -408,7 +396,11 @@ void _logout() {
 # pragma mark - Configuation methods
 
 void _setDebug() {
-    [[Branch getInstance:_branchKey] setDebug];
+    
+}
+ 
+void _enableLogging() {
+    [[Branch getInstance:_branchKey] enableLogging];
 }
 
 void _setRetryInterval(int retryInterval) {
@@ -445,6 +437,14 @@ void _accountForFacebookSDKPreventingAppLaunch() {
 
 void _setRequestMetadata(char *key, char *value) {
     [[Branch getInstance:_branchKey] setRequestMetadataKey:CreateNSString(key) value:CreateNSString(value)];
+}
+
+void _addFacebookPartnerParameter(char *name, char *value) {
+    [[Branch getInstance:_branchKey] addFacebookPartnerParameterWithName:CreateNSString(name) value:CreateNSString(value)];
+}
+
+void _clearPartnerParameters() {
+    [[Branch getInstance:_branchKey] clearPartnerParameters];
 }
 
 void _setTrackingDisabled(BOOL value) {
