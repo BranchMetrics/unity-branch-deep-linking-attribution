@@ -24,7 +24,7 @@ public class BranchUnityActivity extends UnityPlayerActivity {
     @Override
     public void onStart() {
         super.onStart();
-        Log.i(TAG, "BranchUnityActivity.onStart()");
+        //Log.i(TAG, "BranchUnityActivity.onStart()");
         BranchUnityWrapper.initSession();
     }
 

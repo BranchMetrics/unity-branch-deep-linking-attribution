@@ -48,7 +48,7 @@ public class BranchUnityWrapper {
      * Caches the last response.
      */
     public static void initSession() {
-        Log.i(TAG, "BranchUnityWrapper.initSession()");
+        //Log.i(TAG, "BranchUnityWrapper.initSession()");
 
         defaultListener = new BranchReferralInitListenerUnityCallback();
         Activity unityActivity = UnityPlayer.currentActivity;
@@ -60,7 +60,7 @@ public class BranchUnityWrapper {
      * @param callbackId
      */
     public static void initSession(String callbackId) {
-        Log.i(TAG, "BranchUnityWrapper.initSession(String callbackId)");
+        //Log.i(TAG, "BranchUnityWrapper.initSession(String callbackId)");
 
         defaultListener.setCallbackIDAndClearCachedParams(callbackId, false);
     }
@@ -70,7 +70,7 @@ public class BranchUnityWrapper {
      * @param callbackId
      */
     public static void initSessionWithUniversalObjectCallback(String callbackId) {
-        Log.i(TAG, "BranchUnityWrapper.initSessionWithUniversalObjectCallback(String callbackId)");
+        //Log.i(TAG, "BranchUnityWrapper.initSessionWithUniversalObjectCallback(String callbackId)");
 
         defaultListener.setCallbackIDAndClearCachedParams(callbackId, true);
     }
@@ -79,7 +79,7 @@ public class BranchUnityWrapper {
      * Called by BranchUnityActivity onNewIntent. Forces a new session.
      */
     public static void initSessionWithIntent() {
-        Log.i(TAG, "BranchUnityWrapper.initSessionWithIntent()");
+        //Log.i(TAG, "BranchUnityWrapper.initSessionWithIntent()");
 
         Activity unityActivity = UnityPlayer.currentActivity;
         unityActivity.getIntent().putExtra("branch_force_new_session", true);
@@ -667,7 +667,7 @@ public class BranchUnityWrapper {
 
         @Override
         public void onInitFinished(JSONObject params, BranchError branchError) {
-            Log.i(TAG, "BranchReferralInitListenerUnityCallback.onInitFinished(JSONObject params, BranchError branchError)");
+            //Log.i(TAG, "BranchReferralInitListenerUnityCallback.onInitFinished(JSONObject params, BranchError branchError)");
             _waitForFirstPayload = false;
 
             // if we don't have a callback id yet, save params until we do
@@ -680,7 +680,7 @@ public class BranchUnityWrapper {
 
         // set a callbackId and respond with the last data we have
         public void setCallbackIDAndClearCachedParams(String callbackId, Boolean isBUO) {
-            Log.i(TAG, "BranchReferralInitListenerUnityCallback.setCallbackIDAndClearCachedParams(String callbackId, Boolean isBUO)");
+            //Log.i(TAG, "BranchReferralInitListenerUnityCallback.setCallbackIDAndClearCachedParams(String callbackId, Boolean isBUO)");
             _callbackId = callbackId;
             _isBUO = isBUO;
 
@@ -692,7 +692,7 @@ public class BranchUnityWrapper {
         }
 
         private void handleCallback(JSONObject params, BranchError branchError) {
-            Log.i(TAG, "BranchReferralInitListenerUnityCallback.handleCallback(JSONObject params, BranchError branchError)");
+            //Log.i(TAG, "BranchReferralInitListenerUnityCallback.handleCallback(JSONObject params, BranchError branchError)");
             if (_isBUO) {
                 // recreate the convienience API from the Branch SDK
                 BranchUniversalObject branchUniversalObject = BranchUniversalObject.getReferredBranchUniversalObject();

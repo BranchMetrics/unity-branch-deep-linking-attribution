@@ -18,8 +18,13 @@ public class BranchUnityApp extends Application {
     public void onCreate() {
         super.onCreate();
 
-        Log.i(TAG, "BranchUnityApp.onCreate()");
-        Branch.enableLogging();
+        //Log.i(TAG, "BranchUnityApp.onCreate()");
+        //Branch.enableLogging();
+
+        // TODO: fix the version import, maybe we can do it on build
+        // Need to set plugin information earlier than the C# startup
+        Branch.registerPlugin("Unity", "0.6.7");
+
         Branch.disableInstantDeepLinking(true);
         Branch.getAutoInstance(this.getApplicationContext());
     }
