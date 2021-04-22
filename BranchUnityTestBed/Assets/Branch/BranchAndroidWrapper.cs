@@ -13,28 +13,10 @@ public class BranchAndroidWrapper {
     }
 
 	#region InitSession methods
-    
-    public static void initSession() {
-		_runBlockOnThread(() => {
-        	_getBranchClass().CallStatic("initSession");
-		});
-    }
-
-	public static void initSessionAsReferrable(bool isReferrable) {
-		_runBlockOnThread(() => {
-			_getBranchClass().CallStatic("initSession", isReferrable);
-		});
-	}
 
 	public static void initSessionWithCallback(string callbackId) {
 		_runBlockOnThread(() => {
 			_getBranchClass().CallStatic("initSession", callbackId);
-		});
-	}
-
-	public static void initSessionAsReferrableWithCallback(bool isReferrable, string callbackId) {
-		_runBlockOnThread(() => {
-			_getBranchClass().CallStatic("initSession", callbackId, isReferrable);
 		});
 	}
 
@@ -148,7 +130,7 @@ public class BranchAndroidWrapper {
 
 	public static void addFacebookPartnerParameter(string name, string val) {
 		_runBlockOnThread(() => {
-			_getBranchClass().CallStatic("addFacebookPartnerParameterWithName", name, val);
+			_getBranchClass().CallStatic("addFacebookPartnerParameter", name, val);
 		});
 	}
 

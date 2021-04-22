@@ -1,6 +1,7 @@
 package io.branch.unity;
 
 import android.app.Activity;
+import android.util.Log;
 
 import com.unity3d.player.UnityPlayer;
 
@@ -16,6 +17,7 @@ import java.util.Locale;
 
 import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
+import io.branch.referral.Branch.BranchReferralInitListener;
 import io.branch.referral.BranchError;
 import io.branch.referral.BranchUtil;
 import io.branch.referral.Defines;
@@ -36,56 +38,57 @@ public class BranchUnityWrapper {
         Branch.registerPlugin("Unity", sdkVersion);
     }
 
+    // workaround to save payload, before C# code runs
+    private static BranchReferralInitListenerUnityCallback defaultListener;
 
-    private static String autoInitCallbackWithParams = "";
-    private static String autoInitCallbackWithBUO = "";
+    private static final String TAG = "BranchSDK.Unity";
 
     /**
-     * InitSession methods
+     * Init session from BranchUnityActivity.onStart()
+     * Caches the last response.
      */
     public static void initSession() {
+        Log.i(TAG, "BranchUnityWrapper.initSession()");
+
+        defaultListener = new BranchReferralInitListenerUnityCallback();
         Activity unityActivity = UnityPlayer.currentActivity;
-        Branch.getAutoInstance(unityActivity.getApplicationContext(), _branchKey).initSessionWithData(unityActivity.getIntent().getData(), unityActivity);
+        Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).initSession(defaultListener, unityActivity.getIntent().getData(), unityActivity);
     }
 
-    public static void initSession(boolean isReferable) {
-        Activity unityActivity = UnityPlayer.currentActivity;
-        // No congruent API here, so borrowing from initSession(callback, referrable, data) method
-        Branch.getAutoInstance(unityActivity.getApplicationContext(), _branchKey).initSession((Branch.BranchReferralInitListener) null, isReferable, unityActivity.getIntent().getData(), unityActivity);
-    }
-
+    /**
+     * Branch SDK is already initialized, this just attaches the callback id and format
+     * @param callbackId
+     */
     public static void initSession(String callbackId) {
-        autoInitCallbackWithParams = callbackId;
+        Log.i(TAG, "BranchUnityWrapper.initSession(String callbackId)");
 
-        Activity unityActivity = UnityPlayer.currentActivity;
-       Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).initSession(new BranchReferralInitListenerUnityCallback(callbackId), unityActivity.getIntent().getData(), unityActivity);
+        defaultListener.setCallbackIDAndClearCachedParams(callbackId, false);
     }
 
-    public static void initSession(String callbackId, boolean isReferrable) {
-        Activity unityActivity = UnityPlayer.currentActivity;
-        Branch.getAutoInstance(unityActivity.getApplicationContext(), _branchKey).initSession(new BranchReferralInitListenerUnityCallback(callbackId), isReferrable, unityActivity.getIntent().getData(), unityActivity);
-    }
-
+    /**
+     * Branch SDK is already initialized, this just attaches the callback id and format
+     * @param callbackId
+     */
     public static void initSessionWithUniversalObjectCallback(String callbackId) {
-        autoInitCallbackWithBUO = callbackId;
+        Log.i(TAG, "BranchUnityWrapper.initSessionWithUniversalObjectCallback(String callbackId)");
 
-        Activity unityActivity = UnityPlayer.currentActivity;
-       Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).initSession(new BranchUniversalReferralInitListenerUnityCallback(callbackId), unityActivity.getIntent().getData(), unityActivity);
+        defaultListener.setCallbackIDAndClearCachedParams(callbackId, true);
     }
 
+    /**
+     * Called by BranchUnityActivity onNewIntent. Forces a new session.
+     */
     public static void initSessionWithIntent() {
-        if (!autoInitCallbackWithParams.isEmpty()) {
-            initSession(autoInitCallbackWithParams);
-        }
-        else if (!autoInitCallbackWithBUO.isEmpty()) {
-            initSessionWithUniversalObjectCallback(autoInitCallbackWithBUO);
-        }
+        Log.i(TAG, "BranchUnityWrapper.initSessionWithIntent()");
+
+        Activity unityActivity = UnityPlayer.currentActivity;
+        unityActivity.getIntent().putExtra("branch_force_new_session", true);
+        initSession();
     }
 
     /**
      * Session Item methods
      */
-
     public static String getFirstReferringBranchUniversalObject() {
         BranchUniversalObject branchUniversalObject = null;
         Branch branchInstance = Branch.getInstance();
@@ -646,116 +649,67 @@ public class BranchUnityWrapper {
         return linkProperties;
     }
 
-
     private static String _branchKey;
 
     /**
-     * Callback for Unity
+     * Callback for Unity.
      */
-
     private static class BranchReferralInitListenerUnityCallback implements Branch.BranchReferralInitListener, Branch.BranchReferralStateChangedListener, Branch.BranchListResponseListener, Branch.BranchLinkCreateListener, Branch.BranchLinkShareListener {
+
+        // used for the default listener before C# is running
+        public BranchReferralInitListenerUnityCallback() {
+
+        }
+
         public BranchReferralInitListenerUnityCallback(String callbackId) {
             _callbackId = callbackId;
         }
 
         @Override
         public void onInitFinished(JSONObject params, BranchError branchError) {
-            _sendMessageWithWithBranchError("_asyncCallbackWithParams", branchError, "params", params);
-        }
+            Log.i(TAG, "BranchReferralInitListenerUnityCallback.onInitFinished(JSONObject params, BranchError branchError)");
+            _waitForFirstPayload = false;
 
-        @Override
-        public void onStateChanged(boolean changed, BranchError branchError) {
-            _sendMessageWithWithBranchError("_asyncCallbackWithStatus", branchError, "status", changed);
-        }
-
-        @Override
-        public void onReceivingResponse(JSONArray list, BranchError branchError) {
-            _sendMessageWithWithBranchError("_asyncCallbackWithList", branchError, "list", list);
-        }
-
-        @Override
-        public void onLinkCreate(String url, BranchError branchError) {
-            _sendMessageWithWithBranchError("_asyncCallbackWithUrl", branchError, "url", url);
-        }
-
-        @Override
-        public void onShareLinkDialogLaunched() {
-
-        }
-
-        @Override
-        public void onShareLinkDialogDismissed() {
-            try {
-                if (!_linkShared) {
-                    JSONObject params = new JSONObject();
-                    params.put("sharedLink", "");
-                    params.put("sharedChannel", "");
-
-                    _sendMessageWithWithBranchError("_asyncCallbackWithParams", null, "params", params);
-                }
-            }
-            catch (JSONException jsone) {
-                jsone.printStackTrace();
+            // if we don't have a callback id yet, save params until we do
+            if (_callbackId.isEmpty() && branchError == null) {
+                _lastJSON = params;
+            } else {
+                handleCallback(params, branchError);
             }
         }
 
-        @Override
-        public void onLinkShareResponse(String sharedLink, String sharedChannel, BranchError branchError) {
-            try {
-                JSONObject params = new JSONObject();
-                params.put("sharedLink", sharedLink);
-                params.put("sharedChannel", sharedChannel);
-
-                _sendMessageWithWithBranchError("_asyncCallbackWithParams", branchError, "params", params);
-                _linkShared = true;
-            }
-            catch (JSONException jsone) {
-                jsone.printStackTrace();
-            }
-        }
-
-        @Override
-        public void onChannelSelected(java.lang.String selectedChannel) {
-            _sendMessageWithWithBranchError("_asyncCallbackWithParams", null, "selectedChannel", selectedChannel);
-            _linkShared = true;
-        }
-
-        private void _sendMessageWithWithBranchError(String asyncCallbackMethod, BranchError branchError, String extraKey, Object extraValue) {
-            try {
-                JSONObject responseObject = new JSONObject();
-                responseObject.put("callbackId", _callbackId);
-                responseObject.put(extraKey, extraValue);
-                responseObject.put("error", branchError == null ? null : branchError.getMessage());
-
-                String respString = responseObject.toString();
-                UnityPlayer.UnitySendMessage("Branch", asyncCallbackMethod, respString);
-            }
-            catch (JSONException jsone) {
-                // nothing to do here
-                jsone.printStackTrace();
-            }
-        }
-
-        private String _callbackId;
-        private Boolean _linkShared = false;
-    }
-
-    private static class BranchUniversalReferralInitListenerUnityCallback implements Branch.BranchUniversalReferralInitListener, Branch.BranchReferralStateChangedListener, Branch.BranchListResponseListener, Branch.BranchLinkCreateListener, Branch.BranchLinkShareListener {
-        public BranchUniversalReferralInitListenerUnityCallback(String callbackId) {
+        // set a callbackId and respond with the last data we have
+        public void setCallbackIDAndClearCachedParams(String callbackId, Boolean isBUO) {
+            Log.i(TAG, "BranchReferralInitListenerUnityCallback.setCallbackIDAndClearCachedParams(String callbackId, Boolean isBUO)");
             _callbackId = callbackId;
+            _isBUO = isBUO;
+
+            // First request could be in flight, wait for it.
+            if (!_waitForFirstPayload) {
+                handleCallback(_lastJSON, null);
+                _lastJSON = null;
+            }
         }
 
-        @Override
-        public void onInitFinished(BranchUniversalObject branchUniversalObject, LinkProperties linkProperties, BranchError branchError) {
-            try {
-                JSONObject params = new JSONObject();
-                params.put("universalObject", _jsonObjectFromBranchUniversalObject(branchUniversalObject));
-                params.put("linkProperties", _jsonObjectFromLinkProperties(linkProperties));
+        private void handleCallback(JSONObject params, BranchError branchError) {
+            Log.i(TAG, "BranchReferralInitListenerUnityCallback.handleCallback(JSONObject params, BranchError branchError)");
+            if (_isBUO) {
+                // recreate the convienience API from the Branch SDK
+                BranchUniversalObject branchUniversalObject = BranchUniversalObject.getReferredBranchUniversalObject();
+                LinkProperties linkProperties = LinkProperties.getReferredLinkProperties();
+                try {
+                    JSONObject buoParams = new JSONObject();
+                    buoParams.put("universalObject", _jsonObjectFromBranchUniversalObject(branchUniversalObject));
+                    buoParams.put("linkProperties", _jsonObjectFromLinkProperties(linkProperties));
 
-                _sendMessageWithWithBranchError("_asyncCallbackWithBranchUniversalObject", branchError, "params", params);
-            }
-            catch (JSONException jsone) {
-                jsone.printStackTrace();
+                    _sendMessageWithWithBranchError("_asyncCallbackWithBranchUniversalObject", branchError, "params", buoParams);
+                }
+                catch (JSONException jsone) {
+                    jsone.printStackTrace();
+                }
+
+            } else {
+                _sendMessageWithWithBranchError("_asyncCallbackWithParams", branchError, "params", params);
             }
         }
 
@@ -832,7 +786,12 @@ public class BranchUnityWrapper {
             }
         }
 
-        private String _callbackId;
+        private String _callbackId = "";
         private Boolean _linkShared = false;
+        private Boolean _isBUO = false;
+
+        // TODO: Check with Benas if this needs to be synchronized.
+        private Boolean _waitForFirstPayload = true;
+        private JSONObject _lastJSON = null;
     }
 }

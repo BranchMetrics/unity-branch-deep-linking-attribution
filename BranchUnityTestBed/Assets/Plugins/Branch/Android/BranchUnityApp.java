@@ -1,6 +1,7 @@
 package io.branch.unity;
 
 import android.app.Application;
+import android.util.Log;
 
 import io.branch.referral.Branch;
 //import android.support.multidex.MultiDexApplication;
@@ -10,10 +11,16 @@ import io.branch.referral.Branch;
  */
 
 public class BranchUnityApp extends Application {
-//public class BranchUnityApp extends MultiDexApplication {
+    //public class BranchUnityApp extends MultiDexApplication {
+
+    private static final String TAG = "BranchSDK.Unity";
+
     public void onCreate() {
         super.onCreate();
-        Branch.getAutoInstance(this.getApplicationContext());
+
+        Log.i(TAG, "BranchUnityApp.onCreate()");
+        Branch.enableLogging();
         Branch.disableInstantDeepLinking(true);
+        Branch.getAutoInstance(this.getApplicationContext());
     }
 }

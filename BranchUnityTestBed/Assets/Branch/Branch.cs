@@ -397,14 +397,15 @@ public class Branch : MonoBehaviour {
 	#region Singleton
 
     public void Awake() {
-		var olderBranches = FindObjectsOfType<Branch>();
 
+        // make sure there's only a single Branch instance
+		var olderBranches = FindObjectsOfType<Branch>();
 		if (olderBranches != null && olderBranches.Length > 1) {
-			// someone's already here!
 			Destroy(gameObject);
 			return;
 		}
 
+        // setup Branch singleton
         name = "Branch";
         DontDestroyOnLoad(gameObject);
 
@@ -417,8 +418,10 @@ public class Branch : MonoBehaviour {
     }
 
 	void OnApplicationPause(bool pauseStatus) {
-		if (!_isFirstSessionInited)
-			return;
+        if (!_isFirstSessionInited)
+        {
+            return;
+        }
 
 		if (!pauseStatus) {
 			if (autoInitCallbackWithParams != null) {
@@ -444,17 +447,8 @@ public class Branch : MonoBehaviour {
     [DllImport ("__Internal")]
     private static extern void _setBranchKey(string branchKey, string sdkVersion);
 
-    [DllImport ("__Internal")]
-    private static extern void _initSession();
-
-	[DllImport ("__Internal")]
-	private static extern void _initSessionAsReferrable(bool isReferrable);
-
 	[DllImport ("__Internal")]
 	private static extern void _initSessionWithCallback(string callbackId);
-
-	[DllImport ("__Internal")]
-	private static extern void _initSessionAsReferrableWithCallback(bool isReferrable, string callbackId);
 
 	[DllImport ("__Internal")]
 	private static extern void _initSessionWithUniversalObjectCallback(string callbackId);
@@ -570,20 +564,8 @@ public class Branch : MonoBehaviour {
         BranchAndroidWrapper.setBranchKey(branchKey, sdkVersion);
     }
 
-    private static void _initSession() {
-        BranchAndroidWrapper.initSession();
-    }
-
-	private static void _initSessionAsReferrable(bool isReferrable) {
-		BranchAndroidWrapper.initSessionAsReferrable(isReferrable);
-	}
-
 	private static void _initSessionWithCallback(string callbackId) {
 		BranchAndroidWrapper.initSessionWithCallback(callbackId);
-	}
-
-	private static void _initSessionAsReferrableWithCallback(bool isReferrable, string callbackId) {
-		BranchAndroidWrapper.initSessionAsReferrableWithCallback(isReferrable, callbackId);
 	}
 
 	private static void _initSessionWithUniversalObjectCallback(string callbackId) {
@@ -732,19 +714,7 @@ public class Branch : MonoBehaviour {
 
     private static void _setBranchKey(string branchKey, string sdkVersion) { }
 
-    private static void _initSession() {
-        Debug.Log("Branch is not implemented on this platform");
-    }
-    
-	private static void _initSessionAsReferrable(bool isReferrable) {
-		Debug.Log("Branch is not implemented on this platform");
-	}
-
 	private static void _initSessionWithCallback(string callbackId) {
-		callNotImplementedCallbackForParamCallback(callbackId);
-	}
-
-	private static void _initSessionAsReferrableWithCallback(bool isReferrable, string callbackId) {
 		callNotImplementedCallbackForParamCallback(callbackId);
 	}
 
