@@ -10,30 +10,6 @@ public class RewardsHistoryPanel : MonoBehaviour {
 	public GameObject itemPrefab;
 	private List<RewardTransactionItem> items = new List<RewardTransactionItem>();
 
-
-	void OnEnable() {
-		Branch.getCreditHistory( (historyList, error) =>  {
-
-			if (error != null) {
-				Debug.LogError("Branch.getCreditHistory failed: " + error);
-				AddItem("error");
-
-			} else if (historyList != null && historyList.Count > 0) {
-				List<string> resList = new List<string>();
-				Parse(historyList, resList);
-
-				foreach(string str in resList) {
-					Debug.Log(str);
-					AddItem(str);
-				}
-
-				scroll.verticalNormalizedPosition = 1.0f;
-			} else {
-				AddItem("empty");
-			}
-		});
-	}
-
 	void OnDisable() {
 		foreach(RewardTransactionItem obj in items)
 			Destroy(obj.gameObject);
