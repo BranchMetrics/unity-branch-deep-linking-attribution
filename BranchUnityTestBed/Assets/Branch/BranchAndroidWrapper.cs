@@ -170,60 +170,6 @@ public class BranchAndroidWrapper {
 
 	#endregion
     
-	#region Credit methods
-    
-    public static void loadRewardsWithCallback(string callbackId) {
-		_runBlockOnThread(() => {
-        	_getBranchClass().CallStatic("loadRewards", callbackId);
-		});
-    }
-    
-    public static int getCredits() {
-        return _getBranchClass().CallStatic<int>("getCredits");
-    }
-    
-    public static void redeemRewards(int count) {
-		_runBlockOnThread(() => {
-        	_getBranchClass().CallStatic("redeemRewards", count);
-		});
-    }
-    
-    public static int getCreditsForBucket(string bucket) {
-        return _getBranchClass().CallStatic<int>("getCreditsForBucket", bucket);
-    }
-    
-    public static void redeemRewardsForBucket(int count, string bucket) {
-		_runBlockOnThread(() => {
-        	_getBranchClass().CallStatic("redeemRewards", bucket, count);
-		});
-    }
-    
-    public static void getCreditHistoryWithCallback(string callbackId) {
-		_runBlockOnThread(() => {
-        	_getBranchClass().CallStatic("getCreditHistory", callbackId);
-		});
-    }
-    
-    public static void getCreditHistoryForBucketWithCallback(string bucket, string callbackId) {
-		_runBlockOnThread(() => {
-        	_getBranchClass().CallStatic("getCreditHistory", bucket, callbackId);
-		});
-    }
-    
-    public static void getCreditHistoryForTransactionWithLengthOrderAndCallback(string creditTransactionId, int length, int order, string callbackId) {
-		_runBlockOnThread(() => {
-        	_getBranchClass().CallStatic("getCreditHistory", creditTransactionId, length, order, callbackId);
-		});
-    }
-    
-    public static void getCreditHistoryForBucketWithTransactionLengthOrderAndCallback(string bucket, string creditTransactionId, int length, int order, string callbackId) {
-		_runBlockOnThread(() => {
-        	_getBranchClass().CallStatic("getCreditHistory", bucket, creditTransactionId, length, order, callbackId);
-		});
-    }
-    
-	#endregion
-
 	#region Share Link methods
 
 	public static void shareLinkWithLinkProperties(string universalObject, string linkProperties, string message, string callbackId) {

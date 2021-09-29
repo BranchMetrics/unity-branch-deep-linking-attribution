@@ -265,7 +265,7 @@ public class Branch : MonoBehaviour {
 
 	#endregion
 
-	#region Send Evene methods
+	#region Send Event methods
 
 	/**
 	 * Send event
@@ -274,94 +274,6 @@ public class Branch : MonoBehaviour {
 		_sendEvent(branchEvent.ToJsonString());
 
 	}
-
-    #endregion
-
-    #region Credit methods
-
-    /**
-     * Load reward information. Callback indicates whether these values have changed.
-     */
-    public static void loadRewards(BranchCallbackWithStatus callback) {
-        var callbackId = _getNextCallbackId();
-
-        _branchCallbacks[callbackId] = callback;
-
-        _loadRewardsWithCallback(callbackId);
-    }
-
-    /**
-     * Get total credit count
-     */
-    public static int getCredits() {
-        return _getCredits();
-    }
-
-    /**
-     * Get credit count for a specified bucket
-     */
-    public static int getCredits(string bucket) {
-        return _getCreditsForBucket(bucket);
-    }
-
-    /**
-     * Redeem reward for a specified amount of credits
-     */
-    public static void redeemRewards(int count) {
-        _redeemRewards(count);
-    }
-
-    /**
-     * Redeem reward for a specified amount of credits and a certain bucket
-     */
-    public static void redeemRewards(int count, string bucket) {
-        _redeemRewardsForBucket(count, bucket);
-    }
-
-    /**
-     * Get Credit Transaction History items in a list
-     */
-    public static void getCreditHistory(BranchCallbackWithList callback) {
-        var callbackId = _getNextCallbackId();
-
-        _branchCallbacks[callbackId] = callback;
-
-        _getCreditHistoryWithCallback(callbackId);
-    }
-
-    /**
-     * Get Credit Transaction History items in a list for a specified bucket
-     */
-    public static void getCreditHistory(string bucket, BranchCallbackWithList callback) {
-        var callbackId = _getNextCallbackId();
-
-        _branchCallbacks[callbackId] = callback;
-
-        _getCreditHistoryForBucketWithCallback(bucket, callbackId);
-    }
-
-    /**
-     * Get Credit Transaction History items in a list starting at a specified transaction id, and continuing for a specified number of items, either descending or ascending (0, 1)
-     */
-    public static void getCreditHistory(string creditTransactionId, int length, int order, BranchCallbackWithList callback) {
-        var callbackId = _getNextCallbackId();
-
-        _branchCallbacks[callbackId] = callback;
-
-        _getCreditHistoryForTransactionWithLengthOrderAndCallback(creditTransactionId, length, order, callbackId);
-    }
-
-
-    /**
-     * Get Credit Transaction History items in a list for a specified bucket starting at a specified transaction id, and continuing for a specified number of items, either descending or ascending (0, 1)
-     */
-    public static void getCreditHistory(string bucket, string creditTransactionId, int length, int order, BranchCallbackWithList callback) {
-        var callbackId = _getNextCallbackId();
-        
-        _branchCallbacks[callbackId] = callback;
-        
-        _getCreditHistoryForBucketWithTransactionLengthOrderAndCallback(bucket, creditTransactionId, length, order, callbackId);
-    }
 
     #endregion
 
@@ -525,33 +437,6 @@ public class Branch : MonoBehaviour {
 	[DllImport ("__Internal")]
 	private static extern void _sendEvent(string eventName);
 
-    [DllImport ("__Internal")]
-    private static extern void _loadRewardsWithCallback(string callbackId);
-    
-    [DllImport ("__Internal")]
-    private static extern int _getCredits();
-    
-    [DllImport ("__Internal")]
-    private static extern void _redeemRewards(int count);
-    
-    [DllImport ("__Internal")]
-    private static extern int _getCreditsForBucket(string bucket);
-    
-    [DllImport ("__Internal")]
-    private static extern void _redeemRewardsForBucket(int count, string bucket);
-    
-    [DllImport ("__Internal")]
-    private static extern void _getCreditHistoryWithCallback(string callbackId);
-    
-    [DllImport ("__Internal")]
-    private static extern void _getCreditHistoryForBucketWithCallback(string bucket, string callbackId);
-    
-    [DllImport ("__Internal")]
-    private static extern void _getCreditHistoryForTransactionWithLengthOrderAndCallback(string creditTransactionId, int length, int order, string callbackId);
-    
-    [DllImport ("__Internal")]
-    private static extern void _getCreditHistoryForBucketWithTransactionLengthOrderAndCallback(string bucket, string creditTransactionId, int length, int order, string callbackId);
-    
 	[DllImport ("__Internal")]
 	private static extern void _getShortURLWithBranchUniversalObjectAndCallback(string universalObject, string linkProperties, string callbackId);
 
@@ -666,42 +551,6 @@ public class Branch : MonoBehaviour {
 		BranchAndroidWrapper.sendEvent(eventName);
 	}
 
-    private static void _loadRewardsWithCallback(string callbackId) {
-        BranchAndroidWrapper.loadRewardsWithCallback(callbackId);
-    }
-    
-    private static int _getCredits() {
-        return BranchAndroidWrapper.getCredits();
-    }
-
-    private static void _redeemRewards(int count) {
-        BranchAndroidWrapper.redeemRewards(count);
-    }
-    
-    private static int _getCreditsForBucket(string bucket) {
-        return BranchAndroidWrapper.getCreditsForBucket(bucket);
-    }
-
-    private static void _redeemRewardsForBucket(int count, string bucket) {
-        BranchAndroidWrapper.redeemRewardsForBucket(count, bucket);
-    }
-
-    private static void _getCreditHistoryWithCallback(string callbackId) {
-        BranchAndroidWrapper.getCreditHistoryWithCallback(callbackId);
-    }
-    
-    private static void _getCreditHistoryForBucketWithCallback(string bucket, string callbackId) {
-        BranchAndroidWrapper.getCreditHistoryForBucketWithCallback(bucket, callbackId);
-    }
-
-    private static void _getCreditHistoryForTransactionWithLengthOrderAndCallback(string creditTransactionId, int length, int order, string callbackId) {
-        BranchAndroidWrapper.getCreditHistoryForTransactionWithLengthOrderAndCallback(creditTransactionId, length, order, callbackId);
-    }
-    
-    private static void _getCreditHistoryForBucketWithTransactionLengthOrderAndCallback(string bucket, string creditTransactionId, int length, int order, string callbackId) {
-        BranchAndroidWrapper.getCreditHistoryForBucketWithTransactionLengthOrderAndCallback(bucket, creditTransactionId, length, order, callbackId);
-    }
-
 	private static void _shareLinkWithLinkProperties(string universalObject, string linkProperties, string message, string callbackId) {
 		BranchAndroidWrapper.shareLinkWithLinkProperties(universalObject, linkProperties, message, callbackId);
 	}
@@ -779,38 +628,6 @@ public class Branch : MonoBehaviour {
     private static void _userCompletedActionWithState(string action, string stateDict) { }
 
 	private static void _sendEvent(string eventName) { }
-    
-    private static void _loadRewardsWithCallback(string callbackId) {
-        callNotImplementedCallbackForStatusCallback(callbackId);
-    }
-    
-    private static int _getCredits() {
-        return 0;
-    }
-    
-    private static void _redeemRewards(int count) { }
-    
-    private static int _getCreditsForBucket(string bucket) {
-        return 0;
-    }
-    
-    private static void _redeemRewardsForBucket(int count, string bucket) { }
-    
-    private static void _getCreditHistoryWithCallback(string callbackId) {
-        callNotImplementedCallbackForListCallback(callbackId);
-    }
-    
-    private static void _getCreditHistoryForBucketWithCallback(string bucket, string callbackId) {
-        callNotImplementedCallbackForListCallback(callbackId);
-    }
-    
-    private static void _getCreditHistoryForTransactionWithLengthOrderAndCallback(string creditTransactionId, int length, int order, string callbackId) {
-        callNotImplementedCallbackForListCallback(callbackId);
-    }
-    
-    private static void _getCreditHistoryForBucketWithTransactionLengthOrderAndCallback(string bucket, string creditTransactionId, int length, int order, string callbackId) {
-        callNotImplementedCallbackForListCallback(callbackId);
-    }
     
 	private static void _shareLinkWithLinkProperties(string universalObject, string linkProperties, string message,string callbackId) {
 		callNotImplementedCallbackForUrlCallback(callbackId);

@@ -11,10 +11,10 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{820AEC7C-7F93-71C7-A37D-1CC603106BE6}</ProjectGuid>
+    <ProjectGuid>{8EFB3E77-C726-539D-881B-7012244DB85F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <AssemblyName>Assembly-CSharp-Editor</AssemblyName>
+    <AssemblyName>Unity.2D.Tilemap.Editor</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <BaseDirectory>.</BaseDirectory>
@@ -47,10 +47,46 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets\Branch\Editor\BranchPostProcessBuild.cs" />
-     <Compile Include="Assets\Branch\Editor\BranchEditor.cs" />
-     <None Include="Assets\ExternalDependencyManager\Editor\external-dependency-manager_version-1.2.164_manifest.txt" />
-     <None Include="Assets\Branch\Editor\BranchDependencies.xml" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\GridSelection.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\GridPalettes.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\GridBrushEditorBase.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\EditorTools\TilemapEditorTool.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\EditorTools\PaintTool.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\GridPalettesDropdown.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\PaintableGrid.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\GridSelectionEditor.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\AssemblyInfo.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\GridBrushEditor.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\ObjectCreationMenu\GameObjectCreation.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\GridBrush.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\GridPaintPaletteWindowPreferences.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\GridPaletteBrushes.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\TileUtility.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\EditorTools\PickingTool.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\SceneViewGridManager.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\GridBrushesDropdown.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\ObjectCreationMenu\DefaultAssetCreation.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\GridPaletteEditor.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\GridPaletteUtility.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\EditorTools\BoxTool.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\GridPaintTargetsDropdown.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\TilemapPrefabStageHelper.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\CreateTileFromPaletteAttribute.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\GridPaintSortingAttribute.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\EditorTools\FillTool.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\EditorTools\EraseTool.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\PaintableSceneViewGrid.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\GridPaintPaletteClipboard.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\GridEditorUtility.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\TileDragAndDrop.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\GridPaintingState.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\EditorTools\SelectTool.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\GridPaintPaletteWindow.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\EditorTools\MoveTool.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\TileDragAndDropManager.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\GridPaletteAddPopup.cs" />
+     <Compile Include="Packages\com.unity.2d.tilemap\Editor\SceneViewOpenTilePaletteHelper.cs" />
+     <None Include="Packages\com.unity.2d.tilemap\Editor\Unity.2D.Tilemap.Editor.asmdef" />
  <Reference Include="UnityEngine">
  <HintPath>/Applications/Unity/Hub/Editor/2020.3.17f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.dll</HintPath>
  </Reference>
@@ -668,9 +704,14 @@
  </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Assembly-CSharp.csproj">
-      <Project>{67E3F5FC-88EF-55B2-4156-39D21A59D4E6}</Project>
-      <Name>Assembly-CSharp</Name>
+    <ProjectReference Include="UnityEditor.UI.csproj">
+      <Project>{AF0CB866-4C19-B58E-9044-18866349725F}</Project>
+      <Name>UnityEditor.UI</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="UnityEngine.UI.csproj">
+      <Project>{8323CA09-E364-6FB7-EE98-19BCC085E315}</Project>
+      <Name>UnityEngine.UI</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="UnityEngine.TestRunner.csproj">
@@ -681,146 +722,6 @@
     <ProjectReference Include="UnityEditor.TestRunner.csproj">
       <Project>{0229B684-C8F0-DC1C-B76B-E38EC683E8F4}</Project>
       <Name>UnityEditor.TestRunner</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="Purchasing.Common.csproj">
-      <Project>{320E0A63-EAD7-58FE-AB4D-B234769EA66B}</Project>
-      <Name>Purchasing.Common</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="Unity.VSCode.Editor.csproj">
-      <Project>{01577DE5-C068-B91B-CD42-7A60FB1A04C0}</Project>
-      <Name>Unity.VSCode.Editor</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="Unity.2D.Tilemap.Editor.csproj">
-      <Project>{8EFB3E77-C726-539D-881B-7012244DB85F}</Project>
-      <Name>Unity.2D.Tilemap.Editor</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="UnityEngine.Purchasing.csproj">
-      <Project>{A678A7A0-1B0D-EF1D-5AF9-D965A30F93E4}</Project>
-      <Name>UnityEngine.Purchasing</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="Unity.TextMeshPro.Editor.csproj">
-      <Project>{0237B427-13A0-6F1C-CA4A-040261237C53}</Project>
-      <Name>Unity.TextMeshPro.Editor</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="Unity.VisualStudio.Editor.csproj">
-      <Project>{73FC52CC-AF87-4430-AAE3-3C20FA137676}</Project>
-      <Name>Unity.VisualStudio.Editor</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="Unity.Timeline.csproj">
-      <Project>{0B2C94BF-8CB7-397A-97EB-292C88E20131}</Project>
-      <Name>Unity.Timeline</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="Unity.TextMeshPro.csproj">
-      <Project>{6D3242FF-53C9-1A06-910C-66C49417F01F}</Project>
-      <Name>Unity.TextMeshPro</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="UnityEngine.Purchasing.SecurityStub.csproj">
-      <Project>{7C3F709B-6DA0-5209-349C-16AFEA872979}</Project>
-      <Name>UnityEngine.Purchasing.SecurityStub</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="UnityEngine.Advertisements.csproj">
-      <Project>{666394BE-D3FF-7407-24C9-29D23A657C7B}</Project>
-      <Name>UnityEngine.Advertisements</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="Unity.2D.Sprite.Editor.csproj">
-      <Project>{9231205D-871D-2294-DA67-8BC9CE16BD5D}</Project>
-      <Name>Unity.2D.Sprite.Editor</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="UnityEditor.UI.csproj">
-      <Project>{AF0CB866-4C19-B58E-9044-18866349725F}</Project>
-      <Name>UnityEditor.UI</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="Unity.PlasticSCM.Editor.csproj">
-      <Project>{8BA01415-888B-5D31-7377-258DEFDCC669}</Project>
-      <Name>Unity.PlasticSCM.Editor</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="Unity.Rider.Editor.csproj">
-      <Project>{91419F18-AABA-B57F-019C-7129F0D7C9C4}</Project>
-      <Name>Unity.Rider.Editor</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="Analytics.csproj">
-      <Project>{6DF208A2-B6CD-3823-039F-23019F5A801C}</Project>
-      <Name>Analytics</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="UnityEngine.SpatialTracking.csproj">
-      <Project>{35282CF2-C138-CE35-4A33-8FD207F7CFC9}</Project>
-      <Name>UnityEngine.SpatialTracking</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="UnityEngine.UI.csproj">
-      <Project>{8323CA09-E364-6FB7-EE98-19BCC085E315}</Project>
-      <Name>UnityEngine.UI</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="Unity.Analytics.DataPrivacy.csproj">
-      <Project>{A31080A1-741E-7625-DA90-959D6A5A7396}</Project>
-      <Name>Unity.Analytics.DataPrivacy</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="UnityEngine.Purchasing.SecurityCore.csproj">
-      <Project>{C8E90517-1CB6-14F5-E672-3CB07354A252}</Project>
-      <Name>UnityEngine.Purchasing.SecurityCore</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="UnityEngine.Purchasing.Codeless.csproj">
-      <Project>{5A0B40F9-D790-E980-F75E-E5D3308786BE}</Project>
-      <Name>UnityEngine.Purchasing.Codeless</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="UnityEngine.XR.LegacyInputHelpers.csproj">
-      <Project>{43F3917B-BD99-44BA-8086-C3D0D9998657}</Project>
-      <Name>UnityEngine.XR.LegacyInputHelpers</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="Unity.Timeline.Editor.csproj">
-      <Project>{432B7660-86ED-52DC-EA95-A4C4B215451F}</Project>
-      <Name>Unity.Timeline.Editor</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="UnityEngine.Purchasing.Stores.csproj">
-      <Project>{0A84C71B-FFFF-FCF7-AEBF-814D8EA71F7E}</Project>
-      <Name>UnityEngine.Purchasing.Stores</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="UnityEditor.XR.LegacyInputHelpers.csproj">
-      <Project>{05E3513C-A736-A6B0-8FE3-E03372FC4493}</Project>
-      <Name>UnityEditor.XR.LegacyInputHelpers</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="UnityEngine.Monetization.csproj">
-      <Project>{5093E946-D73D-9547-E1FD-9EB16C3157F5}</Project>
-      <Name>UnityEngine.Monetization</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="UnityEditor.Purchasing.csproj">
-      <Project>{FC4F20D9-A230-A0BE-CCBA-0C84E9F5051F}</Project>
-      <Name>UnityEditor.Purchasing</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="UnityEditor.SpatialTracking.csproj">
-      <Project>{0EF3C116-AA7D-2BEB-A9F2-9EA17B207BB2}</Project>
-      <Name>UnityEditor.SpatialTracking</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="UnityEngine.Advertisements.Editor.csproj">
-      <Project>{EB4CEACE-6F15-CF8F-9F1F-DC24D19D731E}</Project>
-      <Name>UnityEngine.Advertisements.Editor</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>

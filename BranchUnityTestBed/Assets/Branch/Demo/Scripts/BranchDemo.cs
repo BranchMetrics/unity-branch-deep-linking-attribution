@@ -7,7 +7,6 @@ using System;
 public class BranchDemo : MonoBehaviour {
 	
 	public InputField inputShortLink;
-	public Text lblRewardPoints;
 	public Text lblSetUserID;
 	public Text lblLog;
 	public GameObject mainPanel;
@@ -142,25 +141,6 @@ public class BranchDemo : MonoBehaviour {
 		}
 	}
 
-	public void OnBtn_Redeem5() {
-		Branch.redeemRewards(5);
-		OnBtn_RefreshRewards();
-	}
-
-	public void OnBtn_RefreshRewards() {
-		lblRewardPoints.text = "updating...";
-
-		Branch.loadRewards( (changed, error) => {
-			if (error != null) {
-				Debug.LogError("Branch.loadRewards failed: " + error);
-				lblRewardPoints.text = "error";
-			} else {
-				Debug.Log("Branch.loadRewards changed: " + changed);
-				lblRewardPoints.text = Branch.getCredits().ToString();
-			}
-		});
-	}
-
 	public void OnBtn_SendBuyEvent() {
         BranchEvent e = new BranchEvent (BranchEventType.PURCHASE);
 
@@ -176,12 +156,6 @@ public class BranchDemo : MonoBehaviour {
 
         Branch.sendEvent(e);
 
-        OnBtn_RefreshRewards();
-	}
-
-	public void OnBtn_ShowRewardsHistory() {
-		rewardsHistoryPanel.SetActive(true);
-		mainPanel.SetActive(false);
 	}
 
 	public void OnBtn_SetUserID() {
@@ -192,7 +166,6 @@ public class BranchDemo : MonoBehaviour {
 			} else {
 				Debug.Log("Branch.setIdentity install params: " + parameters.ToString());
 				lblSetUserID.text = "test_user_10";
-				OnBtn_RefreshRewards();
 			}
 		});
 	}
@@ -200,7 +173,6 @@ public class BranchDemo : MonoBehaviour {
 	public void OnBtn_SimualteLogout() {
 		Branch.logout();
 		lblSetUserID.text = "Set User ID";
-		lblRewardPoints.text = "";
 	}
 
 	public void OnBtn_SendComplexEvent() {
@@ -223,7 +195,6 @@ public class BranchDemo : MonoBehaviour {
 
         Branch.sendEvent(e);
 
-        OnBtn_RefreshRewards();
 	}
 
 	public void OnBtn_ShareLink() {
