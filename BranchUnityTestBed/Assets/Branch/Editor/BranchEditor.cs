@@ -14,10 +14,20 @@ public class BranchEditor : Editor {
 	private bool isNeedToUpdateIOS = false;
 	private bool isNeedToUpdateAndroid = false;
 
+	SerializedObject serializedBranchData;
+	SerializedProperty serializedTestAppLinks;
+	SerializedProperty serializedAppLinks;
+
+    private void OnEnable()
+    {
+		serializedBranchData = new SerializedObject(BranchData.Instance);
+		serializedTestAppLinks = serializedBranchData.FindProperty("testAppLinks");
+		serializedAppLinks = serializedBranchData.FindProperty("liveAppLinks");
+	}
+
+
 	public override void OnInspectorGUI() {
 		GUI.changed = false;
-
-		SerializedObject serializedBranchData = new UnityEditor.SerializedObject(BranchData.Instance);
 
 		// This does not work on Android, disable it for now
 		//SerializedProperty serializedIsDebug = serializedBranchData.FindProperty("enableLogging");
@@ -26,13 +36,10 @@ public class BranchEditor : Editor {
 		SerializedProperty serializedTestBranchKey = serializedBranchData.FindProperty("testBranchKey");
 		SerializedProperty serializedTestBranchUri = serializedBranchData.FindProperty("testBranchUri");
 		SerializedProperty serializedTestAndroidPathPrefix = serializedBranchData.FindProperty("testAndroidPathPrefix");
-		SerializedProperty serializedTestAppLinks = serializedBranchData.FindProperty("testAppLinks");
 
 		SerializedProperty serializedBranchKey = serializedBranchData.FindProperty("liveBranchKey");
 		SerializedProperty serializedBranchUri = serializedBranchData.FindProperty("liveBranchUri");
 		SerializedProperty serializedAndroidPathPrefix = serializedBranchData.FindProperty("liveAndroidPathPrefix");
-		SerializedProperty serializedAppLinks = serializedBranchData.FindProperty("liveAppLinks");
-
 
 		//EditorGUILayout.PropertyField(serializedIsDebug, new GUILayoutOption[]{});
 		EditorGUILayout.PropertyField(serializedIsTestMode, new GUILayoutOption[]{});
