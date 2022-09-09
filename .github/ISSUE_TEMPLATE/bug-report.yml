@@ -39,6 +39,15 @@ body:
     type: input
     validations: 
       required: true
+  -
+    attributes:
+      description: "What version of the Unity are you using?"
+      label: Unity Version
+      placeholder: "2022.1.15"
+    id: unity-version
+    type: input
+    validations: 
+      required: true
   - 
     attributes: 
       description: "What devices or emulators are you seeing this bug on?"
