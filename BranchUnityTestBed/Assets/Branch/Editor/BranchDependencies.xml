@@ -1,10 +1,9 @@
 <dependencies>
   <androidPackages>
     <androidPackage spec="io.branch.sdk.android:library:5.+" />
-    <androidPackage spec="com.google.firebase:firebase-appindexing:19.0.0" />
-    <androidPackage spec="com.google.android.gms:play-services-ads-identifier:16+" />
+    <androidPackage spec="com.google.android.gms:play-services-ads-identifier:18+" />
   </androidPackages>
   <iosPods>
-      <iosPod name="Branch" version="~>1.39.2" bitcodeEnabled="true" minTargetSdk="9.0" addToAllTargets="false" />
+      <iosPod name="BranchSDK" version="~>2.0.0" bitcodeEnabled="false" minTargetSdk="11.0" addToAllTargets="false" />
   </iosPods>
 </dependencies>
