@@ -9,7 +9,6 @@ import io.branch.referral.Branch;
 /**
  * Created by antonarhunou on 1/9/18.
  */
-
 public class BranchUnityApp extends Application {
     //public class BranchUnityApp extends MultiDexApplication {
 
@@ -18,13 +17,15 @@ public class BranchUnityApp extends Application {
     public void onCreate() {
         super.onCreate();
 
+        // Some early lifecycle events occur prior to C# runtime startup, which prevents the C# APIs from working properly
+
+        // Enables logging for install/open on app launch
         //Log.i(TAG, "BranchUnityApp.onCreate()");
         //Branch.enableLogging();
 
-        // TODO: fix the version import, maybe we can do it on build
-        // Need to set plugin information earlier than the C# startup
-        Branch.registerPlugin("Unity", "0.6.7");
-
+        // Set plugin version
+        Branch.registerPlugin("Unity", "1.0.0");
+        
         Branch.disableInstantDeepLinking(true);
         Branch.getAutoInstance(this.getApplicationContext());
     }

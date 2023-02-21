@@ -1,5 +1,6 @@
 #include "BranchiOSWrapper.h"
 #include "Branch.h"
+#include "BranchEvent.h"
 #include "BranchConstants.h"
 #include "BranchUniversalObject.h"
 #import "UnityAppController.h"
