@@ -52,6 +52,8 @@ public class BranchUnityWrapper {
 
         defaultListener = new BranchReferralInitListenerUnityCallback();
         Activity unityActivity = UnityPlayer.currentActivity;
+
+        // TODO: replace with sessionbuilder version
         Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).initSession(defaultListener, unityActivity.getIntent().getData(), unityActivity);
     }
 
@@ -61,8 +63,9 @@ public class BranchUnityWrapper {
      */
     public static void initSession(String callbackId) {
         //Log.i(TAG, "BranchUnityWrapper.initSession(String callbackId)");
-
+        
         defaultListener.setCallbackIDAndClearCachedParams(callbackId, false);
+        Branch.notifyNativeToInit();
     }
 
     /**
@@ -73,6 +76,7 @@ public class BranchUnityWrapper {
         //Log.i(TAG, "BranchUnityWrapper.initSessionWithUniversalObjectCallback(String callbackId)");
 
         defaultListener.setCallbackIDAndClearCachedParams(callbackId, true);
+        Branch.notifyNativeToInit();
     }
 
     /**
@@ -234,8 +238,6 @@ public class BranchUnityWrapper {
         Branch.getInstance().logout();
     }
     
-    public static void setDebug() { }
-
     public static void enableLogging() {
         Branch.enableLogging();
     }
@@ -284,30 +286,8 @@ public class BranchUnityWrapper {
         Branch.getInstance().clearPartnerParameters();
     }
 
-    public static void accountForFacebookSDKPreventingAppLaunch() {
-
-    }
-
     public static void setTrackingDisabled(boolean value) {
         Branch.getInstance().disableTracking(value);
-    }
-
-    /**
-     * User Action methods
-     */
-
-    public static void userCompletedAction(String action) {
-        Branch.getInstance().userCompletedAction(action);
-    }
-
-    public static void userCompletedAction(String action, String stateDict) {
-        try {
-            JSONObject state = new JSONObject(stateDict);
-            Branch.getInstance().userCompletedAction(action, state);
-        }
-        catch (JSONException jsone) {
-            jsone.printStackTrace();
-        }
     }
 
     /**
@@ -405,50 +385,6 @@ public class BranchUnityWrapper {
         catch (JSONException jsone) {
             jsone.printStackTrace();
         }
-    }
-
-    /**
-     * Credit methods
-     */
-
-    public static void loadRewards(String callbackId) {
-        Branch.getInstance().loadRewards(new BranchReferralInitListenerUnityCallback(callbackId));
-    }
-
-    public static int getCredits() {
-        return Branch.getInstance().getCredits();
-    }
-
-    public static void redeemRewards(int count) {
-        Branch.getInstance().redeemRewards(count);
-    }
-
-    public static int getCreditsForBucket(String bucket) {
-        return Branch.getInstance().getCreditsForBucket(bucket);
-    }
-
-    public static void redeemRewards(String bucket, int count) {
-        Branch.getInstance().redeemRewards(bucket, count);
-    }
-
-    public static void getCreditHistory(String callbackId) {
-        Branch.getInstance().getCreditHistory(new BranchReferralInitListenerUnityCallback(callbackId));
-    }
-
-    public static void getCreditHistory(String bucket, String callbackId) {
-        Branch.getInstance().getCreditHistory(bucket, new BranchReferralInitListenerUnityCallback(callbackId));
-    }
-
-    public static void getCreditHistory(String creditTransactionId, int length, int order, String callbackId) {
-        Branch.CreditHistoryOrder creditHistoryOrder = order == 0 ? Branch.CreditHistoryOrder.kMostRecentFirst : Branch.CreditHistoryOrder.kLeastRecentFirst;
-
-        Branch.getInstance().getCreditHistory(creditTransactionId, length, creditHistoryOrder, new BranchReferralInitListenerUnityCallback(callbackId));
-    }
-
-    public static void getCreditHistory(String bucket, String creditTransactionId, int length, int order, String callbackId) {
-        Branch.CreditHistoryOrder creditHistoryOrder = order == 0 ? Branch.CreditHistoryOrder.kMostRecentFirst : Branch.CreditHistoryOrder.kLeastRecentFirst;
-
-        Branch.getInstance().getCreditHistory(bucket, creditTransactionId, length, creditHistoryOrder, new BranchReferralInitListenerUnityCallback(callbackId));
     }
 
     /**

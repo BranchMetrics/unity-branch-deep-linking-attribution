@@ -32,7 +32,7 @@ public class BranchDemo : MonoBehaviour {
 
         // set debug if need
         if (BranchData.Instance.enableLogging) {
-			Branch.setDebug();
+			Branch.enableLogging();
 		}
 
 		// disable tracking of analytics for the user
@@ -40,9 +40,6 @@ public class BranchDemo : MonoBehaviour {
 
         //init Branch with Dictionary
         //Branch.initSession(CallbackWithParams);
-
-        //Branch.setAppleSearchAdsDebugMode();
-        //Branch.delayInitToCheckForSearchAds();
 
 		//init Branch with BUO
 		Branch.initSession(CallbackWithBranchUniversalObject);

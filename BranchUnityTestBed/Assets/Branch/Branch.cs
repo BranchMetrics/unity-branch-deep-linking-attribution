@@ -170,14 +170,6 @@ public class Branch : MonoBehaviour {
     #region Configuration methods
 
     /**
-     * Deprecated
-     * Use test devices instead. https://help.branch.io/using-branch/docs/adding-test-devices
-     */
-    public static void setDebug() {
-		_setDebug();
-    }
-
-    /**
      * Enable native SDK logging.
      */
     public static void enableLogging()
@@ -213,11 +205,6 @@ public class Branch : MonoBehaviour {
 	public static void listOnSpotlight(BranchUniversalObject universalObject) {
 		_listOnSpotlight(universalObject.ToJsonString());
 	}
-
-	public static void accountForFacebookSDKPreventingAppLaunch() {
-		_accountForFacebookSDKPreventingAppLaunch();
-	}
-
 	public static void setRequestMetadata(string key, string val) {
 
 		if (!string.IsNullOrEmpty (key) && !string.IsNullOrEmpty (val)) {
@@ -241,29 +228,7 @@ public class Branch : MonoBehaviour {
 		_setTrackingDisabled(value);
 	}
 
-    public static void delayInitToCheckForSearchAds() {
-        _delayInitToCheckForSearchAds();
-    }
-
     #endregion
-
-    #region User Action methods
-
-    /**
-     * Mark a custom action completed
-     */
-    public static void userCompletedAction(string action) {
-        _userCompletedAction(action);
-    }
-
-    /**
-     * Mark a custom action completed with additional custom fields
-     */
-    public static void userCompletedAction(string action, Dictionary<string, object> state) {
-		_userCompletedActionWithState(action, BranchThirdParty_MiniJSON.Json.Serialize(state));
-    }
-
-	#endregion
 
 	#region Send Event methods
 
@@ -388,9 +353,6 @@ public class Branch : MonoBehaviour {
     
     [DllImport ("__Internal")]
     private static extern void _logout();
-    
-    [DllImport ("__Internal")]
-    private static extern void _setDebug();
 
     [DllImport ("__Internal")]
     private static extern void _enableLogging();
@@ -411,9 +373,6 @@ public class Branch : MonoBehaviour {
 	private static extern void _listOnSpotlight(string universalObject);
 
 	[DllImport ("__Internal")]
-	private static extern void _accountForFacebookSDKPreventingAppLaunch();
-
-	[DllImport ("__Internal")]
 	private static extern void _setRequestMetadata(string key, string val);
 
 	[DllImport ("__Internal")]
@@ -424,15 +383,6 @@ public class Branch : MonoBehaviour {
 
 	[DllImport ("__Internal")]
 	private static extern void _setTrackingDisabled(bool value);
-
-    [DllImport ("__Internal")]
-    private static extern void _delayInitToCheckForSearchAds();
-
-    [DllImport ("__Internal")]
-    private static extern void _userCompletedAction(string action);
-    
-    [DllImport ("__Internal")]
-    private static extern void _userCompletedActionWithState(string action, string stateDict);
     
 	[DllImport ("__Internal")]
 	private static extern void _sendEvent(string eventName);
@@ -489,10 +439,6 @@ public class Branch : MonoBehaviour {
         BranchAndroidWrapper.logout();
     }
 
-    private static void _setDebug() {
-        BranchAndroidWrapper.setDebug();
-    }
-
     private static void _enableLogging() {
         BranchAndroidWrapper.enableLogging();
     }
@@ -517,10 +463,6 @@ public class Branch : MonoBehaviour {
 		BranchAndroidWrapper.listOnSpotlight(universalObject);
 	}
 
-	private static void _accountForFacebookSDKPreventingAppLaunch() {
-		BranchAndroidWrapper.accountForFacebookSDKPreventingAppLaunch();
-	}
-
 	private static void _setRequestMetadata(string key, string val) {
 		BranchAndroidWrapper.setRequestMetadata(key, val);
 	}
@@ -535,16 +477,6 @@ public class Branch : MonoBehaviour {
 
 	private static void _setTrackingDisabled(bool value) {
 	    BranchAndroidWrapper.setTrackingDisabled(value);
-    }
-
-    private static void _delayInitToCheckForSearchAds() {}
-
-    private static void _userCompletedAction(string action) {
-        BranchAndroidWrapper.userCompletedAction(action);
-    }
-    
-    private static void _userCompletedActionWithState(string action, string stateDict) {
-        BranchAndroidWrapper.userCompletedActionWithState(action, stateDict);
     }
     
 	private static void _sendEvent(string eventName) {
@@ -597,8 +529,6 @@ public class Branch : MonoBehaviour {
     
     private static void _logout() { }
 
-	private static void _setDebug() { }
-
     private static void _enableLogging() { }
 
     private static void _setRetryInterval(int retryInterval) { }
@@ -611,8 +541,6 @@ public class Branch : MonoBehaviour {
 
 	private static void _listOnSpotlight(string universalObject) { }
 
-	private static void _accountForFacebookSDKPreventingAppLaunch() { }
-
 	private static void _setRequestMetadata(string key, string val) { }
 
     private static void _addFacebookPartnerParameter(string name, string val) { }
@@ -620,12 +548,6 @@ public class Branch : MonoBehaviour {
     private static void _clearPartnerParameters() { }
 
     private static void _setTrackingDisabled(bool value) { }
-
-    private static void _delayInitToCheckForSearchAds() { }
-
-    private static void _userCompletedAction(string action) { }
-    
-    private static void _userCompletedActionWithState(string action, string stateDict) { }
 
 	private static void _sendEvent(string eventName) { }
     
