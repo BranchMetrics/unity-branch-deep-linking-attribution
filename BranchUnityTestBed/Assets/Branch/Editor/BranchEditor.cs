@@ -29,8 +29,7 @@ public class BranchEditor : Editor {
 	public override void OnInspectorGUI() {
 		GUI.changed = false;
 
-		// This does not work on Android, disable it for now
-		//SerializedProperty serializedIsDebug = serializedBranchData.FindProperty("enableLogging");
+		SerializedProperty serializedEnableLogging = serializedBranchData.FindProperty("enableLogging");
 		SerializedProperty serializedIsTestMode = serializedBranchData.FindProperty("testMode");
 
 		SerializedProperty serializedTestBranchKey = serializedBranchData.FindProperty("testBranchKey");
@@ -41,18 +40,8 @@ public class BranchEditor : Editor {
 		SerializedProperty serializedBranchUri = serializedBranchData.FindProperty("liveBranchUri");
 		SerializedProperty serializedAndroidPathPrefix = serializedBranchData.FindProperty("liveAndroidPathPrefix");
 
-		//EditorGUILayout.PropertyField(serializedIsDebug, new GUILayoutOption[]{});
+		EditorGUILayout.PropertyField(serializedEnableLogging, new GUILayoutOption[]{});
 		EditorGUILayout.PropertyField(serializedIsTestMode, new GUILayoutOption[]{});
-
-		GUI.enabled = BranchData.Instance.testMode;
-
-		EditorGUILayout.Separator();
-		EditorGUILayout.PropertyField(serializedTestBranchKey, new GUILayoutOption[]{});
-		EditorGUILayout.PropertyField(serializedTestBranchUri, new GUILayoutOption[]{});
-		EditorGUILayout.PropertyField(serializedTestAndroidPathPrefix, new GUILayoutOption[]{});
-		EditorGUILayout.PropertyField(serializedTestAppLinks, true, new GUILayoutOption[]{});
-
-		GUI.enabled = !BranchData.Instance.testMode;
 
 		EditorGUILayout.Separator();
 		EditorGUILayout.PropertyField(serializedBranchKey, new GUILayoutOption[]{});
@@ -60,12 +49,16 @@ public class BranchEditor : Editor {
 		EditorGUILayout.PropertyField(serializedAndroidPathPrefix, new GUILayoutOption[]{});
 		EditorGUILayout.PropertyField(serializedAppLinks, true, new GUILayoutOption[]{});
 
-		GUI.enabled = true;
+		EditorGUILayout.Separator();
+		EditorGUILayout.PropertyField(serializedTestBranchKey, new GUILayoutOption[]{});
+		EditorGUILayout.PropertyField(serializedTestBranchUri, new GUILayoutOption[]{});
+		EditorGUILayout.PropertyField(serializedTestAndroidPathPrefix, new GUILayoutOption[]{});
+		EditorGUILayout.PropertyField(serializedTestAppLinks, true, new GUILayoutOption[]{});
 
 		EditorGUILayout.BeginHorizontal(new GUILayoutOption[]{});
 		if (isNeedToUpdateIOS) {
-			if (GUILayout.Button("Update iOS Wrapper", new GUILayoutOption[]{})) {
-				UpdateIOSKey();
+			// Is it necessary to refresh the AssetDatabase? iOS does it's config via the PostProcessBuild
+			if (GUILayout.Button("Update iOS", new GUILayoutOption[]{})) {
 				isNeedToUpdateIOS = false;
 				GUI.changed = false;
 				AssetDatabase.Refresh();
@@ -73,26 +66,12 @@ public class BranchEditor : Editor {
 		}
 
 		if (isNeedToUpdateAndroid) {
-			if (GUILayout.Button("Update Android Manifest", new GUILayoutOption[]{})) {
+			if (GUILayout.Button("Update Android", new GUILayoutOption[]{})) {
 				UpdateManifest();
 				isNeedToUpdateAndroid = false;
 				GUI.changed = false;
 				AssetDatabase.Refresh();
 			}
-		}
-		EditorGUILayout.EndHorizontal();
-
-		EditorGUILayout.BeginHorizontal(new GUILayoutOption[]{});
-		EditorGUILayout.HelpBox("Read more about adding your Branch link domains for iOS.\nButton \"Update iOS Wrapper\" updates only Branch Key. You have to add link domains into xcode project manually.", MessageType.Info);
-		if (GUILayout.Button("?", new GUILayoutOption[]{GUILayout.Width(20)})) {
-			Application.OpenURL("https://dev.branch.io/getting-started/universal-app-links/guide/unity/#add-your-branch-link-domains");
-		}
-		EditorGUILayout.EndHorizontal();
-
-		EditorGUILayout.BeginHorizontal(new GUILayoutOption[]{});
-		EditorGUILayout.HelpBox("Read more about adding your Branch link domains for Android.\nButton \"Update Android Manifest\" updates manifest in accordance with your settings.", MessageType.Info);
-		if (GUILayout.Button("?", new GUILayoutOption[]{GUILayout.Width(20)})) {
-			Application.OpenURL("https://dev.branch.io/getting-started/universal-app-links/guide/unity/#add-intent-filter-to-manifest");
 		}
 		EditorGUILayout.EndHorizontal();
 
@@ -105,48 +84,6 @@ public class BranchEditor : Editor {
 			AssetDatabase.Refresh();
 		}
 	}
-
-	#region UpdateIOSKey
-
-	public static void UpdateIOSKey() {
-		string iosWrapperPath = Path.Combine(Application.dataPath, "Plugins/Branch/iOS/BranchiOSWrapper.mm");
-
-		if (!File.Exists(iosWrapperPath)) {
-			return;
-		}
-
-		StreamReader sr = new StreamReader(iosWrapperPath, Encoding.Default);
-        
-		#if UNITY_EDITOR_OSX || UNITY_EDITOR_LINUX
-		string[] lines = sr.ReadToEnd().Split(new string[] { System.Environment.NewLine }, System.StringSplitOptions.None).ToArray();
-		#elif UNITY_EDITOR_WIN
-		string[] lines = sr.ReadToEnd().Split(new string[] { "\r\n", "\n", "\r" }, System.StringSplitOptions.None).ToArray();
-		#endif
-
-		sr.Close();
-
-		StreamWriter sw = new StreamWriter(iosWrapperPath, false, Encoding.Default);
-		for (int i = 0; i < lines.Length; ++i)
-		{
-			if (lines[i].Contains("static NSString *_branchKey")) {
-				if (BranchData.Instance.testMode) {
-					sw.WriteLine("static NSString *_branchKey = @\"" + BranchData.Instance.testBranchKey + "\";");
-				}
-				else {
-					sw.WriteLine("static NSString *_branchKey = @\"" + BranchData.Instance.liveBranchKey + "\";");
-				}
-			}
-			else {
-				if ( ! (i == lines.Length - 1 && string.IsNullOrEmpty(lines[i])) ) {
-					sw.WriteLine(lines[i]);
-				}
-			}
-		}
-
-		sw.Close();
-	}
-
-	#endregion
 
 	#region Manifest update
 

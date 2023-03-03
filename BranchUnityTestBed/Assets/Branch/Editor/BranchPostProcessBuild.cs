@@ -10,66 +10,91 @@ using System.Text;
 using System.Xml;
 using System.IO;
 
-public class BranchPostProcessBuild {
+public class BranchPostProcessBuild
+{
 
 	[PostProcessBuild(900)]
 	public static void ChangeBranchBuiltProject(BuildTarget buildTarget, string pathToBuiltProject) {
-		
 		if ( buildTarget == BuildTarget.iOS ) {
-			ChangeXcodePlist(pathToBuiltProject);
-			ChangeXcodeProject(pathToBuiltProject);
-            		ChangeEntitlements(pathToBuiltProject);
-        	}
+			UpdateXcodePlist(pathToBuiltProject);
+			UpdateXcodeProject(pathToBuiltProject);
+            UpdateEntitlements(pathToBuiltProject);
+        }
 	}
 
-	public static void ChangeXcodePlist(string pathToBuiltProject) {
-		// Get plist
+	private static void UpdateXcodePlist(string pathToBuiltProject) {
 		string plistPath = pathToBuiltProject + "/Info.plist";
 		PlistDocument plist = new PlistDocument();
 		plist.ReadFromString(File.ReadAllText(plistPath));
 		
-		// Get root
+		UpdateBranchKeys(plist);
+		UpdateURIs(plist);
+
+		// Write to file
+		File.WriteAllText(plistPath, plist.WriteToString());
+	}
+
+	private static void UpdateBranchKeys(PlistDocument plist)
+	{
+		PlistElementDict rootDict = plist.root;
+		PlistElementDict branchKeyDict = null;
+
+		if (!rootDict.values.ContainsKey("branch_key")) {
+			branchKeyDict = rootDict.CreateDict("branch_key");
+		} else {
+			branchKeyDict = rootDict.values["branch_key"].AsDict();
+			if (branchKeyDict == null) {
+				branchKeyDict = rootDict.CreateDict("branch_key");
+			}
+		}
+
+		if (BranchData.Instance.liveBranchKey != null && BranchData.Instance.liveBranchKey.Length > 0) {
+			branchKeyDict.SetString("live", BranchData.Instance.liveBranchKey);
+		}
+
+		if (BranchData.Instance.testBranchKey != null && BranchData.Instance.testBranchKey.Length > 0) {
+			branchKeyDict.SetString("test", BranchData.Instance.testBranchKey);
+		}
+	}
+
+	private static void UpdateURIs(PlistDocument plist) 
+	{
 		PlistElementDict rootDict = plist.root;
 		PlistElementArray urlTypesArray = null;
-		PlistElementDict  urlTypesItems = null;
+		PlistElementDict  urlTypesDict = null;
 		PlistElementArray urlSchemesArray = null;
 
-		//----------------------------------------------------------------------------------
-		// set branch uri
+		// URL types
 		if (!rootDict.values.ContainsKey("CFBundleURLTypes")) {
 			urlTypesArray = rootDict.CreateArray("CFBundleURLTypes");
-		}
-		else {
+		} else {
 			urlTypesArray = rootDict.values["CFBundleURLTypes"].AsArray();
-
 			if (urlTypesArray == null) {
 				urlTypesArray = rootDict.CreateArray("CFBundleURLTypes");
 			}
 		}
 
 		if (urlTypesArray.values.Count == 0) {
-			urlTypesItems = urlTypesArray.AddDict();
-		}
-		else {
-			urlTypesItems = urlTypesArray.values[0].AsDict();
-
-			if (urlTypesItems == null) {
-				urlTypesItems = urlTypesArray.AddDict();
+			urlTypesDict = urlTypesArray.AddDict();
+		} else {
+			urlTypesDict = urlTypesArray.values[0].AsDict();
+			if (urlTypesDict == null) {
+				urlTypesDict = urlTypesArray.AddDict();
 			}
 		}
 
-		if (!urlTypesItems.values.ContainsKey("CFBundleURLSchemes")) {
-			urlSchemesArray = urlTypesItems.CreateArray("CFBundleURLSchemes");
-		}
-		else {
-			urlSchemesArray = urlTypesItems.values["CFBundleURLSchemes"].AsArray();
+		// URL Schemes
+		if (!urlTypesDict.values.ContainsKey("CFBundleURLSchemes")) {
+			urlSchemesArray = urlTypesDict.CreateArray("CFBundleURLSchemes");
+		} else {
+			urlSchemesArray = urlTypesDict.values["CFBundleURLSchemes"].AsArray();
 
 			if (urlSchemesArray == null) {
-				urlSchemesArray = urlTypesItems.CreateArray("CFBundleURLSchemes");
+				urlSchemesArray = urlTypesDict.CreateArray("CFBundleURLSchemes");
 			}
 		}
 
-		// delete old URIs
+		// delete old branch URIs
 		foreach(PlistElement elem in urlSchemesArray.values) {
 			if (elem.AsString() != null && elem.AsString().Equals(BranchData.Instance.liveBranchUri)) {
 				urlSchemesArray.values.Remove(elem);
@@ -84,42 +109,37 @@ public class BranchPostProcessBuild {
 			}
 		}
 
-		// add new URI
+		// add branch URIs
 		if (BranchData.Instance.testMode && !string.IsNullOrEmpty(BranchData.Instance.testBranchUri) ) {
 			urlSchemesArray.AddString(BranchData.Instance.testBranchUri);
 		}
 		else if (!BranchData.Instance.testMode && !string.IsNullOrEmpty(BranchData.Instance.liveBranchUri)) {
 			urlSchemesArray.AddString(BranchData.Instance.liveBranchUri);
 		}
-
-		// Write to file
-		File.WriteAllText(plistPath, plist.WriteToString());
 	}
 
-    public static void ChangeEntitlements(string pathToBuiltProject)
+    private static void UpdateEntitlements(string pathToBuiltProject)
     {
-        //This is the default path to the default pbxproj file. Yours might be different
         string projectPath = pathToBuiltProject + "/Unity-iPhone.xcodeproj/project.pbxproj";
-        //Default target name. Yours might be different
         string targetName = "Unity-iPhone";
-        //Set the entitlements file name to what you want but make sure it has this extension
         string entitlementsFileName = "branch_domains.entitlements";
 
         var entitlements = new ProjectCapabilityManager(projectPath, entitlementsFileName, targetName);
 
         entitlements.AddAssociatedDomains(BuildEntitlements());
-        //Apply
         entitlements.WriteToFile();
     }
 
     private static string[] BuildEntitlements()
     {
         var links = BranchData.Instance.liveAppLinks;
-        if(BranchData.Instance.testMode)
+        if (BranchData.Instance.testMode) {
             links = BranchData.Instance.testAppLinks;
+		}
 
-        if (links == null)
+        if (links == null) {
             return null;
+		}
 
         string[] domains = new string[links.Length];
         for (int i = 0; i < links.Length; i++)
@@ -128,11 +148,9 @@ public class BranchPostProcessBuild {
         }
 
         return domains;
-       
     }
 
-    public static void ChangeXcodeProject(string pathToBuiltProject) {
-		// Get xcodeproj
+    private static void UpdateXcodeProject(string pathToBuiltProject) {
 		string pathToProject = pathToBuiltProject + "/Unity-iPhone.xcodeproj/project.pbxproj";
 		string[] lines = File.ReadAllLines(pathToProject);
 
@@ -142,12 +160,11 @@ public class BranchPostProcessBuild {
 		FileStream fileProject = new FileStream(pathToProject, FileMode.Create);
 		fileProject.Close();
 
-		// Will be used for writing
 		StreamWriter fCurrentXcodeProjFile = new StreamWriter(pathToProject) ;
 
-		// Write all lines to new file and enable objective C exceptions
 		foreach (string line in lines) {
 			
+			// The C# to ObjC code is bridged by C++ enable a few flags
 			if (line.Contains("GCC_ENABLE_OBJC_EXCEPTIONS")) {
                 fCurrentXcodeProjFile.Write("\t\t\t\tGCC_ENABLE_OBJC_EXCEPTIONS = YES;\n");
             }
@@ -157,69 +174,15 @@ public class BranchPostProcessBuild {
             else if (line.Contains("CLANG_ENABLE_MODULES")) {
 				fCurrentXcodeProjFile.Write("\t\t\t\tCLANG_ENABLE_MODULES = YES;\n");
 			}
+			else if (line.Contains("ENABLE_BITCODE")) {
+				// Apple deprecated bitcode, Unity still enables it as of March 2, 2023
+				fCurrentXcodeProjFile.Write("\t\t\t\tENABLE_BITCODE = NO;\n");
+			}
 			else {                          
 				fCurrentXcodeProjFile.WriteLine(line);
 			}
 		}
-
-        // Close file
         fCurrentXcodeProjFile.Close();
-
-		// Add frameworks
-		PBXProject proj = new PBXProject();
-		proj.ReadFromString(File.ReadAllText(pathToProject));
-
-		string target = "";
-#if UNITY_2019_3_OR_NEWER
-		target = proj.GetUnityFrameworkTargetGuid();
-#else
-		target = proj.TargetGuidByName("Unity-iPhone");
-#endif
-
-
-#if UNITY_2017_1_OR_NEWER
-
-		if (!proj.ContainsFramework(target, "AdSupport.framework")) {
-			proj.AddFrameworkToProject(target, "AdSupport.framework", false);
-		}
-
-		if (!proj.ContainsFramework(target, "CoreTelephony.framework")) {
-			proj.AddFrameworkToProject(target, "CoreTelephony.framework", false);
-		}
-
-		if (!proj.ContainsFramework(target, "CoreSpotlight.framework")) {
-			proj.AddFrameworkToProject(target, "CoreSpotlight.framework", false);
-		}
-
-		if (!proj.ContainsFramework(target, "Security.framework")) {
-			proj.AddFrameworkToProject(target, "Security.framework", false);
-		}
-
-        if (!proj.ContainsFramework(target, "WebKit.framework")) {
-            proj.AddFrameworkToProject(target, "WebKit.framework", false);
-        }
-
-#else
-
-		if (!proj.HasFramework("AdSupport.framework")) {
-			proj.AddFrameworkToProject(target, "AdSupport.framework", false);
-		}
-
-		if (!proj.HasFramework("CoreTelephony.framework")) {
-			proj.AddFrameworkToProject(target, "CoreTelephony.framework", false);
-		}
-
-		if (!proj.HasFramework("CoreSpotlight.framework")) {
-			proj.AddFrameworkToProject(target, "CoreSpotlight.framework", false);
-		}
-
-		if (!proj.HasFramework("Security.framework")) {
-			proj.AddFrameworkToProject(target, "Security.framework", false);
-		}
-
-#endif
-
-        File.WriteAllText(pathToProject, proj.WriteToString());
 	}
 }
 #endif
