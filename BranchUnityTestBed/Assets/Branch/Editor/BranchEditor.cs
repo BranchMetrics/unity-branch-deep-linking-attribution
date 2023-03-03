@@ -10,7 +10,6 @@ using System.IO;
 
 [CustomEditor(typeof(Branch))]
 public class BranchEditor : Editor {
-	private bool isNeedToUpdateAndroid = false;
 
 	SerializedObject serializedBranchData;
 	SerializedProperty serializedTestAppLinks;
@@ -53,9 +52,17 @@ public class BranchEditor : Editor {
 		EditorGUILayout.PropertyField(serializedTestAndroidPathPrefix, new GUILayoutOption[]{});
 		EditorGUILayout.PropertyField(serializedTestAppLinks, true, new GUILayoutOption[]{});
 
+		EditorGUILayout.Separator();
+
+		// iOS config update is done post build, in BranchPostProcessBuild.cs.
+		// Android config update is done pre build here.
 		EditorGUILayout.BeginHorizontal(new GUILayoutOption[]{});
-		EditorGUILayout.HelpBox("Branch can be configured by creating `Assets/StreamingAssets/branch.json` and setting config keys.", MessageType.Info);
+		if (GUILayout.Button("Apply Changes", new GUILayoutOption[]{})) {
+			UpdateManifest();
+			AssetDatabase.Refresh();
+		}
 		EditorGUILayout.EndHorizontal();
+		EditorGUILayout.Separator();
 
 		EditorGUILayout.BeginHorizontal(new GUILayoutOption[]{});
 		EditorGUILayout.HelpBox("Known issue: Test mode option is not working on iOS when set here. Set `useTestInstance` true in `Assets/StreamingAssets/branch.json`.", MessageType.Info);
@@ -69,21 +76,8 @@ public class BranchEditor : Editor {
 		EditorGUILayout.HelpBox("Known issue: Native code runs prior to C# runtime startup, this can lead to the install event missing any options set in C# code. To force the native code to wait, set `deferInitForPluginRuntime` true in `Assets/StreamingAssets/branch.json`.", MessageType.Info);
 		EditorGUILayout.EndHorizontal();
 
-		// iOS config update is done post build, in BranchPostProcessBuild.cs.
-		// Android config update is done pre build here.
-		EditorGUILayout.BeginHorizontal(new GUILayoutOption[]{});
-		if (isNeedToUpdateAndroid) {
-			if (GUILayout.Button("Update Android Manifest", new GUILayoutOption[]{})) {
-				UpdateManifest();
-				isNeedToUpdateAndroid = false;
-				GUI.changed = false;
-				AssetDatabase.Refresh();
-			}
-		}
-		EditorGUILayout.EndHorizontal();
-
+		// Saves on UI change
 		if (GUI.changed) {
-			isNeedToUpdateAndroid = true;
 			serializedBranchData.ApplyModifiedProperties();
 			EditorUtility.SetDirty(BranchData.Instance);
 			AssetDatabase.SaveAssets();
