@@ -65,15 +65,15 @@ public class BranchEditor : Editor {
 		EditorGUILayout.Separator();
 
 		EditorGUILayout.BeginHorizontal(new GUILayoutOption[]{});
-		EditorGUILayout.HelpBox("Known issue: Test mode option is not working on iOS when set here. Set `useTestInstance` true in `Assets/StreamingAssets/branch.json`.", MessageType.Info);
+		EditorGUILayout.HelpBox("Test mode option is not working on iOS when set here. Set `useTestInstance` true in `Assets/StreamingAssets/branch.json`.", MessageType.Info);
 		EditorGUILayout.EndHorizontal();
 
 		EditorGUILayout.BeginHorizontal(new GUILayoutOption[]{});
-		EditorGUILayout.HelpBox("Known issue: Enable logging option is not working when set here. Set `enableLogging` true in `Assets/StreamingAssets/branch.json`.", MessageType.Info);
+		EditorGUILayout.HelpBox("Enable logging option is not working when set here. Set `enableLogging` true in `Assets/StreamingAssets/branch.json`.", MessageType.Info);
 		EditorGUILayout.EndHorizontal();
 
 		EditorGUILayout.BeginHorizontal(new GUILayoutOption[]{});
-		EditorGUILayout.HelpBox("Known issue: Native code runs prior to C# runtime startup, this can lead to the install event missing any options set in C# code. To force the native code to wait, set `deferInitForPluginRuntime` true in `Assets/StreamingAssets/branch.json`.", MessageType.Info);
+		EditorGUILayout.HelpBox("Native code runs prior to C# runtime startup, this can lead to the install event missing any options set in C# code. To force the native code to wait, set `deferInitForPluginRuntime` true in `Assets/StreamingAssets/branch.json`.", MessageType.Info);
 		EditorGUILayout.EndHorizontal();
 
 		// Saves on UI change
