@@ -10,8 +10,6 @@ using System.IO;
 
 [CustomEditor(typeof(Branch))]
 public class BranchEditor : Editor {
-
-	private bool isNeedToUpdateIOS = false;
 	private bool isNeedToUpdateAndroid = false;
 
 	SerializedObject serializedBranchData;
@@ -25,10 +23,10 @@ public class BranchEditor : Editor {
 		serializedAppLinks = serializedBranchData.FindProperty("liveAppLinks");
 	}
 
-
 	public override void OnInspectorGUI() {
 		GUI.changed = false;
 
+		// TODO: handle enableLogging. Due to lifecycle issues it is best to set this in branch.json
 		SerializedProperty serializedEnableLogging = serializedBranchData.FindProperty("enableLogging");
 		SerializedProperty serializedIsTestMode = serializedBranchData.FindProperty("testMode");
 
@@ -56,17 +54,26 @@ public class BranchEditor : Editor {
 		EditorGUILayout.PropertyField(serializedTestAppLinks, true, new GUILayoutOption[]{});
 
 		EditorGUILayout.BeginHorizontal(new GUILayoutOption[]{});
-		if (isNeedToUpdateIOS) {
-			// Is it necessary to refresh the AssetDatabase? iOS does it's config via the PostProcessBuild
-			if (GUILayout.Button("Update iOS", new GUILayoutOption[]{})) {
-				isNeedToUpdateIOS = false;
-				GUI.changed = false;
-				AssetDatabase.Refresh();
-			}
-		}
+		EditorGUILayout.HelpBox("Branch can be configured by creating `Assets/StreamingAssets/branch.json` and setting config keys.", MessageType.Info);
+		EditorGUILayout.EndHorizontal();
 
+		EditorGUILayout.BeginHorizontal(new GUILayoutOption[]{});
+		EditorGUILayout.HelpBox("Known issue: Test mode option is not working on iOS when set here. Set `useTestInstance` true in `Assets/StreamingAssets/branch.json`.", MessageType.Info);
+		EditorGUILayout.EndHorizontal();
+
+		EditorGUILayout.BeginHorizontal(new GUILayoutOption[]{});
+		EditorGUILayout.HelpBox("Known issue: Enable logging option is not working when set here. Set `enableLogging` true in `Assets/StreamingAssets/branch.json`.", MessageType.Info);
+		EditorGUILayout.EndHorizontal();
+
+		EditorGUILayout.BeginHorizontal(new GUILayoutOption[]{});
+		EditorGUILayout.HelpBox("Known issue: Native code runs prior to C# runtime startup, this can lead to the install event missing any options set in C# code. To force the native code to wait, set `deferInitForPluginRuntime` true in `Assets/StreamingAssets/branch.json`.", MessageType.Info);
+		EditorGUILayout.EndHorizontal();
+
+		// iOS config update is done post build, in BranchPostProcessBuild.cs.
+		// Android config update is done pre build here.
+		EditorGUILayout.BeginHorizontal(new GUILayoutOption[]{});
 		if (isNeedToUpdateAndroid) {
-			if (GUILayout.Button("Update Android", new GUILayoutOption[]{})) {
+			if (GUILayout.Button("Update Android Manifest", new GUILayoutOption[]{})) {
 				UpdateManifest();
 				isNeedToUpdateAndroid = false;
 				GUI.changed = false;
@@ -76,7 +83,6 @@ public class BranchEditor : Editor {
 		EditorGUILayout.EndHorizontal();
 
 		if (GUI.changed) {
-			isNeedToUpdateIOS = true;
 			isNeedToUpdateAndroid = true;
 			serializedBranchData.ApplyModifiedProperties();
 			EditorUtility.SetDirty(BranchData.Instance);
@@ -90,6 +96,8 @@ public class BranchEditor : Editor {
 	public static void UpdateManifest() {
 		
 		string manifestFolder = Path.Combine(Application.dataPath, "Plugins/Android");
+		
+		// Are both these necessary?
 		string defaultManifestPath = Path.Combine(Application.dataPath, "Plugins/Branch/Android/AndroidManifest.xml");
 		string manifestPath = Path.Combine(Application.dataPath, "Plugins/Android/AndroidManifest.xml");
 		
@@ -110,8 +118,8 @@ public class BranchEditor : Editor {
 		XmlNode appNode = null;
 		XmlNode unityActivityNode = null;
 
-        // change package name
-        rootElem.SetAttribute("package", Application.identifier);
+        // change package name, pretty sure this should be done in Unity build settings
+        // rootElem.SetAttribute("package", Application.identifier);
 
 		// finding node named "application"
 		foreach(XmlNode node in rootElem.ChildNodes) {
@@ -209,8 +217,7 @@ public class BranchEditor : Editor {
 		// is URI present?
 		if (BranchData.Instance.testMode && string.IsNullOrEmpty(BranchData.Instance.testBranchUri)) {
 			return;
-		}
-		else if (!BranchData.Instance.testMode && string.IsNullOrEmpty(BranchData.Instance.liveBranchUri)) {
+		} else if (!BranchData.Instance.testMode && string.IsNullOrEmpty(BranchData.Instance.liveBranchUri)) {
 			return;
 		}
 
@@ -229,8 +236,7 @@ public class BranchEditor : Editor {
 
 		if (BranchData.Instance.testMode) {
 			ifData.SetAttribute("android____scheme", BranchData.Instance.testBranchUri);
-		}
-		else {
+		} else {
 			ifData.SetAttribute("android____scheme", BranchData.Instance.liveBranchUri);
 		}
 
@@ -307,50 +313,43 @@ public class BranchEditor : Editor {
 
 					if (link.Contains("bnc.lt") || link.Contains("app.link")) {
 						ifData.SetAttribute("android____scheme", "https");
-					}
-					else {
+					} else {
 						ifData.SetAttribute("android____scheme", "https");
 					}
 
 					ifData.SetAttribute("android____host", link);
 					ifElem.AppendChild(ifData);
 				}
-			}
-			else if (!string.IsNullOrEmpty(BranchData.Instance.testAndroidPathPrefix)) {
+			} else if (!string.IsNullOrEmpty(BranchData.Instance.testAndroidPathPrefix)) {
 				XmlElement ifData = doc.CreateElement("data");
 				ifData.SetAttribute("android____scheme", "https");
 				ifData.SetAttribute("android____host", "bnc.lt");
 				ifData.SetAttribute("android____pathPrefix", BranchData.Instance.testAndroidPathPrefix);
 				ifElem.AppendChild(ifData);
-			}
-            else {
+			} else {
                 return;
             }
-        }
-		else {
+        } else {
 			if (BranchData.Instance.liveAppLinks.Length > 0) {
 				foreach(string link in BranchData.Instance.liveAppLinks) {
 					XmlElement ifData = doc.CreateElement("data");
 
 					if (link.Contains("bnc.lt") || link.Contains("app.link")) {
 						ifData.SetAttribute("android____scheme", "https");
-					}
-					else {
+					} else {
 						ifData.SetAttribute("android____scheme", "https");
 					}
 
 					ifData.SetAttribute("android____host", link);
 					ifElem.AppendChild(ifData);
 				}
-			}
-			else if (!string.IsNullOrEmpty(BranchData.Instance.testAndroidPathPrefix)) {
+			} else if (!string.IsNullOrEmpty(BranchData.Instance.testAndroidPathPrefix)) {
 				XmlElement ifData = doc.CreateElement("data");
 				ifData.SetAttribute("android____scheme", "https");
 				ifData.SetAttribute("android____host", "bnc.lt");
 				ifData.SetAttribute("android____pathPrefix", BranchData.Instance.liveAndroidPathPrefix);
 				ifElem.AppendChild(ifData);
-            }
-            else {
+            } else {
                 return;
             }
         }
@@ -427,19 +426,16 @@ public class BranchEditor : Editor {
 		if (BranchData.Instance.testMode) {
 			keyMetaData.SetAttribute("android____name", "io.branch.sdk.BranchKey.test");
 			keyMetaData.SetAttribute("android____value", BranchData.Instance.testBranchKey);
-		}
-		else {
+		} else {
 			keyMetaData.SetAttribute("android____name", "io.branch.sdk.BranchKey");
 			keyMetaData.SetAttribute("android____value", BranchData.Instance.liveBranchKey);
 		}
 
 		if (metaDataKeyNode == null) {
 			appNode.AppendChild(keyMetaData);
-		}
-		else {
+		} else {
 			appNode.ReplaceChild(keyMetaData, metaDataKeyNode);
 		}
-
 	}
 
 	#endregion
