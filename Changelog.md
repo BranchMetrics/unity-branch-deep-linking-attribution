@@ -9,6 +9,7 @@ Branch Unity SDK change log
  * Add support for deferred initialization. This will force the underlying Android/iOS code to wait for the C# code to register a callback.
     * Add /Assets/StreamedAssets/branch.json
     * Set `deferInitForPluginRuntime` to true
+ * Switch to semantic versioning
 
 - 0.6.7
  * Updating to iOS SDK 1.39.2
