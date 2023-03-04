@@ -74,12 +74,6 @@ public class BranchAndroidWrapper {
     
 	#region Configuration methods
 
-    public static void setDebug() {
-		_runBlockOnThread(() => {
-        	_getBranchClass().CallStatic("setDebug");
-		});
-    }
-
 	public static void enableLogging() {
 		_runBlockOnThread(() => {
         	_getBranchClass().CallStatic("enableLogging");
@@ -116,12 +110,6 @@ public class BranchAndroidWrapper {
 		});
 	}
 
-	public static void accountForFacebookSDKPreventingAppLaunch() {
-		_runBlockOnThread(() => {
-			_getBranchClass().CallStatic("accountForFacebookSDKPreventingAppLaunch");
-		});
-	}
-
 	public static void setRequestMetadata(string key, string val) {
 		_runBlockOnThread(() => {
 			_getBranchClass().CallStatic("setRequestMetadata", key, val);
@@ -148,19 +136,7 @@ public class BranchAndroidWrapper {
 
 	#endregion
     
-	#region User Action methods
-    
-    public static void userCompletedAction(string action) {
-		_runBlockOnThread(() => {
-        	_getBranchClass().CallStatic("userCompletedAction", action);
-		});
-    }
-    
-    public static void userCompletedActionWithState(string action, string stateDict) {
-		_runBlockOnThread(() => {
-        	_getBranchClass().CallStatic("userCompletedAction", action, stateDict);
-		});
-    }
+	#region Event methods
     
 	public static void sendEvent(string eventName) {
 		_runBlockOnThread(() => {

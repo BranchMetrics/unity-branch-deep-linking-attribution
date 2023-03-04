@@ -1,34 +1,33 @@
 #include "BranchiOSWrapper.h"
 #include "Branch.h"
+#include "BranchEvent.h"
 #include "BranchConstants.h"
 #include "BranchUniversalObject.h"
 #import "UnityAppController.h"
 
 
-static NSString *_branchKey = @"";
-static BranchUnityWrapper *_wrapper = [BranchUnityWrapper sharedInstance];
-
+@interface BranchUnityWrapper()
+@property (nonatomic, strong, readwrite) NSString *branchKey;
+@property (nonatomic, strong, readwrite) NSDictionary *launchOptions;
+@end
 
 #pragma mark - Private notification class implementation
 
 @implementation BranchUnityWrapper
 
-+ (BranchUnityWrapper *)sharedInstance
-{
-    return _wrapper;
++ (BranchUnityWrapper *)sharedInstance {
+    static BranchUnityWrapper *wrapper;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        wrapper = [BranchUnityWrapper new];
+    });
+    return wrapper;
 }
 
-+ (void)initialize {
-    if(!_wrapper) {
-        _wrapper = [[BranchUnityWrapper alloc] init];
-    }
-}
-
-- (id)init {
+- (instancetype)init {
     if (self = [super init]) {
         UnityRegisterAppDelegateListener(self);
     }
-    
     return self;
 }
 
@@ -42,11 +41,11 @@ static BranchUnityWrapper *_wrapper = [BranchUnityWrapper sharedInstance];
 
 - (void)onOpenURL:(NSNotification *)notification {
     NSURL *openURL = notification.userInfo[@"url"];
-    [[Branch getInstance:_branchKey] handleDeepLink:openURL];
+    [[Branch getInstance] handleDeepLink:openURL];
 }
 
 - (BOOL)continueUserActivity:(NSUserActivity *)userActivity {
-    return [[Branch getInstance:_branchKey] continueUserActivity:userActivity];
+    return [[Branch getInstance] continueUserActivity:userActivity];
 }
 
 @end
@@ -341,78 +340,76 @@ static callbackWithShareCompletion callbackWithShareCompletionForCallbackId(char
 #pragma mark - Key methods
 
 void _setBranchKey(char *branchKey, char* branchSDKVersion) {
-    _branchKey = CreateNSString(branchKey);
-    [[Branch getInstance:_branchKey] registerPluginName:@"Unity" version:CreateNSString(branchSDKVersion)];
+    [BranchUnityWrapper sharedInstance].branchKey = CreateNSString(branchKey);
+    [[Branch getInstance] registerPluginName:@"Unity" version:CreateNSString(branchSDKVersion)];
 }
 
 #pragma mark - InitSession methods
 
 void _initSessionWithCallback(char *callbackId) {
-    [[Branch getInstance:_branchKey] initSessionWithLaunchOptions:_wrapper.launchOptions andRegisterDeepLinkHandler:callbackWithParamsForCallbackId(callbackId)];
+    [[Branch getInstance] initSessionWithLaunchOptions:[BranchUnityWrapper sharedInstance].launchOptions andRegisterDeepLinkHandler:callbackWithParamsForCallbackId(callbackId)];
+    [[Branch getInstance] notifyNativeToInit];
 }
 
 void _initSessionWithUniversalObjectCallback(char *callbackId) {
-    [[Branch getInstance:_branchKey] initSessionWithLaunchOptions:_wrapper.launchOptions andRegisterDeepLinkHandlerUsingBranchUniversalObject:callbackWithBranchUniversalObjectForCallbackId(callbackId)];
+    [[Branch getInstance] initSessionWithLaunchOptions:[BranchUnityWrapper sharedInstance].launchOptions andRegisterDeepLinkHandlerUsingBranchUniversalObject:callbackWithBranchUniversalObjectForCallbackId(callbackId)];
+    [[Branch getInstance] notifyNativeToInit];
 }
 
 #pragma mark - Session Item methods
 
 const char *_getFirstReferringBranchUniversalObject() {
-    BranchUniversalObject* universalObject = [[Branch getInstance:_branchKey] getFirstReferringBranchUniversalObject];
+    BranchUniversalObject* universalObject = [[Branch getInstance] getFirstReferringBranchUniversalObject];
     return jsonCStringFromDictionary(dictFromBranchUniversalObject(universalObject));
 }
 
 const char *_getFirstReferringBranchLinkProperties() {
-    BranchLinkProperties *linkProperties = [[Branch getInstance:_branchKey] getFirstReferringBranchLinkProperties];
+    BranchLinkProperties *linkProperties = [[Branch getInstance] getFirstReferringBranchLinkProperties];
     return jsonCStringFromDictionary(dictFromBranchLinkProperties(linkProperties));
 }
 
 const char *_getLatestReferringBranchUniversalObject() {
-    BranchUniversalObject *universalObject = [[Branch getInstance:_branchKey]getLatestReferringBranchUniversalObject];
+    BranchUniversalObject *universalObject = [[Branch getInstance]getLatestReferringBranchUniversalObject];
     return jsonCStringFromDictionary(dictFromBranchUniversalObject(universalObject));
 }
 
 const char *_getLatestReferringBranchLinkProperties() {
-    BranchLinkProperties *linkProperties = [[Branch getInstance:_branchKey] getLatestReferringBranchLinkProperties];
+    BranchLinkProperties *linkProperties = [[Branch getInstance] getLatestReferringBranchLinkProperties];
     return jsonCStringFromDictionary(dictFromBranchLinkProperties(linkProperties));
 }
 
 void _resetUserSession() {
-    [[Branch getInstance:_branchKey] resetUserSession];
+    [[Branch getInstance] resetUserSession];
 }
 
 void _setIdentity(char *userId) {
-    [[Branch getInstance:_branchKey] setIdentity:CreateNSString(userId)];
+    [[Branch getInstance] setIdentity:CreateNSString(userId)];
 }
 
 void _setIdentityWithCallback(char *userId, char *callbackId) {
-    [[Branch getInstance:_branchKey] setIdentity:CreateNSString(userId) withCallback:callbackWithParamsForCallbackId(callbackId)];
+    [[Branch getInstance] setIdentity:CreateNSString(userId) withCallback:callbackWithParamsForCallbackId(callbackId)];
 }
 
 void _logout() {
-    [[Branch getInstance:_branchKey] logout];
+    [[Branch getInstance] logout];
 }
 
 # pragma mark - Configuation methods
-
-void _setDebug() {
-    
-}
  
 void _enableLogging() {
-    [[Branch getInstance:_branchKey] enableLogging];
+    [[Branch getInstance] enableLogging];
 }
 
 void _setRetryInterval(int retryInterval) {
-    [[Branch getInstance:_branchKey] setRetryInterval:retryInterval];
+    [[Branch getInstance] setRetryInterval:retryInterval];
 }
 
 void _setMaxRetries(int maxRetries) {
-    [[Branch getInstance:_branchKey] setMaxRetries:maxRetries];
+    [[Branch getInstance] setMaxRetries:maxRetries];
 }
 
 void _setNetworkTimeout(int timeout) {
-    [[Branch getInstance:_branchKey] setNetworkTimeout:timeout];
+    [[Branch getInstance] setNetworkTimeout:timeout];
 }
 
 void _registerView(char *universalObjectJson) {
@@ -431,39 +428,20 @@ void _listOnSpotlight(char *universalObjectJson) {
     [obj listOnSpotlight];
 }
 
-void _accountForFacebookSDKPreventingAppLaunch() {
-    [[Branch getInstance:_branchKey] accountForFacebookSDKPreventingAppLaunch];
-}
-
 void _setRequestMetadata(char *key, char *value) {
-    [[Branch getInstance:_branchKey] setRequestMetadataKey:CreateNSString(key) value:CreateNSString(value)];
+    [[Branch getInstance] setRequestMetadataKey:CreateNSString(key) value:CreateNSString(value)];
 }
 
 void _addFacebookPartnerParameter(char *name, char *value) {
-    [[Branch getInstance:_branchKey] addFacebookPartnerParameterWithName:CreateNSString(name) value:CreateNSString(value)];
+    [[Branch getInstance] addFacebookPartnerParameterWithName:CreateNSString(name) value:CreateNSString(value)];
 }
 
 void _clearPartnerParameters() {
-    [[Branch getInstance:_branchKey] clearPartnerParameters];
+    [[Branch getInstance] clearPartnerParameters];
 }
 
 void _setTrackingDisabled(BOOL value) {
     [Branch setTrackingDisabled:value];
-}
-
-void _delayInitToCheckForSearchAds() {
-    [[Branch getInstance:_branchKey] delayInitToCheckForSearchAds];
-}
-
-
-#pragma mark - User Action methods
-
-void _userCompletedAction(char *action) {
-    [[Branch getInstance:_branchKey] userCompletedAction:CreateNSString(action)];
-}
-
-void _userCompletedActionWithState(char *action, char *stateDict) {
-    [[Branch getInstance:_branchKey] userCompletedAction:CreateNSString(action) withState:dictionaryFromJsonString(stateDict)];
 }
 
 #pragma mark - Send event methods
@@ -528,44 +506,6 @@ void _sendEvent(char *eventJson) {
     }
     
     [event logEvent];
-}
-
-#pragma mark - Credit methods
-
-void _loadRewardsWithCallback(char *callbackId) {
-    [[Branch getInstance:_branchKey] loadRewardsWithCallback:callbackWithStatusForCallbackId(callbackId)];
-}
-
-int _getCredits() {
-    return (int)[[Branch getInstance:_branchKey] getCredits];
-}
-
-void _redeemRewards(int count) {
-    [[Branch getInstance:_branchKey] redeemRewards:count];
-}
-
-int _getCreditsForBucket(char *bucket) {
-    return (int)[[Branch getInstance:_branchKey] getCreditsForBucket:CreateNSString(bucket)];
-}
-
-void _redeemRewardsForBucket(int count, char *bucket) {
-    [[Branch getInstance:_branchKey] redeemRewards:count forBucket:CreateNSString(bucket)];
-}
-
-void _getCreditHistoryWithCallback(char *callbackId) {
-    [[Branch getInstance:_branchKey] getCreditHistoryWithCallback:callbackWithListForCallbackId(callbackId)];
-}
-
-void _getCreditHistoryForBucketWithCallback(char *bucket, char *callbackId) {
-    [[Branch getInstance:_branchKey] getCreditHistoryForBucket:CreateNSString(bucket) andCallback:callbackWithListForCallbackId(callbackId)];
-}
-
-void _getCreditHistoryForTransactionWithLengthOrderAndCallback(char *creditTransactionId, int length, int order, char *callbackId) {
-    [[Branch getInstance:_branchKey] getCreditHistoryAfter:CreateNSString(creditTransactionId) number:length order:(BranchCreditHistoryOrder)order andCallback:callbackWithListForCallbackId(callbackId)];
-}
-
-void _getCreditHistoryForBucketWithTransactionLengthOrderAndCallback(char *bucket, char *creditTransactionId, int length, int order, char *callbackId) {
-    [[Branch getInstance:_branchKey] getCreditHistoryForBucket:CreateNSString(bucket) after:CreateNSString(creditTransactionId) number:length order:(BranchCreditHistoryOrder)order andCallback:callbackWithListForCallbackId(callbackId)];
 }
 
 #pragma mark - Short URL Generation methods

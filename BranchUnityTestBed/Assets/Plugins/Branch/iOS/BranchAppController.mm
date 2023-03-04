@@ -5,13 +5,12 @@
 #import "BranchiOSWrapper.h"
 
 @interface BranchAppController : UnityAppController
-{
-}
+
 @end
 
 @implementation BranchAppController
 
-- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray *))restorationHandler {
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> *restorableObjects))restorationHandler {
     BOOL handledByBranch = [[BranchUnityWrapper sharedInstance] continueUserActivity:userActivity];
     return handledByBranch;
 }
