@@ -1,5 +1,15 @@
 Branch Unity SDK change log
 
+- 1.0.0
+ * Update iOS SDK to 2.1.0
+ * Update Android SDK to 5.3.0
+ * Remove old Apple Search Ads methods, these APIs are being shutdown by Apple.
+ * Remove deprecated userCompletedAction methods
+ * Remove deprecated credit related methods. Backend has been shutdown.
+ * Add support for deferred initialization. This will force the underlying Android/iOS code to wait for the C# code to register a callback.
+    * Add /Assets/StreamedAssets/branch.json
+    * Set `deferInitForPluginRuntime` to true
+
 - 0.6.7
  * Updating to iOS SDK 1.39.2
  * Updating to Android SDK 5.0.7
