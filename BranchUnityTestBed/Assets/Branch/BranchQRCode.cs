@@ -42,18 +42,12 @@ public class BranchQRCode
     // Hex string used to change the color of the interior part of a Qr-Code’s finder pattern
     private string finderEyeColor;
 
-    public BranchQRCode(string codeColor = "#000000", string backgroundColor = "#FFFFFF", int margin = 1, int width = 512,
-                        BranchImageFormat imageFormat = BranchImageFormat.PNG, string centerLogoUrl = "", BranchQRCodePattern codePattern = BranchQRCodePattern.Default,
-                        BranchQRCodeFinderPattern finderPattern = BranchQRCodeFinderPattern.Square, string finderPatternColor = "#000000",
-                        string backgroundImageUrl = "", int backgroundImageOpacity = 255, string codePatternUrl = "", string finderEyeColor = "")
+    public BranchQRCode(string codeColor = "#000000", string backgroundColor = "#FFFFFF", int margin = 1, int width = 512, BranchImageFormat imageFormat = BranchImageFormat.PNG, string centerLogoUrl = "")
     {
-        Init(codeColor, backgroundColor, margin, width, imageFormat,  centerLogoUrl,  codePattern, finderPattern,  finderPatternColor, backgroundImageUrl,  backgroundImageOpacity,  codePatternUrl,  finderEyeColor);
+        Init(codeColor, backgroundColor, margin, width, imageFormat,  centerLogoUrl);
     }
 
-    private void Init(string codeColor, string backgroundColor, int margin, int width,
-                      BranchImageFormat imageFormat, string centerLogoUrl, BranchQRCodePattern codePattern,
-                      BranchQRCodeFinderPattern finderPattern, string finderPatternColor,
-                      string backgroundImageUrl, int backgroundImageOpacity, string codePatternUrl, string finderEyeColor)
+    private void Init(string codeColor, string backgroundColor, int margin, int width, BranchImageFormat imageFormat, string centerLogoUrl)
     {
         this.codeColor = codeColor;
         this.backgroundColor = backgroundColor;
@@ -61,13 +55,6 @@ public class BranchQRCode
         this.width = width;
         this.imageFormat = imageFormat;
         this.centerLogoUrl = centerLogoUrl;
-        this.codePattern = codePattern;
-        this.finderPattern = finderPattern;
-        this.finderPatternColor = finderPatternColor;
-        this.backgroundImageUrl = backgroundImageUrl;
-        this.backgroundImageOpacity = backgroundImageOpacity;
-        this.codePatternUrl = codePatternUrl;
-        this.finderEyeColor = finderEyeColor;
     }
 
     public void loadFromJson(string json)
@@ -108,34 +95,6 @@ public class BranchQRCode
         {
             centerLogoUrl = data["center_logo_url"].ToString();
         }
-        if (data.ContainsKey("code_pattern"))
-        {
-            codePattern = (BranchQRCodePattern) Convert.ToInt32(data["code_pattern"].ToString());
-        }
-        if (data.ContainsKey("finder_pattern"))
-        {
-            finderPattern = (BranchQRCodeFinderPattern)Convert.ToInt32(data["finder_pattern"].ToString());
-        }
-        if (data.ContainsKey("finder_pattern_color") && data["finder_pattern_color"] != null)
-        {
-            finderPatternColor = data["finder_pattern_color"].ToString();
-        }
-        if (data.ContainsKey("background_image_url") && data["background_image_url"] != null)
-        {
-            backgroundImageUrl = data["background_image_url"].ToString();
-        }
-        if (data.ContainsKey("background_image_opacity"))
-        {
-            backgroundImageOpacity = Convert.ToInt32(data["background_image_opacity"].ToString());
-        }
-        if (data.ContainsKey("code_pattern_url") && data["code_pattern_url"] != null)
-        {
-            codePatternUrl = data["code_pattern_url"].ToString();
-        }
-        if (data.ContainsKey("finder_eye_color") && data["finder_eye_color"] != null)
-        {
-            finderEyeColor = data["finder_eye_color"].ToString();
-        }
     }
 
     public string ToJsonString()
@@ -148,13 +107,6 @@ public class BranchQRCode
         data.Add("width", width.ToString());
         data.Add("image_format", imageFormat.ToString());
         data.Add("center_logo_url", centerLogoUrl);
-        data.Add("code_pattern", codePattern.ToString());
-        data.Add("finder_pattern", finderPattern.ToString());
-        data.Add("finder_pattern_color", finderPatternColor);
-        data.Add("background_image_url", backgroundImageUrl);
-        data.Add("background_image_opacity", backgroundImageOpacity.ToString());
-        data.Add("code_pattern_url", codePatternUrl);
-        data.Add("finder_eye_color", finderEyeColor);
 
         return BranchThirdParty_MiniJSON.Json.Serialize(data);
     }

@@ -618,31 +618,10 @@ public class BranchUnityWrapper {
                 branchQRCode.setWidth(Long.valueOf(params.getString("width")).intValue());
             }
             if (params.has("image_format")) {
-
+                branchQRCode.setImageFormat(params.getString("image_format").equals("0") ? io.branch.referral.QRCode.BranchQRCode.BranchImageFormat.JPEG : io.branch.referral.QRCode.BranchQRCode.BranchImageFormat.PNG));
             }
             if (params.has("center_logo_url")) {
-
-            }
-            if (params.has("code_pattern")) {
-
-            }
-            if (params.has("finder_pattern")) {
-
-            }
-            if (params.has("finder_pattern_color")) {
-
-            }
-            if (params.has("background_image_url")) {
-
-            }
-            if (params.has("background_image_opacity")) {
-
-            }
-            if (params.has("code_pattern_url")) {
-
-            }
-            if (params.has("finder_eye_color")) {
-
+                branchQRCode.setCenterLogo(params.getString("center_logo_url"));
             }
         } catch(Exception ignore) {
 

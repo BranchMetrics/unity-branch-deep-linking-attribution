@@ -327,11 +327,11 @@ public class Branch : MonoBehaviour {
 		}
 	}
 
-    #endregion
+	#endregion
 
-    #region Private methods
+	#region Private methods
 
-    #region Platform Loading Methods
+	#region Platform Loading Methods
 
 #if (UNITY_IOS || UNITY_IPHONE) && !UNITY_EDITOR
     
@@ -505,9 +505,13 @@ public class Branch : MonoBehaviour {
 		BranchAndroidWrapper.getShortURLWithBranchUniversalObjectAndCallback(universalObject, linkProperties, callbackId);
 	}
 
+	private static void _generateQRCode(string universalObject, string linkProperties, string branchQRCode, string callbackId) {
+		BranchAndroidWrapper.generateBranchQRCode(universalObject, linkProperties, branchQRCode, callbackId)
+	}
+
 #else
 
-    private static void _setBranchKey(string branchKey, string sdkVersion) { }
+	private static void _setBranchKey(string branchKey, string sdkVersion) { }
 
 	private static void _initSessionWithCallback(string callbackId) {
 		callNotImplementedCallbackForParamCallback(callbackId);
