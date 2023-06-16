@@ -16,6 +16,7 @@ public class BranchDemo : MonoBehaviour {
 
 	private BranchUniversalObject universalObject = null;
 	private BranchLinkProperties linkProperties = null;
+	private BranchQRCode qrCode = null;
 	private string logString = "";
 
 	#region Init
@@ -137,6 +138,32 @@ public class BranchDemo : MonoBehaviour {
 			Debug.Log(e);
 		}
 	}
+
+	public void OnBtn_GenerateQRCode()
+	{
+		try
+		{
+			universalObject = new BranchUniversalObject();
+			universalObject.canonicalIdentifier = "qrcodeid12345";
+			linkProperties = new BranchLinkProperties();
+			qrCode = new BranchQRCode();
+			Branch.generateQRCode(universalObject, linkProperties, qrCode, (url, error) =>
+			{
+				if (error != null)
+				{
+					Debug.LogError("Branch.generateQRCode failed: " + error);
+				}
+				else
+				{
+					Debug.Log("QR Code Successfully Generated!");
+				}
+			});
+		}
+		catch (Exception e)
+		{
+			Debug.Log(e);
+		}
+    }
 
 	public void OnBtn_SendBuyEvent() {
         BranchEvent e = new BranchEvent (BranchEventType.PURCHASE);
