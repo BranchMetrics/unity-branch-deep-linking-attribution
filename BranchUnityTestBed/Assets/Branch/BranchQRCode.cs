@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class BranchQRCode 
 {
     //Primary color of the generated QR code itself
@@ -48,8 +44,23 @@ public class BranchQRCode
         Init();
     }
 
-    private void Init()
+    private void Init(string codeColor = "#000000", string backgroundColor = "#FFFFFF", int margin = 1, int width = 512,
+                      BranchImageFormat imageFormat = BranchImageFormat.PNG, string centerLogoUrl = "", BranchQRCodePattern codePattern = BranchQRCodePattern.Default,
+                      BranchQRCodeFinderPattern finderPattern = BranchQRCodeFinderPattern.Square, string finderPatternColor = "#000000",
+                      string backgroundImageUrl = "", int backgroundImageOpacity = 255, string codePatternUrl = "", string finderEyeColor = "")
     {
-
+        this.codeColor = codeColor;
+        this.backgroundColor = backgroundColor;
+        this.margin = margin;
+        this.width = width;
+        this.imageFormat = imageFormat;
+        this.centerLogoUrl = centerLogoUrl;
+        this.codePattern = codePattern;
+        this.finderPattern = finderPattern;
+        this.finderPatternColor = finderPatternColor;
+        this.backgroundImageUrl = backgroundImageUrl;
+        this.backgroundImageOpacity = backgroundImageOpacity;
+        this.codePatternUrl = codePatternUrl;
+        this.finderEyeColor = finderEyeColor;
     }
 }
