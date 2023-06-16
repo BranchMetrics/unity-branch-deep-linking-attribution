@@ -405,6 +405,22 @@ public class BranchUnityWrapper {
     }
 
     /**
+     * QR Code Generation methods
+     */
+     public static void generateBranchQRCode(String universalObjectDict, String linkPropertiesDict, String qrCodeDict, String callbackId) {
+         try {
+             BranchUniversalObject universalObject = _branchUniversalObjectFromJSONObject(new JSONObject(universalObjectDict));
+             LinkProperties linkProperties = _linkPropertiesFromJSONObject(new JSONObject(linkPropertiesDict));
+             BranchQRCode qrCode = _qrCodeFromJSONObject(new JSONObject(qrCodeDict))
+
+             //universalObject.generateShortUrl(UnityPlayer.currentActivity.getApplicationContext(), linkProperties, new BranchReferralInitListenerUnityCallback(callbackId));
+         }
+         catch (JSONException jsone) {
+             jsone.printStackTrace();
+         }
+     }
+
+    /**
      * Share methods
      */
 
@@ -583,6 +599,56 @@ public class BranchUnityWrapper {
         }
 
         return linkProperties;
+    }
+
+    private static BranchQRCode _qrCodeFromJSONObject(JSONObject params) {
+        BranchQRCode branchQRCode = new BranchQRCode();
+
+        try {
+            if (params.has("code_color")) {
+                branchQRCode.setCodeColor(params.getString("code_color"));
+            }
+            if (params.has("background_color")) {
+                branchQRCode.setBackgroundColor(params.getString("background_color"));
+            }
+            if (params.has("margin")) {
+                branchQRCode.setMargin(Long.valueOf(params.getString("margin")).intValue());
+            }
+            if (params.has("width")) {
+                branchQRCode.setWidth(Long.valueOf(params.getString("width")).intValue());
+            }
+            if (params.has("image_format")) {
+
+            }
+            if (params.has("center_logo_url")) {
+
+            }
+            if (params.has("code_pattern")) {
+
+            }
+            if (params.has("finder_pattern")) {
+
+            }
+            if (params.has("finder_pattern_color")) {
+
+            }
+            if (params.has("background_image_url")) {
+
+            }
+            if (params.has("background_image_opacity")) {
+
+            }
+            if (params.has("code_pattern_url")) {
+
+            }
+            if (params.has("finder_eye_color")) {
+
+            }
+        } catch(Exception ignore) {
+
+        }
+
+        return branchQRCode;
     }
 
     private static String _branchKey;

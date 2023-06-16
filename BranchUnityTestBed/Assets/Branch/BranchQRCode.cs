@@ -152,7 +152,7 @@ public class BranchQRCode
         data.Add("finder_pattern", finderPattern.ToString());
         data.Add("finder_pattern_color", finderPatternColor);
         data.Add("background_image_url", backgroundImageUrl);
-        data.Add("background_image_opacity", backgroundImageOpacity.ToString();
+        data.Add("background_image_opacity", backgroundImageOpacity.ToString());
         data.Add("code_pattern_url", codePatternUrl);
         data.Add("finder_eye_color", finderEyeColor);
 
