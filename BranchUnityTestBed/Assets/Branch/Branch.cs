@@ -267,13 +267,27 @@ public class Branch : MonoBehaviour {
 		_getShortURLWithBranchUniversalObjectAndCallback(universalObject.ToJsonString(), linkProperties.ToJsonString(), callbackId);
 	}
 
-    #endregion
+	#endregion
 
-    #endregion
+	#region QR Code methods
+
+	/**
+     * Generate a QR Code
+     */
+	public static void generateQRCode(BranchUniversalObject universalObject, BranchLinkProperties linkProperties, BranchQRCode branchQRCode, BranchCallbackWithUrl callback)
+    {
+		var callbackId = _getNextCallbackId();
+		_branchCallbacks[callbackId] = callback;
+		_generateQRCode(universalObject.ToJsonString(), linkProperties.ToJsonString(), branchQRCode.ToJsonString(), callbackId);
+	}
+
+	#endregion
+
+	#endregion
 
 	#region Singleton
 
-    public void Awake() {
+	public void Awake() {
 
         // make sure there's only a single Branch instance
 		var olderBranches = FindObjectsOfType<Branch>();
@@ -558,7 +572,11 @@ public class Branch : MonoBehaviour {
 	private static void _getShortURLWithBranchUniversalObjectAndCallback(string universalObject, string linkProperties, string callbackId) {
 		callNotImplementedCallbackForUrlCallback(callbackId);
 	}
-		
+
+	private static void _generateQRCode(string universalObject, string linkProperties, string branchQRCode, string callbackId)
+    {
+		callNotImplementedCallbackForUrlCallback(callbackId);
+	}
     
     private static void callNotImplementedCallbackForParamCallback(string callbackId) {
         var callback = _branchCallbacks[callbackId] as BranchCallbackWithParams;
