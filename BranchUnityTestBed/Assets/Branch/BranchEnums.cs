@@ -228,3 +228,27 @@ public static class BranchEnumExtensions
 		return BranchProductCategory.NONE;
 	}
 }
+
+public enum BranchQRCodePattern
+{
+	Default,   //1
+	Squares,   //2
+	Circles,   //3
+	Triangles, //4
+	Pentagons, //5
+	Hexagons,  //6
+	Octagons   //7
+}
+
+public enum BranchQRCodeFinderPattern
+{
+	Square,        //1
+	RoundedSquare, //2
+	Circle,        //3
+}
+
+public enum BranchImageFormat
+{
+	JPEG, //QR code is returned as a JPEG 
+	PNG   //QR code is returned as a PNG 
+}
