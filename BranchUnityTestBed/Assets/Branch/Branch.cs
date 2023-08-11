@@ -260,6 +260,7 @@ public class Branch : MonoBehaviour {
      * Get a short url given a BranchUniversalObject, BranchLinkProperties
      */
 	public static void getShortURL(BranchUniversalObject universalObject, BranchLinkProperties linkProperties, BranchCallbackWithUrl callback) {
+
 		var callbackId = _getNextCallbackId();
 		
 		_branchCallbacks[callbackId] = callback;
@@ -276,9 +277,13 @@ public class Branch : MonoBehaviour {
      */
 	public static void generateQRCode(BranchUniversalObject universalObject, BranchLinkProperties linkProperties, BranchQRCode branchQRCode, BranchCallbackWithUrl callback)
     {
+		Debug.Log("Hit 1");
 		var callbackId = _getNextCallbackId();
+		Debug.Log("Hit 2");
 		_branchCallbacks[callbackId] = callback;
-		_generateQRCode(universalObject.ToJsonString(), linkProperties.ToJsonString(), branchQRCode.ToJsonString(), callbackId);
+		Debug.Log("Hit 3");
+		_generateBranchQRCode(universalObject.ToJsonString(), linkProperties.ToJsonString(), branchQRCode.ToJsonString(), callbackId);
+		Debug.Log("Hit 4" + branchQRCode.ToJsonString());
 	}
 
 	#endregion
@@ -505,7 +510,8 @@ public class Branch : MonoBehaviour {
 		BranchAndroidWrapper.getShortURLWithBranchUniversalObjectAndCallback(universalObject, linkProperties, callbackId);
 	}
 
-	private static void _generateQRCode(string universalObject, string linkProperties, string branchQRCode, string callbackId) {
+	private static void _generateBranchQRCode(string universalObject, string linkProperties, string branchQRCode, string callbackId) {
+		Debug.Log("Hit 5");
 		BranchAndroidWrapper.generateBranchQRCode(universalObject, linkProperties, branchQRCode, callbackId);
 	}
 
@@ -577,7 +583,7 @@ public class Branch : MonoBehaviour {
 		callNotImplementedCallbackForUrlCallback(callbackId);
 	}
 
-	private static void _generateQRCode(string universalObject, string linkProperties, string branchQRCode, string callbackId)
+	private static void _generateBranchQRCode(string universalObject, string linkProperties, string branchQRCode, string callbackId)
     {
 		callNotImplementedCallbackForUrlCallback(callbackId);
 	}
