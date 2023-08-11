@@ -28,6 +28,7 @@ import io.branch.referral.util.ContentMetadata;
 import io.branch.referral.util.CurrencyType;
 import io.branch.referral.util.LinkProperties;
 import io.branch.referral.util.ShareSheetStyle;
+import io.branch.referral.QRCode.BranchQRCode;
 
 /**
  * Created by grahammueller on 3/25/15.
@@ -411,7 +412,7 @@ public class BranchUnityWrapper {
          try {
              BranchUniversalObject universalObject = _branchUniversalObjectFromJSONObject(new JSONObject(universalObjectDict));
              LinkProperties linkProperties = _linkPropertiesFromJSONObject(new JSONObject(linkPropertiesDict));
-             BranchQRCode qrCode = _qrCodeFromJSONObject(new JSONObject(qrCodeDict))
+             BranchQRCode qrCode = _qrCodeFromJSONObject(new JSONObject(qrCodeDict));
 
              //universalObject.generateShortUrl(UnityPlayer.currentActivity.getApplicationContext(), linkProperties, new BranchReferralInitListenerUnityCallback(callbackId));
          }
@@ -618,7 +619,7 @@ public class BranchUnityWrapper {
                 branchQRCode.setWidth(Long.valueOf(params.getString("width")).intValue());
             }
             if (params.has("image_format")) {
-                branchQRCode.setImageFormat(params.getString("image_format").equals("0") ? io.branch.referral.QRCode.BranchQRCode.BranchImageFormat.JPEG : io.branch.referral.QRCode.BranchQRCode.BranchImageFormat.PNG));
+                branchQRCode.setImageFormat(params.getString("image_format").equals("0") ? io.branch.referral.QRCode.BranchQRCode.BranchImageFormat.JPEG : io.branch.referral.QRCode.BranchQRCode.BranchImageFormat.PNG);
             }
             if (params.has("center_logo_url")) {
                 branchQRCode.setCenterLogo(params.getString("center_logo_url"));

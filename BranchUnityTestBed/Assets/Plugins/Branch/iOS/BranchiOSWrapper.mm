@@ -520,6 +520,12 @@ void _getShortURLWithBranchUniversalObjectAndCallback(char *universalObjectJson,
     [obj getShortUrlWithLinkProperties:prop andCallback:callbackWithUrlForCallbackId(callbackId)];
 }
 
+#pragma mark - QR Code Generation methods
+
+void _generateBranchQRCode(char *universalObjectJson, char *linkPropertiesJson, char *qrCodeSettingsJson, char *callbackId) {
+    
+}
+
 #pragma mark - Share Link methods
 
 void _shareLinkWithLinkProperties(char *universalObjectJson, char *linkPropertiesJson, char *message, char *callbackId) {

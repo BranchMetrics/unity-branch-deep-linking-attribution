@@ -141,12 +141,14 @@ public class BranchDemo : MonoBehaviour {
 
 	public void OnBtn_GenerateQRCode()
 	{
+		Debug.Log("Hit QR Code Function");
 		try
 		{
 			universalObject = new BranchUniversalObject();
 			universalObject.canonicalIdentifier = "qrcodeid12345";
 			linkProperties = new BranchLinkProperties();
 			qrCode = new BranchQRCode();
+			Debug.Log("Hit QR Code Function 2");
 			Branch.generateQRCode(universalObject, linkProperties, qrCode, (url, error) =>
 			{
 				if (error != null)
@@ -161,7 +163,7 @@ public class BranchDemo : MonoBehaviour {
 		}
 		catch (Exception e)
 		{
-			Debug.Log(e);
+			Debug.Log("QR Code Generating Error" + e);
 		}
     }
 

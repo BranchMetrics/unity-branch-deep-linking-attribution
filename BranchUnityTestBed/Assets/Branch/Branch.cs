@@ -506,7 +506,7 @@ public class Branch : MonoBehaviour {
 	}
 
 	private static void _generateQRCode(string universalObject, string linkProperties, string branchQRCode, string callbackId) {
-		BranchAndroidWrapper.generateBranchQRCode(universalObject, linkProperties, branchQRCode, callbackId)
+		BranchAndroidWrapper.generateBranchQRCode(universalObject, linkProperties, branchQRCode, callbackId);
 	}
 
 #else

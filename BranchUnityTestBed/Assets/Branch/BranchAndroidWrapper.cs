@@ -165,9 +165,20 @@ public class BranchAndroidWrapper {
 	}
 
 	#endregion
-    
+
+	#region QR Code Generation methods
+
+	public static void generateBranchQRCode(string universalObject, string linkProperties, string branchQRCode, string callbackId)
+	{
+		_runBlockOnThread(() => {
+			_getBranchClass().CallStatic("generateBranchQRCode", universalObject, linkProperties, branchQRCode, callbackId);
+		});
+	}
+
+	#endregion
+
 	#region Utility methods
-    
+
 	private static AndroidJavaClass _getBranchClass() {
 		if (_branchClass == null) {
 			_branchClass = new AndroidJavaClass("io/branch/unity/BranchUnityWrapper");
