@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Locale;
+import java.io.IOException;
 
 import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
@@ -408,15 +409,18 @@ public class BranchUnityWrapper {
     /**
      * QR Code Generation methods
      */
-     public static void generateBranchQRCode(String universalObjectDict, String linkPropertiesDict, String qrCodeDict, String callbackId) {
+     public static void generateBranchQRCode(String universalObjectDict, String linkPropertiesDict, String qrCodeDict, String callbackId) throws IOException {
          try {
+            Log.e("QR Codes", "1 - Top of generateBranchQRCode");
              BranchUniversalObject universalObject = _branchUniversalObjectFromJSONObject(new JSONObject(universalObjectDict));
              LinkProperties linkProperties = _linkPropertiesFromJSONObject(new JSONObject(linkPropertiesDict));
              BranchQRCode qrCode = _qrCodeFromJSONObject(new JSONObject(qrCodeDict));
-
-             //universalObject.generateShortUrl(UnityPlayer.currentActivity.getApplicationContext(), linkProperties, new BranchReferralInitListenerUnityCallback(callbackId));
+            Log.e("QR Codes", "2 - Before getQRCodeAsData");
+             qrCode.getQRCodeAsData(UnityPlayer.currentActivity.getApplicationContext(), universalObject, linkProperties, new BranchReferralInitListenerUnityCallback(callbackId));
+            Log.e("QR Codes", "3 - Bottom of generateBranchQRCode");
          }
          catch (JSONException jsone) {
+                Log.e("QR Codes", "Error");
              jsone.printStackTrace();
          }
      }
@@ -636,7 +640,7 @@ public class BranchUnityWrapper {
     /**
      * Callback for Unity.
      */
-    private static class BranchReferralInitListenerUnityCallback implements Branch.BranchReferralInitListener, Branch.BranchReferralStateChangedListener, Branch.BranchListResponseListener, Branch.BranchLinkCreateListener, Branch.BranchLinkShareListener {
+    private static class BranchReferralInitListenerUnityCallback implements Branch.BranchReferralInitListener, Branch.BranchReferralStateChangedListener, Branch.BranchListResponseListener, Branch.BranchLinkCreateListener, Branch.BranchLinkShareListener, BranchQRCode.BranchQRCodeDataHandler {
 
         // used for the default listener before C# is running
         public BranchReferralInitListenerUnityCallback() {
@@ -750,6 +754,16 @@ public class BranchUnityWrapper {
         public void onChannelSelected(java.lang.String selectedChannel) {
             _sendMessageWithWithBranchError("_asyncCallbackWithParams", null, "selectedChannel", selectedChannel);
             _linkShared = true;
+        }
+
+        @Override
+        public void onSuccess(byte[] qrCodeData) {
+            Log.e("QRCode", "QR Code - Success callback");
+        }
+
+        @Override
+        public void onFailure(Exception e) {
+            Log.e("QRCode", "QR Code - Failed callback");
         }
 
         private void _sendMessageWithWithBranchError(String asyncCallbackMethod, BranchError branchError, String extraKey, Object extraValue) {
