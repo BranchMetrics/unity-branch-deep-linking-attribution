@@ -170,9 +170,7 @@ public class BranchAndroidWrapper {
 
 	public static void generateBranchQRCode(string universalObject, string linkProperties, string branchQRCode, string callbackId)
 	{
-		Debug.Log("Hit 6");
 		_runBlockOnThread(() => {
-			Debug.Log("Hit 7");
 			_getBranchClass().CallStatic("generateBranchQRCode", universalObject, linkProperties, branchQRCode, callbackId);
 		});
 	}

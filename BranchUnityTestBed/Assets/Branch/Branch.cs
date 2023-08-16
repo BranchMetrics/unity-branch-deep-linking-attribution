@@ -277,13 +277,9 @@ public class Branch : MonoBehaviour {
      */
 	public static void generateQRCode(BranchUniversalObject universalObject, BranchLinkProperties linkProperties, BranchQRCode branchQRCode, BranchCallbackWithUrl callback)
     {
-		Debug.Log("Hit 1");
 		var callbackId = _getNextCallbackId();
-		Debug.Log("Hit 2");
 		_branchCallbacks[callbackId] = callback;
-		Debug.Log("Hit 3");
 		_generateBranchQRCode(universalObject.ToJsonString(), linkProperties.ToJsonString(), branchQRCode.ToJsonString(), callbackId);
-		Debug.Log("Hit 4" + branchQRCode.ToJsonString());
 	}
 
 	#endregion
@@ -511,7 +507,6 @@ public class Branch : MonoBehaviour {
 	}
 
 	private static void _generateBranchQRCode(string universalObject, string linkProperties, string branchQRCode, string callbackId) {
-		Debug.Log("Hit 5");
 		BranchAndroidWrapper.generateBranchQRCode(universalObject, linkProperties, branchQRCode, callbackId);
 	}
 
