@@ -13,6 +13,7 @@ public class BranchDemo : MonoBehaviour {
 	public GameObject rewardsHistoryPanel;
 	public GameObject logPanel;
     public GameObject quitButton;
+	public RawImage qrCodeRawImage;
 
 	private BranchUniversalObject universalObject = null;
 	private BranchLinkProperties linkProperties = null;
@@ -156,6 +157,11 @@ public class BranchDemo : MonoBehaviour {
 				else
 				{
 					Debug.Log("QR Code Successfully Generated!");
+					byte[] decodedBytes = Convert.FromBase64String(url);
+					Texture2D texture2D = new Texture2D(1, 1);
+					texture2D.LoadImage(decodedBytes);
+					texture2D.Apply();
+					qrCodeRawImage.texture = texture2D;
 				}
 			});
 		}

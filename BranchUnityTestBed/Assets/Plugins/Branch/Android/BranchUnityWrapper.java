@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Base64;
 import java.io.IOException;
 
 import io.branch.indexing.BranchUniversalObject;
@@ -757,13 +758,22 @@ public class BranchUnityWrapper {
         }
 
         @Override
-        public void onSuccess(byte[] qrCodeData) {
-            Log.e("QRCode", "QR Code - Success callback");
+        public void onSuccess(byte[] qrCodeData){
+            _sendMessageWithWithBranchError("_asyncCallbackWithUrl", null, "url", Base64.getEncoder().encodeToString(qrCodeData));
+/*
+try {
+                JSONObject params = new JSONObject();
+                params.put("qrCodeData", qrCodeData);
+                _sendMessageWithWithBranchError("_asyncCallbackWithParams", null, "params", params);
+            } catch(JSONException e) {
+
+            }
+*/
         }
 
         @Override
         public void onFailure(Exception e) {
-            Log.e("QRCode", "QR Code - Failed callback");
+            Log.e("Branch QR Code Generation Error", e.toString());
         }
 
         private void _sendMessageWithWithBranchError(String asyncCallbackMethod, BranchError branchError, String extraKey, Object extraValue) {
