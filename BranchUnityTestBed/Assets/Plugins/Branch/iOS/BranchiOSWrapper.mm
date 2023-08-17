@@ -3,6 +3,7 @@
 #include "BranchEvent.h"
 #include "BranchConstants.h"
 #include "BranchUniversalObject.h"
+#include "BranchQRCode.h"
 #import "UnityAppController.h"
 
 
@@ -304,6 +305,17 @@ static callbackWithUrl callbackWithUrlForCallbackId(char *callbackId) {
     };
 }
 
+static callbackWithData callbackWithDataForCallbackId(char *callbackId) {
+    NSString *callbackString = CreateNSString(callbackId);
+
+    return ^(NSData *url, NSError *error) {
+        id errorDictItem = error ? [error description] : [NSNull null];
+        NSDictionary *callbackDict = @{ @"callbackId": callbackString, @"url": url, @"error": errorDictItem };
+        
+        UnitySendMessage("Branch", "_asyncCallbackWithUrl", jsonCStringFromDictionary(callbackDict));
+    };
+}
+
 static callbackWithBranchUniversalObject callbackWithBranchUniversalObjectForCallbackId(char *callbackId) {
     NSString *callbackString = CreateNSString(callbackId);
     
@@ -523,7 +535,15 @@ void _getShortURLWithBranchUniversalObjectAndCallback(char *universalObjectJson,
 #pragma mark - QR Code Generation methods
 
 void _generateBranchQRCode(char *universalObjectJson, char *linkPropertiesJson, char *qrCodeSettingsJson, char *callbackId) {
+    NSLog(@"QR Code function called");
+    NSDictionary *universalObjectDict = dictionaryFromJsonString(universalObjectJson);
+    NSDictionary *linkPropertiesDict = dictionaryFromJsonString(linkPropertiesJson);
     
+    BranchUniversalObject *obj = branchuniversalObjectFormDict(universalObjectDict);
+    BranchLinkProperties *prop = branchLinkPropertiesFormDict(linkPropertiesDict);
+    
+    BranchQRCode *branchQRCode = [[BranchQRCode alloc] init];
+    [branchQRCode getQRCodeAsData:obj linkProperties:prop completion:callbackWithDataForCallbackId(callbackId)];
 }
 
 #pragma mark - Share Link methods
