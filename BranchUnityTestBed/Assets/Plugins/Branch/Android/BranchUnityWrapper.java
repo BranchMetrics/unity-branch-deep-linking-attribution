@@ -412,16 +412,12 @@ public class BranchUnityWrapper {
      */
      public static void generateBranchQRCode(String universalObjectDict, String linkPropertiesDict, String qrCodeDict, String callbackId) throws IOException {
          try {
-            Log.e("QR Codes", "1 - Top of generateBranchQRCode");
              BranchUniversalObject universalObject = _branchUniversalObjectFromJSONObject(new JSONObject(universalObjectDict));
              LinkProperties linkProperties = _linkPropertiesFromJSONObject(new JSONObject(linkPropertiesDict));
              BranchQRCode qrCode = _qrCodeFromJSONObject(new JSONObject(qrCodeDict));
-            Log.e("QR Codes", "2 - Before getQRCodeAsData");
              qrCode.getQRCodeAsData(UnityPlayer.currentActivity.getApplicationContext(), universalObject, linkProperties, new BranchReferralInitListenerUnityCallback(callbackId));
-            Log.e("QR Codes", "3 - Bottom of generateBranchQRCode");
          }
          catch (JSONException jsone) {
-                Log.e("QR Codes", "Error");
              jsone.printStackTrace();
          }
      }
