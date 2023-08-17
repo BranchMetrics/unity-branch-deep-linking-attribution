@@ -407,6 +407,9 @@ public class Branch : MonoBehaviour {
 
 	[DllImport ("__Internal")]
 	private static extern void _shareLinkWithLinkProperties(string universalObject, string linkProperties, string message, string callbackId);
+
+	[DllImport ("__Internal")]
+	private static extern void _generateBranchQRCode(string universalObject, string linkProperties, string branchQRCode, string callbackId);
 	    
 #elif UNITY_ANDROID && !UNITY_EDITOR
 
