@@ -535,7 +535,6 @@ void _getShortURLWithBranchUniversalObjectAndCallback(char *universalObjectJson,
 #pragma mark - QR Code Generation methods
 
 void _generateBranchQRCode(char *universalObjectJson, char *linkPropertiesJson, char *qrCodeSettingsJson, char *callbackId) {
-    NSLog(@"QR Code function called");
     NSDictionary *universalObjectDict = dictionaryFromJsonString(universalObjectJson);
     NSDictionary *linkPropertiesDict = dictionaryFromJsonString(linkPropertiesJson);
     
