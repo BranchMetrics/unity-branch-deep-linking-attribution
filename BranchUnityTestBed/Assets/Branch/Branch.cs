@@ -14,16 +14,17 @@ public class Branch : MonoBehaviour {
     public delegate void BranchCallbackWithStatus(bool changed, string error);
     public delegate void BranchCallbackWithList(List<object> list, string error);
 	public delegate void BranchCallbackWithBranchUniversalObject(BranchUniversalObject universalObject, BranchLinkProperties linkProperties, string error);
+	public delegate void BranchCallbackWithData(string data, string error);
 
-    #region Public methods
+	#region Public methods
 
-    #region InitSession methods
+	#region InitSession methods
 
 
 	/**
 	 * Initialize session and receive information about how it opened.
 	 */
-    public static void initSession(BranchCallbackWithParams callback) {
+	public static void initSession(BranchCallbackWithParams callback) {
 		if (_sessionCounter == 0) {
 			++_sessionCounter;
 			_isFirstSessionInited = true;
@@ -275,7 +276,7 @@ public class Branch : MonoBehaviour {
 	/**
      * Generate a QR Code
      */
-	public static void generateQRCode(BranchUniversalObject universalObject, BranchLinkProperties linkProperties, BranchQRCode branchQRCode, BranchCallbackWithUrl callback)
+	public static void generateQRCode(BranchUniversalObject universalObject, BranchLinkProperties linkProperties, BranchQRCode branchQRCode, BranchCallbackWithData callback)
     {
 		var callbackId = _getNextCallbackId();
 		_branchCallbacks[callbackId] = callback;
@@ -664,6 +665,20 @@ public class Branch : MonoBehaviour {
         	callback(url, error);
 		}
     }
+
+	public void _asyncCallbackWithData(string callbackDictString)
+	{
+		var callbackDict = BranchThirdParty_MiniJSON.Json.Deserialize(callbackDictString) as Dictionary<string, object>;
+		var callbackId = callbackDict["callbackId"] as string;
+		string data = callbackDict.ContainsKey("data") ? callbackDict["data"] as string : null;
+		string error = callbackDict.ContainsKey("error") ? callbackDict["error"] as string : null;
+
+		var callback = _branchCallbacks[callbackId] as BranchCallbackWithUrl;
+		if (callback != null)
+		{
+			callback(data, error);
+		}
+	}
 
 	public void _asyncCallbackWithBranchUniversalObject(string callbackDictString) {
 
