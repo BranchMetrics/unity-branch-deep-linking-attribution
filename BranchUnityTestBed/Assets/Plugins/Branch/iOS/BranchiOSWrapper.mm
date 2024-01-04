@@ -308,13 +308,27 @@ static callbackWithUrl callbackWithUrlForCallbackId(char *callbackId) {
 static callbackWithData callbackWithDataForCallbackId(char *callbackId) {
     NSString *callbackString = CreateNSString(callbackId);
 
-    return ^(NSData *url, NSError *error) {
+    return ^(NSData *data, NSError *error) {
+        NSString *string;
+        if (data) {
+            string = [data base64EncodedStringWithOptions:0];
+        }
         id errorDictItem = error ? [error description] : [NSNull null];
-        NSDictionary *callbackDict = @{ @"callbackId": callbackString, @"url": url, @"error": errorDictItem };
-        
-        UnitySendMessage("Branch", "_asyncCallbackWithUrl", jsonCStringFromDictionary(callbackDict));
+        NSDictionary *callbackDict = @{ @"callbackId": callbackString, @"data": string, @"error": errorDictItem };
+        UnitySendMessage("Branch", "_asyncCallbackWithData", jsonCStringFromDictionary(callbackDict));
     };
 }
+
+//static callbackWithData callbackWithStringForCallbackId(char *callbackId) {
+//    NSString *callbackString = CreateNSString(callbackId);
+//
+//    return ^(NSData *data, NSError *error) {
+//        NSString string = [data base64EncodedStringWithOptions:0];
+//        id errorDictItem = error ? [error description] : [NSNull null];
+//        NSDictionary *callbackDict = @{ @"callbackId": callbackString, @"data": data, @"error": errorDictItem };
+//        UnitySendMessage("Branch", "_asyncCallbackWithData", jsonCStringFromDictionary(callbackDict));
+//    };
+//}
 
 static callbackWithBranchUniversalObject callbackWithBranchUniversalObjectForCallbackId(char *callbackId) {
     NSString *callbackString = CreateNSString(callbackId);
@@ -543,6 +557,14 @@ void _generateBranchQRCode(char *universalObjectJson, char *linkPropertiesJson, 
     
     BranchQRCode *branchQRCode = [[BranchQRCode alloc] init];
     [branchQRCode getQRCodeAsData:obj linkProperties:prop completion:callbackWithDataForCallbackId(callbackId)];
+    [branchQRCode getQRCodeAsData:obj linkProperties:prop completion:^(NSData * _Nullable qrCode, NSError * _Nullable error) {
+        NSString *string;
+        if (qrCode) {
+            string = [qrCode base64EncodedStringWithOptions:0];
+            NSLog(string);
+
+        }
+    }];
 }
 
 #pragma mark - Share Link methods
