@@ -57,6 +57,7 @@ public class BranchUnityWrapper {
         Activity unityActivity = UnityPlayer.currentActivity;
 
         // TODO: replace with sessionbuilder version
+        Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey);
         Branch.sessionBuilder(unityActivity).withData(unityActivity.getIntent().getData()).withCallback(defaultListener).init();
     }
 
