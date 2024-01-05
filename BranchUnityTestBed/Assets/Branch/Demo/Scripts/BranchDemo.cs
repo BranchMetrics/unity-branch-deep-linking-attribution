@@ -142,7 +142,6 @@ public class BranchDemo : MonoBehaviour {
 
 	public void OnBtn_GenerateQRCode()
 	{
-		Debug.Log("Debug - button clicked");
 		try
 		{
 			universalObject = new BranchUniversalObject();
@@ -150,7 +149,8 @@ public class BranchDemo : MonoBehaviour {
 			linkProperties = new BranchLinkProperties();
 			//qrCode = new BranchQRCode("#FF0000", "#00FF00", 2, 1024, BranchImageFormat.JPEG, "https://play-lh.googleusercontent.com/gJ22vsKfh-dU592AI9GzI4OX9dkyzYPlsGSyr019dQv6cyAvfuRkUtzl9KJADGdTIlQ");
 			qrCode = new BranchQRCode();
-			Branch.generateQRCode(universalObject, linkProperties, qrCode, (url, error) =>
+			Debug.Log("QR Code is: " + qrCode);
+			Branch.generateQRCode(universalObject, linkProperties, qrCode, (data, error) =>
 			{
 				if (error != null)
 				{
@@ -159,7 +159,7 @@ public class BranchDemo : MonoBehaviour {
 				else
 				{
 					Debug.Log("QR Code Successfully Generated!");
-					byte[] decodedBytes = Convert.FromBase64String(url);
+					byte[] decodedBytes = Convert.FromBase64String(data);
 					Texture2D texture2D = new Texture2D(1, 1);
 					texture2D.LoadImage(decodedBytes);
 					texture2D.Apply();

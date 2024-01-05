@@ -413,10 +413,15 @@ public class BranchUnityWrapper {
      */
      public static void generateBranchQRCode(String universalObjectDict, String linkPropertiesDict, String qrCodeDict, String callbackId) throws IOException {
          try {
+             Log.i("QR Code Debugging", "generateBranchQRCode - 1");
              BranchUniversalObject universalObject = _branchUniversalObjectFromJSONObject(new JSONObject(universalObjectDict));
+             Log.i("QR Code Debugging", "generateBranchQRCode - 2");
              LinkProperties linkProperties = _linkPropertiesFromJSONObject(new JSONObject(linkPropertiesDict));
+             Log.i("QR Code Debugging", "generateBranchQRCode - 3");
              BranchQRCode qrCode = _qrCodeFromJSONObject(new JSONObject(qrCodeDict));
+             Log.i("QR Code Debugging", "generateBranchQRCode - 4");
              qrCode.getQRCodeAsData(UnityPlayer.currentActivity.getApplicationContext(), universalObject, linkProperties, new BranchReferralInitListenerUnityCallback(callbackId));
+             Log.i("QR Code Debugging", "generateBranchQRCode - 5");
          }
          catch (JSONException jsone) {
              jsone.printStackTrace();
@@ -607,6 +612,8 @@ public class BranchUnityWrapper {
     private static BranchQRCode _qrCodeFromJSONObject(JSONObject params) {
         BranchQRCode branchQRCode = new BranchQRCode();
 
+        Log.i("QR Code Debugging", "_qrCodeFromJSONObject");
+
         try {
             if (params.has("code_color")) {
                 branchQRCode.setCodeColor(params.getString("code_color"));
@@ -626,8 +633,8 @@ public class BranchUnityWrapper {
             if (params.has("center_logo_url")) {
                 branchQRCode.setCenterLogo(params.getString("center_logo_url"));
             }
-        } catch(Exception ignore) {
-
+        } catch(Exception e) {
+          Log.e("QR Code Debugging", e.toString());
         }
 
         return branchQRCode;
@@ -756,11 +763,13 @@ public class BranchUnityWrapper {
 
         @Override
         public void onSuccess(byte[] qrCodeData){
-            _sendMessageWithWithBranchError("_asyncCallbackWithUrl", null, "url", Base64.getEncoder().encodeToString(qrCodeData));
+            Log.i("QR Code Debugging", "onSuccess callback");
+            _sendMessageWithWithBranchError("_asyncCallbackWithData", null, "data", Base64.getEncoder().encodeToString(qrCodeData));
         }
 
         @Override
         public void onFailure(Exception e) {
+            Log.i("QR Code Debugging", "onFailure callback");
             Log.e("Branch QR Code Generation Error", e.toString());
         }
 
