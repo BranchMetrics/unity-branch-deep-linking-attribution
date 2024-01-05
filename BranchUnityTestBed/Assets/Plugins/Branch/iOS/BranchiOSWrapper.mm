@@ -545,11 +545,13 @@ void _getShortURLWithBranchUniversalObjectAndCallback(char *universalObjectJson,
 void _generateBranchQRCode(char *universalObjectJson, char *linkPropertiesJson, char *qrCodeSettingsJson, char *callbackId) {
     NSDictionary *universalObjectDict = dictionaryFromJsonString(universalObjectJson);
     NSDictionary *linkPropertiesDict = dictionaryFromJsonString(linkPropertiesJson);
+    NSDictionary *qrCodeSettingsDict = dictionaryFromJsonString(qrCodeSettingsJson);
     
     BranchUniversalObject *obj = branchuniversalObjectFormDict(universalObjectDict);
     BranchLinkProperties *prop = branchLinkPropertiesFormDict(linkPropertiesDict);
     
     BranchQRCode *branchQRCode = [[BranchQRCode alloc] init];
+    [branchQRCode hexStringForColor:[qrCodeSettingsDict valueForKey:@"code_color"]]
     [branchQRCode getQRCodeAsData:obj linkProperties:prop completion:callbackWithDataForCallbackId(callbackId)];
     [branchQRCode getQRCodeAsData:obj linkProperties:prop completion:^(NSData * _Nullable qrCode, NSError * _Nullable error) {
         NSString *string;

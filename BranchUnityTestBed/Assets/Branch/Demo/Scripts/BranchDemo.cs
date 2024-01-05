@@ -147,8 +147,7 @@ public class BranchDemo : MonoBehaviour {
 			universalObject = new BranchUniversalObject();
 			universalObject.canonicalIdentifier = "qrcodeid12345";
 			linkProperties = new BranchLinkProperties();
-			//qrCode = new BranchQRCode("#FF0000", "#00FF00", 2, 1024, BranchImageFormat.JPEG, "https://play-lh.googleusercontent.com/gJ22vsKfh-dU592AI9GzI4OX9dkyzYPlsGSyr019dQv6cyAvfuRkUtzl9KJADGdTIlQ");
-			qrCode = new BranchQRCode();
+			qrCode = new BranchQRCode("#FF0000", "#00FF00", 2, 1024, BranchImageFormat.JPEG, "https://play-lh.googleusercontent.com/gJ22vsKfh-dU592AI9GzI4OX9dkyzYPlsGSyr019dQv6cyAvfuRkUtzl9KJADGdTIlQ");
 			Debug.Log("QR Code is: " + qrCode);
 			Branch.generateQRCode(universalObject, linkProperties, qrCode, (data, error) =>
 			{
