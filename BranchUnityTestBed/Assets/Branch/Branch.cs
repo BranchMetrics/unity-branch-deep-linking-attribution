@@ -673,7 +673,7 @@ public class Branch : MonoBehaviour {
 		string data = callbackDict.ContainsKey("data") ? callbackDict["data"] as string : null;
 		string error = callbackDict.ContainsKey("error") ? callbackDict["error"] as string : null;
 
-		var callback = _branchCallbacks[callbackId] as BranchCallbackWithUrl;
+		var callback = _branchCallbacks[callbackId] as BranchCallbackWithData;
 		if (callback != null)
 		{
 			callback(data, error);

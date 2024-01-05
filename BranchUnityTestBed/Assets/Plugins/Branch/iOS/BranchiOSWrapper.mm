@@ -319,17 +319,6 @@ static callbackWithData callbackWithDataForCallbackId(char *callbackId) {
     };
 }
 
-//static callbackWithData callbackWithStringForCallbackId(char *callbackId) {
-//    NSString *callbackString = CreateNSString(callbackId);
-//
-//    return ^(NSData *data, NSError *error) {
-//        NSString string = [data base64EncodedStringWithOptions:0];
-//        id errorDictItem = error ? [error description] : [NSNull null];
-//        NSDictionary *callbackDict = @{ @"callbackId": callbackString, @"data": data, @"error": errorDictItem };
-//        UnitySendMessage("Branch", "_asyncCallbackWithData", jsonCStringFromDictionary(callbackDict));
-//    };
-//}
-
 static callbackWithBranchUniversalObject callbackWithBranchUniversalObjectForCallbackId(char *callbackId) {
     NSString *callbackString = CreateNSString(callbackId);
     
