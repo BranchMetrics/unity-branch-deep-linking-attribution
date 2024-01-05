@@ -310,12 +310,17 @@ static callbackWithData callbackWithDataForCallbackId(char *callbackId) {
 
     return ^(NSData *data, NSError *error) {
         NSString *string;
-        if (data) {
-            string = [data base64EncodedStringWithOptions:0];
-        }
+        NSDictionary *params;
         id errorDictItem = error ? [error description] : [NSNull null];
-        NSDictionary *callbackDict = @{ @"callbackId": callbackString, @"data": string, @"error": errorDictItem };
-        UnitySendMessage("Branch", "_asyncCallbackWithData", jsonCStringFromDictionary(callbackDict));
+
+        if(data) {
+            string = [data base64EncodedStringWithOptions:0];
+            params = @{@"callbackId": callbackString, @"data": string, @"error": errorDictItem};
+        } else {
+            params = @{@"callbackId": callbackString, @"data": @"", @"error": errorDictItem};
+        }
+
+        UnitySendMessage("Branch", "_asyncCallbackWithData", jsonCStringFromDictionary(params));
     };
 }
 
