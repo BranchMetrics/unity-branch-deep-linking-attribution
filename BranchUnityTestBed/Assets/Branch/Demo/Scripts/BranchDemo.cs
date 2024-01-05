@@ -142,12 +142,14 @@ public class BranchDemo : MonoBehaviour {
 
 	public void OnBtn_GenerateQRCode()
 	{
+		Debug.Log("Debug - button clicked");
 		try
 		{
 			universalObject = new BranchUniversalObject();
 			universalObject.canonicalIdentifier = "qrcodeid12345";
 			linkProperties = new BranchLinkProperties();
-			qrCode = new BranchQRCode("#FF0000");
+			//qrCode = new BranchQRCode("#FF0000", "#00FF00", 2, 1024, BranchImageFormat.JPEG, "https://play-lh.googleusercontent.com/gJ22vsKfh-dU592AI9GzI4OX9dkyzYPlsGSyr019dQv6cyAvfuRkUtzl9KJADGdTIlQ");
+			qrCode = new BranchQRCode();
 			Branch.generateQRCode(universalObject, linkProperties, qrCode, (url, error) =>
 			{
 				if (error != null)

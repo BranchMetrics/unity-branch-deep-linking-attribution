@@ -57,7 +57,7 @@ public class BranchUnityWrapper {
         Activity unityActivity = UnityPlayer.currentActivity;
 
         // TODO: replace with sessionbuilder version
-        Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).initSession(defaultListener, unityActivity.getIntent().getData(), unityActivity);
+        Branch.sessionBuilder(unityActivity).withData(unityActivity.getIntent().getData()).withCallback(defaultListener).init();
     }
 
     /**
@@ -270,7 +270,7 @@ public class BranchUnityWrapper {
     public static void listOnSpotlight(String universalObjectDict) {
         try {
             BranchUniversalObject universalObject = _branchUniversalObjectFromJSONObject(new JSONObject(universalObjectDict));
-            universalObject.listOnGoogleSearch(UnityPlayer.currentActivity.getApplicationContext());
+            //universalObject.listOnGoogleSearch(UnityPlayer.currentActivity.getApplicationContext());
         }
         catch (JSONException jsone) {
             jsone.printStackTrace();
