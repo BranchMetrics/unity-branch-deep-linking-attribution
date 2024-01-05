@@ -4,6 +4,6 @@
     <androidPackage spec="com.google.android.gms:play-services-ads-identifier:18+" />
   </androidPackages>
   <iosPods>
-      <iosPod name="BranchSDK" version="~>3.0.1" bitcodeEnabled="false" minTargetSdk="11.0" addToAllTargets="false" />
+      <iosPod name="BranchSDK" version="~>3.0.0" bitcodeEnabled="false" minTargetSdk="14.0" addToAllTargets="false" />
   </iosPods>
 </dependencies>
