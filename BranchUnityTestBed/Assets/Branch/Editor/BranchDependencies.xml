@@ -1,9 +1,9 @@
 <dependencies>
   <androidPackages>
-    <androidPackage spec="io.branch.sdk.android:library:5.3.0" />
+    <androidPackage spec="io.branch.sdk.android:library:5.8.0" />
     <androidPackage spec="com.google.android.gms:play-services-ads-identifier:18+" />
   </androidPackages>
   <iosPods>
-      <iosPod name="BranchSDK" version="~>2.1.0" bitcodeEnabled="false" minTargetSdk="11.0" addToAllTargets="false" />
+      <iosPod name="BranchSDK" version="~>3.0.1" bitcodeEnabled="false" minTargetSdk="11.0" addToAllTargets="false" />
   </iosPods>
 </dependencies>
