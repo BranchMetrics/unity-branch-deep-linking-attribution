@@ -756,15 +756,6 @@ public class BranchUnityWrapper {
         @Override
         public void onSuccess(byte[] qrCodeData){
             _sendMessageWithWithBranchError("_asyncCallbackWithUrl", null, "url", Base64.getEncoder().encodeToString(qrCodeData));
-/*
-try {
-                JSONObject params = new JSONObject();
-                params.put("qrCodeData", qrCodeData);
-                _sendMessageWithWithBranchError("_asyncCallbackWithParams", null, "params", params);
-            } catch(JSONException e) {
-
-            }
-*/
         }
 
         @Override
