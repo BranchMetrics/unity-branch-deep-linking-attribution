@@ -56,5 +56,9 @@ extern "C" {
     #pragma mark - Share Link methods
     
     void _shareLinkWithLinkProperties(char *universalObjectJson, char *linkPropertiesJson, char *message, char *callbackId);
+
+    #pragma mark - QR Code methods
+
+    void _generateBranchQRCode(char *universalObjectJson, char *linkPropertiesJson, char *qrCodeSettingsJson, char *callbackId);
 }
 

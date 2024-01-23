@@ -1,7 +1,7 @@
 <dependencies>
   <packages>
     <package>com.google.android.gms:play-services-ads-identifier:18+</package>
-    <package>io.branch.sdk.android:library:5.3.0</package>
+    <package>io.branch.sdk.android:library:5.8.0</package>
   </packages>
   <files>
     <file>Assets/Plugins/Android/androidx.annotation.annotation-1.4.0.jar</file>
@@ -34,13 +34,14 @@
     <file>Assets/Plugins/Android/com.android.installreferrer.installreferrer-2.2.aar</file>
     <file>Assets/Plugins/Android/com.google.android.gms.play-services-ads-identifier-18.0.1.aar</file>
     <file>Assets/Plugins/Android/com.google.android.gms.play-services-basement-18.0.0.aar</file>
-    <file>Assets/Plugins/Android/io.branch.sdk.android.library-5.3.0.aar</file>
-    <file>Assets/Plugins/Android/org.jacoco.org.jacoco.agent-0.8.7-runtime.jar</file>
+    <file>Assets/Plugins/Android/io.branch.sdk.android.library-5.8.0.aar</file>
     <file>Assets/Plugins/Android/org.jetbrains.annotations-13.0.jar</file>
     <file>Assets/Plugins/Android/org.jetbrains.kotlin.kotlin-stdlib-1.6.21.jar</file>
     <file>Assets/Plugins/Android/org.jetbrains.kotlin.kotlin-stdlib-common-1.6.21.jar</file>
-    <file>Assets/Plugins/Android/org.jetbrains.kotlin.kotlin-stdlib-jdk7-1.6.20.jar</file>
-    <file>Assets/Plugins/Android/org.jetbrains.kotlin.kotlin-stdlib-jdk8-1.6.20.jar</file>
+    <file>Assets/Plugins/Android/org.jetbrains.kotlin.kotlin-stdlib-jdk7-1.6.21.jar</file>
+    <file>Assets/Plugins/Android/org.jetbrains.kotlin.kotlin-stdlib-jdk8-1.6.21.jar</file>
+    <file>Assets/Plugins/Android/org.jetbrains.kotlinx.kotlinx-coroutines-android-1.6.4.jar</file>
+    <file>Assets/Plugins/Android/org.jetbrains.kotlinx.kotlinx-coroutines-core-jvm-1.6.4.jar</file>
   </files>
   <settings>
     <setting name="androidAbis" value="armeabi-v7a" />
@@ -55,6 +56,8 @@
     <setting name="patchAndroidManifest" value="True" />
     <setting name="patchMainTemplateGradle" value="True" />
     <setting name="projectExportEnabled" value="False" />
+    <setting name="useFullCustomMavenRepoPathWhenExport" value="True" />
+    <setting name="useFullCustomMavenRepoPathWhenNotExport" value="False" />
     <setting name="useJetifier" value="True" />
   </settings>
 </dependencies>

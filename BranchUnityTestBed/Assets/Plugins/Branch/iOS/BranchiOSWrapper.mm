@@ -3,6 +3,7 @@
 #include "BranchEvent.h"
 #include "BranchConstants.h"
 #include "BranchUniversalObject.h"
+#include "BranchQRCode.h"
 #import "UnityAppController.h"
 
 
@@ -304,6 +305,25 @@ static callbackWithUrl callbackWithUrlForCallbackId(char *callbackId) {
     };
 }
 
+static callbackWithData callbackWithDataForCallbackId(char *callbackId) {
+    NSString *callbackString = CreateNSString(callbackId);
+
+    return ^(NSData *data, NSError *error) {
+        NSString *string;
+        NSDictionary *params;
+        id errorDictItem = error ? [error description] : [NSNull null];
+
+        if(data) {
+            string = [data base64EncodedStringWithOptions:0];
+            params = @{@"callbackId": callbackString, @"data": string, @"error": errorDictItem};
+        } else {
+            params = @{@"callbackId": callbackString, @"data": @"", @"error": errorDictItem};
+        }
+
+        UnitySendMessage("Branch", "_asyncCallbackWithData", jsonCStringFromDictionary(params));
+    };
+}
+
 static callbackWithBranchUniversalObject callbackWithBranchUniversalObjectForCallbackId(char *callbackId) {
     NSString *callbackString = CreateNSString(callbackId);
     
@@ -518,6 +538,84 @@ void _getShortURLWithBranchUniversalObjectAndCallback(char *universalObjectJson,
     BranchLinkProperties *prop = branchLinkPropertiesFormDict(linkPropertiesDict);
     
     [obj getShortUrlWithLinkProperties:prop andCallback:callbackWithUrlForCallbackId(callbackId)];
+}
+
+#pragma mark - QR Code Generation methods
+
+//utility methods to convert hex color NSString to a UIColor
+
+CGFloat colorComponentFrom(NSString* string, NSInteger start, NSInteger length){
+    NSString *substring = [string substringWithRange: NSMakeRange(start, length)];
+       NSString *fullHex = length == 2 ? substring : [NSString stringWithFormat: @"%@%@", substring, substring];
+       unsigned hexComponent;
+       [[NSScanner scannerWithString: fullHex] scanHexInt: &hexComponent];
+       return hexComponent / 255.0;
+}
+
+UIColor* colorWithHexString(NSString* hexString) {
+    NSString *colorString = [[hexString stringByReplacingOccurrencesOfString: @"#" withString: @""] uppercaseString];
+       CGFloat alpha = 0.0f, red = 0.0f, blue = 0.0f, green = 0.0f;
+       switch ([colorString length]) {
+           case 3: // #RGB
+               alpha = 1.0f;
+               red = colorComponentFrom(colorString, 0, 1);
+               green = colorComponentFrom(colorString, 1, 1);
+               blue = colorComponentFrom(colorString, 2, 1);
+               break;
+           case 4: // #ARGB
+               alpha = colorComponentFrom(colorString, 0, 1);
+               red = colorComponentFrom(colorString, 1, 1);
+               green = colorComponentFrom(colorString, 2, 1);
+               blue = colorComponentFrom(colorString, 3, 1);
+               break;
+           case 6: // #RRGGBB
+               alpha = 1.0f;
+               red = colorComponentFrom(colorString, 0, 2);
+               green = colorComponentFrom(colorString, 2, 2);
+               blue = colorComponentFrom(colorString, 4, 2);
+               break;
+           case 8: // #AARRGGBB
+               alpha = colorComponentFrom(colorString, 0, 2);
+               red = colorComponentFrom(colorString, 2, 2);
+               green = colorComponentFrom(colorString, 4, 2);
+               blue = colorComponentFrom(colorString, 6, 2);
+               break;
+           default:
+               NSLog(@"Branch Flutter SDK - Invalid color value. It should be a hex value of the form #RBG, #ARGB, #RRGGBB, or #AARRGGBB");
+               break;
+       }
+       return [UIColor colorWithRed: red green: green blue: blue alpha: alpha];
+}
+
+void _generateBranchQRCode(char *universalObjectJson, char *linkPropertiesJson, char *qrCodeSettingsJson, char *callbackId) {
+    NSDictionary *universalObjectDict = dictionaryFromJsonString(universalObjectJson);
+    NSDictionary *linkPropertiesDict = dictionaryFromJsonString(linkPropertiesJson);
+    NSDictionary *qrCodeSettingsDict = dictionaryFromJsonString(qrCodeSettingsJson);
+    
+    BranchUniversalObject *obj = branchuniversalObjectFormDict(universalObjectDict);
+    BranchLinkProperties *prop = branchLinkPropertiesFormDict(linkPropertiesDict);
+    
+    BranchQRCode *branchQRCode = [[BranchQRCode alloc] init];
+    NSString *codeColorAsHexString = [qrCodeSettingsDict valueForKey:@"code_color"];
+    NSString *backgroundColorAsHexString = [qrCodeSettingsDict valueForKey:@"background_color"];
+    branchQRCode.codeColor = colorWithHexString(codeColorAsHexString);
+    branchQRCode.backgroundColor = colorWithHexString(backgroundColorAsHexString);
+    branchQRCode.margin = [qrCodeSettingsDict valueForKey:@"margin"];
+    branchQRCode.width = [qrCodeSettingsDict valueForKey:@"width"];
+    NSNumber *imageFormatAsNumber = [qrCodeSettingsDict valueForKey:@"image_format"];
+    BranchQRCodeImageFormat branchQRCodeImageFormat = imageFormatAsNumber == 0 ? BranchQRCodeImageFormatPNG : BranchQRCodeImageFormatJPEG;
+    branchQRCode.imageFormat = branchQRCodeImageFormat;
+    branchQRCode.centerLogo = [qrCodeSettingsDict valueForKey:@"center_logo_url"];
+    
+    [branchQRCode getQRCodeAsData:obj linkProperties:prop completion:callbackWithDataForCallbackId(callbackId)];
+    [branchQRCode getQRCodeAsData:obj linkProperties:prop completion:^(NSData * _Nullable qrCode, NSError * _Nullable error) {
+        NSString *string;
+        if (qrCode) {
+            string = [qrCode base64EncodedStringWithOptions:0];
+            NSLog(string);
+
+        }
+    }];
 }
 
 #pragma mark - Share Link methods

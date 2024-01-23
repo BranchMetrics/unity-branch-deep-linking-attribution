@@ -14,6 +14,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Base64;
+import java.io.IOException;
 
 import io.branch.indexing.BranchUniversalObject;
 import io.branch.referral.Branch;
@@ -28,6 +30,7 @@ import io.branch.referral.util.ContentMetadata;
 import io.branch.referral.util.CurrencyType;
 import io.branch.referral.util.LinkProperties;
 import io.branch.referral.util.ShareSheetStyle;
+import io.branch.referral.QRCode.BranchQRCode;
 
 /**
  * Created by grahammueller on 3/25/15.
@@ -54,7 +57,8 @@ public class BranchUnityWrapper {
         Activity unityActivity = UnityPlayer.currentActivity;
 
         // TODO: replace with sessionbuilder version
-        Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey).initSession(defaultListener, unityActivity.getIntent().getData(), unityActivity);
+        Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey);
+        Branch.sessionBuilder(unityActivity).withData(unityActivity.getIntent().getData()).withCallback(defaultListener).init();
     }
 
     /**
@@ -267,7 +271,7 @@ public class BranchUnityWrapper {
     public static void listOnSpotlight(String universalObjectDict) {
         try {
             BranchUniversalObject universalObject = _branchUniversalObjectFromJSONObject(new JSONObject(universalObjectDict));
-            universalObject.listOnGoogleSearch(UnityPlayer.currentActivity.getApplicationContext());
+            //universalObject.listOnGoogleSearch(UnityPlayer.currentActivity.getApplicationContext());
         }
         catch (JSONException jsone) {
             jsone.printStackTrace();
@@ -403,6 +407,21 @@ public class BranchUnityWrapper {
             jsone.printStackTrace();
         }
     }
+
+    /**
+     * QR Code Generation methods
+     */
+     public static void generateBranchQRCode(String universalObjectDict, String linkPropertiesDict, String qrCodeDict, String callbackId) throws IOException {
+         try {
+             BranchUniversalObject universalObject = _branchUniversalObjectFromJSONObject(new JSONObject(universalObjectDict));
+             LinkProperties linkProperties = _linkPropertiesFromJSONObject(new JSONObject(linkPropertiesDict));
+             BranchQRCode qrCode = _qrCodeFromJSONObject(new JSONObject(qrCodeDict));
+             qrCode.getQRCodeAsData(UnityPlayer.currentActivity.getApplicationContext(), universalObject, linkProperties, new BranchReferralInitListenerUnityCallback(callbackId));
+         }
+         catch (JSONException jsone) {
+             jsone.printStackTrace();
+         }
+     }
 
     /**
      * Share methods
@@ -585,12 +604,41 @@ public class BranchUnityWrapper {
         return linkProperties;
     }
 
+    private static BranchQRCode _qrCodeFromJSONObject(JSONObject params) {
+        BranchQRCode branchQRCode = new BranchQRCode();
+
+        try {
+            if (params.has("code_color")) {
+                branchQRCode.setCodeColor(params.getString("code_color"));
+            }
+            if (params.has("background_color")) {
+                branchQRCode.setBackgroundColor(params.getString("background_color"));
+            }
+            if (params.has("margin")) {
+                branchQRCode.setMargin(Long.valueOf(params.getString("margin")).intValue());
+            }
+            if (params.has("width")) {
+                branchQRCode.setWidth(Long.valueOf(params.getString("width")).intValue());
+            }
+            if (params.has("image_format")) {
+                branchQRCode.setImageFormat(params.getString("image_format").equals("0") ? io.branch.referral.QRCode.BranchQRCode.BranchImageFormat.JPEG : io.branch.referral.QRCode.BranchQRCode.BranchImageFormat.PNG);
+            }
+            if (params.has("center_logo_url")) {
+                branchQRCode.setCenterLogo(params.getString("center_logo_url"));
+            }
+        } catch(Exception e) {
+          Log.e("Error Creating QR Code from JSON", e.toString());
+        }
+
+        return branchQRCode;
+    }
+
     private static String _branchKey;
 
     /**
      * Callback for Unity.
      */
-    private static class BranchReferralInitListenerUnityCallback implements Branch.BranchReferralInitListener, Branch.BranchReferralStateChangedListener, Branch.BranchListResponseListener, Branch.BranchLinkCreateListener, Branch.BranchLinkShareListener {
+    private static class BranchReferralInitListenerUnityCallback implements Branch.BranchReferralInitListener, Branch.BranchReferralStateChangedListener, Branch.BranchListResponseListener, Branch.BranchLinkCreateListener, Branch.BranchLinkShareListener, BranchQRCode.BranchQRCodeDataHandler {
 
         // used for the default listener before C# is running
         public BranchReferralInitListenerUnityCallback() {
@@ -704,6 +752,16 @@ public class BranchUnityWrapper {
         public void onChannelSelected(java.lang.String selectedChannel) {
             _sendMessageWithWithBranchError("_asyncCallbackWithParams", null, "selectedChannel", selectedChannel);
             _linkShared = true;
+        }
+
+        @Override
+        public void onSuccess(byte[] qrCodeData){
+            _sendMessageWithWithBranchError("_asyncCallbackWithData", null, "data", Base64.getEncoder().encodeToString(qrCodeData));
+        }
+
+        @Override
+        public void onFailure(Exception e) {
+            Log.e("Branch QR Code Generation Error", e.toString());
         }
 
         private void _sendMessageWithWithBranchError(String asyncCallbackMethod, BranchError branchError, String extraKey, Object extraValue) {

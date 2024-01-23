@@ -14,16 +14,17 @@ public class Branch : MonoBehaviour {
     public delegate void BranchCallbackWithStatus(bool changed, string error);
     public delegate void BranchCallbackWithList(List<object> list, string error);
 	public delegate void BranchCallbackWithBranchUniversalObject(BranchUniversalObject universalObject, BranchLinkProperties linkProperties, string error);
+	public delegate void BranchCallbackWithData(string data, string error);
 
-    #region Public methods
+	#region Public methods
 
-    #region InitSession methods
+	#region InitSession methods
 
 
 	/**
 	 * Initialize session and receive information about how it opened.
 	 */
-    public static void initSession(BranchCallbackWithParams callback) {
+	public static void initSession(BranchCallbackWithParams callback) {
 		if (_sessionCounter == 0) {
 			++_sessionCounter;
 			_isFirstSessionInited = true;
@@ -260,6 +261,7 @@ public class Branch : MonoBehaviour {
      * Get a short url given a BranchUniversalObject, BranchLinkProperties
      */
 	public static void getShortURL(BranchUniversalObject universalObject, BranchLinkProperties linkProperties, BranchCallbackWithUrl callback) {
+
 		var callbackId = _getNextCallbackId();
 		
 		_branchCallbacks[callbackId] = callback;
@@ -267,13 +269,27 @@ public class Branch : MonoBehaviour {
 		_getShortURLWithBranchUniversalObjectAndCallback(universalObject.ToJsonString(), linkProperties.ToJsonString(), callbackId);
 	}
 
-    #endregion
+	#endregion
 
-    #endregion
+	#region QR Code methods
+
+	/**
+     * Generate a QR Code
+     */
+	public static void generateQRCode(BranchUniversalObject universalObject, BranchLinkProperties linkProperties, BranchQRCode branchQRCode, BranchCallbackWithData callback)
+    {
+		var callbackId = _getNextCallbackId();
+		_branchCallbacks[callbackId] = callback;
+		_generateBranchQRCode(universalObject.ToJsonString(), linkProperties.ToJsonString(), branchQRCode.ToJsonString(), callbackId);
+	}
+
+	#endregion
+
+	#endregion
 
 	#region Singleton
 
-    public void Awake() {
+	public void Awake() {
 
         // make sure there's only a single Branch instance
 		var olderBranches = FindObjectsOfType<Branch>();
@@ -313,11 +329,11 @@ public class Branch : MonoBehaviour {
 		}
 	}
 
-    #endregion
+	#endregion
 
-    #region Private methods
+	#region Private methods
 
-    #region Platform Loading Methods
+	#region Platform Loading Methods
 
 #if (UNITY_IOS || UNITY_IPHONE) && !UNITY_EDITOR
     
@@ -392,6 +408,9 @@ public class Branch : MonoBehaviour {
 
 	[DllImport ("__Internal")]
 	private static extern void _shareLinkWithLinkProperties(string universalObject, string linkProperties, string message, string callbackId);
+
+	[DllImport ("__Internal")]
+	private static extern void _generateBranchQRCode(string universalObject, string linkProperties, string branchQRCode, string callbackId);
 	    
 #elif UNITY_ANDROID && !UNITY_EDITOR
 
@@ -491,9 +510,13 @@ public class Branch : MonoBehaviour {
 		BranchAndroidWrapper.getShortURLWithBranchUniversalObjectAndCallback(universalObject, linkProperties, callbackId);
 	}
 
+	private static void _generateBranchQRCode(string universalObject, string linkProperties, string branchQRCode, string callbackId) {
+		BranchAndroidWrapper.generateBranchQRCode(universalObject, linkProperties, branchQRCode, callbackId);
+	}
+
 #else
 
-    private static void _setBranchKey(string branchKey, string sdkVersion) { }
+	private static void _setBranchKey(string branchKey, string sdkVersion) { }
 
 	private static void _initSessionWithCallback(string callbackId) {
 		callNotImplementedCallbackForParamCallback(callbackId);
@@ -558,7 +581,11 @@ public class Branch : MonoBehaviour {
 	private static void _getShortURLWithBranchUniversalObjectAndCallback(string universalObject, string linkProperties, string callbackId) {
 		callNotImplementedCallbackForUrlCallback(callbackId);
 	}
-		
+
+	private static void _generateBranchQRCode(string universalObject, string linkProperties, string branchQRCode, string callbackId)
+    {
+		callNotImplementedCallbackForUrlCallback(callbackId);
+	}
     
     private static void callNotImplementedCallbackForParamCallback(string callbackId) {
         var callback = _branchCallbacks[callbackId] as BranchCallbackWithParams;
@@ -638,6 +665,20 @@ public class Branch : MonoBehaviour {
         	callback(url, error);
 		}
     }
+
+	public void _asyncCallbackWithData(string callbackDictString)
+	{
+		var callbackDict = BranchThirdParty_MiniJSON.Json.Deserialize(callbackDictString) as Dictionary<string, object>;
+		var callbackId = callbackDict["callbackId"] as string;
+		string data = callbackDict.ContainsKey("data") ? callbackDict["data"] as string : null;
+		string error = callbackDict.ContainsKey("error") ? callbackDict["error"] as string : null;
+
+		var callback = _branchCallbacks[callbackId] as BranchCallbackWithData;
+		if (callback != null)
+		{
+			callback(data, error);
+		}
+	}
 
 	public void _asyncCallbackWithBranchUniversalObject(string callbackDictString) {
 

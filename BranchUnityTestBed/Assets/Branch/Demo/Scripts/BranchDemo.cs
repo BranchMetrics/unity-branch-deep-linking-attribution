@@ -13,9 +13,11 @@ public class BranchDemo : MonoBehaviour {
 	public GameObject rewardsHistoryPanel;
 	public GameObject logPanel;
     public GameObject quitButton;
+	public RawImage qrCodeRawImage;
 
 	private BranchUniversalObject universalObject = null;
 	private BranchLinkProperties linkProperties = null;
+	private BranchQRCode qrCode = null;
 	private string logString = "";
 
 	#region Init
@@ -137,6 +139,37 @@ public class BranchDemo : MonoBehaviour {
 			Debug.Log(e);
 		}
 	}
+
+	public void OnBtn_GenerateQRCode()
+	{
+		try
+		{
+			universalObject = new BranchUniversalObject();
+			universalObject.canonicalIdentifier = "qrcodeid12345";
+			linkProperties = new BranchLinkProperties();
+			qrCode = new BranchQRCode("#FF0000", "#00FF00", 2, 1024, BranchImageFormat.JPEG, "https://play-lh.googleusercontent.com/gJ22vsKfh-dU592AI9GzI4OX9dkyzYPlsGSyr019dQv6cyAvfuRkUtzl9KJADGdTIlQ");
+			Branch.generateQRCode(universalObject, linkProperties, qrCode, (data, error) =>
+			{
+				if (error != null)
+				{
+					Debug.LogError("Branch.generateQRCode failed: " + error);
+				}
+				else
+				{
+					Debug.Log("QR Code Successfully Generated!");
+					byte[] decodedBytes = Convert.FromBase64String(data);
+					Texture2D texture2D = new Texture2D(1, 1);
+					texture2D.LoadImage(decodedBytes);
+					texture2D.Apply();
+					qrCodeRawImage.texture = texture2D;
+				}
+			});
+		}
+		catch (Exception e)
+		{
+			Debug.Log("QR Code Generating Error" + e);
+		}
+    }
 
 	public void OnBtn_SendBuyEvent() {
         BranchEvent e = new BranchEvent (BranchEventType.PURCHASE);
