@@ -340,7 +340,7 @@ static callbackWithBranchUniversalObject callbackWithBranchUniversalObjectForCal
 static callbackWithShareCompletion callbackWithShareCompletionForCallbackId(char *callbackId) {
     NSString *callbackString = CreateNSString(callbackId);
     
-    return ^(NSString *activityType, BOOL completed) {
+    return ^(NSString *activityType, BOOL completed, NSError *error) {
         id errorDictItem = [NSNull null];
         
         NSDictionary *params;
@@ -627,5 +627,5 @@ void _shareLinkWithLinkProperties(char *universalObjectJson, char *linkPropertie
     BranchUniversalObject *obj = branchuniversalObjectFormDict(universalObjectDict);
     BranchLinkProperties *prop = branchLinkPropertiesFormDict(linkPropertiesDict);
     
-    [obj showShareSheetWithLinkProperties:prop andShareText:CreateNSString(message) fromViewController:nil completion:callbackWithShareCompletionForCallbackId(callbackId)];
+    [obj showShareSheetWithLinkProperties:prop andShareText:CreateNSString(message) fromViewController:nil completionWithError:callbackWithShareCompletionForCallbackId(callbackId)];
 }

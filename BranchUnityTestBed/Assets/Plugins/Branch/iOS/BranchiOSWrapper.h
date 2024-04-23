@@ -2,7 +2,7 @@
 
 #pragma mark - Private notification class interface
 
-typedef void (^callbackWithShareCompletion) (NSString *activityType, BOOL completed);
+typedef void (^callbackWithShareCompletion) (NSString *activityType, BOOL completed, NSError *error);
 
 @interface BranchUnityWrapper : NSObject<AppDelegateListener>
 + (BranchUnityWrapper *)sharedInstance;
