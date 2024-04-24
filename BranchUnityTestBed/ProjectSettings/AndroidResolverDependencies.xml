@@ -1,12 +1,12 @@
 <dependencies>
   <packages>
     <package>com.google.android.gms:play-services-ads-identifier:18+</package>
-    <package>io.branch.sdk.android:library:5.8.0</package>
+    <package>io.branch.sdk.android:library:5.11.0</package>
   </packages>
   <files />
   <settings>
     <setting name="androidAbis" value="armeabi-v7a" />
-    <setting name="bundleId" value="com.DefaultCompany.BranchUnityTestBed" />
+    <setting name="bundleId" value="io.branch.BranchUnityTestBed" />
     <setting name="explodeAars" value="True" />
     <setting name="gradleBuildEnabled" value="True" />
     <setting name="gradlePropertiesTemplateEnabled" value="True" />
