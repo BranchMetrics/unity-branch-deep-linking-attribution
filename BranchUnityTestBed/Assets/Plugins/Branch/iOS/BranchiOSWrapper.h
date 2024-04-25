@@ -44,6 +44,7 @@ extern "C" {
     void _addFacebookPartnerParameter(char *name, char *value);
     void _clearPartnerParameters();
     void _setTrackingDisabled(BOOL value);
+    void _setDMAParamsForEEA(BOOL eeaRegion, BOOL adPersonalizationConsent, BOOL adUserDataUsageConsent);
 
     #pragma mark - Send event methods
     
