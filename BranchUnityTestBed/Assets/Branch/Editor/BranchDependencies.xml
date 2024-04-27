@@ -1,6 +1,6 @@
 <dependencies>
   <androidPackages>
-    <androidPackage spec="io.branch.sdk.android:library:5.11.0" />
+    <androidPackage spec="io.branch.sdk.android:library:5.12.0" />
     <androidPackage spec="com.google.android.gms:play-services-ads-identifier:18+" />
   </androidPackages>
   <iosPods>

@@ -229,6 +229,10 @@ public class Branch : MonoBehaviour {
 		_setTrackingDisabled(value);
 	}
 
+	public static void setDMAParamsForEEA(bool eeaRegion, bool adPersonalizationConsent, bool adUserDataUsageConsent) {
+		_setDMAParamsForEEA(eeaRegion, adPersonalizationConsent, adUserDataUsageConsent);
+	}
+
     #endregion
 
 	#region Send Event methods
@@ -399,7 +403,10 @@ public class Branch : MonoBehaviour {
 
 	[DllImport ("__Internal")]
 	private static extern void _setTrackingDisabled(bool value);
-    
+
+	[DllImport ("__Internal")]
+	private static extern void _setDMAParamsForEEA(bool eeaRegion, bool adPersonalizationConsent, bool adUserDataUsageConsent);
+
 	[DllImport ("__Internal")]
 	private static extern void _sendEvent(string eventName);
 
@@ -498,6 +505,10 @@ public class Branch : MonoBehaviour {
 	    BranchAndroidWrapper.setTrackingDisabled(value);
     }
     
+	private static void _setDMAParamsForEEA(bool eeaRegion, bool adPersonalizationConsent, bool adUserDataUsageConsent) {
+		BranchAndroidWrapper.setDMAParamsForEEA(eeaRegion, adPersonalizationConsent, adUserDataUsageConsent);
+	}
+
 	private static void _sendEvent(string eventName) {
 		BranchAndroidWrapper.sendEvent(eventName);
 	}
@@ -571,6 +582,8 @@ public class Branch : MonoBehaviour {
     private static void _clearPartnerParameters() { }
 
     private static void _setTrackingDisabled(bool value) { }
+
+	private static void _setDMAParamsForEEA(bool eeaRegion, bool adPersonalizationConsent, bool adUserDataUsageConsent) { }
 
 	private static void _sendEvent(string eventName) { }
     
