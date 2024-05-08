@@ -15,17 +15,52 @@ public class BranchEditor : Editor {
 	SerializedProperty serializedTestAppLinks;
 	SerializedProperty serializedAppLinks;
 
+	const string assetPath = "Assets/Branch/Resources/BranchData.asset";
+	const string copyPath = "Assets/Branch/Resources/BranchDataBackupCopy.asset";
+
+
     private void OnEnable()
     {
+		// Prevent overwriting settings on SDK upgrade. 
+		// Check for an existing working copy and if it doesn't exist create a new working copy
+		// In the future, consider versioning and migrating the data.
+		if (CopyExists()) {
+			RestoreBranchDataFromCopy();
+		}
+
+		// Loads existing settings
 		serializedBranchData = new SerializedObject(BranchData.Instance);
 		serializedTestAppLinks = serializedBranchData.FindProperty("testAppLinks");
 		serializedAppLinks = serializedBranchData.FindProperty("liveAppLinks");
 	}
 
+	private bool CopyExists() 
+	{
+		var asset = Resources.Load(copyPath);
+		if (asset != null) {
+			return true;
+		}
+		return false;
+	}
+
+	private void RestoreBranchDataFromCopy()
+	{
+		if (!AssetDatabase.CopyAsset(copyPath, assetPath)) {
+			Debug.LogWarning($"Failed to restore Branch Settings from a backup Copy");
+		}
+	}
+
+	private void UpdateBranchDataCopy()
+	{
+		if (!AssetDatabase.CopyAsset(assetPath, copyPath)) {
+			Debug.LogWarning($"Failed to save Branch Settings into a backup Copy");
+		}
+	}
+
 	public override void OnInspectorGUI() {
 		GUI.changed = false;
 
-		// TODO: handle enableLogging. Due to lifecycle issues it is best to set this in branch.json
+		// TODO: handle enableLogging. Due to lifecycle issues it is best to set this in branch.json. Which not yet supportted.
 		SerializedProperty serializedEnableLogging = serializedBranchData.FindProperty("enableLogging");
 		SerializedProperty serializedIsTestMode = serializedBranchData.FindProperty("testMode");
 
@@ -58,6 +93,7 @@ public class BranchEditor : Editor {
 		// Android config update is done pre build here.
 		EditorGUILayout.BeginHorizontal(new GUILayoutOption[]{});
 		if (GUILayout.Button("Apply Changes", new GUILayoutOption[]{})) {
+			UpdateBranchDataCopy();
 			UpdateManifest();
 			AssetDatabase.Refresh();
 		}
