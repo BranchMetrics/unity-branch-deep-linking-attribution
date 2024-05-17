@@ -2,7 +2,7 @@ Branch Unity SDK change log
 
 - 2.0.0
  * External Dependency Manager for Unity (EDM4U) is no longer bundled with the Branch SDK. Clients will need to install it separately.
- * Update iOS SDK to 3.4.2
+ * Update iOS SDK to 3.4.3
  * Update Android SDK to 5.12.0
 
 - 1.0.0
