@@ -1,11 +1,11 @@
 <dependencies>
   <packages>
     <package>com.google.android.gms:play-services-ads-identifier:18+</package>
-    <package>io.branch.sdk.android:library:5.11.0</package>
+    <package>io.branch.sdk.android:library:5.12.0</package>
   </packages>
   <files />
   <settings>
-    <setting name="androidAbis" value="armeabi-v7a" />
+    <setting name="androidAbis" value="arm64-v8a,armeabi-v7a" />
     <setting name="bundleId" value="io.branch.BranchUnityTestBed" />
     <setting name="explodeAars" value="True" />
     <setting name="gradleBuildEnabled" value="True" />
@@ -16,7 +16,7 @@
     <setting name="packageDir" value="Assets/Plugins/Android" />
     <setting name="patchAndroidManifest" value="True" />
     <setting name="patchMainTemplateGradle" value="True" />
-    <setting name="projectExportEnabled" value="False" />
+    <setting name="projectExportEnabled" value="True" />
     <setting name="useFullCustomMavenRepoPathWhenExport" value="True" />
     <setting name="useFullCustomMavenRepoPathWhenNotExport" value="False" />
     <setting name="useJetifier" value="True" />
