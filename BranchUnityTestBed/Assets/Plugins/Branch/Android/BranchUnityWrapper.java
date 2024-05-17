@@ -258,6 +258,10 @@ public class BranchUnityWrapper {
         Branch.getInstance().setNetworkTimeout(timeout);
     }
 
+    public static void setDMAParamsForEEA(boolean eeaRegion, boolean adPersonalizationConsent, boolean adUserDataUsageConsent) {
+        Branch.getInstance().setDMAParamsForEEA(eeaRegion, adPersonalizationConsent, adUserDataUsageConsent);
+    }
+
     public static void registerView(String universalObjectDict) {
         try {
             BranchUniversalObject universalObject = _branchUniversalObjectFromJSONObject(new JSONObject(universalObjectDict));

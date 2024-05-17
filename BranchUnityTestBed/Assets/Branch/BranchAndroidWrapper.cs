@@ -134,6 +134,12 @@ public class BranchAndroidWrapper {
         });
 	}
 
+	public static void setDMAParamsForEEA(bool eeaRegion, bool adPersonalizationConsent, bool adUserDataUsageConsent) {
+		_runBlockOnThread(() => {
+			_getBranchClass().CallStatic("setDMAParamsForEEA", eeaRegion, adPersonalizationConsent, adUserDataUsageConsent);
+		});
+	}
+
 	#endregion
     
 	#region Event methods

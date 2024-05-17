@@ -21,7 +21,7 @@ public class BranchUnityApp extends Application {
         //Branch.enableLogging();
 
         // Set plugin version
-        Branch.registerPlugin("Unity", "1.0.0");
+        Branch.registerPlugin("Unity", "2.0.0");
         Branch.disableInstantDeepLinking(true);
         Branch.getAutoInstance(this.getApplicationContext());
     }

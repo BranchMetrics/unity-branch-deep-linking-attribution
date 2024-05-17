@@ -340,7 +340,7 @@ static callbackWithBranchUniversalObject callbackWithBranchUniversalObjectForCal
 static callbackWithShareCompletion callbackWithShareCompletionForCallbackId(char *callbackId) {
     NSString *callbackString = CreateNSString(callbackId);
     
-    return ^(NSString *activityType, BOOL completed) {
+    return ^(NSString *activityType, BOOL completed, NSError *error) {
         id errorDictItem = [NSNull null];
         
         NSDictionary *params;
@@ -417,7 +417,7 @@ void _logout() {
 # pragma mark - Configuation methods
  
 void _enableLogging() {
-    [[Branch getInstance] enableLogging];
+    [Branch enableLogging];
 }
 
 void _setRetryInterval(int retryInterval) {
@@ -462,6 +462,10 @@ void _clearPartnerParameters() {
 
 void _setTrackingDisabled(BOOL value) {
     [Branch setTrackingDisabled:value];
+}
+
+void _setDMAParamsForEEA(BOOL eeaRegion, BOOL adPersonalizationConsent, BOOL adUserDataUsageConsent) {
+    [Branch setDMAParamsForEEA:eeaRegion AdPersonalizationConsent:adPersonalizationConsent AdUserDataUsageConsent:adUserDataUsageConsent];
 }
 
 #pragma mark - Send event methods
@@ -627,5 +631,5 @@ void _shareLinkWithLinkProperties(char *universalObjectJson, char *linkPropertie
     BranchUniversalObject *obj = branchuniversalObjectFormDict(universalObjectDict);
     BranchLinkProperties *prop = branchLinkPropertiesFormDict(linkPropertiesDict);
     
-    [obj showShareSheetWithLinkProperties:prop andShareText:CreateNSString(message) fromViewController:nil completion:callbackWithShareCompletionForCallbackId(callbackId)];
+    [obj showShareSheetWithLinkProperties:prop andShareText:CreateNSString(message) fromViewController:nil completionWithError:callbackWithShareCompletionForCallbackId(callbackId)];
 }
