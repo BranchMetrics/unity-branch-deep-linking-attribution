@@ -57,6 +57,14 @@ public class BranchAndroidWrapper {
         	_getBranchClass().CallStatic("setIdentity", userId);
 		});
     }
+
+    //INTENG-20830
+    public static void setFBAppID(string facebookAppID)
+    {
+	    _runBlockOnThread(() => {
+		    _getBranchClass().CallStatic("setFBAppID", facebookAppID);
+	    });
+    }
     
     public static void setIdentityWithCallback(string userId, string callbackId) {
 		_runBlockOnThread(() => {
