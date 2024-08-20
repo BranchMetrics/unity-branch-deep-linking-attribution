@@ -149,6 +149,14 @@ public class Branch : MonoBehaviour {
     }
 
     /**
+     * Specifiy a Facebook ID for the current session.
+     */
+    public static void setFBAppID(string facebookAppID)
+    {
+	    _setFBAppID(facebookAppID);
+    }
+
+    /**
      * Specifiy an identity for the current session and receive information about the set.
      */
     public static void setIdentity(string userId, BranchCallbackWithParams callback) {
@@ -456,6 +464,10 @@ public class Branch : MonoBehaviour {
     private static void _setIdentity(string userId) {
         BranchAndroidWrapper.setIdentity(userId);
     }
+
+	private static void _setFBAppID(string facebookAppID){
+        BranchAndroidWrapper.setFBAppID(facebookAppID);
+	}
     
     private static void _setIdentityWithCallback(string userId, string callbackId) {
         BranchAndroidWrapper.setIdentityWithCallback(userId, callbackId);
@@ -526,6 +538,8 @@ public class Branch : MonoBehaviour {
 	}
 
 #else
+
+	private static void _setFBAppID(string facebookAppID){ }
 
 	private static void _setBranchKey(string branchKey, string sdkVersion) { }
 
