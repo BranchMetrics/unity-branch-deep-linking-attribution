@@ -337,6 +337,10 @@ public class Branch : MonoBehaviour {
 			}
 		}
 		else {
+			if (Application.isFocused)
+			{
+				return;
+			}
 			closeSession();
 		}
 	}
