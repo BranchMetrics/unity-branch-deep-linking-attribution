@@ -297,6 +297,14 @@ public class Branch : MonoBehaviour {
 
 	#endregion
 
+	#region Validator methods
+
+	public static void validate() {
+		_validate();
+	}
+
+	#endregion
+
 	#endregion
 
 	#region Singleton
@@ -426,6 +434,9 @@ public class Branch : MonoBehaviour {
 
 	[DllImport ("__Internal")]
 	private static extern void _generateBranchQRCode(string universalObject, string linkProperties, string branchQRCode, string callbackId);
+
+	[DllImport ("__Internal")]
+	private static extern void _validate();
 	    
 #elif UNITY_ANDROID && !UNITY_EDITOR
 
@@ -537,6 +548,10 @@ public class Branch : MonoBehaviour {
 		BranchAndroidWrapper.generateBranchQRCode(universalObject, linkProperties, branchQRCode, callbackId);
 	}
 
+	private static void _validate() {
+		BranchAndroidWrapper.validate();
+	}
+
 #else
 
 	private static void _setFBAppID(string facebookAppID){ }
@@ -613,6 +628,8 @@ public class Branch : MonoBehaviour {
     {
 		callNotImplementedCallbackForUrlCallback(callbackId);
 	}
+
+	private static void _validate() { }
     
     private static void callNotImplementedCallbackForParamCallback(string callbackId) {
         var callback = _branchCallbacks[callbackId] as BranchCallbackWithParams;
