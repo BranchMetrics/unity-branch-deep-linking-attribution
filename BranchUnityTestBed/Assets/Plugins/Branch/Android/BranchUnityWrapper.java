@@ -37,6 +37,7 @@ import io.branch.referral.validators.IntegrationValidator;
  * Created by grahammueller on 3/25/15.
  */
 public class BranchUnityWrapper {
+
     public static void setBranchKey(String branchKey, String sdkVersion) {
         _branchKey = branchKey;
         Branch.registerPlugin("Unity", sdkVersion);
@@ -48,33 +49,62 @@ public class BranchUnityWrapper {
     private static final String TAG = "BranchSDK.Unity";
 
     /**
-     * Init session from BranchUnityActivity.onStart()
-     * Caches the last response.
+     * Init session from BranchUnityActivity.onStart() Caches the last response.
      */
-    public static void initSession() {
-        //Log.i(TAG, "BranchUnityWrapper.initSession()");
+    public static void initSession(Context context) {
+        try {
+            // Try to get UnityPlayer class via reflection
+            Class<?> unityPlayerClass = Class.forName("com.unity3d.player.UnityPlayer");
 
-        defaultListener = new BranchReferralInitListenerUnityCallback();
-        Activity unityActivity = UnityPlayer.currentActivity;
+            // Access the static 'currentActivity' field
+            java.lang.reflect.Field currentActivityField = unityPlayerClass.getDeclaredField("currentActivity");
+            currentActivityField.setAccessible(true);
 
-        // TODO: replace with sessionbuilder version
-        Branch.getAutoInstance(UnityPlayer.currentActivity.getApplicationContext(), _branchKey);
-        Branch.sessionBuilder(unityActivity).withData(unityActivity.getIntent().getData()).withCallback(defaultListener).init();
+            // Get the current Unity activity instance
+            Activity unityActivity = (Activity) currentActivityField.get(null);
+
+            // If null, fallback to context if possible
+            if (unityActivity == null && context instanceof Activity) {
+                unityActivity = (Activity) context;
+            }
+
+            if (unityActivity == null) {
+                Log.e(TAG, "Could not find Unity activity instance.");
+                return;
+            }
+
+            // Init Branch session as usual
+            defaultListener = new BranchReferralInitListenerUnityCallback();
+            Branch.getAutoInstance(unityActivity.getApplicationContext(), _branchKey);
+            Branch.sessionBuilder(unityActivity)
+                    .withData(unityActivity.getIntent().getData())
+                    .withCallback(defaultListener)
+                    .init();
+
+        } catch (ClassNotFoundException e) {
+            Log.e(TAG, "UnityPlayer class not found — not a Unity environment?", e);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            Log.e(TAG, "Unable to access UnityPlayer.currentActivity via reflection", e);
+        }
     }
 
     /**
-     * Branch SDK is already initialized, this just attaches the callback id and format
+     * Branch SDK is already initialized, this just attaches the callback id and
+     * format
+     *
      * @param callbackId
      */
     public static void initSession(String callbackId) {
         //Log.i(TAG, "BranchUnityWrapper.initSession(String callbackId)");
-        
+
         defaultListener.setCallbackIDAndClearCachedParams(callbackId, false);
         Branch.notifyNativeToInit();
     }
 
     /**
-     * Branch SDK is already initialized, this just attaches the callback id and format
+     * Branch SDK is already initialized, this just attaches the callback id and
+     * format
+     *
      * @param callbackId
      */
     public static void initSessionWithUniversalObjectCallback(String callbackId) {
@@ -242,7 +272,7 @@ public class BranchUnityWrapper {
     public static void logout() {
         Branch.getInstance().logout();
     }
-    
+
     public static void enableLogging() {
         Branch.enableLogging();
     }
@@ -267,8 +297,7 @@ public class BranchUnityWrapper {
         try {
             BranchUniversalObject universalObject = _branchUniversalObjectFromJSONObject(new JSONObject(universalObjectDict));
             Branch.getInstance().registerView(universalObject, null);
-        }
-        catch (JSONException json) {
+        } catch (JSONException json) {
             json.printStackTrace();
         }
     }
@@ -277,8 +306,7 @@ public class BranchUnityWrapper {
         try {
             BranchUniversalObject universalObject = _branchUniversalObjectFromJSONObject(new JSONObject(universalObjectDict));
             //universalObject.listOnGoogleSearch(UnityPlayer.currentActivity.getApplicationContext());
-        }
-        catch (JSONException jsone) {
+        } catch (JSONException jsone) {
             jsone.printStackTrace();
         }
     }
@@ -302,7 +330,6 @@ public class BranchUnityWrapper {
     /**
      * Send Event methods
      */
-
     public static void sendEvent(String eventData) {
 
         if (eventData.isEmpty()) {
@@ -327,8 +354,7 @@ public class BranchUnityWrapper {
                 if (event == null) {
                     event = new BranchEvent(params.getString("event_name"));
                 }
-            }
-            else {
+            } else {
                 return;
             }
 
@@ -384,14 +410,13 @@ public class BranchUnityWrapper {
             if (params.has("content_items")) {
                 JSONArray array = params.getJSONArray("content_items");
                 for (int i = 0; i < array.length(); i++) {
-                    event.addContentItems( _branchUniversalObjectFromJSONObject(new JSONObject(array.get(i).toString())) );
+                    event.addContentItems(_branchUniversalObjectFromJSONObject(new JSONObject(array.get(i).toString())));
                 }
             }
 
             // log event
             event.logEvent(UnityPlayer.currentActivity.getApplicationContext());
-        }
-        catch (JSONException jsone) {
+        } catch (JSONException jsone) {
             jsone.printStackTrace();
         }
     }
@@ -399,7 +424,6 @@ public class BranchUnityWrapper {
     /**
      * Short URL Generation methods
      */
-
     public static void getShortURLWithBranchUniversalObject(String universalObjectDict, String linkPropertiesDict, String callbackId) {
 
         try {
@@ -407,8 +431,7 @@ public class BranchUnityWrapper {
             LinkProperties linkProperties = _linkPropertiesFromJSONObject(new JSONObject(linkPropertiesDict));
 
             universalObject.generateShortUrl(UnityPlayer.currentActivity.getApplicationContext(), linkProperties, new BranchReferralInitListenerUnityCallback(callbackId));
-        }
-        catch (JSONException jsone) {
+        } catch (JSONException jsone) {
             jsone.printStackTrace();
         }
     }
@@ -416,19 +439,18 @@ public class BranchUnityWrapper {
     /**
      * QR Code Generation methods
      */
-     public static void generateBranchQRCode(String universalObjectDict, String linkPropertiesDict, String qrCodeDict, String callbackId) throws IOException {
-         try {
-             BranchUniversalObject universalObject = _branchUniversalObjectFromJSONObject(new JSONObject(universalObjectDict));
-             LinkProperties linkProperties = _linkPropertiesFromJSONObject(new JSONObject(linkPropertiesDict));
-             BranchQRCode qrCode = _qrCodeFromJSONObject(new JSONObject(qrCodeDict));
-             qrCode.getQRCodeAsData(UnityPlayer.currentActivity.getApplicationContext(), universalObject, linkProperties, new BranchReferralInitListenerUnityCallback(callbackId));
-         }
-         catch (JSONException jsone) {
-             jsone.printStackTrace();
-         }
-     }
+    public static void generateBranchQRCode(String universalObjectDict, String linkPropertiesDict, String qrCodeDict, String callbackId) throws IOException {
+        try {
+            BranchUniversalObject universalObject = _branchUniversalObjectFromJSONObject(new JSONObject(universalObjectDict));
+            LinkProperties linkProperties = _linkPropertiesFromJSONObject(new JSONObject(linkPropertiesDict));
+            BranchQRCode qrCode = _qrCodeFromJSONObject(new JSONObject(qrCodeDict));
+            qrCode.getQRCodeAsData(UnityPlayer.currentActivity.getApplicationContext(), universalObject, linkProperties, new BranchReferralInitListenerUnityCallback(callbackId));
+        } catch (JSONException jsone) {
+            jsone.printStackTrace();
+        }
+    }
 
-     /**
+    /**
      * Validator methods
      */
     public static void validate() {
@@ -438,7 +460,6 @@ public class BranchUnityWrapper {
     /**
      * Share methods
      */
-
     public static void shareLinkWithLinkProperties(String universalObjectDict, String linkPropertiesDict, String message, String callbackId) {
         try {
             BranchUniversalObject universalObject = _branchUniversalObjectFromJSONObject(new JSONObject(universalObjectDict));
@@ -454,8 +475,7 @@ public class BranchUnityWrapper {
             style.addPreferredSharingOption(SharingHelper.SHARE_WITH.WHATS_APP);
 
             universalObject.showShareSheet(UnityPlayer.currentActivity, linkProperties, style, new BranchReferralInitListenerUnityCallback(callbackId));
-        }
-        catch (JSONException jsone) {
+        } catch (JSONException jsone) {
             jsone.printStackTrace();
         }
     }
@@ -463,7 +483,6 @@ public class BranchUnityWrapper {
     /**
      * Util methods
      */
-
     private static Date _dateFromString(String dateString) {
         Date date = null;
 
@@ -552,13 +571,13 @@ public class BranchUnityWrapper {
             }
             if (params.has(Defines.Jsonkey.PublicallyIndexable.getKey())) {
                 branchUniversalObject.setContentIndexingMode(
-                        params.getString(Defines.Jsonkey.PublicallyIndexable.getKey()).equals("0") ?
-                                BranchUniversalObject.CONTENT_INDEX_MODE.PUBLIC : BranchUniversalObject.CONTENT_INDEX_MODE.PRIVATE);
+                        params.getString(Defines.Jsonkey.PublicallyIndexable.getKey()).equals("0")
+                        ? BranchUniversalObject.CONTENT_INDEX_MODE.PUBLIC : BranchUniversalObject.CONTENT_INDEX_MODE.PRIVATE);
             }
             if (params.has(Defines.Jsonkey.LocallyIndexable.getKey())) {
                 branchUniversalObject.setLocalIndexMode(
-                        params.getString(Defines.Jsonkey.LocallyIndexable.getKey()).equals("0") ?
-                                BranchUniversalObject.CONTENT_INDEX_MODE.PUBLIC : BranchUniversalObject.CONTENT_INDEX_MODE.PRIVATE);
+                        params.getString(Defines.Jsonkey.LocallyIndexable.getKey()).equals("0")
+                        ? BranchUniversalObject.CONTENT_INDEX_MODE.PUBLIC : BranchUniversalObject.CONTENT_INDEX_MODE.PRIVATE);
             }
             if (params.has(Defines.Jsonkey.ContentExpiryTime.getKey())) {
                 if (!params.getString(Defines.Jsonkey.ContentExpiryTime.getKey()).isEmpty()) {
@@ -638,8 +657,8 @@ public class BranchUnityWrapper {
             if (params.has("center_logo_url")) {
                 branchQRCode.setCenterLogo(params.getString("center_logo_url"));
             }
-        } catch(Exception e) {
-          Log.e("Error Creating QR Code from JSON", e.toString());
+        } catch (Exception e) {
+            Log.e("Error Creating QR Code from JSON", e.toString());
         }
 
         return branchQRCode;
@@ -699,8 +718,7 @@ public class BranchUnityWrapper {
                     buoParams.put("linkProperties", _jsonObjectFromLinkProperties(linkProperties));
 
                     _sendMessageWithWithBranchError("_asyncCallbackWithBranchUniversalObject", branchError, "params", buoParams);
-                }
-                catch (JSONException jsone) {
+                } catch (JSONException jsone) {
                     jsone.printStackTrace();
                 }
 
@@ -739,8 +757,7 @@ public class BranchUnityWrapper {
 
                     _sendMessageWithWithBranchError("_asyncCallbackWithParams", null, "params", params);
                 }
-            }
-            catch (JSONException jsone) {
+            } catch (JSONException jsone) {
                 jsone.printStackTrace();
             }
         }
@@ -754,8 +771,7 @@ public class BranchUnityWrapper {
 
                 _sendMessageWithWithBranchError("_asyncCallbackWithParams", branchError, "params", params);
                 _linkShared = true;
-            }
-            catch (JSONException jsone) {
+            } catch (JSONException jsone) {
                 jsone.printStackTrace();
             }
         }
@@ -767,7 +783,7 @@ public class BranchUnityWrapper {
         }
 
         @Override
-        public void onSuccess(byte[] qrCodeData){
+        public void onSuccess(byte[] qrCodeData) {
             _sendMessageWithWithBranchError("_asyncCallbackWithData", null, "data", Base64.getEncoder().encodeToString(qrCodeData));
         }
 
@@ -785,8 +801,7 @@ public class BranchUnityWrapper {
 
                 String respString = responseObject.toString();
                 UnityPlayer.UnitySendMessage("Branch", asyncCallbackMethod, respString);
-            }
-            catch (JSONException jsone) {
+            } catch (JSONException jsone) {
                 // nothing to do here
                 jsone.printStackTrace();
             }
