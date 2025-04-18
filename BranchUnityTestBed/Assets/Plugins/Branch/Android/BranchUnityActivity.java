@@ -11,14 +11,21 @@ import io.branch.referral.Defines;
 /**
  * Created by antonarhunou on 10/13/16.
  */
-
-public class BranchUnityActivity extends UnityPlayerActivity {
+public class BranchUnityActivity extends Activity {
 
     private static final String TAG = "BranchSDK.Unity";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Use reflection to detect which Unity activity is available
+        try {
+            Class.forName("com.unity3d.player.UnityPlayerGameActivity");
+            // Start or use GameActivity-based logic
+        } catch (ClassNotFoundException e) {
+            // Fall back to PlayerActivity logic
+        }
     }
 
     @Override
