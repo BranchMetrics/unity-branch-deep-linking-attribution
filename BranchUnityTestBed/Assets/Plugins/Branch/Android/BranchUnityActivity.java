@@ -3,6 +3,7 @@ package io.branch.unity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.app.Activity;
 
 import com.unity3d.player.UnityPlayerActivity;
 
