@@ -33,7 +33,7 @@ public class BranchUnityActivity extends Activity {
     public void onStart() {
         super.onStart();
         //Log.i(TAG, "BranchUnityActivity.onStart()");
-        BranchUnityWrapper.initSession();
+        BranchUnityWrapper.initSession(this);
     }
 
     @Override

@@ -2,6 +2,7 @@ package io.branch.unity;
 
 import android.app.Activity;
 import android.util.Log;
+import android.content.Context;
 
 import com.unity3d.player.UnityPlayer;
 
@@ -122,7 +123,7 @@ public class BranchUnityWrapper {
 
         Activity unityActivity = UnityPlayer.currentActivity;
         unityActivity.getIntent().putExtra("branch_force_new_session", true);
-        initSession();
+        BranchUnityWrapper.initSession(unityActivity);
     }
 
     /**
