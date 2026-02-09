@@ -91,7 +91,7 @@ public class BranchDemo : MonoBehaviour {
 			universalObject.canonicalUrl = "https://branch.io";
 			universalObject.title = "id12345 title";
 			universalObject.contentDescription = "My awesome piece of content!";
-			universalObject.imageUrl = "https://s3-us-west-2.amazonaws.com/branchhost-usw2/mosaic_og.png";
+			universalObject.imageUrl = "https://branchhost-usw2.s3.us-west-2.amazonaws.com/mosaic_og.png";
 			universalObject.contentIndexMode = 0;
 			universalObject.localIndexMode = 0;
 			universalObject.expirationDate = new DateTime(2020, 12, 30);
@@ -113,7 +113,7 @@ public class BranchDemo : MonoBehaviour {
 			universalObject.metadata.setLocation(40.0f, 40.0f);
 			universalObject.metadata.setRating(4.0f, 5.0f, 10);
 
-			universalObject.metadata.AddImageCaption("https://s3-us-west-2.amazonaws.com/branchhost-usw2/mosaic_og.png");
+			universalObject.metadata.AddImageCaption("https://branchhost-usw2.s3.us-west-2.amazonaws.com/mosaic_og.png");
 			universalObject.metadata.AddCustomMetadata("foo", "bar");
 
 
