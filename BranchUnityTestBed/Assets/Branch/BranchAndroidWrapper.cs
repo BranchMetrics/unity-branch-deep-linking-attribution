@@ -57,6 +57,14 @@ public class BranchAndroidWrapper {
         	_getBranchClass().CallStatic("setIdentity", userId);
 		});
     }
+
+    //INTENG-20830
+    public static void setFBAppID(string facebookAppID)
+    {
+	    _runBlockOnThread(() => {
+		    _getBranchClass().CallStatic("setFBAppID", facebookAppID);
+	    });
+    }
     
     public static void setIdentityWithCallback(string userId, string callbackId) {
 		_runBlockOnThread(() => {
@@ -183,6 +191,38 @@ public class BranchAndroidWrapper {
 
 	#endregion
 
+	#region Validator methods
+
+	public static void validate() {
+		_runBlockOnThread(() => {
+			_getBranchClass().CallStatic("validate");
+		});
+	}
+
+	#endregion
+
+	#region Google On Device Measurement methods
+
+	public static void setSDKWaitTimeForThirdPartyAPIs(double waitTime) {
+		_runBlockOnThread(() => {
+			_getBranchClass().CallStatic("setSDKWaitTimeForThirdPartyAPIs", waitTime);
+		});
+	}
+
+	public static void setODMInfo(string odmInfo, double firstOpenTimestamp) {
+		_runBlockOnThread(() => {
+			_getBranchClass().CallStatic("setODMInfo", odmInfo, firstOpenTimestamp);
+		});
+	}
+
+	public static void setAnonID(string anonID) {
+		_runBlockOnThread(() => {
+			_getBranchClass().CallStatic("setAnonID", anonID);
+		});
+	}
+
+	#endregion
+
 	#region Utility methods
 
 	private static AndroidJavaClass _getBranchClass() {
@@ -203,6 +243,7 @@ public class BranchAndroidWrapper {
 	#endregion
     
     private static AndroidJavaClass _branchClass;
+	private static AndroidJavaClass _validatorClass;
     
 #endif
 }

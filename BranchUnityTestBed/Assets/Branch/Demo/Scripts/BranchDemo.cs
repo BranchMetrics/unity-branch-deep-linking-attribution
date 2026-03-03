@@ -43,8 +43,14 @@ public class BranchDemo : MonoBehaviour {
         //init Branch with Dictionary
         //Branch.initSession(CallbackWithParams);
 
+		double currentTimestampSeconds = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() / 1000.0;
+		Branch.setODMInfo("testODM", currentTimestampSeconds);
+		Branch.setAnonID("testAnonID");
+		Branch.setSDKWaitTimeForThirdPartyAPIs(7.0);
+
 		//init Branch with BUO
 		Branch.initSession(CallbackWithBranchUniversalObject);
+		Debug.Log("InitSession Finished.");
 	}
 
 	public void CallbackWithParams(Dictionary<string, object> parameters, string error) {
@@ -170,6 +176,10 @@ public class BranchDemo : MonoBehaviour {
 			Debug.Log("QR Code Generating Error" + e);
 		}
     }
+
+	public void OnBtn_ValidateSDKIntegration() {
+		Branch.validate();
+	}
 
 	public void OnBtn_SendBuyEvent() {
         BranchEvent e = new BranchEvent (BranchEventType.PURCHASE);

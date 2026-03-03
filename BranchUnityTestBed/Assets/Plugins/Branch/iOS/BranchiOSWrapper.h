@@ -61,5 +61,15 @@ extern "C" {
     #pragma mark - QR Code methods
 
     void _generateBranchQRCode(char *universalObjectJson, char *linkPropertiesJson, char *qrCodeSettingsJson, char *callbackId);
+
+    void _validate();
+
+    #pragma mark - Google On Device Measurement convenience methods (ODM)
+
+    void _setSDKWaitTimeForThirdPartyAPIs(double waitTime);
+
+    void _setODMInfo(char *odmInfo, double firstOpenTimestamp);
+
+    void _setAnonID(char *anonID);
 }
 

@@ -76,3 +76,39 @@ crashlytics-build.properties
 # External Dependency Manager resolved Android files
 BranchUnityTestBed/Assets/Plugins/Android/*
 
+# Ignore Firebase Editor Resources
+BranchUnityTestBed/Assets/Editor\ Default\ Resources/Firebase/
+BranchUnityTestBed/Assets/Editor\ Default\ Resources/Firebase.meta
+BranchUnityTestBed/Assets/Firebase/
+BranchUnityTestBed/Assets/Firebase.meta
+
+# Ignore External Dependency Manager (EDM4U)
+BranchUnityTestBed/Assets/ExternalDependencyManager/
+BranchUnityTestBed/Assets/ExternalDependencyManager.meta
+BranchUnityTestBed/Assets/PlayServicesResolver/
+BranchUnityTestBed/Assets/PlayServicesResolver.meta
+
+BranchUnityTestBed/Assets/Firebase/Plugins/**/*.bundle
+BranchUnityTestBed/Assets/Firebase/Plugins/**/*.so
+*.csproj
+*.sln
+
+
+# Local IDE Settings
+.vscode/
+**/.vscode/
+
+# User-specific Firebase/Google configurations
+BranchUnityTestBed/Assets/StreamingAssets/google-services-desktop.json*
+BranchUnityTestBed/Assets/GoogleService-Info.plist*
+
+# Hidden Firebase Plugin libraries
+BranchUnityTestBed/Assets/Plugins/iOS/Firebase/
+BranchUnityTestBed/Assets/Plugins/iOS/Firebase.meta
+BranchUnityTestBed/Assets/Plugins/tvOS/Firebase/
+BranchUnityTestBed/Assets/Plugins/tvOS/Firebase.meta
+
+# Auto-generated Unity settings
+BranchUnityTestBed/ProjectSettings/MultiplayerManager.asset
+BranchUnityTestBed/Assets/Settings/
+BranchUnityTestBed/Assets/Settings.meta

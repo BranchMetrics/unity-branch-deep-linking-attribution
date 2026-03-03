@@ -31,6 +31,7 @@ import io.branch.referral.util.CurrencyType;
 import io.branch.referral.util.LinkProperties;
 import io.branch.referral.util.ShareSheetStyle;
 import io.branch.referral.QRCode.BranchQRCode;
+import io.branch.referral.validators.IntegrationValidator;
 
 /**
  * Created by grahammueller on 3/25/15.
@@ -426,6 +427,29 @@ public class BranchUnityWrapper {
              jsone.printStackTrace();
          }
      }
+
+     /**
+     * Validator methods
+     */
+    public static void validate() {
+        IntegrationValidator.validate(UnityPlayer.currentActivity.getApplicationContext());
+    }
+
+    /**
+     * Google On Device Measurement convenience methods (ODM)
+     */
+
+    public static void setSDKWaitTimeForThirdPartyAPIs(Double waitTime) {
+        Log.w("BranchUnitySDK", "setSDKWaitTimeForThirdPartyAPIs() is only available on iOS.");
+    }
+
+    public static void setODMInfo(String odmInfo, Double firstOpenTimestamp) {
+        Log.w("BranchUnitySDK", "setODMInfo() is only available on iOS.");
+    }
+
+    public static void setAnonID(String anonID) {
+        Log.w("BranchUnitySDK", "setAnonID() is only available on iOS.");
+    }
 
     /**
      * Share methods

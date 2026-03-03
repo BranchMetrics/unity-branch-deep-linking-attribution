@@ -5,7 +5,7 @@
 #include "BranchUniversalObject.h"
 #include "BranchQRCode.h"
 #import "UnityAppController.h"
-
+#import "Branch+Validator.h"
 
 @interface BranchUnityWrapper()
 @property (nonatomic, strong, readwrite) NSString *branchKey;
@@ -632,4 +632,25 @@ void _shareLinkWithLinkProperties(char *universalObjectJson, char *linkPropertie
     BranchLinkProperties *prop = branchLinkPropertiesFormDict(linkPropertiesDict);
     
     [obj showShareSheetWithLinkProperties:prop andShareText:CreateNSString(message) fromViewController:nil completionWithError:callbackWithShareCompletionForCallbackId(callbackId)];
+}
+
+void _validate() {
+    [[Branch getInstance] validateSDKIntegration];
+}
+
+#pragma mark - Google On Device Measurement convenience methods (ODM)
+
+void _setSDKWaitTimeForThirdPartyAPIs(double waitTime) {
+    [Branch setSDKWaitTimeForThirdPartyAPIs:waitTime];
+}
+
+void _setODMInfo(char *odmInfo, double firstOpenTimestamp) {
+    NSString *nsOdmInfo = odmInfo ? [NSString stringWithUTF8String:odmInfo] : nil;
+    NSDate *firstOpenDate = [NSDate dateWithTimeIntervalSince1970:firstOpenTimestamp];
+    [Branch setODMInfo:nsOdmInfo andFirstOpenTimestamp:firstOpenDate];
+}
+
+void _setAnonID(char *anonID) {
+    NSString *nsAnonID = anonID ? [NSString stringWithUTF8String:anonID] : nil;
+    [Branch setAnonID:nsAnonID];
 }
