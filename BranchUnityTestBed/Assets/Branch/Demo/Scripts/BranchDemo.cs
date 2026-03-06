@@ -38,7 +38,7 @@ public class BranchDemo : MonoBehaviour {
 		}
 
 		// disable tracking of analytics for the user
-		Branch.setTrackingDisabled(false);
+		// Branch.setTrackingDisabled(false);
 
         //init Branch with Dictionary
         //Branch.initSession(CallbackWithParams);
@@ -50,6 +50,7 @@ public class BranchDemo : MonoBehaviour {
 
 		//init Branch with BUO
 		Branch.initSession(CallbackWithBranchUniversalObject);
+		Branch.setConsumerProtectionAttributionLevel("NONE");
 		Debug.Log("InitSession Finished.");
 	}
 

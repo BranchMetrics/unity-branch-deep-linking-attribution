@@ -223,6 +223,16 @@ public class BranchAndroidWrapper {
 
 	#endregion
 
+	#region Consumer protection attribution level methods
+
+	public static void setConsumerProtectionAttributionLevel(string level) {
+		_runBlockOnThread(() => {
+			_getBranchClass().CallStatic("setConsumerProtectionAttributionLevel", level);
+		});
+	}
+
+	#endregion
+
 	#region Utility methods
 
 	private static AndroidJavaClass _getBranchClass() {

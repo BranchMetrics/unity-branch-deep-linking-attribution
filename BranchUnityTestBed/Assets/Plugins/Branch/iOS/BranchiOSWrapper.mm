@@ -647,10 +647,35 @@ void _setSDKWaitTimeForThirdPartyAPIs(double waitTime) {
 void _setODMInfo(char *odmInfo, double firstOpenTimestamp) {
     NSString *nsOdmInfo = odmInfo ? [NSString stringWithUTF8String:odmInfo] : nil;
     NSDate *firstOpenDate = [NSDate dateWithTimeIntervalSince1970:firstOpenTimestamp];
-    [Branch setODMInfo:nsOdmInfo andFirstOpenTimestamp:firstOpenDate];
+    [Branch setODMInfo:nsOdmInfo andFirstOpenTimestamp:firstOpenDate]; 
 }
 
 void _setAnonID(char *anonID) {
     NSString *nsAnonID = anonID ? [NSString stringWithUTF8String:anonID] : nil;
     [Branch setAnonID:nsAnonID];
+}
+
+void _setConsumerProtectionAttributionLevel(char *level) {
+    if (level == NULL) {
+        NSLog(@"BranchUnitySDK: Attribution level string is null.");
+        return;
+    }
+
+    NSString *nsLevel = [NSString stringWithUTF8String:level];
+
+    BranchAttributionLevel attributionLevel;
+
+    if ([nsLevel isEqualToString:@"FULL"]) {
+        attributionLevel = BranchAttributionLevelFull;
+    } else if ([nsLevel isEqualToString:@"REDUCED"]) {
+        attributionLevel = BranchAttributionLevelReduced;
+    } else if ([nsLevel isEqualToString:@"MINIMAL"]) {
+        attributionLevel = BranchAttributionLevelMinimal;
+    } else if ([nsLevel isEqualToString:@"NONE"]) {
+        attributionLevel = BranchAttributionLevelNone;
+    } else {
+        NSLog(@"BranchUnitySDK: Invalid attribution level: %@", nsLevel);
+        return;
+    }
+    [[Branch getInstance] setConsumerProtectionAttributionLevel:attributionLevel];
 }

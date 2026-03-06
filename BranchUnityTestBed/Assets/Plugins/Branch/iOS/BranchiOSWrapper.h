@@ -71,5 +71,9 @@ extern "C" {
     void _setODMInfo(char *odmInfo, double firstOpenTimestamp);
 
     void _setAnonID(char *anonID);
+
+    #pragma mark - Consumer protection attribution level methods
+
+    void _setConsumerProtectionAttributionLevel(char *level);
 }
 
