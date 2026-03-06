@@ -1,5 +1,14 @@
 Branch Unity SDK change log
 
+- 3.0.0
+ * Exposing Google On Device Measurement (ODM) Methods
+ * iOS Target Minimum SDK raised to 15
+ * Exposed setODMInfo() method
+ * Exposed setAnonID() method
+ * Exposed setSDKWaitTimeForThirdPartyAPIs() method
+ * Update iOS SDK to 3.14.0
+ * Update Android SDK to 5.20.3
+
 - 2.0.0
  * External Dependency Manager for Unity (EDM4U) is no longer bundled with the Branch SDK. Clients will need to install it separately.
  * Update iOS SDK to 3.4.3

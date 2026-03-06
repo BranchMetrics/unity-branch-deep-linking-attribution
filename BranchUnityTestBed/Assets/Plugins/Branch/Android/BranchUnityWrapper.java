@@ -436,6 +436,22 @@ public class BranchUnityWrapper {
     }
 
     /**
+     * Google On Device Measurement convenience methods (ODM)
+     */
+
+    public static void setSDKWaitTimeForThirdPartyAPIs(double waitTime) {
+        Log.w("BranchUnitySDK", "setSDKWaitTimeForThirdPartyAPIs() is only available on iOS.");
+    }
+
+    public static void setODMInfo(String odmInfo, double firstOpenTimestamp) {
+        Log.w("BranchUnitySDK", "setODMInfo() is only available on iOS.");
+    }
+
+    public static void setAnonID(String anonID) {
+        Log.w("BranchUnitySDK", "setAnonID() is only available on iOS.");
+    }
+
+    /**
      * Share methods
      */
 

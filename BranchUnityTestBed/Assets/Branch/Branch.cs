@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 public class Branch : MonoBehaviour
 {
 
-	public static string sdkVersion = "2.0.0";
+	public static string sdkVersion = "3.0.0";
 
 	public delegate void BranchCallbackWithParams(Dictionary<string, object> parameters, string error);
 	public delegate void BranchCallbackWithUrl(string url, string error);
@@ -334,6 +334,25 @@ public class Branch : MonoBehaviour
 
 	#endregion
 
+	#region Google On Device Measurement methods
+
+	public static void setSDKWaitTimeForThirdPartyAPIs(double waitTime)
+	{
+		_setSDKWaitTimeForThirdPartyAPIs(waitTime);
+	}
+
+	public static void setODMInfo(string odmInfo, double firstOpenTimestamp)
+	{
+		_setODMInfo(odmInfo, firstOpenTimestamp);
+	}
+
+	public static void setAnonID(string anonID)
+	{
+		_setAnonID(anonID);
+	}
+
+	#endregion
+
 	#endregion
 
 	#region Singleton
@@ -475,6 +494,15 @@ public class Branch : MonoBehaviour
 
 	[DllImport ("__Internal")]
 	private static extern void _validate();
+
+	[DllImport ("__Internal")]
+	private static extern void _setSDKWaitTimeForThirdPartyAPIs(double waitTime);
+
+	[DllImport ("__Internal")]
+	private static extern void _setODMInfo(string odmInfo, double firstOpenTimestamp);
+
+	[DllImport ("__Internal")]
+	private static extern void _setAnonID(string anonID);
 	    
 #elif UNITY_ANDROID && !UNITY_EDITOR
 
@@ -590,6 +618,18 @@ public class Branch : MonoBehaviour
 		BranchAndroidWrapper.validate();
 	}
 
+	private static void _setSDKWaitTimeForThirdPartyAPIs(double waitTime) {
+		BranchAndroidWrapper.setSDKWaitTimeForThirdPartyAPIs(waitTime);
+	}
+
+	private static void _setODMInfo(string odmInfo, double firstOpenTimestamp) {
+		BranchAndroidWrapper.setODMInfo(odmInfo, firstOpenTimestamp);
+	}
+
+	private static void _setAnonID(string anonID) {
+		BranchAndroidWrapper.setAnonID(anonID);
+	}
+
 #else
 
 	private static void _setFBAppID(string facebookAppID) { }
@@ -677,6 +717,12 @@ public class Branch : MonoBehaviour
 	}
 
 	private static void _validate() { }
+
+	private static void _setSDKWaitTimeForThirdPartyAPIs(double waitTime) {}
+
+	private static void _setODMInfo(string odmInfo, double firstOpenTimestamp) {}
+
+	private static void _setAnonID(string anonID) {}
 
 	private static void callNotImplementedCallbackForParamCallback(string callbackId)
 	{

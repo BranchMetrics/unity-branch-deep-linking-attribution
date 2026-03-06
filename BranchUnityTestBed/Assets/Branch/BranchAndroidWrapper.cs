@@ -201,6 +201,28 @@ public class BranchAndroidWrapper {
 
 	#endregion
 
+	#region Google On Device Measurement methods
+
+	public static void setSDKWaitTimeForThirdPartyAPIs(double waitTime) {
+		_runBlockOnThread(() => {
+			_getBranchClass().CallStatic("setSDKWaitTimeForThirdPartyAPIs", waitTime);
+		});
+	}
+
+	public static void setODMInfo(string odmInfo, double firstOpenTimestamp) {
+		_runBlockOnThread(() => {
+			_getBranchClass().CallStatic("setODMInfo", odmInfo, firstOpenTimestamp);
+		});
+	}
+
+	public static void setAnonID(string anonID) {
+		_runBlockOnThread(() => {
+			_getBranchClass().CallStatic("setAnonID", anonID);
+		});
+	}
+
+	#endregion
+
 	#region Utility methods
 
 	private static AndroidJavaClass _getBranchClass() {
