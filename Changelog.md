@@ -1,8 +1,7 @@
 Branch Unity SDK change log
 
-- 3.0.0
+- 2.1.0
  * Exposing Google On Device Measurement (ODM) convenience functions.
- * iOS Target Minimum SDK raised to 15
  * Exposed setODMInfo() method
  * Exposed setAnonID() method
  * Exposed setSDKWaitTimeForThirdPartyAPIs() method

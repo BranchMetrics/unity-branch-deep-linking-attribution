@@ -641,16 +641,28 @@ void _validate() {
 #pragma mark - Google On Device Measurement convenience methods (ODM)
 
 void _setSDKWaitTimeForThirdPartyAPIs(double waitTime) {
-    [Branch setSDKWaitTimeForThirdPartyAPIs:waitTime];
+    if (@available(iOS 15.0, *)) {
+        [Branch setSDKWaitTimeForThirdPartyAPIs:waitTime];
+    } else {
+        NSLog(@"[BranchUnitySDK] _setSDKWaitTimeForThirdPartyAPIs skipped. OS is below minimum requirement of 15.");
+    }
 }
 
 void _setODMInfo(char *odmInfo, double firstOpenTimestamp) {
-    NSString *nsOdmInfo = odmInfo ? [NSString stringWithUTF8String:odmInfo] : nil;
-    NSDate *firstOpenDate = [NSDate dateWithTimeIntervalSince1970:firstOpenTimestamp];
-    [Branch setODMInfo:nsOdmInfo andFirstOpenTimestamp:firstOpenDate]; 
+    if (@available(iOS 15.0, *)) {
+        NSString *nsOdmInfo = odmInfo ? [NSString stringWithUTF8String:odmInfo] : nil;
+        NSDate *firstOpenDate = [NSDate dateWithTimeIntervalSince1970:firstOpenTimestamp];
+        [Branch setODMInfo:nsOdmInfo andFirstOpenTimestamp:firstOpenDate]; 
+    } else {
+        NSLog(@"[BranchUnitySDK] _setODMInfo skipped. OS is below minimum requirement of 15.");
+    }
 }
 
 void _setAnonID(char *anonID) {
-    NSString *nsAnonID = anonID ? [NSString stringWithUTF8String:anonID] : nil;
-    [Branch setAnonID:nsAnonID];
+    if (@available(iOS 15.0, *)) {
+        NSString *nsAnonID = anonID ? [NSString stringWithUTF8String:anonID] : nil;
+        [Branch setAnonID:nsAnonID];
+    } else {
+        NSLog(@"[BranchUnitySDK] _setAnonID skipped. OS is below minimum requirement of 15.");
+    }
 }
