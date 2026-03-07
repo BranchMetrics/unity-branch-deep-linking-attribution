@@ -256,6 +256,7 @@ public class Branch : MonoBehaviour
 		_clearPartnerParameters();
 	}
 
+	[Obsolete("setTrackingDisabled() is deprecated. Please use setConsumerProtectionAttributionLevel() instead.")]
 	public static void setTrackingDisabled(bool value)
 	{
 		_setTrackingDisabled(value);
@@ -330,6 +331,15 @@ public class Branch : MonoBehaviour
 	public static void validate()
 	{
 		_validate();
+	}
+
+	#endregion
+
+	#region Set Consumer Protection Attribution methods
+
+	public static void setConsumerProtectionAttributionLevel(string level)
+	{
+		_setConsumerProtectionAttributionLevel(level);
 	}
 
 	#endregion
@@ -475,6 +485,9 @@ public class Branch : MonoBehaviour
 
 	[DllImport ("__Internal")]
 	private static extern void _validate();
+
+	[DllImport ("__Internal")]
+	private static extern void _setConsumerProtectionAttributionLevel(string level);
 	    
 #elif UNITY_ANDROID && !UNITY_EDITOR
 
@@ -590,6 +603,10 @@ public class Branch : MonoBehaviour
 		BranchAndroidWrapper.validate();
 	}
 
+	private static void _setConsumerProtectionAttributionLevel(string level) {
+		BranchAndroidWrapper.setConsumerProtectionAttributionLevel(level);
+	}
+
 #else
 
 	private static void _setFBAppID(string facebookAppID) { }
@@ -677,6 +694,8 @@ public class Branch : MonoBehaviour
 	}
 
 	private static void _validate() { }
+
+	private static void _setConsumerProtectionAttributionLevel(string level) {}
 
 	private static void callNotImplementedCallbackForParamCallback(string callbackId)
 	{

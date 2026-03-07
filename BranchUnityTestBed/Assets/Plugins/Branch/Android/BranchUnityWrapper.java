@@ -436,6 +436,40 @@ public class BranchUnityWrapper {
     }
 
     /**
+     * Consumer protection attribution level methods
+     */
+
+    public static void setConsumerProtectionAttributionLevel(String level) {
+        if (level == null) {
+            Log.w("BranchUnitySDK", "Attribution level string is null");
+            return;
+        }
+
+        Branch branchInstance = Branch.getInstance();
+        Defines.BranchAttributionLevel attributionLevel;
+
+        switch (level) {
+            case "FULL":
+                attributionLevel = Defines.BranchAttributionLevel.FULL;
+                break;
+            case "REDUCED":
+                attributionLevel = Defines.BranchAttributionLevel.REDUCED;
+                break;
+            case "MINIMAL":
+                attributionLevel = Defines.BranchAttributionLevel.MINIMAL;
+                break;
+            case "NONE":
+                attributionLevel = Defines.BranchAttributionLevel.NONE;
+                break;
+            default:
+                Log.w("BranchUnitySDK", "Invalid attribution level: " + level);
+                return;
+        }
+
+        branchInstance.setConsumerProtectionAttributionLevel(attributionLevel);
+    }
+    
+    /**
      * Share methods
      */
 

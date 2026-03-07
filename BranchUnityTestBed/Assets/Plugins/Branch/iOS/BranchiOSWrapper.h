@@ -63,5 +63,9 @@ extern "C" {
     void _generateBranchQRCode(char *universalObjectJson, char *linkPropertiesJson, char *qrCodeSettingsJson, char *callbackId);
 
     void _validate();
+
+    #pragma mark - Consumer protection attribution level methods
+
+    void _setConsumerProtectionAttributionLevel(char *level);
 }
 
