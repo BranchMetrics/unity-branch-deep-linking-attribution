@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 public class Branch : MonoBehaviour
 {
 
-	public static string sdkVersion = "3.0.0";
+	public static string sdkVersion = "2.1.0";
 
 	public delegate void BranchCallbackWithParams(Dictionary<string, object> parameters, string error);
 	public delegate void BranchCallbackWithUrl(string url, string error);
