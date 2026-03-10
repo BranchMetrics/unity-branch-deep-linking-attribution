@@ -252,3 +252,11 @@ public enum BranchImageFormat
 	JPEG, //QR code is returned as a JPEG 
 	PNG   //QR code is returned as a PNG 
 }
+
+public enum BranchAttributionLevel
+{
+	FULL,
+	REDUCED,
+	MINIMAL,
+	NONE
+}
