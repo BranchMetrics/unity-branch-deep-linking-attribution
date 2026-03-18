@@ -666,3 +666,30 @@ void _setAnonID(char *anonID) {
         NSLog(@"[BranchUnitySDK] _setAnonID skipped. OS is below minimum requirement of 15.");
     }
 }
+
+#pragma mark - Set consumer protection attribution level methods
+
+void _setConsumerProtectionAttributionLevel(char *level) {
+    if (level == NULL) {
+        NSLog(@"BranchUnitySDK: Attribution level string is null.");
+        return;
+    }
+
+    NSString *nsLevel = [NSString stringWithUTF8String:level];
+
+    BranchAttributionLevel attributionLevel;
+
+    if ([nsLevel isEqualToString:@"FULL"]) {
+        attributionLevel = BranchAttributionLevelFull;
+    } else if ([nsLevel isEqualToString:@"REDUCED"]) {
+        attributionLevel = BranchAttributionLevelReduced;
+    } else if ([nsLevel isEqualToString:@"MINIMAL"]) {
+        attributionLevel = BranchAttributionLevelMinimal;
+    } else if ([nsLevel isEqualToString:@"NONE"]) {
+        attributionLevel = BranchAttributionLevelNone;
+    } else {
+        NSLog(@"BranchUnitySDK: Invalid attribution level: %@", nsLevel);
+        return;
+    }
+    [[Branch getInstance] setConsumerProtectionAttributionLevel:attributionLevel];
+}

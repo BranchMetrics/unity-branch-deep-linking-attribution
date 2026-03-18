@@ -220,6 +220,14 @@ public class BranchAndroidWrapper {
 			_getBranchClass().CallStatic("setAnonID", anonID);
 		});
 	}
+	
+	#region Consumer protection attribution level methods
+
+	public static void setConsumerProtectionAttributionLevel(string level) {
+		_runBlockOnThread(() => {
+			_getBranchClass().CallStatic("setConsumerProtectionAttributionLevel", level);
+		});
+	}
 
 	#endregion
 
