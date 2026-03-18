@@ -220,6 +220,8 @@ public class BranchAndroidWrapper {
 			_getBranchClass().CallStatic("setAnonID", anonID);
 		});
 	}
+
+	#endregion
 	
 	#region Consumer protection attribution level methods
 

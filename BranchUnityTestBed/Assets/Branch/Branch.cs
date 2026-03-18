@@ -351,6 +351,9 @@ public class Branch : MonoBehaviour
 	{
 		_setAnonID(anonID);
 	}
+
+	#endregion
+	
 	#region Set Consumer Protection Attribution methods
 
 	public static void setConsumerProtectionAttributionLevel(string level)
