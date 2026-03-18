@@ -5,6 +5,7 @@ Branch Unity SDK change log
  * Exposed setODMInfo() method
  * Exposed setAnonID() method
  * Exposed setSDKWaitTimeForThirdPartyAPIs() method
+ * Exposed setConsumerProtectionAttributionLevel() method
  * Update iOS SDK to 3.14.0
  * Update Android SDK to 5.20.3
 
