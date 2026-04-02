@@ -42,7 +42,7 @@ public class BranchDemo : MonoBehaviour {
 		
 		// --- Testing Google On Device Measurement ---
 		// Before uncommenting the below code, download and unzip the Firebase SDK from here: https://firebase.google.com/download/unity
-		// In Unity, go to Assets -> Import Package -> Custom Package in the Menu Bar
+		// In Unity's Menu Bar, go to Assets -> Import Package -> Custom Package 
 		// Select FirebaseAnalytics.unitypackage
 		// Deselect External Dependency Manager and import the rest of the package
 
