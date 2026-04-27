@@ -24,6 +24,19 @@ public class BranchDemo : MonoBehaviour {
 
 	void Awake() {
 		Application.logMessageReceived += OnLogMessage;
+
+		// --- Testing Google On Device Measurement ---
+		// Before uncommenting the below code, download and unzip the Firebase SDK from here: https://firebase.google.com/download/unity
+		// In Unity's Menu Bar, go to Assets -> Import Package -> Custom Package 
+		// Select FirebaseAnalytics.unitypackage
+		// Deselect External Dependency Manager and import the rest of the package
+
+		//Branch.setSDKWaitTimeForThirdPartyAPIs(5);
+		//Branch.setAnonID("testAnonID1");
+
+		//double currentTimestampMillis = (DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;                                  
+        //double firstOpenTimestampSeconds = currentTimestampMillis / 1000.0;
+		//Branch.setODMInfo("testODMInfo", firstOpenTimestampSeconds);
 	}
 
 	void Start() {
@@ -36,9 +49,6 @@ public class BranchDemo : MonoBehaviour {
         if (BranchData.Instance.enableLogging) {
 			Branch.enableLogging();
 		}
-
-		// disable tracking of analytics for the user
-		Branch.setTrackingDisabled(false);
 
         //init Branch with Dictionary
         //Branch.initSession(CallbackWithParams);

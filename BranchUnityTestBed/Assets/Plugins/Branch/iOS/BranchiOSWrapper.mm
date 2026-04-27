@@ -637,3 +637,59 @@ void _shareLinkWithLinkProperties(char *universalObjectJson, char *linkPropertie
 void _validate() {
     [[Branch getInstance] validateSDKIntegration];
 }
+
+#pragma mark - Google On Device Measurement convenience methods (ODM)
+
+void _setSDKWaitTimeForThirdPartyAPIs(double waitTime) {
+    if (@available(iOS 15.0, *)) {
+        [Branch setSDKWaitTimeForThirdPartyAPIs:waitTime];
+    } else {
+        NSLog(@"[BranchUnitySDK] _setSDKWaitTimeForThirdPartyAPIs skipped. OS is below minimum requirement of 15.");
+    }
+}
+
+void _setODMInfo(char *odmInfo, double firstOpenTimestamp) {
+    if (@available(iOS 15.0, *)) {
+        NSString *nsOdmInfo = odmInfo ? [NSString stringWithUTF8String:odmInfo] : nil;
+        NSDate *firstOpenDate = [NSDate dateWithTimeIntervalSince1970:firstOpenTimestamp];
+        [Branch setODMInfo:nsOdmInfo andFirstOpenTimestamp:firstOpenDate]; 
+    } else {
+        NSLog(@"[BranchUnitySDK] _setODMInfo skipped. OS is below minimum requirement of 15.");
+    }
+}
+
+void _setAnonID(char *anonID) {
+    if (@available(iOS 15.0, *)) {
+        NSString *nsAnonID = anonID ? [NSString stringWithUTF8String:anonID] : nil;
+        [Branch setAnonID:nsAnonID];
+    } else {
+        NSLog(@"[BranchUnitySDK] _setAnonID skipped. OS is below minimum requirement of 15.");
+    }
+}
+
+#pragma mark - Set consumer protection attribution level methods
+
+void _setConsumerProtectionAttributionLevel(char *level) {
+    if (level == NULL) {
+        NSLog(@"BranchUnitySDK: Attribution level string is null.");
+        return;
+    }
+
+    NSString *nsLevel = [NSString stringWithUTF8String:level];
+
+    BranchAttributionLevel attributionLevel;
+
+    if ([nsLevel isEqualToString:@"FULL"]) {
+        attributionLevel = BranchAttributionLevelFull;
+    } else if ([nsLevel isEqualToString:@"REDUCED"]) {
+        attributionLevel = BranchAttributionLevelReduced;
+    } else if ([nsLevel isEqualToString:@"MINIMAL"]) {
+        attributionLevel = BranchAttributionLevelMinimal;
+    } else if ([nsLevel isEqualToString:@"NONE"]) {
+        attributionLevel = BranchAttributionLevelNone;
+    } else {
+        NSLog(@"BranchUnitySDK: Invalid attribution level: %@", nsLevel);
+        return;
+    }
+    [[Branch getInstance] setConsumerProtectionAttributionLevel:attributionLevel];
+}
