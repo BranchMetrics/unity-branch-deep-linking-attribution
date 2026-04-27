@@ -31,12 +31,12 @@ public class BranchDemo : MonoBehaviour {
 		// Select FirebaseAnalytics.unitypackage
 		// Deselect External Dependency Manager and import the rest of the package
 
-		Branch.setSDKWaitTimeForThirdPartyAPIs(5);
-		Branch.setAnonID("testAnonID1");
+		//Branch.setSDKWaitTimeForThirdPartyAPIs(5);
+		//Branch.setAnonID("testAnonID1");
 
-		double currentTimestampMillis = (DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;                                  
-        double firstOpenTimestampSeconds = currentTimestampMillis / 1000.0;
-		Branch.setODMInfo("testODMInfo", firstOpenTimestampSeconds);
+		//double currentTimestampMillis = (DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;                                  
+        //double firstOpenTimestampSeconds = currentTimestampMillis / 1000.0;
+		//Branch.setODMInfo("testODMInfo", firstOpenTimestampSeconds);
 	}
 
 	void Start() {
